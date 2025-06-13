@@ -1,0 +1,1 @@
+<!-- displays detailed user profile and submission information for an individual applicant -->
