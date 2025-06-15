@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClientHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +15,12 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
+// Public Routes
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        return redirect()->route('client.dashboard');
+    }
+    return redirect()->route('login');
 });
 
 // Authentication Routes
@@ -24,14 +29,12 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [LoginController::class, 'login']);
 });
 
+// Protected Routes
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
     // Client Routes
-    Route::get('/client/dashboard', [App\Http\Controllers\ClientHomeController::class, 'index'])->name('client.dashboard');
+    Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
     
     // PHS Routes
     Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
