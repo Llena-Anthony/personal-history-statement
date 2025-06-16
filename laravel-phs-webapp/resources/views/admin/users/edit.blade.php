@@ -78,6 +78,7 @@
                     <label for="is_active" class="block text-sm font-medium text-gray-700">Status</label>
                     <div class="mt-2">
                         <label class="inline-flex items-center">
+                            <input type="hidden" name="is_active" value="0">
                             <input type="checkbox" name="is_active" value="1" {{ old('is_active', $user->is_active) ? 'checked' : '' }}
                                 class="rounded border-gray-300 text-[#1B365D] shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D]">
                             <span class="ml-2 text-sm text-gray-600">Active</span>

@@ -68,8 +68,8 @@
                     <label for="organic_role" class="block text-sm font-medium text-gray-700">Role</label>
                     <select name="organic_role" id="organic_role" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
+                        <option value="admin" {{ old('organic_role') == 'admin' ? 'selected' : '' }}>Administrator</option>
                         <option value="client" {{ old('organic_role') == 'client' ? 'selected' : '' }}>Client</option>
-                        <option value="admin" {{ old('organic_role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
                 </div>
 

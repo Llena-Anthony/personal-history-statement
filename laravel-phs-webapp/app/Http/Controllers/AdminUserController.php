@@ -11,7 +11,7 @@ class AdminUserController extends Controller
 {
     public function index()
     {
-        $users = User::where('usertype', 'client')->paginate(10);
+        $users = User::paginate(10);
         return view('admin.users.index', ['users' => $users]);
     }
 
@@ -27,7 +27,7 @@ class AdminUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'organic_role' => ['required', 'string'],
+            'organic_role' => ['required', 'string', 'in:admin,client'],
             'branch' => ['required', 'string'],
         ]);
 
@@ -36,11 +36,12 @@ class AdminUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'usertype' => 'client',
+            'usertype' => $validated['organic_role'],
             'organic_role' => $validated['organic_role'],
             'branch' => $validated['branch'],
             'created_by' => auth()->user()->username,
             'is_active' => true,
+            'is_admin' => $validated['organic_role'] === 'admin',
         ]);
 
         return redirect()->route('admin.users.index')
@@ -59,7 +60,7 @@ class AdminUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'organic_role' => ['required', 'string'],
             'branch' => ['required', 'string'],
-            'is_active' => ['boolean'],
+            'is_active' => ['required', 'boolean'],
         ]);
 
         $user->update($validated);

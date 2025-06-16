@@ -24,6 +24,12 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'usertype',
+        'organic_role',
+        'branch',
+        'created_by',
+        'is_active',
+        'phs_stat'
     ];
 
     /**
