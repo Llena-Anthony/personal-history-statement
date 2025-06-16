@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
 
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
-    
+
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
@@ -50,10 +50,10 @@ Route::middleware('auth')->group(function () {
             'destroy' => 'admin.users.destroy',
         ]);
     });
-    
+
     // PHS Routes
     Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
-    
+
     // PDS Routes
     Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
 });

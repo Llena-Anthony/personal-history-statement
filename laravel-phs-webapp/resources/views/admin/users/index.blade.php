@@ -82,4 +82,4 @@
         {{ $users->links() }}
     </div>
 </div>
-@endsection 
+@endsection
