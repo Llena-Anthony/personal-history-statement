@@ -48,10 +48,13 @@ class LoginController extends Controller
             if ($user->usertype === 'admin') {
                 return redirect()->intended('admin/dashboard');
             }
+            if ($user->usertype === 'personnel') {
+                return redirect()->intended('personnel/dashboard');
+            }
             return redirect()->intended('client/dashboard');
         }
 
-        // If we get here, the password is wrong
+        // Incorrect password prompt
         throw ValidationException::withMessages([
             'password' => 'The password you entered is incorrect.',
         ]);
@@ -64,4 +67,4 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect('/')->with('success', 'You have been successfully logged out.');
     }
-} 
+}
