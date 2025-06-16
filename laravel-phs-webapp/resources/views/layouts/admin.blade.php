@@ -55,14 +55,6 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        .nav-section {
-            @apply bg-[#2B4B7D] rounded-lg p-3 mb-4;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-section-title {
-            @apply text-xs font-semibold text-gray-300 uppercase tracking-wider px-2 mb-2;
-        }
 
         .nav-link {
             @apply flex items-center px-3 py-2.5 text-gray-300 hover:text-white transition-all duration-200 rounded-md mb-1;
@@ -151,7 +143,47 @@
             margin-bottom: 1.5rem;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
         }
+        .tab-container {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
+        /* .tab-container li {
+            margin-bottom: 15px;
+        } */
+
+        .tab-container li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cfd8dc;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .tab-container li a:hover {
+            background-color: #E59500;
+            color: white;
+        }
+
+        .tab-container li a i {
+            font-size: 20px;
+        }
+        .tab-container li a.active {
+            border-style: inset;
+            border-color: #E59500;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+        }
+        .space-y-1 li a.active{
+            background-color: rgb(212 175 55 / var(--tw-bg-opacity, 1));
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -165,14 +197,12 @@
                     <div class="user-name">{{ Auth::user()->name }}</div>
                     <div class="user-role">Administrator</div>
                 </div>
-            </div>
-
             <!-- Navigation -->
-            <nav class="flex-1 p-4">
-                <div class="nav-section">
+            </div>
+                <div class="tab-container">
                     <div class="space-y-1">
                         <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fas fa-tachometer-alt"></i>
+                            <i class="fa-solid fa-chart-line"></i>
                             <span class="ml-3">Dashboard</span>
                         </a></li>
                         <li><a href="#" class="nav-link">
@@ -197,6 +227,9 @@
                         </a></li>
                     </div>
                 </div>
+            
+            <nav class="flex-1 p-4">
+
             </nav>
 
             <!-- Logout Section -->
