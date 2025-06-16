@@ -1,1 +1,0 @@
-<!-- view edit applicant profile or update info -->

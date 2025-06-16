@@ -1,1 +1,0 @@
-<!-- a formatted view of the applicant's PHS for printing. -->

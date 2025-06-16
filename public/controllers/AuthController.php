@@ -1,1 +1,0 @@
-<!-- L:ogin, logout, password changes -->

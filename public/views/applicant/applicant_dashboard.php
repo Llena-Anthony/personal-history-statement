@@ -1,1 +1,0 @@
-<!-- Applicant's main dashboard after login; shows PHS progress and navigation links. -->

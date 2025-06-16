@@ -1,1 +1,0 @@
-<!-- Allows users to request a password reset (email or verification method assumed). -->
