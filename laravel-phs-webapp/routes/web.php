@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientHomeController;
+use App\Http\Controllers\AdminHomeController;
+use App\Http\Controllers\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,19 @@ Route::middleware('auth')->group(function () {
 
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
+    
+    // Admin Routes
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
+        Route::resource('admin/users', AdminUserController::class)->names([
+            'index' => 'admin.users.index',
+            'create' => 'admin.users.create',
+            'store' => 'admin.users.store',
+            'edit' => 'admin.users.edit',
+            'update' => 'admin.users.update',
+            'destroy' => 'admin.users.destroy',
+        ]);
+    });
     
     // PHS Routes
     Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
