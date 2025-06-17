@@ -109,22 +109,21 @@
 
                 <form method="POST" action="{{ route('phs.store') }}" class="space-y-8">
                     @csrf
-                    
+
                     <!-- Name Section -->
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Full Name</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                                <input type="text" name="last_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="first_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                                <input type="text" name="first_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="middle_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                                <input type="text" name="middle_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name <span class="text-red-500">*</span></label>
+                                <input type="text" name="last_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Suffix</label>
@@ -133,185 +132,142 @@
                         </div>
                     </div>
 
-                    <!-- Personal Details Section -->
+                    <!-- Military Information -->
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Personal Details</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                                <input type="date" name="date_of_birth" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth</label>
-                                <input type="text" name="place_of_birth" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-                                <select name="gender" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    <option value="">Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Rank</label>
+                                <select name="rank" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                    <option value="">Select Rank</option>
+                                    <option value="2LT">2LT</option>
+                                    <option value="1LT">1LT</option>
+                                    <option value="CPT">CPT</option>
+                                    <option value="MAJ">MAJ</option>
+                                    <option value="LTC">LTC</option>
+                                    <option value="COL">COL</option>
+                                    <option value="BGEN">BGEN</option>
+                                    <option value="MGEN">MGEN</option>
+                                    <option value="LTGEN">LTGEN</option>
+                                    <option value="GEN">GEN</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Civil Status</label>
-                                <select name="civil_status" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    <option value="">Select Civil Status</option>
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                    <option value="Widowed">Widowed</option>
-                                    <option value="Separated">Separated</option>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">AFPSN</label>
+                                <input type="text" name="afpsn" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Br of Svc</label>
+                                <select name="branch_of_service" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                    <option value="">Select Branch</option>
+                                    <option value="PA">Philippine Army</option>
+                                    <option value="PN">Philippine Navy</option>
+                                    <option value="PAF">Philippine Air Force</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Citizenship Section -->
+                    <!-- Job and Religion -->
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Citizenship</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                                <select name="citizenship" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    <option value="">Select Citizenship</option>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Present Job / Assignment</label>
+                                <input type="text" name="present_job" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Religion</label>
+                                <select name="religion" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                    <option value="">Select Religion</option>
+                                    <option value="Roman Catholic">Roman Catholic</option>
+                                    <option value="Protestant">Protestant</option>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Buddhism">Buddhism</option>
+                                    <option value="Hinduism">Hinduism</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Addresses -->
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Home Address</label>
+                                <input type="text" name="home_address" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Business / Duty Address</label>
+                                <input type="text" name="business_address" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Birth Information -->
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth <span class="text-red-500">*</span></label>
+                                <input type="date" name="date_of_birth" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth <span class="text-red-500">*</span></label>
+                                <input type="text" name="place_of_birth" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nationality</label>
+                                <select name="nationality" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                    <option value="">Select Nationality</option>
                                     <option value="Filipino">Filipino</option>
-                                    <option value="Dual Citizenship">Dual Citizenship</option>
+                                    <option value="Dual Citizen">Dual Citizen</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <div id="dualCitizenshipFields" class="hidden">
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship by Birth</label>
-                                        <input type="checkbox" name="dual_citizenship_by_birth" class="rounded border-gray-300 text-[#D4AF37] focus:ring-[#D4AF37]">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship by Naturalization</label>
-                                        <input type="checkbox" name="dual_citizenship_by_naturalization" class="rounded border-gray-300 text-[#D4AF37] focus:ring-[#D4AF37]">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship Country</label>
-                                        <input type="text" name="dual_citizenship_country" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Government IDs Section -->
+                    <!-- Additional Information -->
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Government IDs</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">GSIS ID No.</label>
-                                <input type="text" name="gsis_id" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Change in Name</label>
+                                <input type="text" name="name_change" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">PhilHealth No.</label>
-                                <input type="text" name="philhealth_no" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nickname</label>
+                                <input type="text" name="nickname" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">TIN No.</label>
-                                <input type="text" name="tin_no" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">PAG-IBIG ID No.</label>
-                                <input type="text" name="pagibig_id" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">SSS No.</label>
-                                <input type="text" name="sss_no" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Agency Employee No.</label>
-                                <input type="text" name="agency_employee_no" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Address Section -->
-                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Residential Address</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">House/Block/Lot No.</label>
-                                <input type="text" name="residential_house_no" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Street</label>
-                                <input type="text" name="residential_street" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Subdivision/Village</label>
-                                <input type="text" name="residential_subdivision" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Barangay</label>
-                                <input type="text" name="residential_barangay" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">City/Municipality</label>
-                                <input type="text" name="residential_city" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Province</label>
-                                <input type="text" name="residential_province" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
-                                <input type="text" name="residential_zip" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Permanent Address</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">House/Block/Lot No.</label>
-                                <input type="text" name="permanent_house_no" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Street</label>
-                                <input type="text" name="permanent_street" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Subdivision/Village</label>
-                                <input type="text" name="permanent_subdivision" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Barangay</label>
-                                <input type="text" name="permanent_barangay" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">City/Municipality</label>
-                                <input type="text" name="permanent_city" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Province</label>
-                                <input type="text" name="permanent_province" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
-                                <input type="text" name="permanent_zip" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Contact Information Section -->
-                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Contact Information</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                                 <input type="email" name="email" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Identification Numbers -->
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Telephone No.</label>
-                                <input type="tel" name="telephone" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tax Identification Number</label>
+                                <input type="text" name="tin" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Mobile No.</label>
-                                <input type="tel" name="mobile" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Passport Number</label>
+                                <input type="text" name="passport_number" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Expiration Date</label>
+                                <input type="date" name="passport_expiry" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Number -->
+                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Mobile / Telephone Number</label>
+                                <input type="tel" name="contact_number" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                         </div>
                     </div>

@@ -76,8 +76,8 @@ class MaritalStatusController extends Controller
 
             DB::commit();
 
-            return redirect()->route('phs.family-background.create')
-                ->with('success', 'Marital status information saved successfully. Please continue with your family background.');
+            return redirect()->route('phs.family-history.create')
+                ->with('success', 'Marital status saved successfully. Please continue with your family history.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'An error occurred while saving your marital status information. Please try again.');
