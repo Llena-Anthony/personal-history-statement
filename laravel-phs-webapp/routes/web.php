@@ -63,7 +63,15 @@ Route::middleware('auth')->group(function () {
 
     // PHS Routes
     Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
+    Route::post('/phs', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
+    Route::get('/phs/{phs}/edit', [App\Http\Controllers\PHSController::class, 'edit'])->name('phs.edit');
+    Route::put('/phs/{phs}', [App\Http\Controllers\PHSController::class, 'update'])->name('phs.update');
 
     // PDS Routes
     Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
+
+    // Dashboard Route
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
