@@ -44,128 +44,178 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .slideshow img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            pointer-events: none;
+        }
+
+        .slideshow img.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(27, 54, 93, 0.85), rgba(27, 54, 93, 0.75));
+            z-index: 2;
+        }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex items-center justify-center p-4">
-    <div class="flex w-full max-w-7xl bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <!-- Left side - Login Form -->
-        <div class="w-1/2 p-16">
-            <div class="text-center mb-12 fade-in">
-                <h2 class="text-4xl font-semibold text-[#1B365D] mb-3">PHS Online Application System</h2>
-                <p class="text-gray-600 text-lg">Welcome to the Philippine Military Academy's Document Portal</p>
-            </div>
-            
-            @if(session('error'))
-            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 fade-in">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-exclamation-circle text-red-500"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">{{ session('error') }}</p>
-                    </div>
-                </div>
-            </div>
-            @endif
-            
-            <form method="POST" action="{{ route('login') }}" class="space-y-8 fade-in" style="animation-delay: 0.1s;">
-                @csrf
-                <div>
-                    <label for="username" class="block text-sm font-medium text-[#1B365D] mb-2">Username</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fas fa-user text-gray-400"></i>
-                        </div>
-                        <input type="text" name="username" id="username" value="{{ old('username') }}" required
-                            class="input-field block w-full pl-12 pr-4 py-4 border {{ $errors->has('username') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
-                        @error('username')
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <i class="fas fa-exclamation-circle text-red-500"></i>
-                        </div>
-                        @enderror
-                    </div>
-                    @error('username')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- Slideshow Background -->
+    <div class="slideshow">
+        <div class="overlay"></div>
+        <img src="{{ asset('images/pmabg1.png') }}" alt="PMA Background 1" class="active">
+        <img src="{{ asset('images/pmabg2.png') }}" alt="PMA Background 2">
+        <img src="{{ asset('images/pmabg3.png') }}" alt="PMA Background 3">
+        <img src="{{ asset('images/pmabg4.png') }}" alt="PMA Background 4">
+    </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-medium text-[#1B365D] mb-2">Password</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fas fa-lock text-gray-400"></i>
-                        </div>
-                        <input type="password" name="password" id="password" required
-                            class="input-field block w-full pl-12 pr-12 py-4 border {{ $errors->has('password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
-                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
-                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
-                        </button>
-                        @error('password')
-                        <div class="absolute inset-y-0 right-0 pr-12 flex items-center pointer-events-none">
-                            <i class="fas fa-exclamation-circle text-red-500"></i>
-                        </div>
-                        @enderror
+    <div class="w-full max-w-7xl">
+        <div class="glass-card rounded-2xl shadow-2xl overflow-hidden">
+            <div class="flex flex-col lg:flex-row">
+                <!-- Left side - Login Form -->
+                <div class="w-full lg:w-1/2 p-8 lg:p-16">
+                    <div class="text-center mb-12 fade-in">
+                        <h2 class="text-3xl lg:text-4xl font-semibold text-[#1B365D] mb-3">PHS Online Application System</h2>
+                        <p class="text-gray-600 text-base lg:text-lg">Welcome to the Philippine Military Academy's Document Portal</p>
                     </div>
-                    @error('password')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="remember" name="remember"
-                            class="h-4 w-4 text-[#1B365D] focus:ring-[#1B365D] border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-[#1B365D]">Remember me</label>
-                    </div>
-
-                    <div class="text-sm">
-                        <a href="{{ route('password.request') }}" class="font-medium text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">Forgot password?</a>
-                    </div>
-                </div>
-
-                <div>
-                    <button type="submit"
-                        class="btn-primary w-full flex justify-center py-4 px-6 border border-transparent rounded-xl text-base font-medium text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
-                        <i class="fas fa-sign-in-alt mr-2"></i>
-                        Sign in
-                    </button>
-                </div>
-            </form>
-
-            <!-- PMA Links Section -->
-            <div class="mt-12 pt-8 border-t border-gray-200 fade-in" style="animation-delay: 0.2s;">
-                <div class="text-center">
-                    <p class="text-sm text-gray-600 mb-6">Connect with Philippine Military Academy</p>
-                    <div class="flex justify-center space-x-8">
-                        <a href="https://www.pma.edu.ph/" target="_blank" 
-                           class="text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">
-                            <div class="flex items-center space-x-2">
-                                <i class="fas fa-globe text-lg"></i>
-                                <span class="text-sm">Official Website</span>
+                    
+                    @if(session('error'))
+                    <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 fade-in">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-circle text-red-500"></i>
                             </div>
-                        </a>
-                        <a href="https://www.facebook.com/philippinemilitaryacademypublicaffairs/" target="_blank"
-                           class="text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">
-                            <div class="flex items-center space-x-2">
-                                <i class="fab fa-facebook text-lg"></i>
-                                <span class="text-sm">Facebook Page</span>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">{{ session('error') }}</p>
                             </div>
-                        </a>
+                        </div>
+                    </div>
+                    @endif
+                    
+                    <form method="POST" action="{{ route('login') }}" class="space-y-6 lg:space-y-8 fade-in" style="animation-delay: 0.1s;">
+                        @csrf
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-[#1B365D] mb-2">Username</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                </div>
+                                <input type="text" name="username" id="username" value="{{ old('username') }}" required
+                                    class="input-field block w-full pl-12 pr-4 py-3 lg:py-4 border {{ $errors->has('username') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
+                                @error('username')
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                                </div>
+                                @enderror
+                            </div>
+                            @error('username')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-[#1B365D] mb-2">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input type="password" name="password" id="password" required
+                                    class="input-field block w-full pl-12 pr-12 py-3 lg:py-4 border {{ $errors->has('password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
+                                <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                </button>
+                                @error('password')
+                                <div class="absolute inset-y-0 right-0 pr-12 flex items-center pointer-events-none">
+                                    <i class="fas fa-exclamation-circle text-red-500"></i>
+                                </div>
+                                @enderror
+                            </div>
+                            @error('password')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="remember" name="remember"
+                                    class="h-4 w-4 text-[#1B365D] focus:ring-[#1B365D] border-gray-300 rounded">
+                                <label for="remember" class="ml-2 block text-sm text-[#1B365D]">Remember me</label>
+                            </div>
+
+                            <div class="text-sm">
+                                <a href="{{ route('password.request') }}" class="font-medium text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">Forgot password?</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                class="btn-primary w-full flex justify-center py-3 lg:py-4 px-6 border border-transparent rounded-xl text-base font-medium text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Sign in
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- PMA Links Section -->
+                    <div class="mt-8 lg:mt-12 pt-6 lg:pt-8 border-t border-gray-200 fade-in" style="animation-delay: 0.2s;">
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600 mb-4 lg:mb-6">Connect with Philippine Military Academy</p>
+                            <div class="flex justify-center space-x-6 lg:space-x-8">
+                                <a href="https://www.pma.edu.ph/" target="_blank" 
+                                   class="text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-globe text-lg"></i>
+                                        <span class="text-sm">Official Website</span>
+                                    </div>
+                                </a>
+                                <a href="https://www.facebook.com/philippinemilitaryacademypublicaffairs/" target="_blank"
+                                   class="text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fab fa-facebook text-lg"></i>
+                                        <span class="text-sm">Facebook Page</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Right side - Image -->
-        <div class="w-1/2 bg-[#1B365D] relative">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#1B365D]/90 to-[#1B365D]/80"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-                <img src="{{ asset('images/Philippine_Military_Academy_logo.png') }}" 
-                     alt="PMA Logo" 
-                     class="w-full h-full object-cover">
-            </div>
-            <div class="absolute bottom-0 left-0 right-0 p-8 text-center text-white">
-                <p class="text-sm text-gray-200">Fort Del Pilar, Baguio City, Philippines 2600</p>
+                <!-- Right side - Logo -->
+                <div class="hidden lg:block w-1/2 bg-[#1B365D] relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-[#1B365D]/90 to-[#1B365D]/80"></div>
+                    <div class="absolute inset-0">
+                        <img src="{{ asset('images/Philippine_Military_Academy_logo.png') }}" 
+                             alt="PMA Logo" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-center text-white">
+                        <p class="text-sm text-gray-200">Fort Del Pilar, Baguio City, Philippines 2600</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -185,6 +235,24 @@
             toggleIcon.classList.add('fa-eye');
         }
     }
+
+    // Slideshow functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.slideshow img');
+        let currentImage = 0;
+
+        function nextImage() {
+            images[currentImage].classList.remove('active');
+            currentImage = (currentImage + 1) % images.length;
+            images[currentImage].classList.add('active');
+        }
+
+        // Set initial active image
+        images[0].classList.add('active');
+
+        // Change image every 5 seconds
+        setInterval(nextImage, 5000);
+    });
     </script>
 </body>
 </html> 

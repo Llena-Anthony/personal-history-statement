@@ -34,13 +34,13 @@ class AdminUserController extends Controller
             'organic_group' => ['required', 'string', 'in:civilian,enlisted,officer'],
         ]);
 
-        // Generate username from first letters of each first name + last name
-        $firstNames = explode(' ', $validated['first_name']);
+        // Generate username from first letters of each first name + last name (no spaces)
+        $firstNames = explode(' ', preg_replace('/\s+/', ' ', trim($validated['first_name'])));
         $firstLetters = '';
         foreach ($firstNames as $name) {
             $firstLetters .= strtolower(substr($name, 0, 1));
         }
-        $baseUsername = $firstLetters . strtolower($validated['last_name']);
+        $baseUsername = $firstLetters . strtolower(str_replace(' ', '', $validated['last_name']));
         $username = $baseUsername;
         $counter = 1;
 
@@ -50,8 +50,8 @@ class AdminUserController extends Controller
             $counter++;
         }
 
-        // Generate default password (first name + last name + random 4 digits)
-        $defaultPassword = strtolower(str_replace(' ', '', $validated['first_name']) . $validated['last_name'] . rand(1000, 9999));
+        // Generate default password (first name + last name + random 4 digits, no spaces)
+        $defaultPassword = strtolower(str_replace(' ', '', $validated['first_name']) . str_replace(' ', '', $validated['last_name']) . rand(1000, 9999));
 
         // Store the data in session for confirmation
         session()->put('user_data', [
@@ -78,17 +78,19 @@ class AdminUserController extends Controller
         return view('admin.users.confirm', ['userData' => session('user_data')]);
     }
 
-    private function toCamelCase($string)
-    {
-        return ucwords(strtolower($string));
-    }
-
     public function finalize(Request $request)
     {
-        Log::info('Finalize method called', ['request' => $request->all()]);
+        Log::info('Finalize method called', [
+            'request' => $request->all(),
+            'session' => session()->all(),
+            'has_user_data' => session()->has('user_data')
+        ]);
         
         if (!session()->has('user_data')) {
             Log::error('No user data in session');
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Please fill out the user creation form first.'], 400);
+            }
             return redirect()->route('admin.users.create')
                 ->with('error', 'Please fill out the user creation form first.');
         }
@@ -97,37 +99,35 @@ class AdminUserController extends Controller
         Log::info('User data from session', ['userData' => $userData]);
         
         try {
+            // Validate the request
+            $validated = $request->validate([
+                'username' => ['required', 'string', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8'],
+            ]);
+
             DB::beginTransaction();
 
-            // Use the generated username if no custom username is provided
-            $username = $request->input('custom_username', $userData['generated_username']);
-            
-            // Use the generated password if no custom password is provided
-            $password = $request->input('custom_password', $userData['generated_password']);
-
-            // Validate username uniqueness
-            if (User::where('username', $username)->exists()) {
-                throw new \Exception('Username already exists. Please choose a different username.');
-            }
-
-            // Convert names to camel case
-            $firstName = $this->toCamelCase($userData['first_name']);
-            $middleName = $userData['middle_name'] ? $this->toCamelCase($userData['middle_name']) : '';
-            $lastName = $this->toCamelCase($userData['last_name']);
-
             // Create the user
-            $user = User::create([
-                'username' => $username,
-                'name' => trim($firstName . ' ' . $middleName . ' ' . $lastName),
+            $userData = [
+                'username' => $validated['username'],
+                'name' => trim($userData['first_name'] . ' ' . $userData['middle_name'] . ' ' . $userData['last_name']),
                 'email' => $userData['email'],
-                'password' => Hash::make($password),
+                'password' => Hash::make($validated['password']),
                 'usertype' => $userData['user_type'],
                 'organic_role' => $userData['organic_group'],
                 'branch' => 'PMA',
                 'created_by' => auth()->user()->username,
                 'is_active' => true,
                 'is_admin' => $userData['user_type'] === 'admin',
-            ]);
+            ];
+
+            Log::info('Attempting to create user with data', ['userData' => $userData]);
+
+            $user = User::create($userData);
+
+            if (!$user) {
+                throw new \Exception('Failed to create user');
+            }
 
             Log::info('User created successfully', ['user' => $user->toArray()]);
 
@@ -136,19 +136,53 @@ class AdminUserController extends Controller
             // Clear the session data
             session()->forget('user_data');
 
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User created successfully.',
+                    'redirect' => route('admin.users.index'),
+                    'credentials' => [
+                        'username' => $validated['username'],
+                        'password' => $validated['password']
+                    ]
+                ]);
+            }
+
             return redirect()->route('admin.users.index')
                 ->with('success', 'User created successfully.')
                 ->with('generated_credentials', [
-                    'username' => $username,
-                    'password' => $password
+                    'username' => $validated['username'],
+                    'password' => $validated['password']
                 ]);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            Log::error('Validation failed', [
+                'errors' => $e->errors(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'error' => 'Please check the form for errors: ' . collect($e->errors())->first()[0]
+                ], 422);
+            }
+            
+            return redirect()->route('admin.users.confirm')
+                ->with('error', 'Please check the form for errors: ' . collect($e->errors())->first()[0])
+                ->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('User creation failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'error' => 'An error occurred while creating the user: ' . $e->getMessage()
+                ], 500);
+            }
             
             return redirect()->route('admin.users.confirm')
                 ->with('error', 'An error occurred while creating the user: ' . $e->getMessage())

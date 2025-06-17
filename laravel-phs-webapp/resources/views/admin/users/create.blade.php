@@ -43,25 +43,29 @@
                 <div>
                     <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
                     <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm bg-white text-gray-900 px-4 py-3 placeholder-gray-400"
+                        placeholder="Enter first name">
                 </div>
 
                 <div>
                     <label for="middle_name" class="block text-sm font-medium text-gray-700">Middle Name</label>
-                    <input type="text" name="middle_name" id="middle_name" value="{{ old('middle_name') }}" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
+                    <input type="text" name="middle_name" id="middle_name" value="{{ old('middle_name') }}"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm bg-white text-gray-900 px-4 py-3 placeholder-gray-400"
+                        placeholder="Enter middle name (optional)">
                 </div>
 
                 <div>
                     <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
                     <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm bg-white text-gray-900 px-4 py-3 placeholder-gray-400"
+                        placeholder="Enter last name">
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="text" name="email" id="email" value="{{ old('email') }}" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm bg-white text-gray-900 px-4 py-3 placeholder-gray-400"
+                        placeholder="Enter email address">
                 </div>
 
                 <div>
@@ -83,7 +87,6 @@
                         <option value="officer" {{ old('organic_group') == 'officer' ? 'selected' : '' }}>Officer</option>
                     </select>
                 </div>
-
             </div>
 
             <div class="flex justify-end">
@@ -92,29 +95,7 @@
                     Okay
                 </button>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" name="username" id="username" value="{{ old('username') }}" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
-                </div>
-
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password" value="{{ old('password') }}" required
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
-                </div>
-            </div>
-
-            <div class="flex justify-end">
-                <button type="submit" class="btn-primary inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
-                    <i class="fas fa-user-plus mr-2"></i>
-                    Create User
-                </button>
-            </div>
         </form>
-
     </div>
 </div>
 @endsection

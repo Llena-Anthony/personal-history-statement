@@ -1,133 +1,195 @@
 @extends('layouts.admin')
 
-@section('title', 'Confirm User Creation')
-
-@section('header', 'Confirm User Creation')
+@section('title', 'Confirm New User')
 
 @section('content')
-<div class="space-y-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center">
-        <div>
-            <p class="text-gray-600">Review and confirm the new user details</p>
-        </div>
-        <a href="{{ route('admin.users.create') }}" class="btn-primary inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
-            <i class="fas fa-arrow-left mr-2"></i>
-            Back to Form
-        </a>
-    </div>
-
-    @if($errors->any())
-    <div class="bg-red-50 border border-red-200 rounded-xl p-4 fade-in">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-circle text-red-500"></i>
-            </div>
-            <div class="ml-3">
-                <p class="text-sm text-red-700">Please correct the following errors:</p>
-                <ul class="mt-2 list-disc list-inside text-sm text-red-700">
-                    @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
-    @endif
-
+<div class="max-w-4xl mx-auto">
     @if(session('error'))
-    <div class="bg-red-50 border border-red-200 rounded-xl p-4 fade-in">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <i class="fas fa-exclamation-circle text-red-500"></i>
-            </div>
-            <div class="ml-3">
-                <p class="text-sm text-red-700">{{ session('error') }}</p>
-            </div>
-        </div>
+    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ session('error') }}</span>
     </div>
     @endif
 
-    <!-- User Details Card -->
-    <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-2xl font-semibold text-[#1B365D]">Confirm New User Details</h2>
+            <p class="mt-1 text-gray-600">Please review the generated credentials and make any necessary changes.</p>
+        </div>
+
+        <div class="p-6">
             <!-- User Information -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-medium text-gray-900">User Information</h3>
-                <div class="space-y-2">
+            <div class="mb-8">
+                <h3 class="text-lg font-medium text-[#1B365D] mb-4">User Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-500">Full Name</label>
-                        <p class="mt-1 text-sm text-gray-900">{{ $userData['first_name'] }} {{ $userData['middle_name'] }} {{ $userData['last_name'] }}</p>
+                        <p class="text-sm text-gray-600">First Name</p>
+                        <p class="font-medium">{{ $userData['first_name'] }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-500">Email Address</label>
-                        <p class="mt-1 text-sm text-gray-900">{{ $userData['email'] }}</p>
+                        <p class="text-sm text-gray-600">Middle Name</p>
+                        <p class="font-medium">{{ $userData['middle_name'] ?: 'N/A' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-500">User Type</label>
-                        <p class="mt-1 text-sm text-gray-900">{{ ucfirst($userData['user_type']) }}</p>
+                        <p class="text-sm text-gray-600">Last Name</p>
+                        <p class="font-medium">{{ $userData['last_name'] }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-500">Organic Group</label>
-                        <p class="mt-1 text-sm text-gray-900">{{ ucfirst($userData['organic_group']) }}</p>
+                        <p class="text-sm text-gray-600">Email</p>
+                        <p class="font-medium">{{ $userData['email'] }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">User Type</p>
+                        <p class="font-medium capitalize">{{ $userData['user_type'] }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Organic Group</p>
+                        <p class="font-medium capitalize">{{ $userData['organic_group'] }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Generated Credentials -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-medium text-gray-900">Generated Credentials</h3>
-                <form action="{{ route('admin.users.finalize') }}" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label for="custom_username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <div class="mt-1 flex items-center">
-                            <input type="text" name="custom_username" id="custom_username" value="{{ old('custom_username', $userData['generated_username']) }}"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
-                            <button type="button" onclick="copyToClipboard('{{ $userData['generated_username'] }}')"
-                                class="ml-2 p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-                                <i class="fas fa-copy"></i>
+            <div class="mb-8">
+                <h3 class="text-lg font-medium text-[#1B365D] mb-4">Generated Credentials</h3>
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <form method="POST" action="{{ route('admin.users.finalize') }}" class="space-y-6" id="createUserForm">
+                        @csrf
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-[#1B365D] mb-2">Username</label>
+                            <div class="relative">
+                                <input type="text" name="username" id="username" value="{{ $userData['generated_username'] }}"
+                                    class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-[#1B365D] focus:border-[#1B365D]"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-[#1B365D] mb-2">Password</label>
+                            <div class="relative">
+                                <input type="text" name="password" id="password" value="{{ $userData['generated_password'] }}"
+                                    class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-[#1B365D] focus:border-[#1B365D]"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-4">
+                            <a href="{{ route('admin.users.create') }}"
+                                class="px-6 py-3 border border-gray-300 rounded-xl text-[#1B365D] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                                Back
+                            </a>
+                            <button type="submit" id="submitButton"
+                                class="px-6 py-3 bg-[#1B365D] text-white rounded-xl hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                                <span class="inline-flex items-center">
+                                    <i class="fas fa-user-plus mr-2"></i>
+                                    Create User
+                                </span>
                             </button>
                         </div>
-                        <p class="mt-1 text-sm text-gray-500">You can modify the generated username if needed</p>
-                    </div>
-
-                    <div>
-                        <label for="custom_password" class="block text-sm font-medium text-gray-700">Password</label>
-                        <div class="mt-1 flex items-center">
-                            <input type="text" name="custom_password" id="custom_password" value="{{ old('custom_password', $userData['generated_password']) }}"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
-                            <button type="button" onclick="copyToClipboard('{{ $userData['generated_password'] }}')"
-                                class="ml-2 p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </div>
-                        <p class="mt-1 text-sm text-gray-500">You can modify the generated password if needed</p>
-                    </div>
-
-                    <div class="pt-4">
-                        <button type="submit" class="w-full btn-primary inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
-                            <i class="fas fa-check mr-2"></i>
-                            Confirm and Create User
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B365D] mx-auto"></div>
+        <p class="mt-4 text-gray-700">Creating user account...</p>
+    </div>
+</div>
+
+<div id="successModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-xl shadow-lg text-center max-w-md mx-auto">
+        <h2 class="text-2xl font-bold mb-4 text-green-700">User Created!</h2>
+        <p id="successMessage" class="mb-4 text-gray-700"></p>
+        <div class="mb-4">
+            <p class="font-semibold">Username: <span id="modalUsername"></span></p>
+            <p class="font-semibold">Password: <span id="modalPassword"></span></p>
+            <p class="text-xs text-gray-500 mt-2">Please save these credentials as they won't be shown again.</p>
+        </div>
+        <button id="closeSuccessModal" class="px-6 py-2 bg-green-700 text-white rounded-xl">OK</button>
+    </div>
+</div>
+
 <script>
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        // Show a temporary success message
-        const button = event.currentTarget;
-        const originalIcon = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-check"></i>';
-        setTimeout(() => {
-            button.innerHTML = originalIcon;
-        }, 2000);
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('createUserForm');
+    const submitButton = document.getElementById('submitButton');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+        
+        // Show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <span class="inline-flex items-center">
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Creating...
+            </span>
+        `;
+        loadingOverlay.classList.remove('hidden');
+        loadingOverlay.classList.add('flex');
+
+        // Get form data
+        const formData = new FormData(form);
+        
+        // Submit form using fetch
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Show modal with credentials
+                showSuccessModal(data.credentials.username, data.credentials.password, data.message, data.redirect);
+            } else if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = `
+                <span class="inline-flex items-center">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create User
+                </span>
+            `;
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('flex');
+            
+            // Show error message
+            alert('An error occurred while creating the user. Please try again.');
+        });
     });
+});
+
+function showSuccessModal(username, password, message, redirectUrl) {
+    document.getElementById('modalUsername').textContent = username;
+    document.getElementById('modalPassword').textContent = password;
+    document.getElementById('successMessage').textContent = message;
+    const modal = document.getElementById('successModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.getElementById('closeSuccessModal').onclick = function() {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        window.location.href = redirectUrl;
+    };
 }
 </script>
-@endsection 
+@endsection
