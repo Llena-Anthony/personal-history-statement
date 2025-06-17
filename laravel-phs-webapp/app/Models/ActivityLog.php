@@ -11,14 +11,19 @@ class ActivityLog extends Model
 
     protected $fillable = [
         'user_id',
+        'action',
         'description',
         'status',
         'ip_address',
         'user_agent'
     ];
 
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withDefault();
     }
 } 
