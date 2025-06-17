@@ -13,33 +13,13 @@ class LogUserActivity
     {
         $response = $next($request);
 
-        // Get the action based on the request
-        $action = $this->getActivityAction($request);
-        
-        // For login attempts, we'll log them even if not authenticated
-        if ($request->is('login') && $request->isMethod('post')) {
-            $user = Auth::user();
-            $description = 'User attempted to log in';
-            $status = $this->getActivityStatus($response);
-            
-            ActivityLog::create([
-                'user_id' => $user ? $user->id : null,
-                'action' => 'login',
-                'description' => $description,
-                'status' => $status,
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
-            ]);
-        }
-        // For other actions, only log if user is authenticated
-        elseif (Auth::check()) {
+        if (Auth::check()) {
             $user = Auth::user();
             $description = $this->getActivityDescription($request);
             
             if ($description) {
                 ActivityLog::create([
                     'user_id' => $user->id,
-                    'action' => $action,
                     'description' => $description,
                     'status' => $this->getActivityStatus($response),
                     'ip_address' => $request->ip(),
@@ -120,58 +100,5 @@ class LogUserActivity
         } else {
             return 'error';
         }
-    }
-
-    private function getActivityAction(Request $request)
-    {
-        $path = $request->path();
-        $method = $request->method();
-
-        // Login activity
-        if ($path === 'login' && $method === 'POST') {
-            return 'login';
-        }
-
-        // Logout activity
-        if ($path === 'logout' && $method === 'POST') {
-            return 'logout';
-        }
-
-        // PHS submission activities
-        if (str_starts_with($path, 'phs')) {
-            if ($method === 'POST') {
-                return 'phs_submit';
-            } elseif ($method === 'PUT') {
-                return 'phs_update';
-            } elseif ($method === 'DELETE') {
-                return 'phs_delete';
-            }
-        }
-
-        // PDS submission activities
-        if (str_starts_with($path, 'pds')) {
-            if ($method === 'POST') {
-                return 'pds_submit';
-            } elseif ($method === 'PUT') {
-                return 'pds_update';
-            } elseif ($method === 'DELETE') {
-                return 'pds_delete';
-            }
-        }
-
-        // Admin activities
-        if (str_starts_with($path, 'admin')) {
-            if (str_contains($path, 'users')) {
-                if ($method === 'POST') {
-                    return 'user_create';
-                } elseif ($method === 'PUT') {
-                    return 'user_update';
-                } elseif ($method === 'DELETE') {
-                    return 'user_delete';
-                }
-            }
-        }
-
-        return 'other';
     }
 } 
