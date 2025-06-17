@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\PHSSubmission;
+use App\Models\PDSSubmission;
+use App\Models\ActivityLog;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class AdminHomeController extends Controller
+{
+    public function index()
+    {
+        // User Statistics
+        $totalUsers = User::count();
+        $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))->count();
+        $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
+
+        // Submission Statistics
+        $totalPHSSubmissions = PHSSubmission::count();
+        $newPHSSubmissionsThisMonth = PHSSubmission::whereMonth('created_at', now()->month)->count();
+        $totalPDSSubmissions = PDSSubmission::count();
+        $newPDSSubmissionsThisMonth = PDSSubmission::whereMonth('created_at', now()->month)->count();
+
+        // Submission Status Distribution
+        $submissionStats = [
+            'pending' => PHSSubmission::where('status', 'pending')->count(),
+            'reviewed' => PHSSubmission::where('status', 'reviewed')->count(),
+            'approved' => PHSSubmission::where('status', 'approved')->count(),
+            'rejected' => PHSSubmission::where('status', 'rejected')->count(),
+        ];
+
+        // Monthly Statistics
+        $monthlyStats = DB::table('phs_submissions')
+            ->select(
+                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                DB::raw('COUNT(*) as phs_count')
+            )
+            ->whereYear('created_at', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                $item->month = Carbon::createFromFormat('Y-m', $item->month)->format('M Y');
+                return $item;
+            });
+
+        $pdsMonthlyStats = DB::table('pds_submissions')
+            ->select(
+                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
+                DB::raw('COUNT(*) as pds_count')
+            )
+            ->whereYear('created_at', now()->year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        // Merge PDS stats with PHS stats
+        $monthlyStats = $monthlyStats->map(function ($item) use ($pdsMonthlyStats) {
+            $pdsMonth = $pdsMonthlyStats->firstWhere('month', Carbon::createFromFormat('M Y', $item->month)->format('Y-m'));
+            $item->pds_count = $pdsMonth ? $pdsMonth->pds_count : 0;
+            return $item;
+        });
+
+        // Recent Activity
+        $recentActivities = ActivityLog::with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'activeUsers',
+            'newUsersThisMonth',
+            'totalPHSSubmissions',
+            'newPHSSubmissionsThisMonth',
+            'totalPDSSubmissions',
+            'newPDSSubmissionsThisMonth',
+            'submissionStats',
+            'monthlyStats',
+            'recentActivities'
+        ));
+    }
+} 

@@ -29,7 +29,8 @@ class User extends Authenticatable
         'branch',
         'created_by',
         'is_active',
-        'phs_stat'
+        'phs_stat',
+        'last_login_at'
     ];
 
     /**
