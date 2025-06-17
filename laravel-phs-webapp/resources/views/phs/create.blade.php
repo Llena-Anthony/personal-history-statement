@@ -114,16 +114,16 @@
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name <span class="text-red-500">*</span></label>
-                                <input type="text" name="first_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                                <input type="text" name="first_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name <span class="text-red-500">*</span></label>
-                                <input type="text" name="middle_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
+                                <input type="text" name="middle_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name <span class="text-red-500">*</span></label>
-                                <input type="text" name="last_name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                                <input type="text" name="last_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Suffix</label>
@@ -207,12 +207,12 @@
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth <span class="text-red-500">*</span></label>
-                                <input type="date" name="date_of_birth" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                                <input type="date" name="date_of_birth" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth <span class="text-red-500">*</span></label>
-                                <input type="text" name="place_of_birth" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth</label>
+                                <input type="text" name="place_of_birth" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nationality</label>

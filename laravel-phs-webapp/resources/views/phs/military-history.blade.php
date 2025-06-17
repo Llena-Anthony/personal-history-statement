@@ -47,11 +47,11 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('phs.family-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('phs.family-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
                         <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
                             <span class="text-xs text-white">IV</span>
                         </span>
-                        <span class="text-gray-400">Family History and Information</span>
+                        <span class="text-gray-400">Family Background</span>
                     </a>
                 </li>
                 <li>
@@ -132,28 +132,13 @@
                     <!-- Important Unit Assignments -->
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-[#1B365D]">Important Unit Assignments</h3>
-                            <button type="button" class="add-assignment px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                            <h3 class="text-lg font-semibold text-[#1B365D]">Assignments</h3>
+                            <button type="button" id="addAssignment" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
                                 <i class="fas fa-plus mr-2"></i>Add Assignment
                             </button>
                         </div>
                         <div id="assignments" class="space-y-4">
-                            <div class="assignment p-4 bg-white rounded-lg border border-gray-200">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                                        <input type="date" name="assignments[0][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Unit</label>
-                                        <input type="text" name="assignments[0][unit]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
-                                        <input type="text" name="assignments[0][position]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Assignment template will be cloned here -->
                         </div>
                     </div>
 
@@ -230,26 +215,27 @@
     let schoolCount = 1;
     let awardCount = 1;
 
-    document.querySelector('.add-assignment').addEventListener('click', function() {
-        const template = `
-            <div class="assignment p-4 bg-white rounded-lg border border-gray-200">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                        <input type="date" name="assignments[${assignmentCount}][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Unit</label>
-                        <input type="text" name="assignments[${assignmentCount}][unit]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
-                        <input type="text" name="assignments[${assignmentCount}][position]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                    </div>
+    document.getElementById('addAssignment').addEventListener('click', function() {
+        const assignmentsContainer = document.getElementById('assignments');
+        const newAssignment = document.createElement('div');
+        newAssignment.className = 'assignment p-4 bg-white rounded-lg border border-gray-200';
+        newAssignment.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input type="date" name="assignments[${assignmentCount}][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Unit</label>
+                    <input type="text" name="assignments[${assignmentCount}][unit]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                    <input type="text" name="assignments[${assignmentCount}][position]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                 </div>
             </div>
         `;
-        document.getElementById('assignments').insertAdjacentHTML('beforeend', template);
+        assignmentsContainer.appendChild(newAssignment);
         assignmentCount++;
     });
 

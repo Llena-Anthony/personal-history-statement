@@ -47,11 +47,11 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('phs.family-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('phs.family-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
                         <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
                             <span class="text-xs text-white">IV</span>
                         </span>
-                        <span class="text-gray-400">Family History and Information</span>
+                        <span class="text-gray-400">Family Background</span>
                     </a>
                 </li>
                 <li>
@@ -112,26 +112,13 @@
 
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-[#1B365D]">Residence History</h3>
-                            <button type="button" class="add-residence px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                            <h3 class="text-lg font-semibold text-[#1B365D]">Residences</h3>
+                            <button type="button" id="addResidence" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
                                 <i class="fas fa-plus mr-2"></i>Add Residence
                             </button>
                         </div>
                         <div id="residences" class="space-y-4">
-                            <div class="residence grid grid-cols-1 md:grid-cols-3 gap-6 p-4 bg-white rounded-lg border border-gray-200">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Residence Address</label>
-                                    <input type="text" name="residences[0][address]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">From (MM/YYYY)</label>
-                                    <input type="month" name="residences[0][from_date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Until (MM/YYYY)</label>
-                                    <input type="month" name="residences[0][until_date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                            </div>
+                            <!-- Residence template will be cloned here -->
                         </div>
                     </div>
 
@@ -140,9 +127,9 @@
                         <a href="{{ route('phs.military-history.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
                             Previous Section
                         </a>
-                        <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
+                        <a href="{{ route('phs.employment-history.create') }}" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
                             Next Section
-                        </button>
+                        </a>
                     </div>
                 </form>
             </div>
@@ -153,24 +140,27 @@
 @push('scripts')
 <script>
     let residenceCount = 1;
-    document.querySelector('.add-residence').addEventListener('click', function() {
-        const template = `
-            <div class="residence grid grid-cols-1 md:grid-cols-3 gap-6 p-4 bg-white rounded-lg border border-gray-200">
+    document.getElementById('addResidence').addEventListener('click', function() {
+        const residencesContainer = document.getElementById('residences');
+        const newResidence = document.createElement('div');
+        newResidence.className = 'residence p-4 bg-white rounded-lg border border-gray-200';
+        newResidence.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Residence Address</label>
-                    <input type="text" name="residences[${residenceCount}][address]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Residence Name</label>
+                    <input type="text" name="residences[${residenceCount}][name]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">From (MM/YYYY)</label>
-                    <input type="month" name="residences[${residenceCount}][from_date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input type="date" name="residences[${residenceCount}][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Until (MM/YYYY)</label>
-                    <input type="month" name="residences[${residenceCount}][until_date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <input type="text" name="residences[${residenceCount}][description]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                 </div>
             </div>
         `;
-        document.getElementById('residences').insertAdjacentHTML('beforeend', template);
+        residencesContainer.appendChild(newResidence);
         residenceCount++;
     });
 </script>

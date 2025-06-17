@@ -47,11 +47,11 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('phs.family-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('phs.family-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
                         <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
                             <span class="text-xs text-white">IV</span>
                         </span>
-                        <span class="text-gray-400">Family History and Information</span>
+                        <span class="text-gray-400">Family Background</span>
                     </a>
                 </li>
                 <li>
@@ -112,49 +112,13 @@
 
                     <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-[#1B365D]">Visit Records</h3>
-                            <button type="button" class="add-visit px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                            <h3 class="text-lg font-semibold text-[#1B365D]">Visits</h3>
+                            <button type="button" id="addVisit" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
                                 <i class="fas fa-plus mr-2"></i>Add Visit
                             </button>
                         </div>
                         <div id="visits" class="space-y-4">
-                            <div class="visit p-4 bg-white rounded-lg border border-gray-200">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Country Name</label>
-                                        <input type="text" name="visits[0][country]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Visit</label>
-                                        <input type="date" name="visits[0][visit_date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">Purpose of Visit</label>
-                                        <input type="text" name="visits[0][purpose]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                </div>
-                                <div class="mt-4">
-                                    <h4 class="text-md font-semibold text-[#1B365D] mb-4">Address Abroad</h4>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
-                                            <input type="text" name="visits[0][street_address]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">City/Locality</label>
-                                            <input type="text" name="visits[0][city]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">State/Province</label>
-                                            <input type="text" name="visits[0][state]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                        </div>
-                                        <div>
-                                            <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                                            <input type="text" name="visits[0][postal_code]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- Visit template will be cloned here -->
                         </div>
                     </div>
 
@@ -218,6 +182,31 @@
         `;
         document.getElementById('visits').insertAdjacentHTML('beforeend', template);
         visitCount++;
+    });
+
+    let countryCount = 1;
+    document.getElementById('addCountry').addEventListener('click', function() {
+        const countriesContainer = document.getElementById('countries');
+        const newCountry = document.createElement('div');
+        newCountry.className = 'country p-4 bg-white rounded-lg border border-gray-200';
+        newCountry.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Country Name</label>
+                    <input type="text" name="countries[${countryCount}][name]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                    <input type="date" name="countries[${countryCount}][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <input type="text" name="countries[${countryCount}][description]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                </div>
+            </div>
+        `;
+        countriesContainer.appendChild(newCountry);
+        countryCount++;
     });
 </script>
 @endpush

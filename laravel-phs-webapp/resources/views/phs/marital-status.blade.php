@@ -221,7 +221,7 @@
                         <a href="{{ route('phs.personal-characteristics.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
                             Previous Section
                         </a>
-                        <a href="{{ route('phs.family-history.create') }}" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
+                        <a href="{{ route('phs.family-background.create') }}" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
                             Next Section
                         </a>
                     </div>
