@@ -168,7 +168,7 @@
 
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('phs.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                        <a href="{{ route('phs.marital-status.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
                             Previous Section
                         </a>
                         <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">

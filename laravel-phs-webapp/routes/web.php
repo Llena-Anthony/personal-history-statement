@@ -6,6 +6,8 @@ use App\Http\Controllers\ClientHomeController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FamilyBackgroundController;
+use App\Http\Controllers\PersonalCharacteristicController;
+use App\Http\Controllers\MaritalStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,8 +76,6 @@ Route::middleware('auth')->group(function () {
     // PHS Routes
     Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
     Route::post('/phs', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
-    Route::get('/phs/{phs}/edit', [App\Http\Controllers\PHSController::class, 'edit'])->name('phs.edit');
-    Route::put('/phs/{phs}', [App\Http\Controllers\PHSController::class, 'update'])->name('phs.update');
 
     // PDS Routes
     Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
@@ -83,6 +83,14 @@ Route::middleware('auth')->group(function () {
     // Family Background Routes
     Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
     Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
+
+    // Personal Characteristics Routes
+    Route::get('/phs/personal-characteristics', [PersonalCharacteristicController::class, 'create'])->name('phs.personal-characteristics.create');
+    Route::post('/phs/personal-characteristics', [PersonalCharacteristicController::class, 'store'])->name('phs.personal-characteristics.store');
+
+    // Marital Status Routes
+    Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
+    Route::post('/phs/marital-status', [MaritalStatusController::class, 'store'])->name('phs.marital-status.store');
 
     // Dashboard Route
     Route::get('/dashboard', function () {

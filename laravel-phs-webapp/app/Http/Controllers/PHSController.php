@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PHS;
+use Illuminate\Support\Facades\DB;
 
 class PHSController extends Controller
 {
@@ -55,13 +56,22 @@ class PHSController extends Controller
             'email' => 'required|email|max:255',
         ]);
 
-        $phs = PHS::create([
-            'user_id' => auth()->id(),
-            ...$validated
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('phs.edit', $phs->id)
-            ->with('success', 'Personal History Statement created successfully.');
+            $phs = PHS::create([
+                'user_id' => auth()->id(),
+                ...$validated
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('phs.personal-characteristics.create')
+                ->with('success', 'Personal information saved successfully. Please continue with your personal characteristics.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'An error occurred while saving your personal information. Please try again.');
+        }
     }
 
     public function edit(PHS $phs)
