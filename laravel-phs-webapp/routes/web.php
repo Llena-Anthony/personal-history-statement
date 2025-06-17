@@ -6,15 +6,10 @@ use App\Http\Controllers\ClientHomeController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FamilyBackgroundController;
+use App\Http\Controllers\PersonalCharacteristicController;
 use App\Http\Controllers\MaritalStatusController;
-use App\Http\Controllers\EducationalBackgroundController;
-use App\Http\Controllers\FamilyHistoryController;
-use App\Http\Controllers\PersonalDetailsController;
-use App\Http\Controllers\PersonalCharacteristicsController;
-use App\Http\Controllers\PlacesOfResidenceController;
-use App\Http\Controllers\EmploymentHistoryController;
-use App\Http\Controllers\ForeignCountriesController;
-use App\Http\Controllers\MilitaryHistoryController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,66 +53,51 @@ Route::middleware('auth')->group(function () {
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
 
-    // Admin Routes
-    Route::middleware('admin')->group(function () {
-        Route::get('/admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
-        Route::resource('admin/users', AdminUserController::class)->names([
-            'index' => 'admin.users.index',
-            'create' => 'admin.users.create',
-            'store' => 'admin.users.store',
-            'edit' => 'admin.users.edit',
-            'update' => 'admin.users.update',
-            'destroy' => 'admin.users.destroy',
-        ]);
-        
-        // PHS Submission Management Routes
-        Route::resource('admin/phs', App\Http\Controllers\Admin\PHSController::class)->names([
-            'index' => 'admin.phs.index',
-            'show' => 'admin.phs.show',
-            'edit' => 'admin.phs.edit',
-            'update' => 'admin.phs.update',
-            'destroy' => 'admin.phs.destroy',
-        ]);
-    });
+    // PHS Routes
+    Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
+    Route::post('/phs', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
 
-    // Personal Details Routes
-    Route::get('/phs', [PersonalDetailsController::class, 'create'])->name('phs.create');
-    Route::post('/phs', [PersonalDetailsController::class, 'store'])->name('phs.store');
+    // PDS Routes
+    Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
+
+    // Family Background Routes
+    Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
+    Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
+
+    // Personal Characteristics Routes
+    Route::get('/phs/personal-characteristics', [PersonalCharacteristicController::class, 'create'])->name('phs.personal-characteristics.create');
+    Route::post('/phs/personal-characteristics', [PersonalCharacteristicController::class, 'store'])->name('phs.personal-characteristics.store');
 
     // Marital Status Routes
     Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
     Route::post('/phs/marital-status', [MaritalStatusController::class, 'store'])->name('phs.marital-status.store');
 
-    // Family History Routes
-    Route::get('/phs/family-history', [FamilyHistoryController::class, 'create'])->name('phs.family-history.create');
-    Route::post('/phs/family-history', [FamilyHistoryController::class, 'store'])->name('phs.family-history.store');
-
-    // Educational Background Routes
-    Route::get('/phs/educational-background', [EducationalBackgroundController::class, 'create'])->name('phs.educational-background.create');
-    Route::post('/phs/educational-background', [EducationalBackgroundController::class, 'store'])->name('phs.educational-background.store');
-
-    // Personal Characteristics Routes
-    Route::get('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'create'])->name('phs.personal-characteristics.create');
-    Route::post('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'store'])->name('phs.personal-characteristics.store');
-
-    // Places of Residence Routes
-    Route::get('/phs/places-of-residence', [PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence.create');
-    Route::post('/phs/places-of-residence', [PlacesOfResidenceController::class, 'store'])->name('phs.places-of-residence.store');
-
-    // Employment History Routes
-    Route::get('/phs/employment-history', [EmploymentHistoryController::class, 'create'])->name('phs.employment-history.create');
-    Route::post('/phs/employment-history', [EmploymentHistoryController::class, 'store'])->name('phs.employment-history.store');
-
-    // Foreign Countries Routes
-    Route::get('/phs/foreign-countries', [ForeignCountriesController::class, 'create'])->name('phs.foreign-countries.create');
-    Route::post('/phs/foreign-countries', [ForeignCountriesController::class, 'store'])->name('phs.foreign-countries.store');
-
-    // Military History Routes
-    Route::get('/phs/military-history', [MilitaryHistoryController::class, 'create'])->name('phs.military-history.create');
-    Route::post('/phs/military-history', [MilitaryHistoryController::class, 'store'])->name('phs.military-history.store');
-
     // Dashboard Route
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+// Admin Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
+    
+    // User Management Routes
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/users/confirm', [AdminUserController::class, 'confirm'])->name('users.confirm');
+    Route::post('/users/finalize', [AdminUserController::class, 'finalize'])->name('users.finalize');
+    Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+
+    // PHS Submission Management Routes
+    Route::resource('phs', App\Http\Controllers\Admin\PHSController::class)->names([
+        'index' => 'phs.index',
+        'show' => 'phs.show',
+        'edit' => 'phs.edit',
+        'update' => 'phs.update',
+        'destroy' => 'phs.destroy',
+    ]);
 });
