@@ -205,7 +205,7 @@
                             <i class="fa-solid fa-chart-line"></i>
                             <span class="ml-3">Dashboard</span>
                         </a></li>
-                        <li><a href="#" class="nav-link">
+                        <li><a href="{{ route('admin.phs.index') }}" class="nav-link {{ request()->routeIs('admin.phs.*') ? 'active' : '' }}">
                             <i class="fa-regular fa-folder"></i>
                             <span class="ml-3">PHS Submissions</span>
                         </a></li>

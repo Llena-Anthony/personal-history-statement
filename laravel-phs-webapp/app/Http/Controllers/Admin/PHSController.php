@@ -56,19 +56,19 @@ class PHSController extends Controller
 
         $submissions = $query->paginate(10)->withQueryString();
 
-        return view('admin.phs-submissions', compact('submissions'));
+        return view('admin.phs.index', compact('submissions'));
     }
 
     public function show(PHSSubmission $submission)
     {
         $submission->load(['user', 'personalInfo', 'familyHistory', 'educationalBackground', 'employmentHistory', 'militaryHistory']);
-        return view('admin.phs-show', compact('submission'));
+        return view('admin.phs.show', compact('submission'));
     }
 
     public function edit(PHSSubmission $submission)
     {
         $submission->load(['user', 'personalInfo', 'familyHistory', 'educationalBackground', 'employmentHistory', 'militaryHistory']);
-        return view('admin.phs-edit', compact('submission'));
+        return view('admin.phs.edit', compact('submission'));
     }
 
     public function update(Request $request, PHSSubmission $submission)
