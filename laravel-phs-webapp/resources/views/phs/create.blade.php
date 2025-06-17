@@ -379,7 +379,10 @@
 
                     <!-- Button -->
                     <div class="text-right">
-                        <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">Next Section</button>
+                        <div class="flex justify-end space-x-4">
+                            <a href="{{ route('dashboard') }}" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition">Back</a>
+                            <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition">Next Section</button>
+                        </div>
                     </div>
                 </form>
             </div>
