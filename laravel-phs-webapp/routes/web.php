@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientHomeController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\FamilyBackgroundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,10 @@ Route::middleware('auth')->group(function () {
 
     // PDS Routes
     Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
+
+    // Family Background Routes
+    Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
+    Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
 
     // Dashboard Route
     Route::get('/dashboard', function () {
