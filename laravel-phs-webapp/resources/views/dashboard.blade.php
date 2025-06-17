@@ -124,7 +124,7 @@
                         Submit your PDS to provide essential personal and professional information for official records.
                     </p>
                     <div class="text-center">
-                        <a href="{{ route('pds.create') }}" class="btn-primary inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                        <a href="{{ route('phs.create') }}" class="btn-primary inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
                             <i class="fas fa-file-upload mr-2"></i>
                             Submit PDS
                         </a>
