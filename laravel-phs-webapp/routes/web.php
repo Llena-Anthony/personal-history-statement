@@ -60,6 +60,15 @@ Route::middleware('auth')->group(function () {
             'update' => 'admin.users.update',
             'destroy' => 'admin.users.destroy',
         ]);
+        
+        // PHS Submission Management Routes
+        Route::resource('admin/phs', App\Http\Controllers\Admin\PHSController::class)->names([
+            'index' => 'admin.phs.index',
+            'show' => 'admin.phs.show',
+            'edit' => 'admin.phs.edit',
+            'update' => 'admin.phs.update',
+            'destroy' => 'admin.phs.destroy',
+        ]);
     });
 
     // PHS Routes
