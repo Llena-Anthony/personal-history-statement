@@ -1,0 +1,396 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Models\User;
+use App\Models\PHSSubmission;
+use App\Models\PDSSubmission;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+class ReportsController extends Controller
+{
+    public function index(Request $request)
+    {
+        $reportType = $request->get('report_type', 'activity');
+        $dateFrom = $request->get('date_from');
+        $dateTo = $request->get('date_to');
+        $userType = $request->get('user_type');
+        $status = $request->get('status');
+        $search = $request->get('search');
+
+        $data = [];
+        $summary = [];
+
+        switch ($reportType) {
+            case 'activity':
+                $data = $this->getActivityReport($request);
+                $summary = $this->getActivitySummary($dateFrom, $dateTo);
+                break;
+            case 'submissions':
+                $data = $this->getSubmissionsReport($request);
+                $summary = $this->getSubmissionsSummary($dateFrom, $dateTo);
+                break;
+            case 'users':
+                $data = $this->getUsersReport($request);
+                $summary = $this->getUsersSummary();
+                break;
+            case 'system':
+                $data = $this->getSystemReport($request);
+                $summary = $this->getSystemSummary($dateFrom, $dateTo);
+                break;
+        }
+
+        // Get filter options
+        $userTypes = User::distinct()->pluck('usertype')->filter()->sort();
+        $statuses = ['pending', 'reviewed', 'approved', 'rejected'];
+        $reportTypes = [
+            'activity' => 'Activity Logs',
+            'submissions' => 'Submissions Report',
+            'users' => 'User Management',
+            'system' => 'System Overview'
+        ];
+
+        return view('admin.reports.index', compact(
+            'data',
+            'summary',
+            'reportType',
+            'dateFrom',
+            'dateTo',
+            'userType',
+            'status',
+            'search',
+            'userTypes',
+            'statuses',
+            'reportTypes'
+        ));
+    }
+
+    private function getActivityReport(Request $request)
+    {
+        $query = ActivityLog::with('user')
+            ->when($request->date_from, function ($q, $date) {
+                $q->whereDate('created_at', '>=', $date);
+            })
+            ->when($request->date_to, function ($q, $date) {
+                $q->whereDate('created_at', '<=', $date);
+            })
+            ->when($request->search, function ($q, $search) {
+                $q->where(function ($subQ) use ($search) {
+                    $subQ->where('action', 'like', "%{$search}%")
+                         ->orWhere('description', 'like', "%{$search}%")
+                         ->orWhereHas('user', function ($userQ) use ($search) {
+                             $userQ->where('name', 'like', "%{$search}%")
+                                   ->orWhere('username', 'like', "%{$search}%")
+                                   ->orWhere('email', 'like', "%{$search}%");
+                         });
+                });
+            })
+            ->when($request->user_type, function ($q, $userType) {
+                $q->whereHas('user', function ($userQ) use ($userType) {
+                    $userQ->where('usertype', $userType);
+                });
+            })
+            ->when($request->status, function ($q, $status) {
+                $q->where('status', $status);
+            });
+
+        return $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+    }
+
+    private function getSubmissionsReport(Request $request)
+    {
+        $phsQuery = PHSSubmission::with('user')
+            ->when($request->date_from, function ($q, $date) {
+                $q->whereDate('created_at', '>=', $date);
+            })
+            ->when($request->date_to, function ($q, $date) {
+                $q->whereDate('created_at', '<=', $date);
+            })
+            ->when($request->search, function ($q, $search) {
+                $q->whereHas('user', function ($userQ) use ($search) {
+                    $userQ->where('name', 'like', "%{$search}%")
+                          ->orWhere('username', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->status, function ($q, $status) {
+                $q->where('status', $status);
+            });
+
+        $pdsQuery = PDSSubmission::with('user')
+            ->when($request->date_from, function ($q, $date) {
+                $q->whereDate('created_at', '>=', $date);
+            })
+            ->when($request->date_to, function ($q, $date) {
+                $q->whereDate('created_at', '<=', $date);
+            })
+            ->when($request->search, function ($q, $search) {
+                $q->whereHas('user', function ($userQ) use ($search) {
+                    $userQ->where('name', 'like', "%{$search}%")
+                          ->orWhere('username', 'like', "%{$search}%");
+                });
+            })
+            ->when($request->status, function ($q, $status) {
+                $q->where('status', $status);
+            });
+
+        return [
+            'phs' => $phsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString(),
+            'pds' => $pdsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString()
+        ];
+    }
+
+    private function getUsersReport(Request $request)
+    {
+        $query = User::when($request->search, function ($q, $search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('username', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->when($request->user_type, function ($q, $userType) {
+                $q->where('usertype', $userType);
+            })
+            ->when($request->date_from, function ($q, $date) {
+                $q->whereDate('created_at', '>=', $date);
+            })
+            ->when($request->date_to, function ($q, $date) {
+                $q->whereDate('created_at', '<=', $date);
+            });
+
+        return $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+    }
+
+    private function getSystemReport(Request $request)
+    {
+        $dateFrom = $request->date_from ? Carbon::parse($request->date_from) : now()->subDays(30);
+        $dateTo = $request->date_to ? Carbon::parse($request->date_to) : now();
+
+        return [
+            'daily_activities' => ActivityLog::select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COUNT(*) as count')
+            )
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get(),
+            
+            'action_distribution' => ActivityLog::select('action', DB::raw('COUNT(*) as count'))
+                ->whereBetween('created_at', [$dateFrom, $dateTo])
+                ->groupBy('action')
+                ->orderBy('count', 'desc')
+                ->get(),
+                
+            'user_activity' => ActivityLog::select(
+                'user_id',
+                DB::raw('COUNT(*) as activity_count')
+            )
+            ->with('user:id,name,username,usertype')
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->groupBy('user_id')
+            ->orderBy('activity_count', 'desc')
+            ->limit(10)
+            ->get()
+        ];
+    }
+
+    private function getActivitySummary($dateFrom, $dateTo)
+    {
+        $query = ActivityLog::query();
+        
+        if ($dateFrom) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        return [
+            'total_activities' => $query->count(),
+            'unique_users' => $query->distinct('user_id')->count(),
+            'success_rate' => $query->where('status', 'success')->count(),
+            'error_rate' => $query->where('status', 'error')->count(),
+        ];
+    }
+
+    private function getSubmissionsSummary($dateFrom, $dateTo)
+    {
+        $phsQuery = PHSSubmission::query();
+        $pdsQuery = PDSSubmission::query();
+        
+        if ($dateFrom) {
+            $phsQuery->whereDate('created_at', '>=', $dateFrom);
+            $pdsQuery->whereDate('created_at', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $phsQuery->whereDate('created_at', '<=', $dateTo);
+            $pdsQuery->whereDate('created_at', '<=', $dateTo);
+        }
+
+        return [
+            'total_phs' => $phsQuery->count(),
+            'total_pds' => $pdsQuery->count(),
+            'phs_pending' => $phsQuery->where('status', 'pending')->count(),
+            'phs_approved' => $phsQuery->where('status', 'approved')->count(),
+            'pds_pending' => $pdsQuery->where('status', 'pending')->count(),
+            'pds_approved' => $pdsQuery->where('status', 'approved')->count(),
+        ];
+    }
+
+    private function getUsersSummary()
+    {
+        return [
+            'total_users' => User::count(),
+            'active_users' => User::where('is_active', true)->count(),
+            'admin_users' => User::where('usertype', 'admin')->count(),
+            'personnel_users' => User::where('usertype', 'personnel')->count(),
+            'regular_users' => User::where('usertype', 'regular')->count(),
+            'new_users_this_month' => User::whereMonth('created_at', now()->month)->count(),
+        ];
+    }
+
+    private function getSystemSummary($dateFrom, $dateTo)
+    {
+        $query = ActivityLog::query();
+        
+        if ($dateFrom) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        return [
+            'total_activities' => $query->count(),
+            'unique_users' => $query->distinct('user_id')->count(),
+            'avg_activities_per_day' => $query->count() / max(1, $dateFrom ? $dateFrom->diffInDays($dateTo ?: now()) : 30),
+            'most_active_user' => $query->select('user_id', DB::raw('COUNT(*) as count'))
+                ->groupBy('user_id')
+                ->orderBy('count', 'desc')
+                ->first(),
+        ];
+    }
+
+    public function export(Request $request)
+    {
+        $reportType = $request->get('report_type', 'activity');
+        $filename = "report_{$reportType}_" . now()->format('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($request, $reportType) {
+            $file = fopen('php://output', 'w');
+            
+            switch ($reportType) {
+                case 'activity':
+                    $this->exportActivityReport($file, $request);
+                    break;
+                case 'submissions':
+                    $this->exportSubmissionsReport($file, $request);
+                    break;
+                case 'users':
+                    $this->exportUsersReport($file, $request);
+                    break;
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    private function exportActivityReport($file, Request $request)
+    {
+        fputcsv($file, [
+            'ID', 'User', 'Username', 'Email', 'User Type', 'Action', 'Description', 
+            'Status', 'IP Address', 'Date & Time'
+        ]);
+
+        $activities = $this->getActivityReport($request);
+        foreach ($activities as $activity) {
+            fputcsv($file, [
+                $activity->id,
+                $activity->user->name ?? 'N/A',
+                $activity->user->username ?? 'N/A',
+                $activity->user->email ?? 'N/A',
+                $activity->user->usertype ?? 'N/A',
+                $activity->action,
+                $activity->description,
+                $activity->status,
+                $activity->ip_address,
+                $activity->created_at->format('Y-m-d H:i:s')
+            ]);
+        }
+    }
+
+    private function exportSubmissionsReport($file, Request $request)
+    {
+        fputcsv($file, [
+            'Type', 'ID', 'User', 'Username', 'Email', 'User Type', 'Status', 
+            'Admin Notes', 'Submitted Date', 'Last Updated'
+        ]);
+
+        $submissions = $this->getSubmissionsReport($request);
+        
+        foreach ($submissions['phs'] as $submission) {
+            fputcsv($file, [
+                'PHS',
+                $submission->id,
+                $submission->user->name ?? 'N/A',
+                $submission->user->username ?? 'N/A',
+                $submission->user->email ?? 'N/A',
+                $submission->user->usertype ?? 'N/A',
+                $submission->status,
+                $submission->admin_notes,
+                $submission->created_at->format('Y-m-d H:i:s'),
+                $submission->updated_at->format('Y-m-d H:i:s')
+            ]);
+        }
+
+        foreach ($submissions['pds'] as $submission) {
+            fputcsv($file, [
+                'PDS',
+                $submission->id,
+                $submission->user->name ?? 'N/A',
+                $submission->user->username ?? 'N/A',
+                $submission->user->email ?? 'N/A',
+                $submission->user->usertype ?? 'N/A',
+                $submission->status,
+                $submission->admin_notes ?? 'N/A',
+                $submission->created_at->format('Y-m-d H:i:s'),
+                $submission->updated_at->format('Y-m-d H:i:s')
+            ]);
+        }
+    }
+
+    private function exportUsersReport($file, Request $request)
+    {
+        fputcsv($file, [
+            'ID', 'Name', 'Username', 'Email', 'User Type', 'Organic Role', 
+            'Branch', 'Status', 'Created By', 'Created Date', 'Last Login'
+        ]);
+
+        $users = $this->getUsersReport($request);
+        foreach ($users as $user) {
+            fputcsv($file, [
+                $user->id,
+                $user->name,
+                $user->username,
+                $user->email,
+                $user->usertype,
+                $user->organic_role ?? 'N/A',
+                $user->branch ?? 'N/A',
+                $user->is_active ? 'Active' : 'Inactive',
+                $user->created_by ?? 'N/A',
+                $user->created_at->format('Y-m-d H:i:s'),
+                $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'Never'
+            ]);
+        }
+    }
+} 
