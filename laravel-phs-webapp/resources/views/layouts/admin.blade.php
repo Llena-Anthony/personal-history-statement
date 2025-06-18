@@ -184,6 +184,15 @@
         .space-y-1 li a.active{
             background-color: rgb(212 175 55 / var(--tw-bg-opacity, 1));
         }
+        
+        .settings-btn {
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-btn:hover {
+            transform: rotate(90deg);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -192,72 +201,77 @@
         <aside class="w-64 bg-[#1B365D] text-white flex flex-col">
             <!-- Profile Section -->
             <div class="profile-container">
-                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.png') }}" alt="Profile Picture" class="profile-picture">
+                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
                 <div class="user-info">
                     <div class="user-name">{{ Auth::user()->name }}</div>
                     <div class="user-role">Administrator</div>
                 </div>
+                <a href="{{ route('admin.profile.edit') }}" 
+                   class="settings-btn p-2 rounded-full bg-[#D4AF37] hover:bg-[#B38F2A] text-white transition-all duration-200 shadow-md hover:shadow-lg"
+                   title="Manage Profile">
+                    <i class="fas fa-cog text-sm"></i>
+                </a>
+            </div>
             <!-- Navigation -->
-            </div>
-                <div class="tab-container">
-                    <div class="space-y-1">
-                        <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-line"></i>
-                            <span class="ml-3">Dashboard</span>
-                        </a></li>
-                        <li><a href="{{ route('admin.phs.index') }}" class="nav-link {{ request()->routeIs('admin.phs.*') ? 'active' : '' }}">
-                            <i class="fa-regular fa-folder"></i>
-                            <span class="ml-3">PHS Submissions</span>
-                        </a></li>
-                        <li><a href="#" class="nav-link">
-                            <i class="fa-regular fa-folder"></i>
-                            <span class="ml-3">PDS Submissions</span>
-                        </a></li>
-                        <li><a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                            <i class="fa-regular fa-address-book"></i>
-                            <span class="ml-3">User Management</span>
-                        </a></li>
-                        <li><a href="{{ route('admin.activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}">
-                            <i class="fas fa-history"></i>
-                            <span class="ml-3">Activity Logs</span>
-                        </a></li>
-                        <li><a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
-                            <i class="fa-regular fa-file-lines"></i>
-                            <span class="ml-3">Reports</span>
-                        </a></li>
-                    </div>
-                </div>
-            
-            <nav class="flex-1 p-4">
-
-            </nav>
-
-            <!-- Logout Section -->
-            <div class="p-4 border-t border-[#2B4B7D]">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full btn-primary inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-[#D4AF37] hover:bg-[#B38F2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-200 shadow-md hover:shadow-lg">
-                        <i class="fas fa-sign-out-alt mr-2"></i>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
-            <!-- Top Bar -->
-            <div class="bg-white shadow-sm">
-                <div class="px-8 py-4">
-                    <h1 class="text-2xl font-bold text-[#1B365D]">@yield('header')</h1>
+            <div class="tab-container">
+                <div class="space-y-1">
+                    <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span class="ml-3">Dashboard</span>
+                    </a></li>
+                    <li><a href="{{ route('admin.phs.index') }}" class="nav-link {{ request()->routeIs('admin.phs.*') ? 'active' : '' }}">
+                        <i class="fa-regular fa-folder"></i>
+                        <span class="ml-3">PHS Submissions</span>
+                    </a></li>
+                    <li><a href="#" class="nav-link">
+                        <i class="fa-regular fa-folder"></i>
+                        <span class="ml-3">PDS Submissions</span>
+                    </a></li>
+                    <li><a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <i class="fa-regular fa-address-book"></i>
+                        <span class="ml-3">User Management</span>
+                    </a></li>
+                    <li><a href="{{ route('admin.activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}">
+                        <i class="fas fa-history"></i>
+                        <span class="ml-3">Activity Logs</span>
+                    </a></li>
+                    <li><a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                        <i class="fa-regular fa-file-lines"></i>
+                        <span class="ml-3">Reports</span>
+                    </a></li>
                 </div>
             </div>
+        
+        <nav class="flex-1 p-4">
 
-            <!-- Page Content -->
-            <div class="p-8">
-                @yield('content')
+        </nav>
+
+        <!-- Logout Section -->
+        <div class="p-4 border-t border-[#2B4B7D]">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-full btn-primary inline-flex items-center justify-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-[#D4AF37] hover:bg-[#B38F2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-200 shadow-md hover:shadow-lg">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Logout
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Top Bar -->
+        <div class="bg-white shadow-sm">
+            <div class="px-8 py-4">
+                <h1 class="text-2xl font-bold text-[#1B365D]">@yield('header')</h1>
             </div>
-        </main>
-    </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="p-8">
+            @yield('content')
+        </div>
+    </main>
+</div>
 </body>
 </html> 

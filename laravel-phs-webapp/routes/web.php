@@ -144,7 +144,7 @@ Route::middleware('auth')->group(function () {
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
-
+    
     // User Management Routes
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');

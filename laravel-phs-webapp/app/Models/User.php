@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -29,7 +30,8 @@ class User extends Authenticatable
         'created_by',
         'is_active',
         'is_admin',
-        'last_login_at'
+        'last_login_at',
+        'profile_photo_path'
     ];
 
     /**
@@ -61,6 +63,20 @@ class User extends Authenticatable
     public function username()
     {
         return 'username';
+    }
+
+    /**
+     * Get the user's profile photo URL.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo_path) {
+            return url('storage/' . $this->profile_photo_path);
+        }
+        
+        return asset('images/default-avatar.svg');
     }
 
     /**
