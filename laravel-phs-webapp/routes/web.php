@@ -59,10 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
 
     // PHS Routes
-    Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
-    Route::post('/phs', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
-    Route::get('/phs/personal-details', [App\Http\Controllers\PersonalDetailsController::class, 'create'])->name('phs.personal-details.create');
-    Route::post('/phs/personal-details', [App\Http\Controllers\PersonalDetailsController::class, 'store'])->name('phs.personal-details.store');
+    Route::get('/phs/personal-details', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
+    Route::post('/phs/personal-details', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
 
     // PDS Routes
     Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
@@ -139,6 +137,12 @@ Route::middleware('auth')->group(function () {
         ->name('phs.personal-characteristics.create');
     Route::post('/phs/personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'store'])
         ->name('phs.personal-characteristics.store');
+
+    // Family History Routes
+    Route::get('/phs/family-history', [App\Http\Controllers\FamilyHistoryController::class, 'create'])
+        ->name('phs.family-history.create');
+    Route::post('/phs/family-history', [App\Http\Controllers\FamilyHistoryController::class, 'store'])
+        ->name('phs.family-history.store');
 });
 
 // Admin Routes

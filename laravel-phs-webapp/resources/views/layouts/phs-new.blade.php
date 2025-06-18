@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 relative">
+        <!-- Background Overlay -->
+        <div class="absolute inset-0 bg-[url('/images/pma-background.jpg')] bg-cover bg-center bg-no-repeat opacity-10 blur-sm"></div>
+
+        <div class="relative flex min-h-screen">
+            <!-- Fixed Sidebar -->
+            <aside class="w-72 bg-white shadow-lg fixed top-0 left-0 h-screen overflow-y-auto z-40 flex flex-col">
+                <!-- User Profile Section -->
+                <div class="p-6 border-b border-gray-200 bg-white flex flex-col items-center">
+                    <img src="/images/profile-placeholder.png" alt="User Photo" class="w-16 h-16 rounded-full object-cover mb-2">
+                    <div class="text-center">
+                        <h3 class="text-base font-semibold text-gray-800">Gregorio Del Pilar</h3>
+                        <p class="text-xs text-gray-500">Civilian</p>
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <nav class="flex-1 p-6 bg-white">
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="{{ route('phs.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.create') ? 'bg-green-500' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">I</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.create') ? 'font-bold' : 'font-medium' }}">Personal Details</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.personal-characteristics.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.personal-characteristics.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.personal-characteristics.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">II</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.personal-characteristics.create') ? 'font-bold' : 'font-medium' }}">Personal Characteristics</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.marital-status.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.marital-status.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.marital-status.create') ? 'bg-green-500' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">III</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.marital-status.create') ? 'font-bold' : 'font-medium' }}">Marital Status</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.family-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.family-background.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.family-background.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">IV</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.family-background.create') ? 'font-bold' : 'font-medium' }}">Family History and Information</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.educational-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.educational-background.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.educational-background.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">V</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.educational-background.create') ? 'font-bold' : 'font-medium' }}">Educational Background</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.military-history.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.military-history.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.military-history.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">VI</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.military-history.create') ? 'font-bold' : 'font-medium' }}">Military History</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.places-of-residence.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.places-of-residence.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.places-of-residence.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">VII</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.places-of-residence.create') ? 'font-bold' : 'font-medium' }}">Places of Residence Since Birth</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.employment-history.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.employment-history.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.employment-history.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">VIII</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.employment-history.create') ? 'font-bold' : 'font-medium' }}">Employment History</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('phs.foreign-countries.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.foreign-countries.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.foreign-countries.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                    <span class="text-xs text-white font-bold">IX</span>
+                                </span>
+                                <span class="text-sm {{ request()->routeIs('phs.foreign-countries.create') ? 'font-bold' : 'font-medium' }}">Foreign Countries Visited</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="flex-1 ml-72 p-8 mt-16">
+                @yield('content')
+            </main>
+        </div>
+    </div>
+</body>
+</html> 
