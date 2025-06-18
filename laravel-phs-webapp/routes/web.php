@@ -61,17 +61,11 @@ Route::middleware('auth')->group(function () {
     // PHS Routes
     Route::get('/phs/create', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
     Route::post('/phs', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
+    Route::get('/phs/personal-details', [App\Http\Controllers\PersonalDetailsController::class, 'create'])->name('phs.personal-details.create');
+    Route::post('/phs/personal-details', [App\Http\Controllers\PersonalDetailsController::class, 'store'])->name('phs.personal-details.store');
 
     // PDS Routes
     Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
-
-    // Family Background Routes
-    Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
-    Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
-
-    // Personal Characteristics Routes
-    Route::get('/phs/personal-characteristics', [PersonalCharacteristicController::class, 'create'])->name('phs.personal-characteristics.create');
-    Route::post('/phs/personal-characteristics', [PersonalCharacteristicController::class, 'store'])->name('phs.personal-characteristics.store');
 
     // Marital Status Routes
     Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
@@ -97,12 +91,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    // Personal Information
-    Route::get('/phs/personal-information', [App\Http\Controllers\PersonalInformationController::class, 'create'])
-        ->name('phs.personal-information.create');
-    Route::post('/phs/personal-information', [App\Http\Controllers\PersonalInformationController::class, 'store'])
-        ->name('phs.personal-information.store');
 
     // Family Background
     Route::get('/phs/family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'create'])
@@ -145,6 +133,12 @@ Route::middleware('auth')->group(function () {
         ->name('phs.foreign-countries.create');
     Route::post('/phs/foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'store'])
         ->name('phs.foreign-countries.store');
+
+    // Personal Characteristics Routes
+    Route::get('/phs/personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'create'])
+        ->name('phs.personal-characteristics.create');
+    Route::post('/phs/personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'store'])
+        ->name('phs.personal-characteristics.store');
 });
 
 // Admin Routes
