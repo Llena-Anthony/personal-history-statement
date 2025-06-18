@@ -15,6 +15,7 @@
             padding: 0;
             overflow: hidden;
             height: 100vh;
+            font-size: 14px;
         }
         
         .glass-card {
@@ -126,6 +127,8 @@
             filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
             transition: all 0.3s ease;
             position: relative;
+            width: 3.5rem;
+            height: 3.5rem;
         }
 
         .pma-crest::after {
@@ -156,7 +159,7 @@
             display: flex;
             overflow: hidden;
             position: relative;
-            margin: 0.5rem;
+            margin: 0.25rem;
         }
 
         /* Sidebar Enhancements - Modern Design */
@@ -166,7 +169,7 @@
             background-clip: padding-box;
             position: relative;
             overflow: hidden;
-            width: 280px;
+            width: 260px;
             flex-shrink: 0;
             z-index: 30;
             border-radius: 1.5rem;
@@ -202,12 +205,12 @@
 
         .profile-container {
             text-align: left;
-            padding: 2rem 1.5rem;
+            padding: 1.5rem 1.25rem;
             background: linear-gradient(135deg, rgba(43, 75, 125, 0.4) 0%, rgba(27, 54, 93, 0.3) 100%);
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin: 1rem;
+            gap: 0.75rem;
+            margin: 0.75rem;
             border-radius: 1.5rem;
             position: relative;
             overflow: hidden;
@@ -240,8 +243,8 @@
         }
         
         .profile-container .profile-picture {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid transparent;
@@ -266,7 +269,7 @@
         }
         
         .profile-container .user-name {
-            font-size: 1rem;
+            font-size: 0.875rem;
             font-weight: 600;
             color: #fff;
             margin-bottom: 0.25rem;
@@ -303,14 +306,14 @@
         }
         
         .profile-container .user-role {
-            font-size: 0.75rem;
+            font-size: 0.6875rem;
             color: #94a3b8;
             letter-spacing: 0.5px;
         }
         
         .tab-container {
             list-style: none;
-            padding: 0 1rem;
+            padding: 0 0.75rem;
             margin: 0;
             position: relative;
             z-index: 1;
@@ -339,11 +342,11 @@
         .tab-container li a {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             color: #cfd8dc;
             text-decoration: none;
-            font-size: 16px;
-            padding: 14px 18px;
+            font-size: 14px;
+            padding: 12px 16px;
             border-radius: 1rem;
             transition: all 0.3s ease;
             margin-bottom: 0.5rem;
@@ -376,9 +379,9 @@
         }
 
         .tab-container li a i {
-            font-size: 18px;
+            font-size: 16px;
             transition: all 0.3s ease;
-            width: 20px;
+            width: 18px;
             text-align: center;
         }
 
@@ -423,18 +426,19 @@
             flex: 1;
             background: white;
             border-radius: 1.5rem;
-            margin-left: 0.5rem;
+            margin-left: 0.25rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             border: 1px solid rgba(212, 175, 55, 0.1);
+            max-width: calc(100vw - 280px - 1rem);
         }
 
         .content-scroll {
             flex: 1;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 1.25rem;
         }
 
         .content-scroll::-webkit-scrollbar {
@@ -518,12 +522,13 @@
             }
             
             .header-title {
-                font-size: 1.25rem;
+                font-size: 1.125rem;
             }
 
             .content-area {
-                margin: 0.5rem;
+                margin: 0.25rem;
                 border-radius: 1rem;
+                max-width: calc(100vw - 0.5rem);
             }
 
             .content-scroll {
@@ -595,42 +600,42 @@
         <!-- Header -->
         <header class="admin-header">
             <div class="header-content">
-                <div class="flex items-center justify-between px-8 py-6">
+                <div class="flex items-center justify-between px-6 py-4">
                     <!-- Left Section -->
-                    <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-4">
                         <!-- Mobile Menu Button -->
                         <button class="mobile-menu-btn lg:hidden text-white hover:text-[#D4AF37] transition-colors" onclick="toggleSidebar()">
-                            <i class="fas fa-bars text-xl"></i>
+                            <i class="fas fa-bars text-lg"></i>
                         </button>
                         
                         <!-- PMA Logo/Crest -->
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-3">
                             <img src="{{ asset('images/pma_logo.svg') }}" 
                                  alt="PMA Logo" 
-                                 class="pma-crest w-14 h-14">
+                                 class="pma-crest">
                             <div class="hidden sm:block">
-                                <h1 class="header-title text-white font-bold text-xl">Personal History Statement Online System</h1>
-                                <p class="text-[#D4AF37] text-sm font-medium">Administrative Portal</p>
+                                <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
+                                <p class="text-[#D4AF37] text-xs font-medium">Administrative Portal</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Right Section -->
-                    <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-4">
                         <!-- Notifications -->
                         <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
-                            <i class="fas fa-bell text-xl"></i>
+                            <i class="fas fa-bell text-lg"></i>
                             <span class="notification-badge">3</span>
                         </button>
                         
                         <!-- Current Time -->
-                        <div class="hidden md:block text-white text-sm">
+                        <div class="hidden md:block text-white text-xs">
                             <div class="font-medium" id="current-time"></div>
                             <div class="text-[#D4AF37] text-xs" id="current-date"></div>
                         </div>
                         
                         <!-- Breadcrumb -->
-                        <div class="hidden lg:block text-white text-sm">
+                        <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Admin</span>
                             <span class="mx-2">/</span>
                             <span>@yield('header', 'Dashboard')</span>
@@ -710,14 +715,14 @@
         <!-- Footer -->
         <footer class="admin-footer">
             <div class="footer-pattern">
-                <div class="px-8 py-6">
-                    <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="px-6 py-4">
+                    <div class="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
                         <!-- Left Section -->
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-3">
                             <img src="{{ asset('images/pma_logo.svg') }}" 
                                  alt="PMA Logo" 
-                                 class="w-10 h-10 opacity-80">
-                            <div class="text-white text-sm">
+                                 class="w-8 h-8 opacity-80">
+                            <div class="text-white text-xs">
                                 <p class="font-medium">Philippine Military Academy</p>
                                 <p class="text-[#D4AF37] text-xs">Personal History Statement System</p>
                             </div>
@@ -727,10 +732,10 @@
                         <div class="text-center text-white text-xs">
                             <p class="text-[#D4AF37] font-medium">"Character, Excellence, Service"</p>
                             <p class="mt-1">Fort Del Pilar, Baguio City, Philippines</p>
-            </div>
+                        </div>
 
                         <!-- Right Section -->
-                        <div class="flex items-center space-x-6 text-white text-xs">
+                        <div class="flex items-center space-x-4 text-white text-xs">
                             <div class="text-center">
                                 <p class="text-[#D4AF37] font-medium">System Status</p>
                                 <div class="flex items-center space-x-1 mt-1">

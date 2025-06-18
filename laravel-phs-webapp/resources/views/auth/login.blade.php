@@ -93,18 +93,18 @@
         <img src="{{ asset('images/pmabg4.png') }}" alt="PMA Background 4">
     </div>
 
-    <div class="w-full max-w-7xl">
+    <div class="w-full max-w-5xl">
         <div class="glass-card rounded-2xl shadow-2xl overflow-hidden">
             <div class="flex flex-col lg:flex-row">
                 <!-- Left side - Login Form -->
-                <div class="w-full lg:w-1/2 p-8 lg:p-16">
-                    <div class="text-center mb-12 fade-in">
-                        <h2 class="text-3xl lg:text-4xl font-semibold text-[#1B365D] mb-3">PHS Online Application System</h2>
-                        <p class="text-gray-600 text-base lg:text-lg">Welcome to the Philippine Military Academy's Document Portal</p>
+                <div class="w-full lg:w-1/2 p-6 lg:p-12">
+                    <div class="text-center mb-8 fade-in">
+                        <h2 class="text-2xl lg:text-3xl font-semibold text-[#1B365D] mb-2">PHS Online Application System</h2>
+                        <p class="text-gray-600 text-sm lg:text-base">Welcome to the Philippine Military Academy's Document Portal</p>
                     </div>
                     
                     @if(session('error'))
-                    <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 fade-in">
+                    <div class="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 fade-in">
                         <div class="flex items-center">
                             <div class="flex-shrink-0">
                                 <i class="fas fa-exclamation-circle text-red-500"></i>
@@ -116,16 +116,16 @@
                     </div>
                     @endif
                     
-                    <form method="POST" action="{{ route('login') }}" class="space-y-6 lg:space-y-8 fade-in" style="animation-delay: 0.1s;">
+                    <form method="POST" action="{{ route('login') }}" class="space-y-4 lg:space-y-6 fade-in" style="animation-delay: 0.1s;">
                         @csrf
                         <div>
                             <label for="username" class="block text-sm font-medium text-[#1B365D] mb-2">Username</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-user text-gray-400"></i>
                                 </div>
                                 <input type="text" name="username" id="username" value="{{ old('username') }}" required
-                                    class="input-field block w-full pl-12 pr-4 py-3 lg:py-4 border {{ $errors->has('username') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
+                                    class="input-field block w-full pl-10 pr-4 py-2.5 lg:py-3 border {{ $errors->has('username') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
                                 @error('username')
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                     <i class="fas fa-exclamation-circle text-red-500"></i>
@@ -140,16 +140,16 @@
                         <div>
                             <label for="password" class="block text-sm font-medium text-[#1B365D] mb-2">Password</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
                                 <input type="password" name="password" id="password" required
-                                    class="input-field block w-full pl-12 pr-12 py-3 lg:py-4 border {{ $errors->has('password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
-                                <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    class="input-field block w-full pl-10 pr-12 py-2.5 lg:py-3 border {{ $errors->has('password') ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-200 focus:ring-[#1B365D] focus:border-[#1B365D]' }} rounded-xl bg-gray-50 focus:outline-none">
+                                <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none">
                                     <i class="fas fa-eye" id="togglePasswordIcon"></i>
                                 </button>
                                 @error('password')
-                                <div class="absolute inset-y-0 right-0 pr-12 flex items-center pointer-events-none">
+                                <div class="absolute inset-y-0 right-0 pr-10 flex items-center pointer-events-none">
                                     <i class="fas fa-exclamation-circle text-red-500"></i>
                                 </div>
                                 @enderror
@@ -173,7 +173,7 @@
 
                         <div>
                             <button type="submit"
-                                class="btn-primary w-full flex justify-center py-3 lg:py-4 px-6 border border-transparent rounded-xl text-base font-medium text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                                class="btn-primary w-full flex justify-center py-2.5 lg:py-3 px-6 border border-transparent rounded-xl text-sm font-medium text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
                                 <i class="fas fa-sign-in-alt mr-2"></i>
                                 Sign in
                             </button>
@@ -181,22 +181,22 @@
                     </form>
 
                     <!-- PMA Links Section -->
-                    <div class="mt-8 lg:mt-12 pt-6 lg:pt-8 border-t border-gray-200 fade-in" style="animation-delay: 0.2s;">
+                    <div class="mt-6 lg:mt-8 pt-4 lg:pt-6 border-t border-gray-200 fade-in" style="animation-delay: 0.2s;">
                         <div class="text-center">
-                            <p class="text-sm text-gray-600 mb-4 lg:mb-6">Connect with Philippine Military Academy</p>
-                            <div class="flex justify-center space-x-6 lg:space-x-8">
+                            <p class="text-sm text-gray-600 mb-3 lg:mb-4">Connect with Philippine Military Academy</p>
+                            <div class="flex justify-center space-x-4 lg:space-x-6">
                                 <a href="https://www.pma.edu.ph/" target="_blank" 
                                    class="text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">
                                     <div class="flex items-center space-x-2">
-                                        <i class="fas fa-globe text-lg"></i>
-                                        <span class="text-sm">Official Website</span>
+                                        <i class="fas fa-globe text-base"></i>
+                                        <span class="text-xs">Official Website</span>
                                     </div>
                                 </a>
                                 <a href="https://www.facebook.com/philippinemilitaryacademypublicaffairs/" target="_blank"
                                    class="text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">
                                     <div class="flex items-center space-x-2">
-                                        <i class="fab fa-facebook text-lg"></i>
-                                        <span class="text-sm">Facebook Page</span>
+                                        <i class="fab fa-facebook text-base"></i>
+                                        <span class="text-xs">Facebook Page</span>
                                     </div>
                                 </a>
                             </div>
