@@ -39,7 +39,7 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
-    
+
     // Password Reset Routes
     Route::get('forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])
         ->name('password.request');
@@ -100,7 +100,7 @@ Route::middleware('auth')->group(function () {
 
     // Personal Information
     Route::get('/phs/personal-information', [App\Http\Controllers\PersonalInformationController::class, 'create'])
-        ->name('phs.personal-information.create');
+ *       ->name('phs.personal-information.create');
     Route::post('/phs/personal-information', [App\Http\Controllers\PersonalInformationController::class, 'store'])
         ->name('phs.personal-information.store');
 
@@ -150,7 +150,7 @@ Route::middleware('auth')->group(function () {
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
-    
+
     // User Management Routes
     Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');

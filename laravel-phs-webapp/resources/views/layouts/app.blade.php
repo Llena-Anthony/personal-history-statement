@@ -8,48 +8,48 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        
+
         .glass-card {
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             background-color: rgba(255, 255, 255, 0.8);
         }
-        
+
         .btn-primary {
             transition: all 0.2s ease;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15);
         }
-        
+
         .fade-in {
             animation: fadeIn 0.6s ease-out;
         }
-        
+
         .slide-in {
             animation: slideIn 0.6s ease-out;
         }
-        
+
         .scale-in {
             animation: scaleIn 0.6s ease-out;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         @keyframes slideIn {
             from { transform: translateX(-20px); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-        
+
         @keyframes scaleIn {
             from { transform: scale(0.95); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
@@ -108,4 +108,4 @@
 
     @yield('scripts')
 </body>
-</html> 
+</html>

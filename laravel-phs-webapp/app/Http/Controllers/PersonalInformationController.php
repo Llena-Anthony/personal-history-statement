@@ -10,7 +10,7 @@ class PersonalInformationController extends Controller
 {
     public function create()
     {
-        return view('phs.personal-information', [
+        return view('phs.create', [
             'progress' => 0
         ]);
     }
@@ -65,8 +65,8 @@ class PersonalInformationController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error saving personal information: ' . $e->getMessage());
-            
+
             return back()->with('error', 'An error occurred while saving your information. Please try again.');
         }
     }
-} 
+}
