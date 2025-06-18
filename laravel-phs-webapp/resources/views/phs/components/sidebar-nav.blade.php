@@ -1,14 +1,14 @@
 @php
 $sections = [
-    'personal-information' => [
-        'title' => 'Personal Information',
+    'personal-details' => [
+        'title' => 'Personal Details',
         'icon' => 'user',
         'status' => 'completed'
     ],
-    'family-background' => [
-        'title' => 'Family Background',
-        'icon' => 'users',
-        'status' => 'in-progress'
+    'marital-status' => [
+        'title' => 'Marital Status',
+        'icon' => 'heart',
+        'status' => 'pending'
     ],
     'educational-background' => [
         'title' => 'Educational Background',
@@ -18,11 +18,6 @@ $sections = [
     'military-history' => [
         'title' => 'Military History',
         'icon' => 'shield-check',
-        'status' => 'pending'
-    ],
-    'marital-status' => [
-        'title' => 'Marital Status',
-        'icon' => 'heart',
         'status' => 'pending'
     ],
     'places-of-residence' => [
@@ -42,7 +37,7 @@ $sections = [
     ]
 ];
 
-$currentSection = request()->segment(2) ?? 'personal-information';
+$currentSection = request()->segment(2) ?? 'personal-details';
 @endphp
 
 @foreach($sections as $route => $section)
