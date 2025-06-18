@@ -217,11 +217,11 @@
                             <i class="fa-regular fa-address-book"></i>
                             <span class="ml-3">User Management</span>
                         </a></li>
-                        <li><a href="#" class="nav-link">
+                        <li><a href="{{ route('admin.activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}">
                             <i class="fas fa-history"></i>
                             <span class="ml-3">Activity Logs</span>
                         </a></li>
-                        <li><a href="#" class="nav-link">
+                        <li><a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
                             <i class="fa-regular fa-file-lines"></i>
                             <span class="ml-3">Reports</span>
                         </a></li>
