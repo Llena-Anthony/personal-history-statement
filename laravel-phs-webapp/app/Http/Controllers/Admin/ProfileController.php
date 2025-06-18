@@ -95,6 +95,11 @@ class ProfileController extends Controller
                 $filename = 'profile_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
                 $path = $file->storeAs('profile-photos', $filename, 'public');
                 
+                // Ensure the directory exists
+                if (!Storage::disk('public')->exists('profile-photos')) {
+                    Storage::disk('public')->makeDirectory('profile-photos');
+                }
+                
                 $user->profile_photo_path = $path;
                 
                 Log::info('Profile photo uploaded successfully', [
