@@ -31,6 +31,11 @@ class ActivityLogsController extends Controller
         $statuses = ActivityLog::distinct()->pluck('status')->filter()->sort();
         $users = User::orderBy('name')->get(['id', 'name', 'username', 'email']);
 
+        // Get searchable fields for the search bar
+        $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+            return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+        })->toArray();
+
         // Get statistics
         $stats = [
             'total' => ActivityLog::count(),
@@ -52,7 +57,8 @@ class ActivityLogsController extends Controller
             'statuses',
             'users',
             'stats',
-            'actionStats'
+            'actionStats',
+            'searchFields'
         ));
     }
 
@@ -119,11 +125,16 @@ class ActivityLogsController extends Controller
 
     public function clearOldLogs(Request $request)
     {
-        $request->validate([
-            'days' => 'required|integer|min:30|max:365'
-        ]);
+        // Use default of 30 days if not specified
+        $days = $request->get('days', 30);
+        
+        // Validate the days parameter if provided
+        if ($request->has('days')) {
+            $request->validate([
+                'days' => 'required|integer|min:30|max:365'
+            ]);
+        }
 
-        $days = $request->days;
         $deletedCount = ActivityLog::where('created_at', '<', now()->subDays($days))->delete();
 
         return redirect()->route('admin.activity-logs.index')

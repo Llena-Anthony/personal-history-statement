@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Searchable;
 
 class PHSSubmission extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'phs_submissions';
     
@@ -16,6 +17,40 @@ class PHSSubmission extends Model
         'status',
         'admin_notes',
     ];
+
+    /**
+     * Get searchable fields for PHSSubmission model
+     */
+    public function getSearchableFields()
+    {
+        return [
+            'status' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Status'
+            ],
+            'admin_notes' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Admin Notes'
+            ],
+            'user.name' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Name'
+            ],
+            'user.username' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Username'
+            ],
+            'user.email' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Email'
+            ]
+        ];
+    }
 
     public function user()
     {

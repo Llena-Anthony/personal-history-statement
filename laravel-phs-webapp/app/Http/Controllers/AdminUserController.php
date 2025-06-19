@@ -12,10 +12,33 @@ use Illuminate\Support\Facades\Log;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::paginate(10);
-        return view('admin.users.index', ['users' => $users]);
+        $query = User::query();
+
+        // Apply all filters using the Searchable trait
+        $query->applyFilters($request->all());
+
+        // Handle sorting
+        $sort = $request->get('sort', 'created_at');
+        $direction = $request->get('direction', 'desc');
+        
+        if (in_array($sort, ['name', 'username', 'email', 'usertype', 'organic_role', 'is_active', 'created_at'])) {
+            $query->orderBy($sort, $direction);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        // Get pagination per page from request or default to 10
+        $perPage = $request->get('per_page', 10);
+        $users = $query->paginate($perPage)->withQueryString();
+
+        // Get searchable fields for the search bar
+        $searchFields = collect((new User())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+            return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+        })->toArray();
+
+        return view('admin.users.index', compact('users', 'searchFields'));
     }
 
     public function create()

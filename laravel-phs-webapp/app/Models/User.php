@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\ResetPasswordNotification;
+use App\Traits\Searchable;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -54,6 +55,58 @@ class User extends Authenticatable
         'password' => 'hashed',
         'is_admin' => 'boolean',
     ];
+
+    /**
+     * Get searchable fields for User model
+     */
+    public function getSearchableFields()
+    {
+        return [
+            'name' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Full Name'
+            ],
+            'username' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Username'
+            ],
+            'email' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Email Address'
+            ],
+            'usertype' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Type'
+            ],
+            'organic_role' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Organic Role'
+            ],
+            'branch' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Branch'
+            ],
+            'created_by' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Created By'
+            ]
+        ];
+    }
+
+    /**
+     * Get the status field name for User model
+     */
+    protected function getStatusField()
+    {
+        return 'is_active';
+    }
 
     /**
      * Get the login username to be used by the controller.
