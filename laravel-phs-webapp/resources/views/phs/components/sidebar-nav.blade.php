@@ -54,11 +54,11 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('phs.educational-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.educational-background.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.educational-background.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                        <a href="{{ route('phs.educational-background') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.educational-background') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.educational-background') ? 'bg-yellow-400' : 'bg-gray-200' }}">
                                 <span class="text-xs text-white font-bold">V</span>
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.educational-background.create') ? 'font-bold' : 'font-medium' }}">Educational Background</span>
+                            <span class="text-sm {{ request()->routeIs('phs.educational-background') ? 'font-bold' : 'font-medium' }}">Educational Background</span>
                         </a>
                     </li>
                     <li>

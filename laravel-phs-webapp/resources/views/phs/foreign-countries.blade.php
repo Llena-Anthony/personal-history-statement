@@ -1,213 +1,57 @@
-@extends('layouts.app')
+@extends('layouts.phs-new')
 
-@section('title', 'Foreign Countries Visited - Personal History Statement')
+@section('title', 'Foreign Countries Visited')
 
 @section('content')
-<div class="flex min-h-screen bg-gray-100">
-    <!-- Fixed Sidebar -->
-    <div class="w-72 bg-white shadow-lg fixed overflow-y-auto" style="position: fixed; top: 64px; left: 0; z-index: 40; height: calc(100vh - 64px);">
-        <!-- User Profile Section -->
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                    <i class="fas fa-user text-gray-500 text-2xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-base font-semibold text-gray-800">{{ auth()->user()->name }}</h3>
-                    <p class="text-sm text-gray-500">Personal History Statement</p>
-                </div>
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
+                <i class="fas fa-globe-asia text-white text-xl"></i>
             </div>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="p-6">
-            <ul class="space-y-6">
-                <li>
-                    <a href="{{ route('phs.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">I</span>
-                        </span>
-                        <span class="text-gray-400">Personal Details</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.personal-characteristics.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">II</span>
-                        </span>
-                        <span class="text-gray-400">Personal Characteristics</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.marital-status.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">III</span>
-                        </span>
-                        <span class="text-gray-400">Marital Status</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.family-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">IV</span>
-                        </span>
-                        <span class="text-gray-400">Family Background</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.educational-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">V</span>
-                        </span>
-                        <span class="text-gray-400">Educational Background</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.military-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">VI</span>
-                        </span>
-                        <span class="text-gray-400">Military History</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.places-of-residence.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">VII</span>
-                        </span>
-                        <span class="text-gray-400">Places of Residence</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.employment-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">VIII</span>
-                        </span>
-                        <span class="text-gray-400">Employment History</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.foreign-countries.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">IX</span>
-                        </span>
-                        <span class="text-black">Foreign Countries Visited</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 ml-72 p-8">
-        <div class="max-w-4xl mx-auto">
-            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-[#1B365D] mb-6 flex items-center">
-                    <i class="fas fa-globe-americas mr-3 text-[#D4AF37]"></i>
-                    Foreign Countries Visited
-                </h2>
-
-                <form method="POST" action="{{ route('phs.foreign-countries.store') }}" class="space-y-8">
-                    @csrf
-
-                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-[#1B365D]">Visits</h3>
-                            <button type="button" id="addVisit" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
-                                <i class="fas fa-plus mr-2"></i>Add Visit
-                            </button>
-                        </div>
-                        <div id="visits" class="space-y-4">
-                            <!-- Visit template will be cloned here -->
-                        </div>
-                    </div>
-
-                    <!-- Navigation Buttons -->
-                    <div class="flex justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('phs.employment-history.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                            Previous Section
-                        </a>
-                        <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
-                            Submit Form
-                        </button>
-                    </div>
-                </form>
+            <div>
+                <h1 class="text-3xl font-bold text-[#1B365D]">Foreign Countries Visited</h1>
+                <p class="text-gray-600">List all foreign countries you have visited.</p>
             </div>
         </div>
     </div>
+    <form method="POST" action="{{ route('phs.foreign-countries.store') }}" class="space-y-8">
+        @csrf
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-[#1B365D]">Countries Visited</h3>
+                <button type="button" id="addCountry" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Country
+                </button>
+            </div>
+            <div id="countries" class="space-y-4">
+                <div class="country p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                            <input type="text" name="countries[0][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
+                            <input type="number" name="countries[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">To (Year)</label>
+                            <input type="number" name="countries[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-between pt-6 border-t border-gray-200">
+            <a href="{{ route('phs.employment-history.create') }}" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                <i class="fas fa-arrow-left mr-2"></i> Previous Section
+            </a>
+            <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </form>
 </div>
-
-@push('scripts')
-<script>
-    let visitCount = 1;
-    document.querySelector('.add-visit').addEventListener('click', function() {
-        const template = `
-            <div class="visit p-4 bg-white rounded-lg border border-gray-200">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Country Name</label>
-                        <input type="text" name="visits[${visitCount}][country]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Visit</label>
-                        <input type="date" name="visits[${visitCount}][visit_date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Purpose of Visit</label>
-                        <input type="text" name="visits[${visitCount}][purpose]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <h4 class="text-md font-semibold text-[#1B365D] mb-4">Address Abroad</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
-                            <input type="text" name="visits[${visitCount}][street_address]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">City/Locality</label>
-                            <input type="text" name="visits[${visitCount}][city]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">State/Province</label>
-                            <input type="text" name="visits[${visitCount}][state]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Postal Code</label>
-                            <input type="text" name="visits[${visitCount}][postal_code]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        document.getElementById('visits').insertAdjacentHTML('beforeend', template);
-        visitCount++;
-    });
-
-    let countryCount = 1;
-    document.getElementById('addCountry').addEventListener('click', function() {
-        const countriesContainer = document.getElementById('countries');
-        const newCountry = document.createElement('div');
-        newCountry.className = 'country p-4 bg-white rounded-lg border border-gray-200';
-        newCountry.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Country Name</label>
-                    <input type="text" name="countries[${countryCount}][name]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                    <input type="date" name="countries[${countryCount}][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <input type="text" name="countries[${countryCount}][description]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                </div>
-            </div>
-        `;
-        countriesContainer.appendChild(newCountry);
-        countryCount++;
-    });
-</script>
-@endpush
-@endsection 
+@endsection
+@php($currentSection = 'foreign-countries') 

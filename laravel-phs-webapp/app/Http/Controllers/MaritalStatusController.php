@@ -6,12 +6,15 @@ use App\Models\MaritalStatus;
 use App\Models\Child;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Traits\PHSSectionTracking;
 
 class MaritalStatusController extends Controller
 {
+    use PHSSectionTracking;
+
     public function create()
     {
-        return view('phs.marital-status');
+        return view('phs.marital-status', $this->getCommonViewData('marital-status'));
     }
 
     public function store(Request $request)
@@ -73,6 +76,9 @@ class MaritalStatusController extends Controller
                     }
                 }
             }
+
+            // Mark marital status as completed
+            $this->markSectionAsCompleted('marital-status');
 
             DB::commit();
 
