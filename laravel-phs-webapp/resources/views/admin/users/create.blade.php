@@ -74,7 +74,7 @@
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring-[#1B365D] sm:text-sm">
                         <option value="admin" {{ old('user_type') == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="personnel" {{ old('user_type') == 'personnel' ? 'selected' : '' }}>Personnel</option>
-                        <option value="regular" {{ old('user_type') == 'regular' ? 'selected' : '' }}>Regular</option>
+                        <option value="regular" {{ old('user_type') == 'client' ? 'selected' : '' }}>Client</option>
                     </select>
                 </div>
 

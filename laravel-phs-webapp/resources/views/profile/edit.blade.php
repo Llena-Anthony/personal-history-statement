@@ -12,7 +12,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('profile.update') }}">
+            <form method="POST" action="{{ route('profile.update') }}" id="profile-form">
                 @csrf
                 @method('PUT')
 
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="flex items-center justify-end">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <button type="button" onclick="confirmProfileUpdate()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Update Profile
                     </button>
                 </div>
@@ -67,4 +67,26 @@
         </div>
     </div>
 </div>
+
+<!-- Confirmation Modal for Profile Update -->
+<x-confirmation-modal 
+    id="profileUpdateModal"
+    title="Confirm Profile Update"
+    message="Are you sure you want to update your profile information? This action cannot be undone."
+    confirmText="Update Profile"
+    cancelText="Cancel"
+    confirmClass="bg-blue-500 hover:bg-blue-700"
+/>
+
+<script>
+function confirmProfileUpdate() {
+    showConfirmationModal(
+        'profileUpdateModal',
+        'Are you sure you want to update your profile information? This action cannot be undone.',
+        function() {
+            document.getElementById('profile-form').submit();
+        }
+    );
+}
+</script>
 @endsection 
