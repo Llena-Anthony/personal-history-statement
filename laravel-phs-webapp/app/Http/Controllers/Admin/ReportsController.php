@@ -54,6 +54,35 @@ class ReportsController extends Controller
             'system' => 'System Overview'
         ];
 
+        // Get searchable fields based on report type
+        $searchFields = [];
+        switch ($reportType) {
+            case 'activity':
+                $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                    return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+                })->toArray();
+                break;
+            case 'submissions':
+                $phsFields = collect((new PHSSubmission())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                    return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+                })->toArray();
+                $pdsFields = collect((new PDSSubmission())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                    return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+                })->toArray();
+                $searchFields = array_merge($phsFields, $pdsFields);
+                break;
+            case 'users':
+                $searchFields = collect((new User())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                    return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+                })->toArray();
+                break;
+            case 'system':
+                $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                    return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+                })->toArray();
+                break;
+        }
+
         return view('admin.reports.index', compact(
             'data',
             'summary',
@@ -65,77 +94,31 @@ class ReportsController extends Controller
             'search',
             'userTypes',
             'statuses',
-            'reportTypes'
+            'reportTypes',
+            'searchFields'
         ));
     }
 
     private function getActivityReport(Request $request)
     {
-        $query = ActivityLog::with('user')
-            ->when($request->date_from, function ($q, $date) {
-                $q->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function ($q, $date) {
-                $q->whereDate('created_at', '<=', $date);
-            })
-            ->when($request->search, function ($q, $search) {
-                $q->where(function ($subQ) use ($search) {
-                    $subQ->where('action', 'like', "%{$search}%")
-                         ->orWhere('description', 'like', "%{$search}%")
-                         ->orWhereHas('user', function ($userQ) use ($search) {
-                             $userQ->where('name', 'like', "%{$search}%")
-                                   ->orWhere('username', 'like', "%{$search}%")
-                                   ->orWhere('email', 'like', "%{$search}%");
-                         });
-                });
-            })
-            ->when($request->user_type, function ($q, $userType) {
-                $q->whereHas('user', function ($userQ) use ($userType) {
-                    $userQ->where('usertype', $userType);
-                });
-            })
-            ->when($request->status, function ($q, $status) {
-                $q->where('status', $status);
-            });
+        $query = ActivityLog::with('user');
+        
+        // Apply all filters using the Searchable trait
+        $query->applyFilters($request->all());
 
         return $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
     }
 
     private function getSubmissionsReport(Request $request)
     {
-        $phsQuery = PHSSubmission::with('user')
-            ->when($request->date_from, function ($q, $date) {
-                $q->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function ($q, $date) {
-                $q->whereDate('created_at', '<=', $date);
-            })
-            ->when($request->search, function ($q, $search) {
-                $q->whereHas('user', function ($userQ) use ($search) {
-                    $userQ->where('name', 'like', "%{$search}%")
-                          ->orWhere('username', 'like', "%{$search}%");
-                });
-            })
-            ->when($request->status, function ($q, $status) {
-                $q->where('status', $status);
-            });
-
-        $pdsQuery = PDSSubmission::with('user')
-            ->when($request->date_from, function ($q, $date) {
-                $q->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function ($q, $date) {
-                $q->whereDate('created_at', '<=', $date);
-            })
-            ->when($request->search, function ($q, $search) {
-                $q->whereHas('user', function ($userQ) use ($search) {
-                    $userQ->where('name', 'like', "%{$search}%")
-                          ->orWhere('username', 'like', "%{$search}%");
-                });
-            })
-            ->when($request->status, function ($q, $status) {
-                $q->where('status', $status);
-            });
+        $phsQuery = PHSSubmission::with('user');
+        $pdsQuery = PDSSubmission::with('user');
+        
+        // Apply filters to PHS submissions
+        $phsQuery->applyFilters($request->all());
+        
+        // Apply filters to PDS submissions
+        $pdsQuery->applyFilters($request->all());
 
         return [
             'phs' => $phsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString(),
@@ -145,20 +128,10 @@ class ReportsController extends Controller
 
     private function getUsersReport(Request $request)
     {
-        $query = User::when($request->search, function ($q, $search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            })
-            ->when($request->user_type, function ($q, $userType) {
-                $q->where('usertype', $userType);
-            })
-            ->when($request->date_from, function ($q, $date) {
-                $q->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function ($q, $date) {
-                $q->whereDate('created_at', '<=', $date);
-            });
+        $query = User::query();
+        
+        // Apply all filters using the Searchable trait
+        $query->applyFilters($request->all());
 
         return $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
     }

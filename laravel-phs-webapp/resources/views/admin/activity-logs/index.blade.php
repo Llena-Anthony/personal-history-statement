@@ -57,71 +57,21 @@
         </div>
     </div>
 
-    <!-- Filters -->
-    <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
-        <form action="{{ route('admin.activity-logs.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50"
-                    placeholder="Search activities, users...">
-            </div>
-            <div>
-                <label for="action" class="block text-sm font-medium text-gray-700 mb-1">Action</label>
-                <select name="action" id="action" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-                    <option value="">All Actions</option>
-                    @foreach($actions as $action)
-                        <option value="{{ $action }}" {{ request('action') == $action ? 'selected' : '' }}>
-                            {{ ucfirst(str_replace('_', ' ', $action)) }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" id="status" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-                    <option value="">All Status</option>
-                    @foreach($statuses as $status)
-                        <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
-                            {{ ucfirst($status) }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label for="user_id" class="block text-sm font-medium text-gray-700 mb-1">User</label>
-                <select name="user_id" id="user_id" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-                    <option value="">All Users</option>
-                    @foreach($users as $user)
-                        <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
-                            {{ $user->name }} ({{ $user->username }})
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label for="date_from" class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
-                <input type="date" name="date_from" id="date_from" value="{{ request('date_from') }}" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="date_to" class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
-                <input type="date" name="date_to" id="date_to" value="{{ request('date_to') }}" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-            </div>
-            <div class="flex items-end space-x-2">
-                <button type="submit" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:ring-opacity-50">
-                    <i class="fas fa-search mr-2"></i>Filter
-                </button>
-                <a href="{{ route('admin.activity-logs.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
-                    <i class="fas fa-times mr-2"></i>Clear
-                </a>
-            </div>
-        </form>
-    </div>
+    <!-- Search Bar with Filter Dropdowns -->
+    <x-admin.search-bar 
+        :route="route('admin.activity-logs.index')"
+        placeholder="Search activities, users, IP addresses, or any field..."
+        :filters="[
+            'status' => [
+                'success' => 'Success',
+                'warning' => 'Warning',
+                'error' => 'Error'
+            ],
+            'action' => $actions,
+            'user' => $users,
+            'date_range' => true
+        ]"
+    />
 
     <!-- Action Buttons -->
     <div class="flex justify-between items-center">
@@ -248,45 +198,36 @@
         
         <!-- Pagination -->
         @if($activityLogs->hasPages())
-        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
             {{ $activityLogs->links() }}
         </div>
         @endif
     </div>
 </div>
 
-<!-- Clear Old Logs Modal -->
+<!-- Clear Logs Modal -->
 <div id="clearLogsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                 <i class="fas fa-exclamation-triangle text-red-600"></i>
             </div>
-            <div class="mt-3 text-center">
-                <h3 class="text-lg font-medium text-gray-900">Clear Old Activity Logs</h3>
-                <div class="mt-2 px-7 py-3">
-                    <p class="text-sm text-gray-500">
-                        This will permanently delete activity logs older than the specified number of days. This action cannot be undone.
-                    </p>
-                </div>
-                <form action="{{ route('admin.activity-logs.clear-old') }}" method="POST" class="mt-4">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4">Clear Old Logs</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500">
+                    This will permanently delete activity logs older than 30 days. This action cannot be undone.
+                </p>
+            </div>
+            <div class="items-center px-4 py-3">
+                <form action="{{ route('admin.activity-logs.clear-old') }}" method="POST" class="inline">
                     @csrf
-                    <div class="mb-4">
-                        <label for="days" class="block text-sm font-medium text-gray-700 mb-1">Delete logs older than (days)</label>
-                        <input type="number" name="days" id="days" min="30" max="365" value="90" required
-                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-                    </div>
-                    <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeClearLogsModal()" 
-                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
-                            Cancel
-                        </button>
-                        <button type="submit" 
-                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
-                            Clear Logs
-                        </button>
-                    </div>
+                    <button type="submit" class="px-4 py-2 bg-red-500 text-white text-base font-medium rounded-md w-24 shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+                        Clear
+                    </button>
                 </form>
+                <button onclick="closeClearLogsModal()" class="ml-3 px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-24 shadow-sm hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
@@ -300,12 +241,5 @@ function openClearLogsModal() {
 function closeClearLogsModal() {
     document.getElementById('clearLogsModal').classList.add('hidden');
 }
-
-// Close modal when clicking outside
-document.getElementById('clearLogsModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeClearLogsModal();
-    }
-});
 </script>
 @endsection 

@@ -6,48 +6,20 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Filters -->
-    <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
-        <form action="{{ route('admin.phs.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50"
-                    placeholder="Search by name or username">
-            </div>
-            <div>
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" id="status" 
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-                    <option value="">All Status</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="reviewed" {{ request('status') == 'reviewed' ? 'selected' : '' }}>Reviewed</option>
-                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
-                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                </select>
-            </div>
-            <div>
-                <label for="date_from" class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
-                <input type="date" name="date_from" id="date_from" value="{{ request('date_from') }}"
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-            </div>
-            <div>
-                <label for="date_to" class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
-                <input type="date" name="date_to" id="date_to" value="{{ request('date_to') }}"
-                    class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#1B365D] focus:ring focus:ring-[#1B365D] focus:ring-opacity-50">
-            </div>
-            <div class="md:col-span-4 flex justify-end space-x-3">
-                <button type="submit" class="btn-primary inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
-                    <i class="fas fa-search mr-2"></i>
-                    Apply Filters
-                </button>
-                <a href="{{ route('admin.phs.index') }}" class="btn-secondary inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
-                    <i class="fas fa-redo mr-2"></i>
-                    Reset
-                </a>
-            </div>
-        </form>
-    </div>
+    <!-- Search Bar with Filter Dropdowns -->
+    <x-admin.search-bar 
+        :route="route('admin.phs.index')"
+        placeholder="Search by name, username, status, notes, or any field..."
+        :filters="[
+            'status' => [
+                'pending' => 'Pending',
+                'reviewed' => 'Reviewed', 
+                'approved' => 'Approved',
+                'rejected' => 'Rejected'
+            ],
+            'date_range' => true
+        ]"
+    />
 
     <!-- Submissions Table -->
     <div class="bg-white rounded-xl shadow-sm overflow-hidden scale-in">

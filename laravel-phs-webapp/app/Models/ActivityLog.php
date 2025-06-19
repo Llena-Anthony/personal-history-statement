@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Searchable;
 
 class ActivityLog extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'user_id',
@@ -28,41 +29,58 @@ class ActivityLog extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get searchable fields for ActivityLog model
+     */
+    public function getSearchableFields()
+    {
+        return [
+            'action' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Action'
+            ],
+            'description' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Description'
+            ],
+            'status' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Status'
+            ],
+            'ip_address' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'IP Address'
+            ],
+            'user_agent' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Agent'
+            ],
+            'user.name' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Name'
+            ],
+            'user.username' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Username'
+            ],
+            'user.email' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Email'
+            ]
+        ];
+    }
+
     public function scopeFilter($query, $filters)
     {
-        if (isset($filters['search'])) {
-            $query->where(function ($q) use ($filters) {
-                $q->where('action', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('description', 'like', '%' . $filters['search'] . '%')
-                  ->orWhereHas('user', function ($userQuery) use ($filters) {
-                      $userQuery->where('name', 'like', '%' . $filters['search'] . '%')
-                               ->orWhere('email', 'like', '%' . $filters['search'] . '%')
-                               ->orWhere('username', 'like', '%' . $filters['search'] . '%');
-                  });
-            });
-        }
-
-        if (isset($filters['action']) && $filters['action']) {
-            $query->where('action', $filters['action']);
-        }
-
-        if (isset($filters['status']) && $filters['status']) {
-            $query->where('status', $filters['status']);
-        }
-
-        if (isset($filters['user_id']) && $filters['user_id']) {
-            $query->where('user_id', $filters['user_id']);
-        }
-
-        if (isset($filters['date_from']) && $filters['date_from']) {
-            $query->whereDate('created_at', '>=', $filters['date_from']);
-        }
-
-        if (isset($filters['date_to']) && $filters['date_to']) {
-            $query->whereDate('created_at', '<=', $filters['date_to']);
-        }
-
-        return $query;
+        return $query->applyFilters($filters);
     }
 
     public function getStatusColorAttribute()

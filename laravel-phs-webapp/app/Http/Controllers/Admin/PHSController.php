@@ -56,7 +56,12 @@ class PHSController extends Controller
 
         $submissions = $query->paginate(10)->withQueryString();
 
-        return view('admin.phs.index', compact('submissions'));
+        // Get searchable fields for the search bar
+        $searchFields = collect((new PHSSubmission())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+            return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
+        })->toArray();
+
+        return view('admin.phs.index', compact('submissions', 'searchFields'));
     }
 
     public function show(PHSSubmission $submission)
