@@ -16,8 +16,27 @@ class AdminUserController extends Controller
     {
         $query = User::query();
 
+        $filters = $request->all();
+
+        // Map status filter to boolean for User model, only allow 'active' or 'disabled'
+        if (isset($filters['status'])) {
+            $status = strtolower(trim($filters['status']));
+            Log::info('Received status filter:', ['status' => $status]);
+            if ($status === 'active') {
+                $filters['status'] = 1;
+            } elseif ($status === 'disabled') {
+                $filters['status'] = 0;
+            } else {
+                unset($filters['status']); // Ignore any other value
+            }
+        }
+
+        Log::info('User Management Filters:', $filters);
+
         // Apply all filters using the Searchable trait
-        $query->applyFilters($request->all());
+        $query->applyFilters($filters);
+
+        Log::info('User Management SQL:', ['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
         // Handle sorting
         $sort = $request->get('sort', 'created_at');

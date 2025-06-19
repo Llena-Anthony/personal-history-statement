@@ -142,12 +142,12 @@ trait Searchable
      */
     public function scopeFilterByStatus(Builder $query, $status)
     {
-        if (empty($status)) {
+        if ($status === null || $status === '' || $status === []) {
             return $query;
         }
 
         $statusField = $this->getStatusField();
-        return $query->where($statusField, $status);
+        return $query->where($statusField, (int) $status);
     }
 
     /**
@@ -188,6 +188,12 @@ trait Searchable
             return $query;
         }
 
+        // If this is the User model, filter directly
+        if ($this instanceof \App\Models\User) {
+            return $query->where('usertype', $userType);
+        }
+
+        // Otherwise, filter via the user relationship
         return $query->whereHas('user', function ($q) use ($userType) {
             $q->where('usertype', $userType);
         });
@@ -243,7 +249,7 @@ trait Searchable
         }
 
         // Status filter
-        if (isset($filters['status']) && !empty($filters['status'])) {
+        if (array_key_exists('status', $filters)) {
             $query->filterByStatus($filters['status']);
         }
 

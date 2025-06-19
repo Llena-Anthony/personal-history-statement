@@ -102,7 +102,7 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%);
-            border-radius: 0 0 2rem 2rem;
+            /* border-radius: 0 0 2rem 2rem; */
         }
 
         .admin-header::after {
@@ -478,7 +478,7 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%);
-            border-radius: 2rem 2rem 0 0;
+            /* border-radius: 2rem 2rem 0 0; */
         }
 
         .admin-footer::after {
@@ -489,14 +489,14 @@
             right: 0;
             height: 3px;
             background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37);
-            border-radius: 2rem 2rem 0 0;
+            /* border-radius: 2rem 2rem 0 0; */
         }
 
         .footer-pattern {
             background-image: 
                 radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
-            border-radius: 2rem 2rem 0 0;
+            /* border-radius: 2rem 2rem 0 0; */
             position: relative;
             z-index: 1;
         }

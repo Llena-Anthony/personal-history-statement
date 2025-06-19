@@ -25,7 +25,7 @@
         :filters="[
             'status' => [
                 'active' => 'Active',
-                'inactive' => 'Inactive'
+                'disabled' => 'Disabled'
             ],
             'user_type' => [
                 'admin' => 'Admin',
