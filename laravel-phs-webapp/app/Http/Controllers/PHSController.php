@@ -43,6 +43,11 @@ class PHSController extends Controller
             'mobile' => 'nullable|string|max:50',
         ]);
 
+        // Capitalize first letter of each word for names
+        $validated['first_name'] = ucwords(strtolower($validated['first_name']));
+        $validated['middle_name'] = $validated['middle_name'] ? ucwords(strtolower($validated['middle_name'])) : null;
+        $validated['last_name'] = ucwords(strtolower($validated['last_name']));
+
         try {
             DB::beginTransaction();
 

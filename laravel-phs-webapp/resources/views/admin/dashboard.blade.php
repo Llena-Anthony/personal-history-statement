@@ -193,7 +193,7 @@
     // Update current time
     function updateTime() {
         const now = new Date();
-        document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
         document.getElementById('last-updated').textContent = now.toLocaleString();
     }
     updateTime();

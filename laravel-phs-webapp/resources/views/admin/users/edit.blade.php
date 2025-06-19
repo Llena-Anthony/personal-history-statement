@@ -108,23 +108,17 @@
                 </div>
             </div>
             <div class="flex justify-end mt-4">
-                <button type="button" id="updateUserBtn" onclick="confirmUserUpdate()" class="inline-flex items-center gap-2 px-6 py-2 rounded-lg font-semibold text-base shadow transition bg-gradient-to-r from-blue-600 to-blue-800 text-white hover:from-blue-700 hover:to-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                    <i class="fas fa-save"></i> Update User
+                <button type="button" id="updateUserBtn" class="inline-flex items-center gap-2 px-6 py-2 rounded-lg font-semibold text-base shadow transition bg-gradient-to-r from-blue-600 to-blue-800 text-white hover:from-blue-700 hover:to-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fas fa-save"></i> <span>Update User</span>
+                </button>
+                <button type="submit" id="confirmUpdateBtn" style="display:none;"
+                        class="inline-flex items-center gap-2 px-6 py-2 rounded-lg font-semibold text-base shadow transition bg-gradient-to-r from-green-600 to-green-800 text-white hover:from-green-700 hover:to-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 animate-fade-in">
+                    <i class="fas fa-check-circle"></i> <span>Click to Confirm</span>
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-<!-- Confirmation Modal for User Update -->
-<x-confirmation-modal 
-    id="userUpdateModal"
-    title="Confirm User Update"
-    message="Are you sure you want to update this user's information? This action cannot be undone."
-    confirmText="Update User"
-    cancelText="Cancel"
-    confirmClass="bg-[#1B365D] hover:bg-[#2B4B7D]"
-/>
 
 @endsection
 
@@ -153,16 +147,25 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('usertype').addEventListener('change', checkIfChanged);
     document.getElementById('is_active_checkbox').addEventListener('change', checkIfChanged);
     checkIfChanged();
-});
 
-function confirmUserUpdate() {
-    showConfirmationModal(
-        'userUpdateModal',
-        'Are you sure you want to update this user\'s information? This action cannot be undone.',
-        function() {
-            document.getElementById('edit-user-form').submit();
-        }
-    );
-}
+    // Two-step confirmation button logic
+    const updateBtn = document.getElementById('updateUserBtn');
+    const confirmBtn = document.getElementById('confirmUpdateBtn');
+    let confirmTimeout;
+    if (updateBtn && confirmBtn) {
+        updateBtn.addEventListener('click', function() {
+            updateBtn.style.display = 'none';
+            confirmBtn.style.display = 'inline-flex';
+            confirmBtn.classList.add('scale-105');
+            confirmTimeout = setTimeout(() => {
+                confirmBtn.style.display = 'none';
+                updateBtn.style.display = 'inline-flex';
+            }, 5000); // 5 seconds to confirm
+        });
+        confirmBtn.addEventListener('click', function() {
+            clearTimeout(confirmTimeout);
+        });
+    }
+});
 </script>
 @endpush 

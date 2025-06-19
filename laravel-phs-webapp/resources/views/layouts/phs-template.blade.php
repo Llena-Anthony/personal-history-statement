@@ -28,14 +28,14 @@
     <body>
         <p id='confidential'>CONFIDENTIAL</p>
         <p id='vision'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-        <p id='annex'>ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+        <p id='annex'>ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
         <p id='fnr'>File Nr:_______</p>
         <p id='ghq'>GHQ, OJ2</p>
         <p id='num-form'>200-054 Form</p>
         <p id='doc-title'>PERSONAL HISTORY STATEMENT</p>
         <p class='instruc'>INSTRUCTION</p>
         <ol class='instruc-list'>
-            <li>Answer all questions completely; if question is not applicable, write “NA”.write “Unknown”
+            <li>Answer all questions completely; if question is not applicable, write "NA".write "Unknown"
                 only if you do not know the answer and cannot obtain the answer from personal records.
                 Use the blank pages at the back of this form for extra details on any question for which you
                 do not have sufficient space.

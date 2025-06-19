@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\PHSController;
 use App\Http\Controllers\FamilyHistoryController;
+use App\Http\Controllers\PrintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -153,6 +154,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         'update' => 'phs.update',
         'destroy' => 'phs.destroy',
     ]);
+
+    // Print PHS Submission
+    Route::get('phs/{submission}/print', [PrintController::class, 'printPHSSubmission'])->name('phs.print');
 
     // Activity Logs Management
     Route::get('activity-logs', [App\Http\Controllers\Admin\ActivityLogsController::class, 'index'])->name('activity-logs.index');
