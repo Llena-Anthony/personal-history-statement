@@ -1,25 +1,41 @@
-@extends('layouts.app')
+@extends('layouts.client')
 
 @section('title', 'Dashboard - Personal History Statement')
+@section('header', 'Dashboard')
 
 @section('content')
-<!-- Hero Section -->
-<div class="bg-[#1B365D] text-white py-12 fade-in">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h1 class="text-4xl font-bold mb-4">Welcome to Your Document Portal</h1>
-            <p class="text-xl text-gray-200 max-w-3xl mx-auto">
-                Access and manage your Personal History Statement (PHS) and Personal Data Sheet (PDS) applications
-            </p>
+<div class="space-y-6">
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- PHS Status -->
+        <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-file-alt text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">PHS Status</p>
+                    <p class="text-2xl font-bold text-gray-900">@if($phsStatus) {{ ucfirst($phsStatus) }} @else Not Started @endif</p>
+                </div>
+            </div>
+        </div>
+        <!-- PDS Status -->
+        <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-id-card text-2xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">PDS Status</p>
+                    <p class="text-2xl font-bold text-gray-900">@if($pdsStatus) {{ ucfirst($pdsStatus) }} @else Not Started @endif</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<!-- Main Content -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
         <!-- PHS Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] slide-in" style="animation-delay: 0.2s;">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] slide-in">
             <div class="p-8">
                 <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-6 mx-auto">
                     <i class="fas fa-file-alt text-2xl text-white"></i>
@@ -36,9 +52,8 @@
                 </div>
             </div>
         </div>
-
         <!-- PDS Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] slide-in" style="animation-delay: 0.4s;">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] slide-in">
             <div class="p-8">
                 <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-6 mx-auto">
                     <i class="fas fa-id-card text-2xl text-white"></i>
@@ -48,7 +63,7 @@
                     Submit your PDS to provide essential personal and professional information for official records.
                 </p>
                 <div class="text-center">
-                    <a href="{{ route('phs.create') }}" class="btn-primary inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                    <a href="#" class="btn-primary inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
                         <i class="fas fa-file-upload mr-2"></i>
                         Submit PDS
                     </a>
@@ -56,9 +71,8 @@
             </div>
         </div>
     </div>
-
     <!-- PMA Information Section -->
-    <div class="mt-16 bg-white rounded-xl shadow-lg overflow-hidden p-8 scale-in" style="animation-delay: 0.6s;">
+    <div class="mt-16 bg-white rounded-xl shadow-lg overflow-hidden p-8 scale-in">
         <div class="text-center mb-8">
             <h2 class="text-3xl font-bold text-[#1B365D]">About Philippine Military Academy</h2>
             <p class="text-gray-600 mt-2">The Premier Military School in the Philippines</p>

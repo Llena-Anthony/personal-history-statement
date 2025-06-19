@@ -44,6 +44,9 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            // Update last login timestamp
+            $user->update(['last_login_at' => now()]);
+
             // Redirect based on user type
             if ($user->usertype === 'admin') {
                 return redirect()->intended('admin/dashboard');

@@ -240,23 +240,16 @@ class AdminUserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'organic_role' => ['required', 'string'],
-            'branch' => ['required', 'string'],
+            'usertype' => ['required', 'string', 'in:admin,personnel,client'],
             'is_active' => ['required', 'boolean'],
         ]);
 
-        $user->update($validated);
+        $user->update([
+            'usertype' => $validated['usertype'],
+            'is_active' => $validated['is_active'],
+        ]);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'User updated successfully.');
-    }
-
-    public function destroy(User $user)
-    {
-        $user->delete();
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User deleted successfully.');
     }
 } 

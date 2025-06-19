@@ -1,218 +1,207 @@
-@extends('layouts.app')
+@extends('layouts.phs-new')
 
-@section('title', 'IV: Family History and Information - Personal History Statement')
+@section('title', 'Family Background')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 relative">
-    <!-- Background Overlay -->
-    <div class="absolute inset-0 bg-[url('/images/pma-background.jpg')] bg-cover bg-center bg-no-repeat opacity-10 blur-sm"></div>
-
-    <div class="relative flex min-h-screen">
-        <!-- Fixed Sidebar -->
-        <aside class="w-72 bg-white shadow-lg fixed top-0 left-0 h-screen overflow-y-auto z-40 flex flex-col">
-            <!-- User Profile Section -->
-            <div class="p-6 border-b border-gray-200 bg-white flex flex-col items-center">
-                <div class="relative mb-3">
-                    <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-[#D4AF37]">
-                        <img src="/images/profile-placeholder.png" alt="User Photo" 
-                            class="w-full h-full object-cover object-center transform scale-110">
-                    </div>
-                    <div class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
-                </div>
-                <div class="text-center">
-                    <h3 class="text-base font-semibold text-gray-800">Gregorio Del Pilar</h3>
-                    <p class="text-xs text-gray-500">Civilian</p>
-                </div>
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
+                <i class="fas fa-users text-white text-xl"></i>
             </div>
-            <!-- Progress Bar -->
-            <div class="px-6 py-4 border-b border-gray-200">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-600">Progress</span>
-                    <span class="text-sm font-medium text-[#1B365D]">4/9</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div class="bg-green-500 h-2 rounded-full" style="width: 44%"></div>
-                </div>
+            <div>
+                <h1 class="text-3xl font-bold text-[#1B365D]">Family Background</h1>
+                <p class="text-gray-600">Please provide information about your family</p>
             </div>
-            <!-- Navigation -->
-            <nav class="flex-1 p-6 bg-white">
-                <ul class="space-y-2">
-                    <li>
-                        <a href="{{ route('phs.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">I</span>
-                            </span>
-                            <span class="text-sm font-medium">Personal Details</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('phs.personal-characteristics.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">II</span>
-                            </span>
-                            <span class="text-sm font-medium">Personal Characteristics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('phs.marital-status.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">III</span>
-                            </span>
-                            <span class="text-sm font-medium">Marital Status</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('phs.family-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors bg-[#1B365D]/5 font-bold text-[#1B365D]">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-[#D4AF37]">
-                                <span class="text-xs text-white font-bold">IV</span>
-                            </span>
-                            <span class="text-sm font-bold">Family History and Information</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">V</span>
-                            </span>
-                            <span class="text-sm font-medium">Educational Background</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">VI</span>
-                            </span>
-                            <span class="text-sm font-medium">Military History</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">VII</span>
-                            </span>
-                            <span class="text-sm font-medium">Places of Residence Since Birth</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">VIII</span>
-                            </span>
-                            <span class="text-sm font-medium">Employment History</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
-                                <span class="text-xs text-white font-bold">IX</span>
-                            </span>
-                            <span class="text-sm font-medium">Foreign Countries Visited</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 ml-72 p-8 mt-16">
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg p-8 mb-8 pb-24">
-                    <h2 class="text-2xl font-bold text-[#1B365D] mb-8 flex items-center">
-                        <i class="fas fa-users mr-3 text-[#D4AF37]"></i>
-                        IV: Family History and Information
-                    </h2>
-
-                    <form method="POST" action="{{ route('phs.family-background.store') }}" class="space-y-8">
-                        @csrf
-
-                        <!-- Father's Information -->
-                        <fieldset class="bg-gray-50/80 backdrop-blur-sm rounded-lg p-6 border border-gray-100">
-                            <legend class="text-lg font-semibold text-[#1B365D] mb-4 px-2">Father's Information</legend>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
-                                    <input type="text" name="father_last_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">First Name</label>
-                                    <input type="text" name="father_first_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">Middle Name</label>
-                                    <input type="text" name="father_middle_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">Occupation</label>
-                                    <input type="text" name="father_occupation" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <!-- Mother's Information -->
-                        <fieldset class="bg-gray-50/80 backdrop-blur-sm rounded-lg p-6 border border-gray-100">
-                            <legend class="text-lg font-semibold text-[#1B365D] mb-4 px-2">Mother's Information</legend>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">Last Name</label>
-                                    <input type="text" name="mother_last_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">First Name</label>
-                                    <input type="text" name="mother_first_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">Middle Name</label>
-                                    <input type="text" name="mother_middle_name" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">Occupation</label>
-                                    <input type="text" name="mother_occupation" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <!-- Siblings Information -->
-                        <fieldset class="bg-gray-50/80 backdrop-blur-sm rounded-lg p-6 border border-gray-100">
-                            <legend class="text-lg font-semibold text-[#1B365D] mb-4 px-2">Siblings Information</legend>
-                            <div class="space-y-4">
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">Name</label>
-                                        <input type="text" name="sibling_names[]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">Age</label>
-                                        <input type="number" name="sibling_ages[]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">Sex</label>
-                                        <select name="sibling_sexes[]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                            <option value="">Select Sex</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">Occupation</label>
-                                        <input type="text" name="sibling_occupations[]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
-                                    </div>
-                                </div>
-                                <button type="button" class="text-[#D4AF37] hover:text-[#B38F2A] transition-colors text-sm font-medium">
-                                    <i class="fas fa-plus mr-1"></i> Add Another Sibling
-                                </button>
-                            </div>
-                        </fieldset>
-
-                        @include('phs.components.form-navigation', [
-                            'previousRoute' => route('phs.marital-status.create'),
-                            'nextRoute' => route('phs.educational-background.create'),
-                            'previousText' => 'Previous Section',
-                            'nextText' => 'Next Section'
-                        ])
-                    </form>
-                </div>
+        </div>
+        
+        <!-- Progress Indicator -->
+        <div class="bg-gray-100 rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-700">Section Progress</span>
+                <span class="text-sm text-gray-500">2 of 10 sections</span>
             </div>
-        </main>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-[#1B365D] h-2 rounded-full" style="width: 20%"></div>
+            </div>
+        </div>
     </div>
+
+    <!-- Form -->
+    <form method="POST" action="{{ route('phs.family-background.store') }}" class="space-y-8">
+        @csrf
+        
+        <!-- Father's Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-male mr-3 text-[#D4AF37]"></i>
+                Father's Information
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Father's Name -->
+                <div>
+                    <label for="father_name" class="block text-sm font-medium text-gray-700 mb-2">
+                        Father's Full Name
+                    </label>
+                    <input type="text" name="father_name" id="father_name"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter father's full name">
+                </div>
+
+                <!-- Father's Occupation -->
+                <div>
+                    <label for="father_occupation" class="block text-sm font-medium text-gray-700 mb-2">
+                        Father's Occupation
+                    </label>
+                    <input type="text" name="father_occupation" id="father_occupation"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter father's occupation">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Father's Address -->
+                <div>
+                    <label for="father_address" class="block text-sm font-medium text-gray-700 mb-2">
+                        Father's Address
+                    </label>
+                    <textarea name="father_address" id="father_address" rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                              placeholder="Enter father's address"></textarea>
+                </div>
+
+                <!-- Father's Contact -->
+                <div>
+                    <label for="father_contact" class="block text-sm font-medium text-gray-700 mb-2">
+                        Father's Contact Number
+                    </label>
+                    <input type="tel" name="father_contact" id="father_contact"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter contact number">
+                </div>
+            </div>
+        </div>
+
+        <!-- Mother's Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-female mr-3 text-[#D4AF37]"></i>
+                Mother's Information
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Mother's Name -->
+                <div>
+                    <label for="mother_name" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mother's Full Name
+                    </label>
+                    <input type="text" name="mother_name" id="mother_name"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter mother's full name">
+                </div>
+
+                <!-- Mother's Occupation -->
+                <div>
+                    <label for="mother_occupation" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mother's Occupation
+                    </label>
+                    <input type="text" name="mother_occupation" id="mother_occupation"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter mother's occupation">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <!-- Mother's Address -->
+                <div>
+                    <label for="mother_address" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mother's Address
+                    </label>
+                    <textarea name="mother_address" id="mother_address" rows="3"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                              placeholder="Enter mother's address"></textarea>
+                </div>
+
+                <!-- Mother's Contact -->
+                <div>
+                    <label for="mother_contact" class="block text-sm font-medium text-gray-700 mb-2">
+                        Mother's Contact Number
+                    </label>
+                    <input type="tel" name="mother_contact" id="mother_contact"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter contact number">
+                </div>
+            </div>
+        </div>
+
+        <!-- Siblings Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
+                Siblings Information
+            </h3>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="siblings_count" class="block text-sm font-medium text-gray-700 mb-2">
+                            Number of Siblings
+                        </label>
+                        <input type="number" name="siblings_count" id="siblings_count" min="0"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="0">
+                    </div>
+                    
+                    <div>
+                        <label for="brothers_count" class="block text-sm font-medium text-gray-700 mb-2">
+                            Number of Brothers
+                        </label>
+                        <input type="number" name="brothers_count" id="brothers_count" min="0"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="0">
+                    </div>
+                    
+                    <div>
+                        <label for="sisters_count" class="block text-sm font-medium text-gray-700 mb-2">
+                            Number of Sisters
+                        </label>
+                        <input type="number" name="sisters_count" id="sisters_count" min="0"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+            <a href="{{ route('phs.create') }}" 
+               class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous Section
+            </a>
+            
+            <button type="submit" 
+                    class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                Save & Continue
+                <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </form>
 </div>
+
+<script>
+    // Initialize Alpine.js data for this section
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('familyBackground', () => ({
+            currentSection: 'family-background',
+            init() {
+                // Mark this section as visited
+                this.markSectionAsVisited('family-background');
+            }
+        }));
+    });
+</script>
 @endsection 

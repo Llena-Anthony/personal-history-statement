@@ -1,141 +1,60 @@
-@extends('layouts.app')
+@extends('layouts.phs-new')
 
-@section('title', 'Places of Residence - Personal History Statement')
+@section('title', 'Places of Residence Since Birth')
 
 @section('content')
-<div class="flex min-h-screen bg-gray-100">
-    <!-- Fixed Sidebar -->
-    <div class="w-72 bg-white shadow-lg fixed overflow-y-auto" style="position: fixed; top: 64px; left: 0; z-index: 40; height: calc(100vh - 64px);">
-        <!-- User Profile Section -->
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                    <i class="fas fa-user text-gray-500 text-2xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-base font-semibold text-gray-800">{{ auth()->user()->name }}</h3>
-                    <p class="text-sm text-gray-500">Personal History Statement</p>
-                </div>
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
+                <i class="fas fa-home text-white text-xl"></i>
             </div>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="p-6">
-            <ul class="space-y-6">
-                <li>
-                    <a href="{{ route('phs.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">I</span>
-                        </span>
-                        <span class="text-gray-400">Personal Details</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.personal-characteristics.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">II</span>
-                        </span>
-                        <span class="text-gray-400">Personal Characteristics</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.marital-status.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">III</span>
-                        </span>
-                        <span class="text-gray-400">Marital Status</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.family-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">IV</span>
-                        </span>
-                        <span class="text-gray-400">Family Background</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.educational-background.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">V</span>
-                        </span>
-                        <span class="text-gray-400">Educational Background</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.military-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-green-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">VI</span>
-                        </span>
-                        <span class="text-gray-400">Military History</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.places-of-residence.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">VII</span>
-                        </span>
-                        <span class="text-black">Places of Residence</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.employment-history.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">VIII</span>
-                        </span>
-                        <span class="text-gray-400">Employment History</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('phs.foreign-countries.create') }}" class="flex items-center text-gray-600 hover:text-gray-900">
-                        <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                            <span class="text-xs text-white">IX</span>
-                        </span>
-                        <span class="text-gray-400">Foreign Countries Visited</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 ml-72 p-8">
-        <div class="max-w-4xl mx-auto">
-            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-[#1B365D] mb-6 flex items-center">
-                    <i class="fas fa-home mr-3 text-[#D4AF37]"></i>
-                    Places of Residence Since Birth
-                </h2>
-
-                <form method="POST" action="{{ route('phs.places-of-residence.store') }}" class="space-y-8">
-                    @csrf
-
-                    <div class="bg-gray-50 rounded-lg p-6 border border-gray-100">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold text-[#1B365D]">Residences</h3>
-                            <button type="button" id="addResidence" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
-                                <i class="fas fa-plus mr-2"></i>Add Residence
-                            </button>
-                        </div>
-                        <div id="residences" class="space-y-4">
-                            <!-- Residence template will be cloned here -->
-                        </div>
-                    </div>
-
-                    <!-- Navigation Buttons -->
-                    <div class="flex justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('phs.military-history.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                            Previous Section
-                        </a>
-                        <a href="{{ route('phs.employment-history.create') }}" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
-                            Next Section
-                        </a>
-                    </div>
-                </form>
+            <div>
+                <h1 class="text-3xl font-bold text-[#1B365D]">Places of Residence Since Birth</h1>
+                <p class="text-gray-600">List all places you have resided in since birth.</p>
             </div>
         </div>
     </div>
+    <form method="POST" action="{{ route('phs.places-of-residence.store') }}" class="space-y-8">
+        @csrf
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-[#1B365D]">Residence History</h3>
+                <button type="button" id="addResidence" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Residence
+                </button>
+            </div>
+            <div id="residences" class="space-y-4">
+                <div class="residence p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
+                            <input type="number" name="residences[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">To (Year)</label>
+                            <input type="number" name="residences[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                            <input type="text" name="residences[0][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-between pt-6 border-t border-gray-200">
+            <a href="{{ route('phs.military-history.create') }}" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                <i class="fas fa-arrow-left mr-2"></i> Previous Section
+            </a>
+            <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </form>
 </div>
+@endsection
+@php($currentSection = 'places-of-residence')
 
 @push('scripts')
 <script>
@@ -147,16 +66,16 @@
         newResidence.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Residence Name</label>
-                    <input type="text" name="residences[${residenceCount}][name]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
+                    <input type="number" name="residences[${residenceCount}][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                    <input type="date" name="residences[${residenceCount}][date]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">To (Year)</label>
+                    <input type="number" name="residences[${residenceCount}][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <input type="text" name="residences[${residenceCount}][description]" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                    <input type="text" name="residences[${residenceCount}][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
             </div>
         `;
@@ -164,5 +83,4 @@
         residenceCount++;
     });
 </script>
-@endpush
-@endsection 
+@endpush 

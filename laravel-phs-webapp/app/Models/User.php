@@ -52,6 +52,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
     ];
@@ -130,6 +131,23 @@ class User extends Authenticatable
         }
         
         return asset('images/default-avatar.svg');
+    }
+
+    /**
+     * Get the user's last login time safely.
+     *
+     * @return string
+     */
+    public function getLastLoginDisplayAttribute()
+    {
+        try {
+            if ($this->last_login_at && $this->last_login_at instanceof \Carbon\Carbon) {
+                return $this->last_login_at->diffForHumans();
+            }
+            return 'First Login';
+        } catch (\Exception $e) {
+            return 'First Login';
+        }
     }
 
     /**

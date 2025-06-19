@@ -6,7 +6,7 @@ use App\Http\Controllers\ClientHomeController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\FamilyBackgroundController;
-use App\Http\Controllers\PersonalCharacteristicController;
+use App\Http\Controllers\PersonalCharacteristicsController;
 use App\Http\Controllers\MaritalStatusController;
 use App\Http\Controllers\EducationalBackgroundController;
 use App\Http\Controllers\MilitaryHistoryController;
@@ -16,6 +16,7 @@ use App\Http\Controllers\ForeignCountriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\PHSController;
+use App\Http\Controllers\FamilyHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,81 +64,68 @@ Route::middleware('auth')->group(function () {
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
 
-    // PHS Routes
-    Route::get('/phs/personal-details', [App\Http\Controllers\PHSController::class, 'create'])->name('phs.create');
-    Route::post('/phs/personal-details', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
+    // PHS Routes - Personal Details
+    Route::get('/phs/personal-details', [PHSController::class, 'create'])->name('phs.create');
+    Route::post('/phs/personal-details', [PHSController::class, 'store'])->name('phs.store');
 
-    // PDS Routes
-    // Route::get('/pds/create', [PDSController::class, 'create'])->name('pds.create');
+    // PHS Routes - Family Background
+    Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
+    Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
 
-    // Marital Status Routes
+    // PHS Routes - Educational Background
+    Route::get('/phs/educational-background', [PHSController::class, 'educationalBackground'])->name('phs.educational-background');
+    Route::post('/phs/educational-background', [PHSController::class, 'storeEducationalBackground'])->name('phs.educational-background.store');
+
+    // PHS Routes - Marital Status
     Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
     Route::post('/phs/marital-status', [MaritalStatusController::class, 'store'])->name('phs.marital-status.store');
 
-    // Educational Background Routes
-    Route::get('/phs/educational-background', [EducationalBackgroundController::class, 'index'])->name('phs.educational-background');
-    Route::post('/phs/educational-background', [EducationalBackgroundController::class, 'store'])->name('phs.educational-background.store');
-    Route::get('/phs/educational-background/create', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])->name('phs.educational-background.create');
-    
-
-    // Military History Routes
+    // PHS Routes - Military History
     Route::get('/phs/military-history', [MilitaryHistoryController::class, 'create'])->name('phs.military-history.create');
     Route::post('/phs/military-history', [MilitaryHistoryController::class, 'store'])->name('phs.military-history.store');
 
-    // Places of Residence Routes
+    // PHS Routes - Places of Residence
     Route::get('/phs/places-of-residence', [PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence.create');
     Route::post('/phs/places-of-residence', [PlacesOfResidenceController::class, 'store'])->name('phs.places-of-residence.store');
 
-    // Foreign Countries Routes
+    // PHS Routes - Employment History
+    Route::get('/phs/employment-history', [EmploymentHistoryController::class, 'create'])->name('phs.employment-history.create');
+    Route::post('/phs/employment-history', [EmploymentHistoryController::class, 'store'])->name('phs.employment-history.store');
+
+    // PHS Routes - Foreign Countries
     Route::get('/phs/foreign-countries', [ForeignCountriesController::class, 'create'])->name('phs.foreign-countries.create');
     Route::post('/phs/foreign-countries', [ForeignCountriesController::class, 'store'])->name('phs.foreign-countries.store');
 
+    // PHS Routes - Personal Characteristics
+    Route::get('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'create'])->name('phs.personal-characteristics.create');
+    Route::post('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'store'])->name('phs.personal-characteristics.store');
+
+    // PHS Routes - Family History
+    Route::get('/phs/family-history', [FamilyHistoryController::class, 'create'])->name('phs.family-history.create');
+    Route::post('/phs/family-history', [FamilyHistoryController::class, 'store'])->name('phs.family-history.store');
+
+    // PHS Routes - Credit Reputation
+    Route::get('/phs/credit-reputation', function() { return view('phs.credit-reputation'); })->name('phs.credit-reputation');
+    Route::post('/phs/credit-reputation', function(Request $request) { return redirect()->route('phs.arrest-record')->with('success', 'Credit reputation saved.'); })->name('phs.credit-reputation.store');
+
+    // PHS Routes - Arrest Record
+    Route::get('/phs/arrest-record', function() { return view('phs.arrest-record'); })->name('phs.arrest-record');
+    Route::post('/phs/arrest-record', function(Request $request) { return redirect()->route('phs.employment-history-2')->with('success', 'Arrest record saved.'); })->name('phs.arrest-record.store');
+
+    // PHS Routes - Employment History II
+    Route::get('/phs/employment-history-2', function() { return view('phs.employment-history-2'); })->name('phs.employment-history-2');
+    Route::post('/phs/employment-history-2', function(Request $request) { return redirect()->route('phs.organization')->with('success', 'Employment history II saved.'); })->name('phs.employment-history-2.store');
+
+    // PHS Routes - Organization
+    Route::get('/phs/organization', function() { return view('phs.organization'); })->name('phs.organization');
+    Route::post('/phs/organization', function(Request $request) { return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); })->name('phs.organization.store');
+
+    // PHS Routes - Miscellaneous
+    Route::get('/phs/miscellaneous', function() { return view('phs.miscellaneous'); })->name('phs.miscellaneous');
+    Route::post('/phs/miscellaneous', function(Request $request) { return redirect()->route('client.dashboard')->with('success', 'Miscellaneous information saved.'); })->name('phs.miscellaneous.store');
+
     // Dashboard Route
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
-    // Family Background
-    Route::get('/phs/family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'create'])
-        ->name('phs.family-background.create');
-    Route::post('/phs/family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'store'])
-        ->name('phs.family-background.store');
-
-    // Marital Status
-    Route::get('/phs/marital-status', [App\Http\Controllers\MaritalStatusController::class, 'create'])
-        ->name('phs.marital-status.create');
-    Route::post('/phs/marital-status', [App\Http\Controllers\MaritalStatusController::class, 'store'])
-        ->name('phs.marital-status.store');
-
-    // Places of Residence
-    Route::get('/phs/places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'create'])
-        ->name('phs.places-of-residence.create');
-    Route::post('/phs/places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'store'])
-        ->name('phs.places-of-residence.store');
-
-    // Employment History
-    Route::get('/phs/employment-history', [App\Http\Controllers\EmploymentHistoryController::class, 'create'])
-        ->name('phs.employment-history.create');
-    Route::post('/phs/employment-history', [App\Http\Controllers\EmploymentHistoryController::class, 'store'])
-        ->name('phs.employment-history.store');
-
-    // Foreign Countries
-    Route::get('/phs/foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])
-        ->name('phs.foreign-countries.create');
-    Route::post('/phs/foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'store'])
-        ->name('phs.foreign-countries.store');
-
-    // Personal Characteristics Routes
-    Route::get('/phs/personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'create'])
-        ->name('phs.personal-characteristics.create');
-    Route::post('/phs/personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'store'])
-        ->name('phs.personal-characteristics.store');
-
-    // Family History Routes
-    Route::get('/phs/family-history', [App\Http\Controllers\FamilyHistoryController::class, 'create'])
-        ->name('phs.family-history.create');
-    Route::post('/phs/family-history', [App\Http\Controllers\FamilyHistoryController::class, 'store'])
-        ->name('phs.family-history.store');
+    Route::get('/dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
 });
 
 // Admin Routes
@@ -156,7 +144,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users/finalize', [AdminUserController::class, 'finalize'])->name('users.finalize');
     Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
     // PHS Submission Management Routes
     Route::resource('phs', App\Http\Controllers\Admin\PHSController::class)->names([

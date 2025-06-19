@@ -212,7 +212,7 @@
                     <i class="fas fa-times mr-2"></i>
                     Cancel
                 </a>
-                <button type="submit" 
+                <button type="button" onclick="confirmProfileUpdate()" 
                         class="px-6 py-2.5 bg-[#D4AF37] text-white rounded-lg hover:bg-[#B38F2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-200 shadow-md hover:shadow-lg">
                     <i class="fas fa-save mr-2"></i>
                     Save Changes
@@ -221,6 +221,16 @@
         </form>
     </div>
 </div>
+
+<!-- Confirmation Modal for Profile Update -->
+<x-confirmation-modal 
+    id="profileUpdateModal"
+    title="Confirm Profile Update"
+    message="Are you sure you want to update your profile information? This action cannot be undone."
+    confirmText="Update Profile"
+    cancelText="Cancel"
+    confirmClass="bg-[#D4AF37] hover:bg-[#B38F2A]"
+/>
 
 <style>
 @keyframes fade-in {
@@ -270,6 +280,16 @@ function toggleBranchField() {
     } else {
         branchField.classList.remove('hidden');
     }
+}
+
+function confirmProfileUpdate() {
+    showConfirmationModal(
+        'profileUpdateModal',
+        'Are you sure you want to update your profile information? This action cannot be undone.',
+        function() {
+            document.querySelector('form').submit();
+        }
+    );
 }
 
 // Show image preview if there's already an image

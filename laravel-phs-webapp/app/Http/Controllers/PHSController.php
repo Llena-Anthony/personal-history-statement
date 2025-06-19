@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PHS;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\PHSSectionTracking;
 
 class PHSController extends Controller
 {
+    use PHSSectionTracking;
+
     public function create()
     {
-        return view('phs.personal-details');
+        return view('phs.personal-details', $this->getCommonViewData('personal-details'));
     }
 
     public function store(Request $request)
@@ -47,10 +51,13 @@ class PHSController extends Controller
                 ...$validated
             ]);
 
+            // Mark personal details as completed
+            $this->markSectionAsCompleted('personal-details');
+
             DB::commit();
 
-            return redirect()->route('phs.personal-characteristics.create')
-                ->with('success', 'Personal information saved successfully. Please continue with your personal characteristics.');
+            return redirect()->route('phs.family-background.create')
+                ->with('success', 'Personal information saved successfully. Please continue with your family background.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'An error occurred while saving your personal information. Please try again.');
@@ -113,7 +120,7 @@ class PHSController extends Controller
 
     public function educationalBackground()
     {
-        return view('phs.educational-background');
+        return view('phs.educational-background', $this->getCommonViewData('educational-background'));
     }
 
     public function storeEducationalBackground(Request $request)
@@ -125,9 +132,26 @@ class PHSController extends Controller
             'college.*.name' => 'nullable|string|max:255',
         ]);
 
+        // Mark educational background as completed
+        $this->markSectionAsCompleted('educational-background');
+
         // Save logic — example:
         // DB::table('educational_backgrounds')->insert([...]);
 
-        return redirect()->route('phs.military-history.create')->with('success', 'Saved!');
+        return redirect()->route('phs.military-history.create')->with('success', 'Educational background saved successfully!');
+    }
+
+    /**
+     * Helper method to get common data for all PHS views
+     */
+    private function getCommonViewData($currentSection)
+    {
+        // Mark current section as visited
+        session(["phs_sections.{$currentSection}" => 'visited']);
+        
+        return [
+            'currentSection' => $currentSection,
+            'sectionStatus' => $this->getSectionStatus()
+        ];
     }
 } 
