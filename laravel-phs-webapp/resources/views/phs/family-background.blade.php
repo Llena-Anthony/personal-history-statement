@@ -12,85 +12,101 @@
         <aside class="w-72 bg-white shadow-lg fixed top-0 left-0 h-screen overflow-y-auto z-40 flex flex-col">
             <!-- User Profile Section -->
             <div class="p-6 border-b border-gray-200 bg-white flex flex-col items-center">
-                <img src="/images/profile-placeholder.png" alt="User Photo" class="w-16 h-16 rounded-full object-cover mb-2">
+                <div class="relative mb-3">
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-[#D4AF37]">
+                        <img src="/images/profile-placeholder.png" alt="User Photo" 
+                            class="w-full h-full object-cover object-center transform scale-110">
+                    </div>
+                    <div class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
+                </div>
                 <div class="text-center">
                     <h3 class="text-base font-semibold text-gray-800">Gregorio Del Pilar</h3>
                     <p class="text-xs text-gray-500">Civilian</p>
+                </div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-600">Progress</span>
+                    <span class="text-sm font-medium text-[#1B365D]">4/9</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 44%"></div>
                 </div>
             </div>
             <!-- Navigation -->
             <nav class="flex-1 p-6 bg-white">
                 <ul class="space-y-2">
                     <li>
-                        <a href="{{ route('phs.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.create') ? 'bg-green-500' : 'bg-gray-200' }}">
+                        <a href="{{ route('phs.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
                                 <span class="text-xs text-white font-bold">I</span>
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.create') ? 'font-bold' : 'font-medium' }}">Personal Details</span>
+                            <span class="text-sm font-medium">Personal Details</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('phs.personal-characteristics.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.personal-characteristics.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.personal-characteristics.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                        <a href="{{ route('phs.personal-characteristics.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
                                 <span class="text-xs text-white font-bold">II</span>
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.personal-characteristics.create') ? 'font-bold' : 'font-medium' }}">Personal Characteristics</span>
+                            <span class="text-sm font-medium">Personal Characteristics</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('phs.marital-status.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.marital-status.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.marital-status.create') ? 'bg-green-500' : 'bg-gray-200' }}">
+                        <a href="{{ route('phs.marital-status.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
                                 <span class="text-xs text-white font-bold">III</span>
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.marital-status.create') ? 'font-bold' : 'font-medium' }}">Marital Status</span>
+                            <span class="text-sm font-medium">Marital Status</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('phs.family-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.family-background.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.family-background.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                        <a href="{{ route('phs.family-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors bg-[#1B365D]/5 font-bold text-[#1B365D]">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-[#D4AF37]">
                                 <span class="text-xs text-white font-bold">IV</span>
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.family-background.create') ? 'font-bold' : 'font-medium' }}">Family History and Information</span>
+                            <span class="text-sm font-bold">Family History and Information</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
-                            <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                                <span class="text-xs text-white">V</span>
+                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
+                                <span class="text-xs text-white font-bold">V</span>
                             </span>
-                            <span class="text-gray-400">Educational Background</span>
+                            <span class="text-sm font-medium">Educational Background</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
-                            <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                                <span class="text-xs text-white">VI</span>
+                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
+                                <span class="text-xs text-white font-bold">VI</span>
                             </span>
-                            <span class="text-gray-400">Military History</span>
+                            <span class="text-sm font-medium">Military History</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
-                            <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                                <span class="text-xs text-white">VII</span>
+                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
+                                <span class="text-xs text-white font-bold">VII</span>
                             </span>
-                            <span class="text-gray-400">Places of Residence Since Birth</span>
+                            <span class="text-sm font-medium">Places of Residence Since Birth</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
-                            <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                                <span class="text-xs text-white">VIII</span>
+                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
+                                <span class="text-xs text-white font-bold">VIII</span>
                             </span>
-                            <span class="text-gray-400">Employment History</span>
+                            <span class="text-sm font-medium">Employment History</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
-                            <span class="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center mr-3">
-                                <span class="text-xs text-white">IX</span>
+                        <a href="#" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors text-gray-400 hover:text-gray-700">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200">
+                                <span class="text-xs text-white font-bold">IX</span>
                             </span>
-                            <span class="text-gray-400">Foreign Countries Visited</span>
+                            <span class="text-sm font-medium">Foreign Countries Visited</span>
                         </a>
                     </li>
                 </ul>

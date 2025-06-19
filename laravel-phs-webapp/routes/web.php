@@ -15,6 +15,7 @@ use App\Http\Controllers\EmploymentHistoryController;
 use App\Http\Controllers\ForeignCountriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\PHSController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,10 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+    // Profile Routes
+    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
 
@@ -63,15 +68,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/phs/personal-details', [App\Http\Controllers\PHSController::class, 'store'])->name('phs.store');
 
     // PDS Routes
-    Route::get('/pds/create', [App\Http\Controllers\PDSController::class, 'create'])->name('pds.create');
+    // Route::get('/pds/create', [PDSController::class, 'create'])->name('pds.create');
 
     // Marital Status Routes
     Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
     Route::post('/phs/marital-status', [MaritalStatusController::class, 'store'])->name('phs.marital-status.store');
 
     // Educational Background Routes
-    Route::get('/phs/educational-background', [EducationalBackgroundController::class, 'create'])->name('phs.educational-background.create');
+    Route::get('/phs/educational-background', [EducationalBackgroundController::class, 'index'])->name('phs.educational-background');
     Route::post('/phs/educational-background', [EducationalBackgroundController::class, 'store'])->name('phs.educational-background.store');
+    Route::get('/phs/educational-background/create', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])->name('phs.educational-background.create');
+    
 
     // Military History Routes
     Route::get('/phs/military-history', [MilitaryHistoryController::class, 'create'])->name('phs.military-history.create');
@@ -95,18 +102,6 @@ Route::middleware('auth')->group(function () {
         ->name('phs.family-background.create');
     Route::post('/phs/family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'store'])
         ->name('phs.family-background.store');
-
-    // Educational Background
-    Route::get('/phs/educational-background', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])
-        ->name('phs.educational-background.create');
-    Route::post('/phs/educational-background', [App\Http\Controllers\EducationalBackgroundController::class, 'store'])
-        ->name('phs.educational-background.store');
-
-    // Military History
-    Route::get('/phs/military-history', [App\Http\Controllers\MilitaryHistoryController::class, 'create'])
-        ->name('phs.military-history.create');
-    Route::post('/phs/military-history', [App\Http\Controllers\MilitaryHistoryController::class, 'store'])
-        ->name('phs.military-history.store');
 
     // Marital Status
     Route::get('/phs/marital-status', [App\Http\Controllers\MaritalStatusController::class, 'create'])
