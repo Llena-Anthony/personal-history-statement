@@ -104,13 +104,9 @@
                                 <a href="{{ route('admin.phs.edit', $submission->id) }}" class="text-[#1B365D] hover:text-[#2B4B7D]">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.phs.destroy', $submission->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this submission?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button" onclick="confirmPHSDelete('{{ $submission->id }}', '{{ $submission->user->name }}')" class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -133,4 +129,34 @@
         @endif
     </div>
 </div>
+
+<!-- Confirmation Modal for PHS Delete -->
+<x-confirmation-modal 
+    id="phsDeleteModal"
+    title="Confirm PHS Deletion"
+    message="Are you sure you want to delete this PHS submission? This action cannot be undone."
+    confirmText="Delete Submission"
+    cancelText="Cancel"
+    confirmClass="bg-red-600 hover:bg-red-700"
+/>
+
+<!-- Hidden form for delete -->
+<form id="delete-phs-form" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
+<script>
+function confirmPHSDelete(submissionId, userName) {
+    showConfirmationModal(
+        'phsDeleteModal',
+        `Are you sure you want to delete the PHS submission for "${userName}"? This action cannot be undone and will permanently remove all associated data.`,
+        function() {
+            const form = document.getElementById('delete-phs-form');
+            form.action = '{{ route("admin.phs.destroy", ":id") }}'.replace(':id', submissionId);
+            form.submit();
+        }
+    );
+}
+</script>
 @endsection 

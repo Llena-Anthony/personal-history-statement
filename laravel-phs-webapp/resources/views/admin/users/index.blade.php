@@ -30,7 +30,7 @@
             'user_type' => [
                 'admin' => 'Admin',
                 'personnel' => 'Personnel',
-                'regular' => 'Regular'
+                'client' => 'Client'
             ],
             'date_range' => true
         ]"
@@ -132,7 +132,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                {{ $user->is_active ? 'Active' : 'Disabled' }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -140,13 +140,6 @@
                                 <a href="{{ route('admin.users.edit', $user) }}" class="text-[#1B365D] hover:text-[#2B4B7D]">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
                             </div>
                         </td>
                     </tr>
@@ -159,6 +152,9 @@
         </div>
     </div>
 </div>
+
+<!-- Confirmation Modal for User Delete -->
+<!-- Removed delete modal and form -->
 
 <script>
 function copyToClipboard(text) {

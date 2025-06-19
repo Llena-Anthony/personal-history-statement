@@ -8,7 +8,7 @@
 <div class="space-y-6">
     <!-- Edit Form -->
     <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
-        <form action="{{ route('admin.phs.update', $submission->id) }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.phs.update', $submission->id) }}" method="POST" class="space-y-6" id="phs-edit-form">
             @csrf
             @method('PUT')
 
@@ -43,7 +43,7 @@
                     <i class="fas fa-times mr-2"></i>
                     Cancel
                 </a>
-                <button type="submit" class="btn-primary inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
+                <button type="button" onclick="confirmPHSUpdate()" class="btn-primary inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D]">
                     <i class="fas fa-save mr-2"></i>
                     Save Changes
                 </button>
@@ -87,4 +87,32 @@
         </div>
     </div>
 </div>
-@endsection 
+
+<!-- Confirmation Modal for PHS Update -->
+<x-confirmation-modal 
+    id="phsUpdateModal"
+    title="Confirm PHS Status Update"
+    message="Are you sure you want to update this PHS submission status? This action cannot be undone."
+    confirmText="Update Status"
+    cancelText="Cancel"
+    confirmClass="bg-[#1B365D] hover:bg-[#2B4B7D]"
+/>
+
+@endsection
+
+@push('scripts')
+<script>
+function confirmPHSUpdate() {
+    const status = document.getElementById('status').value;
+    const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+    
+    showConfirmationModal(
+        'phsUpdateModal',
+        `Are you sure you want to update this PHS submission status to "${statusText}"? This action cannot be undone.`,
+        function() {
+            document.getElementById('phs-edit-form').submit();
+        }
+    );
+}
+</script>
+@endpush 
