@@ -110,4 +110,24 @@ class PHSController extends Controller
         return redirect()->route('phs.edit', $phs->id)
             ->with('success', 'Personal History Statement updated successfully.');
     }
+
+    public function educationalBackground()
+    {
+        return view('phs.educational-background');
+    }
+
+    public function storeEducationalBackground(Request $request)
+    {
+        // Validation (optional: refine per level)
+        $request->validate([
+            'elementary.*.name' => 'nullable|string|max:255',
+            'highschool.*.name' => 'nullable|string|max:255',
+            'college.*.name' => 'nullable|string|max:255',
+        ]);
+
+        // Save logic — example:
+        // DB::table('educational_backgrounds')->insert([...]);
+
+        return redirect()->route('phs.military-history.create')->with('success', 'Saved!');
+    }
 } 
