@@ -18,7 +18,7 @@
             'user_type' => [
                 'admin' => 'Admin',
                 'personnel' => 'Personnel',
-                'regular' => 'Regular'
+                'client' => 'Client'
             ],
             'date_range' => true
         ]"

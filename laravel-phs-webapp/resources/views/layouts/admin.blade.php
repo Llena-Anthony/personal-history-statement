@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>[x-cloak] { display: none !important; }</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Personal History Statement</title>
@@ -594,6 +595,8 @@
             box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
     </style>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
     <div class="admin-layout">
@@ -970,9 +973,5 @@
             mainContent.style.transition = 'all 0.3s ease-in-out';
         });
     </script>
-
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @stack('scripts')
 </body>
 </html> 
