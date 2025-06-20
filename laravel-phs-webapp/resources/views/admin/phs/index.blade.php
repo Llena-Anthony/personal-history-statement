@@ -7,13 +7,13 @@
 @section('content')
 <div class="space-y-6">
     <!-- Search Bar with Filter Dropdowns -->
-    <x-admin.search-bar 
+    <x-admin.search-bar
         :route="route('admin.phs.index')"
         placeholder="Search by name, username, status, notes, or any field..."
         :filters="[
             'status' => [
                 'pending' => 'Pending',
-                'reviewed' => 'Reviewed', 
+                'reviewed' => 'Reviewed',
                 'approved' => 'Approved',
                 'rejected' => 'Rejected'
             ],
@@ -81,7 +81,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                 @if($submission->status === 'pending') bg-yellow-100 text-yellow-800
                                 @elseif($submission->status === 'reviewed') bg-blue-100 text-blue-800
                                 @elseif($submission->status === 'approved') bg-green-100 text-green-800
@@ -120,7 +120,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <!-- Pagination -->
         @if($submissions->hasPages())
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
@@ -128,10 +128,11 @@
         </div>
         @endif
     </div>
+    <a href="{{route('admin.phs.preview')}}"><hr><br>Print</a>
 </div>
 
 <!-- Confirmation Modal for PHS Delete -->
-<x-confirmation-modal 
+<x-confirmation-modal
     id="phsDeleteModal"
     title="Confirm PHS Deletion"
     message="Are you sure you want to delete this PHS submission? This action cannot be undone."
@@ -159,4 +160,4 @@ function confirmPHSDelete(submissionId, userName) {
     );
 }
 </script>
-@endsection 
+@endsection
