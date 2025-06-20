@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\PHSSectionTracking;
 
 class EmploymentHistoryController extends Controller
 {
+    use PHSSectionTracking;
+
     /**
      * Show the form for creating a new employment history entry.
      *
@@ -13,7 +16,7 @@ class EmploymentHistoryController extends Controller
      */
     public function create()
     {
-        return view('phs.employment-history');
+        return view('phs.employment-history', $this->getCommonViewData('employment-history'));
     }
 
     /**
@@ -43,5 +46,23 @@ class EmploymentHistoryController extends Controller
         // TODO: Add storage logic
         // For now, just redirect to the next section
         return redirect()->route('phs.organization.create');
+    }
+
+    protected function getSections()
+    {
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'credit-reputation',
+            'arrest-record',
+            'character-references',
+            'organization',
+            'miscellaneous'
+        ];
     }
 } 

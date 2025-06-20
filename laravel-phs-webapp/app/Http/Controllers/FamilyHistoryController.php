@@ -42,7 +42,7 @@ class FamilyHistoryController extends Controller
 
             DB::commit();
 
-            return redirect()->route('phs.educational-background.create')
+            return redirect()->route('phs.educational-background')
                 ->with('success', 'Family history information saved successfully. Please continue with your educational background.');
         } catch (\Exception $e) {
             DB::rollBack();

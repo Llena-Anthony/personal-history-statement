@@ -19,6 +19,8 @@ use App\Http\Controllers\PHSController;
 use App\Http\Controllers\FamilyHistoryController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\CreditReputationController;
+use App\Models\Miscellaneous;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,8 +126,26 @@ Route::middleware('auth')->group(function () {
     Route::post('/phs/organization', function(Request $request) { return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); })->name('phs.organization.store');
 
     // PHS Routes - Miscellaneous
-    Route::get('/phs/miscellaneous', function() { return view('phs.miscellaneous'); })->name('phs.miscellaneous');
-    Route::post('/phs/miscellaneous', function(Request $request) { return redirect()->route('client.dashboard')->with('success', 'Miscellaneous information saved.'); })->name('phs.miscellaneous.store');
+    Route::get('/phs/miscellaneous', function() {
+        $miscellaneous = Miscellaneous::where('username', Auth::user()->username)->first();
+        return view('phs.miscellaneous', ['miscellaneous' => $miscellaneous]);
+    })->name('phs.miscellaneous');
+
+    Route::post('/phs/miscellaneous', function(Request $request) {
+        $validated = $request->validate([
+            'misc_type' => 'nullable|string|max:255',
+            'misc_details' => 'required|string',
+        ]);
+
+        Miscellaneous::updateOrCreate(
+            ['username' => Auth::user()->username],
+            $validated
+        );
+
+        session()->put('phs_sections.miscellaneous', 'completed');
+        
+        return redirect()->route('phs.miscellaneous')->with('show_confirmation', true); 
+    })->name('phs.miscellaneous.store');
 
     // Dashboard Route
     Route::get('/dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
