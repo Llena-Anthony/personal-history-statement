@@ -9,45 +9,40 @@
 
         <form method="POST" action="{{ route('phs.employment-history.store') }}" class="space-y-6">
             @csrf
-            <div id="employment-entries" class="space-y-6">
-                @php
-                    $employmentEntries = old('company_name') ? count(old('company_name')) : 1;
-                @endphp
-
-                @for ($i = 0; $i < $employmentEntries; $i++)
-                <div class="employment-entry relative pt-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-[#1B365D]">Employment Entries</h3>
+                <button type="button" id="addEmployment" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Employment
+                </button>
+            </div>
+            <div id="employment-entries" class="space-y-4">
+                <div class="employment-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                         <div class="md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700">Business/Company Name <span class="text-xs text-gray-400">(Strictly no abbreviations. Write in full.)</span></label>
-                            <input type="text" name="company_name[]" value="{{ old('company_name.'.$i) }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            <input type="text" name="company_name[]" value="{{ old('company_name.0') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                         </div>
                         <div class="md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700">Type of Employment</label>
-                            <input type="text" name="employment_type[]" value="{{ old('employment_type.'.$i) }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            <input type="text" name="employment_type[]" value="{{ old('employment_type.0') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700">Business/Company Address</label>
-                            <input type="text" name="company_address[]" value="{{ old('company_address.'.$i) }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            <input type="text" name="company_address[]" value="{{ old('company_address.0') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                         </div>
                         <div class="md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700">Start</label>
-                            <input type="month" name="start_date[]" value="{{ old('start_date.'.$i) }}" placeholder="MM/YYYY" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            <input type="month" name="start_date[]" value="{{ old('start_date.0') }}" placeholder="MM/YYYY" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                         </div>
                         <div class="md:col-span-1">
                             <label class="block text-sm font-medium text-gray-700">End</label>
-                            <input type="month" name="end_date[]" value="{{ old('end_date.'.$i) }}" placeholder="MM/YYYY" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                            <input type="month" name="end_date[]" value="{{ old('end_date.0') }}" placeholder="MM/YYYY" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
                         </div>
                     </div>
-                    <div class="absolute top-0 right-0 flex items-center space-x-2">
-                        <button type="button" class="add-entry text-blue-500 hover:text-blue-700 transition-colors" title="Add another entry">
-                            <i class="fas fa-plus-circle fa-lg"></i>
-                        </button>
-                        <button type="button" class="remove-entry text-red-500 hover:text-red-700 transition-colors" title="Remove this entry">
-                            <i class="fas fa-minus-circle fa-lg"></i>
-                        </button>
+                    <div class="flex justify-end mt-4">
+                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
                     </div>
                 </div>
-                @endfor
             </div>
 
             <hr class="my-8">
@@ -83,39 +78,49 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const entriesContainer = document.getElementById('employment-entries');
+    function setupDynamicFields(containerId, addButtonId, entryClass, allowRemoveLast = false) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
 
-    const manageButtons = () => {
-        const entries = entriesContainer.querySelectorAll('.employment-entry');
-        entries.forEach((entry, index) => {
-            const addBtn = entry.querySelector('.add-entry');
-            const removeBtn = entry.querySelector('.remove-entry');
+        const addButton = document.getElementById(addButtonId);
+        if (!addButton) return;
+        
+        const templateEntry = container.querySelector('.' + entryClass);
+        if (!templateEntry) return;
+        
+        const template = templateEntry.cloneNode(true);
+        let index = container.querySelectorAll('.' + entryClass).length;
 
-            addBtn.style.display = (index === entries.length - 1) ? 'inline-flex' : 'none';
-            removeBtn.style.display = (entries.length > 1) ? 'inline-flex' : 'none';
+        container.addEventListener('click', function(e) {
+            const removeBtn = e.target.closest('.remove-btn');
+            if (removeBtn) {
+                const entry = removeBtn.closest('.' + entryClass);
+                if (entry) {
+                    if (container.querySelectorAll('.' + entryClass).length > 1 || allowRemoveLast) {
+                        entry.remove();
+                    }
+                }
+            }
         });
-    };
 
-    const addEntry = () => {
-        const newEntry = entriesContainer.querySelector('.employment-entry').cloneNode(true);
-        newEntry.querySelectorAll('input').forEach(input => input.value = '');
-        entriesContainer.appendChild(newEntry);
-        manageButtons();
-    };
+        addButton.addEventListener('click', function () {
+            const newEntry = template.cloneNode(true);
+            newEntry.querySelectorAll('input, select').forEach(input => {
+                const name = input.getAttribute('name');
+                if (name) {
+                    // Update array index for new entries
+                    const newName = name.replace(/\[\d*\]/, `[${index}]`);
+                    input.name = newName;
+                }
+                input.value = ''; // Clear the value of new inputs
+            });
+            
+            container.appendChild(newEntry);
+            index++;
+        });
+    }
 
-    const removeEntry = (btn) => {
-        btn.closest('.employment-entry').remove();
-        manageButtons();
-    };
-
-    entriesContainer.addEventListener('click', function (e) {
-        if (e.target.closest('.add-entry')) {
-            addEntry();
-        }
-        if (e.target.closest('.remove-entry')) {
-            removeEntry(e.target.closest('.remove-entry'));
-        }
-    });
+    setupDynamicFields('employment-entries', 'addEmployment', 'employment-entry', true);
 
     const dismissedSelect = document.getElementById('dismissed-select');
     if (dismissedSelect) {
@@ -124,8 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
             explanation.classList.toggle('hidden', this.value !== 'yes');
         });
     }
-
-    manageButtons();
 });
 </script>
 @endpush 
