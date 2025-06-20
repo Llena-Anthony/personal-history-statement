@@ -6,20 +6,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Current Time -->
-    <div class="bg-white rounded-xl shadow-sm p-6 scale-in">
-        <div class="flex items-center justify-between">
-            <div>
-                <h3 class="text-lg font-medium text-gray-900">Current Time</h3>
-                <p class="text-3xl font-bold text-[#1B365D]" id="current-time"></p>
-            </div>
-            <div class="text-right">
-                <p class="text-sm text-gray-500">Last Updated</p>
-                <p class="text-sm font-medium text-gray-900" id="last-updated"></p>
-            </div>
-        </div>
-    </div>
-
     <!-- Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Total Users -->
@@ -51,15 +37,19 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-500">Active Users</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $activeUsers }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $enabledUsers }}</p>
                 </div>
             </div>
             <div class="mt-4">
                 <div class="flex items-center">
                     <span class="text-sm font-medium text-green-600">
-                        {{ number_format(($activeUsers / $totalUsers) * 100, 1) }}%
+                        @if ($totalUsers > 0)
+                            {{ number_format(($enabledUsers / $totalUsers) * 100, 1) }}%
+                        @else
+                            0%
+                        @endif
                     </span>
-                    <span class="text-sm text-gray-500 ml-2">of total users</span>
+                    <span class="text-sm text-gray-500 ml-2">are active</span>
                 </div>
             </div>
         </div>
@@ -190,15 +180,6 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Update current time
-    function updateTime() {
-        const now = new Date();
-        document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
-        document.getElementById('last-updated').textContent = now.toLocaleString();
-    }
-    updateTime();
-    setInterval(updateTime, 1000);
-
     // Submission Status Chart
     const submissionStatusCtx = document.getElementById('submissionStatusChart').getContext('2d');
     new Chart(submissionStatusCtx, {

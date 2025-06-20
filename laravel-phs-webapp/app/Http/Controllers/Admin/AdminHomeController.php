@@ -17,7 +17,7 @@ class AdminHomeController extends Controller
     {
         // User Statistics
         $totalUsers = User::count();
-        $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))->count();
+        $enabledUsers = User::where('is_active', true)->count();
         $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
 
         // Submission Statistics
@@ -74,7 +74,7 @@ class AdminHomeController extends Controller
 
         $data = compact(
             'totalUsers',
-            'activeUsers',
+            'enabledUsers',
             'newUsersThisMonth',
             'totalPHSSubmissions',
             'newPHSSubmissionsThisMonth',
