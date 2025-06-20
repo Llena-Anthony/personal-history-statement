@@ -32,7 +32,7 @@ class User extends Authenticatable
         'is_active',
         'is_admin',
         'last_login_at',
-        'profile_photo_path'
+        'profile_picture'
     ];
 
     /**
@@ -126,8 +126,8 @@ class User extends Authenticatable
      */
     public function getProfilePhotoUrlAttribute()
     {
-        if ($this->profile_photo_path) {
-            return asset('storage/' . $this->profile_photo_path);
+        if ($this->profile_picture) {
+            return asset('storage/' . $this->profile_picture);
         }
         
         return asset('images/default-avatar.svg');
