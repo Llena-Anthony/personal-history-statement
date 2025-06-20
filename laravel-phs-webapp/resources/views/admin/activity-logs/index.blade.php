@@ -62,13 +62,8 @@
         :route="route('admin.activity-logs.index')"
         placeholder="Search activities, users, IP addresses, or any field..."
         :filters="[
-            'status' => [
-                'success' => 'Success',
-                'warning' => 'Warning',
-                'error' => 'Error'
-            ],
+            'status' => $statuses,
             'action' => $actions,
-            'user' => $users,
             'date_range' => true
         ]"
     />
@@ -76,10 +71,6 @@
     <!-- Action Buttons -->
     <div class="flex justify-between items-center">
         <div class="flex space-x-2">
-            <a href="{{ route('admin.activity-logs.export', request()->query()) }}" 
-               class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                <i class="fas fa-download mr-2"></i>Export CSV
-            </a>
             <button onclick="openClearLogsModal()" 
                     class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
                 <i class="fas fa-trash mr-2"></i>Clear Old Logs
