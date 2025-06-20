@@ -72,7 +72,7 @@ class AdminHomeController extends Controller
             ->take(10)
             ->get();
 
-        return view('admin.dashboard', compact(
+        $data = compact(
             'totalUsers',
             'activeUsers',
             'newUsersThisMonth',
@@ -83,6 +83,13 @@ class AdminHomeController extends Controller
             'submissionStats',
             'monthlyStats',
             'recentActivities'
-        ));
+        );
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('admin.dashboard', $data)->render();
+        }
+
+        return view('admin.dashboard', $data);
     }
 } 

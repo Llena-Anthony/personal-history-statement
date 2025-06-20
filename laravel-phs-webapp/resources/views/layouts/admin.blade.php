@@ -671,11 +671,15 @@
             <!-- Navigation -->
                 <div class="tab-container">
                     <div class="space-y-1">
-                        <li><a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <li><a href="{{ route('admin.dashboard') }}" 
+                               data-route="admin.dashboard"
+                               class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} dynamic-nav">
                             <i class="fa-solid fa-chart-line"></i>
                             <span class="ml-3">Dashboard</span>
                         </a></li>
-                        <li><a href="{{ route('admin.phs.index') }}" class="nav-link {{ request()->routeIs('admin.phs.*') ? 'active' : '' }}">
+                        <li><a href="{{ route('admin.phs.index') }}" 
+                               data-route="admin.phs.index"
+                               class="nav-link {{ request()->routeIs('admin.phs.*') ? 'active' : '' }} dynamic-nav">
                             <i class="fa-regular fa-folder"></i>
                             <span class="ml-3">PHS Submissions</span>
                         </a></li>
@@ -683,15 +687,21 @@
                             <i class="fa-regular fa-folder"></i>
                             <span class="ml-3">PDS Submissions</span>
                         </a></li>
-                        <li><a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <li><a href="{{ route('admin.users.index') }}" 
+                               data-route="admin.users.index"
+                               class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }} dynamic-nav">
                             <i class="fa-regular fa-address-book"></i>
                             <span class="ml-3">User Management</span>
                         </a></li>
-                        <li><a href="{{ route('admin.activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}">
+                        <li><a href="{{ route('admin.activity-logs.index') }}" 
+                               data-route="admin.activity-logs.index"
+                               class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }} dynamic-nav">
                             <i class="fas fa-history"></i>
                             <span class="ml-3">Activity Logs</span>
                         </a></li>
-                        <li><a href="{{ route('admin.reports.index') }}" class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
+                        <li><a href="{{ route('admin.reports.index') }}" 
+                               data-route="admin.reports.index"
+                               class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }} dynamic-nav">
                             <i class="fa-regular fa-file-lines"></i>
                             <span class="ml-3">Reports</span>
                         </a></li>
@@ -706,7 +716,7 @@
 
             <!-- Content Area -->
             <div class="content-area">
-                <div class="content-scroll">
+                <div class="content-scroll" id="mainContent">
                     @yield('content')
                 </div>
             </div>
@@ -752,6 +762,14 @@
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mb-4"></div>
+            <p class="text-gray-700 font-medium">Loading...</p>
+        </div>
     </div>
 
     <!-- Logout Confirmation Modal -->
@@ -866,6 +884,111 @@
         // Update date and time every second
         updateDateTime();
         setInterval(updateDateTime, 1000);
+
+        // Dynamic Navigation System
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.dynamic-nav');
+            const mainContent = document.getElementById('mainContent');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            let currentRoute = '{{ request()->route()->getName() }}';
+
+            // Add click event listeners to navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const route = this.getAttribute('data-route');
+                    const url = this.getAttribute('href');
+                    
+                    if (route && route !== currentRoute) {
+                        loadContent(url, route);
+                    }
+                });
+            });
+
+            // Function to load content dynamically
+            function loadContent(url, route) {
+                // Show loading overlay
+                loadingOverlay.classList.remove('hidden');
+                loadingOverlay.classList.add('flex');
+
+                // Fade out current content
+                mainContent.style.opacity = '0';
+                mainContent.style.transform = 'translateY(10px)';
+
+                // Fetch new content
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'text/html, application/xhtml+xml'
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    // Create a temporary div to parse the HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    
+                    // Extract the content from the yield('content') section
+                    const newContent = tempDiv.querySelector('#mainContent') || tempDiv.querySelector('.content-scroll') || tempDiv;
+                    
+                    // Update the content
+                    setTimeout(() => {
+                        mainContent.innerHTML = newContent.innerHTML;
+                        
+                        // Update active navigation
+                        updateActiveNav(route);
+                        
+                        // Update browser URL without reload
+                        window.history.pushState({route: route}, '', url);
+                        currentRoute = route;
+                        
+                        // Fade in new content
+                        mainContent.style.opacity = '1';
+                        mainContent.style.transform = 'translateY(0)';
+                        
+                        // Hide loading overlay
+                        loadingOverlay.classList.add('hidden');
+                        loadingOverlay.classList.remove('flex');
+                        
+                        // Update page title if available
+                        const titleElement = tempDiv.querySelector('title');
+                        if (titleElement) {
+                            document.title = titleElement.textContent;
+                        }
+                    }, 300);
+                })
+                .catch(error => {
+                    console.error('Error loading content:', error);
+                    loadingOverlay.classList.add('hidden');
+                    loadingOverlay.classList.remove('flex');
+                    mainContent.style.opacity = '1';
+                    mainContent.style.transform = 'translateY(0)';
+                });
+            }
+
+            // Function to update active navigation
+            function updateActiveNav(route) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-route') === route) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function(event) {
+                if (event.state && event.state.route) {
+                    const link = document.querySelector(`[data-route="${event.state.route}"]`);
+                    if (link) {
+                        loadContent(link.getAttribute('href'), event.state.route);
+                    }
+                }
+            });
+
+            // Initialize content transition styles
+            mainContent.style.transition = 'all 0.3s ease-in-out';
+        });
     </script>
 
     <!-- Alpine.js -->

@@ -57,7 +57,14 @@ class AdminUserController extends Controller
             return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
         })->toArray();
 
-        return view('admin.users.index', compact('users', 'searchFields'));
+        $data = compact('users', 'searchFields');
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('admin.users.index', $data)->render();
+        }
+
+        return view('admin.users.index', $data);
     }
 
     public function create()
