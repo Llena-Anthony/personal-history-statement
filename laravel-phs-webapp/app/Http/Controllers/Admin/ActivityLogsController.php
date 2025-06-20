@@ -13,7 +13,7 @@ class ActivityLogsController extends Controller
     public function index(Request $request)
     {
         $query = ActivityLog::with('user')
-            ->filter($request->all())
+            ->applyFilters($request->all())
             ->orderBy('created_at', 'desc');
 
         // Handle sorting
@@ -27,9 +27,13 @@ class ActivityLogsController extends Controller
         $activityLogs = $query->paginate(20)->withQueryString();
 
         // Get filter options for dropdowns
-        $actions = ActivityLog::distinct()->pluck('action')->filter()->sort();
-        $statuses = ActivityLog::distinct()->pluck('status')->filter()->sort();
-        $users = User::orderBy('name')->get(['id', 'name', 'username', 'email']);
+        $actions = ActivityLog::distinct()->pluck('action')->filter()->sort()->mapWithKeys(function ($action) {
+            return [$action => ucfirst(str_replace('_', ' ', $action))];
+        })->toArray();
+        
+        $statuses = ActivityLog::distinct()->pluck('status')->filter()->sort()->mapWithKeys(function ($status) {
+            return [$status => ucfirst($status)];
+        })->toArray();
 
         // Get searchable fields for the search bar
         $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
@@ -55,7 +59,6 @@ class ActivityLogsController extends Controller
             'activityLogs',
             'actions',
             'statuses',
-            'users',
             'stats',
             'actionStats',
             'searchFields'
@@ -72,7 +75,7 @@ class ActivityLogsController extends Controller
     public function export(Request $request)
     {
         $query = ActivityLog::with('user')
-            ->filter($request->all())
+            ->applyFilters($request->all())
             ->orderBy('created_at', 'desc');
 
         $activityLogs = $query->get();

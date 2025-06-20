@@ -83,6 +83,28 @@ class ActivityLog extends Model
         return $query->applyFilters($filters);
     }
 
+    /**
+     * Override the status field handling for ActivityLog
+     * ActivityLog uses string statuses, not integer statuses
+     */
+    protected function getStatusField()
+    {
+        return 'status';
+    }
+
+    /**
+     * Override the status filtering for ActivityLog
+     * ActivityLog statuses are strings, not integers
+     */
+    public function scopeFilterByStatus($query, $status)
+    {
+        if ($status === null || $status === '' || $status === []) {
+            return $query;
+        }
+
+        return $query->where('status', $status);
+    }
+
     public function getStatusColorAttribute()
     {
         return match($this->status) {
