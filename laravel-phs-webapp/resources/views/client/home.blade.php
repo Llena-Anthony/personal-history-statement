@@ -246,121 +246,38 @@
     </div>
 </div>
 
-<!-- Smooth Transition Overlay -->
-<div id="transition-overlay" class="fixed inset-0 bg-gradient-to-br from-[#1B365D] via-[#2B4B7D] to-[#1B365D] z-50 transform scale-0 opacity-0 transition-all duration-500 ease-out pointer-events-none">
-    <!-- Animated Background Pattern -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full">
-            <div class="absolute top-1/4 left-1/4 w-16 h-16 bg-[#D4AF37] opacity-20 rounded-full animate-bounce"></div>
-            <div class="absolute top-3/4 right-1/4 w-12 h-12 bg-[#D4AF37] opacity-15 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-[#D4AF37] opacity-10 rounded-full animate-pulse"></div>
-        </div>
-    </div>
-    
-    <!-- Main Content -->
+<!-- Simple Transition Overlay -->
+<div id="transition-overlay" class="fixed inset-0 bg-[#1B365D] z-50 opacity-0 transition-opacity duration-300 ease-in-out pointer-events-none">
     <div class="absolute inset-0 flex items-center justify-center">
-        <div class="text-white text-center transform translate-y-8 opacity-0 transition-all duration-700 ease-out" id="transition-content">
-            <!-- Icon Container with Ripple Effect -->
-            <div class="relative mb-6">
-                <div class="flex items-center justify-center mx-auto transform scale-0 transition-all duration-600 ease-out" id="icon-container">
-                    <img src="{{ asset('images/pma_logo.svg') }}" 
-                         alt="PMA Logo" 
-                         class="w-24 h-24 transform rotate-0 transition-all duration-600 ease-out" 
-                         id="icon">
-                </div>
-                <!-- Ripple circles -->
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border-2 border-[#D4AF37] rounded-full opacity-0 animate-ping"></div>
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-[#D4AF37] rounded-full opacity-0 animate-ping" style="animation-delay: 0.3s;"></div>
+        <div class="text-white text-center">
+            <div class="mb-4">
+                <img src="{{ asset('images/pma_logo.svg') }}" 
+                     alt="PMA Logo" 
+                     class="w-16 h-16 mx-auto">
             </div>
-            
-            <!-- Text Content -->
-            <div class="space-y-2">
-                <h3 class="text-2xl font-bold transform translate-y-4 opacity-0 transition-all duration-500 ease-out" id="title">Loading PHS Form</h3>
-                <p class="text-[#D4AF37] transform translate-y-4 opacity-0 transition-all duration-500 ease-out" id="subtitle">Preparing your application...</p>
-            </div>
-            
-            <!-- Progress Indicator -->
-            <div class="mt-6 flex justify-center space-x-1" id="progress-dots">
-                <div class="w-2 h-2 bg-white rounded-full opacity-30 transform scale-0 transition-all duration-300 ease-out" style="animation-delay: 0ms;"></div>
-                <div class="w-2 h-2 bg-white rounded-full opacity-30 transform scale-0 transition-all duration-300 ease-out" style="animation-delay: 100ms;"></div>
-                <div class="w-2 h-2 bg-white rounded-full opacity-30 transform scale-0 transition-all duration-300 ease-out" style="animation-delay: 200ms;"></div>
-            </div>
+            <h3 class="text-xl font-semibold">Loading PHS Form...</h3>
         </div>
     </div>
 </div>
 
 <script>
-// Smooth transition for PHS buttons
+// Simple transition for PHS buttons
 document.addEventListener('DOMContentLoaded', function() {
     const phsButtons = document.querySelectorAll('#start-phs-btn, #phs-action-btn');
     const transitionOverlay = document.getElementById('transition-overlay');
-    const transitionContent = document.getElementById('transition-content');
-    const iconContainer = document.getElementById('icon-container');
-    const icon = document.getElementById('icon');
-    const title = document.getElementById('title');
-    const subtitle = document.getElementById('subtitle');
-    const progressDots = document.getElementById('progress-dots');
     
     phsButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Start overlay animation
-            transitionOverlay.classList.remove('scale-0', 'opacity-0', 'pointer-events-none');
-            transitionOverlay.classList.add('scale-100', 'opacity-100');
+            // Show overlay
+            transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            transitionOverlay.classList.add('opacity-100');
             
-            // Animate content after overlay appears
-            setTimeout(() => {
-                transitionContent.classList.remove('translate-y-8', 'opacity-0');
-                transitionContent.classList.add('translate-y-0', 'opacity-100');
-                
-                // Animate icon container
-                setTimeout(() => {
-                    iconContainer.classList.remove('scale-0');
-                    iconContainer.classList.add('scale-100');
-                    
-                    // Animate icon rotation
-                    setTimeout(() => {
-                        icon.classList.add('rotate-12');
-                        setTimeout(() => {
-                            icon.classList.remove('rotate-12');
-                            icon.classList.add('-rotate-12');
-                            setTimeout(() => {
-                                icon.classList.remove('-rotate-12');
-                                icon.classList.add('rotate-0');
-                            }, 150);
-                        }, 150);
-                    }, 200);
-                }, 100);
-                
-                // Animate title and subtitle
-                setTimeout(() => {
-                    title.classList.remove('translate-y-4', 'opacity-0');
-                    title.classList.add('translate-y-0', 'opacity-100');
-                }, 300);
-                
-                setTimeout(() => {
-                    subtitle.classList.remove('translate-y-4', 'opacity-0');
-                    subtitle.classList.add('translate-y-0', 'opacity-100');
-                }, 400);
-                
-                // Animate progress dots
-                setTimeout(() => {
-                    const dots = progressDots.querySelectorAll('div');
-                    dots.forEach((dot, index) => {
-                        setTimeout(() => {
-                            dot.classList.remove('scale-0', 'opacity-30');
-                            dot.classList.add('scale-100', 'opacity-100');
-                        }, index * 100);
-                    });
-                }, 500);
-                
-            }, 100);
-            
-            // Navigate after animation sequence
+            // Navigate after brief delay
             setTimeout(() => {
                 window.location.href = this.href;
-            }, 1200);
+            }, 400);
         });
     });
 });
