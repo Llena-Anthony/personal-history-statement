@@ -23,7 +23,6 @@
                 margin: 0;
                 padding: 0;
             }
-
             header, footer {
                 position: fixed;
                 width: 100%;
@@ -33,20 +32,23 @@
                 text-align: center;
                 background: white;
             }
-
             header {
                 top: 0.3in;
+            }
+
+            header {
+                margin-bottom: 1pt;
             }
             footer {
                 bottom: 0.2in;
             }
             main {
-                margin-top: 1.2in;
-                margin-bottom: 1in;
+                margin-top: 1in;
                 text-align: justify;
             }
 
             .confidential {
+                margin-top: 0;
                 letter-spacing: 2px;
                 margin-bottom: 10pt;
             }
@@ -64,7 +66,6 @@
                 font-size: 9pt;
                 font-weight: bold;
                 text-align: left;
-                padding-left: 0.2in;
             }
 
             #fnr {
@@ -130,18 +131,12 @@
                 text-indent: 50px;
             }
 
-            header {
-                margin-top: 0.3in;
-                margin-bottom: 1pt;
-            }
-
-            footer {
-                margin-bottom: 0.2in;
-            }
-
             @media print {
                 @page {
-                    margin: 1in;
+                    margin-top: 0.3in;
+                    margin-bottom: 0.2in;
+                    margin-right: 1in;
+                    margin-left: 1in;
                 }
             }
         </style>
