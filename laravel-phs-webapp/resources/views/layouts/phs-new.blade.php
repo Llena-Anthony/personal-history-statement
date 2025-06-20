@@ -988,6 +988,14 @@
                             document.title = titleElement.textContent;
                         }
                         
+                        // Initialize section-specific functionality
+                        if (sectionId === 'personal-details' && window.initializePersonalDetails) {
+                            // Small delay to ensure DOM is ready
+                            setTimeout(() => {
+                                window.initializePersonalDetails();
+                            }, 100);
+                        }
+                        
                         // Close sidebar on mobile
                         if (window.innerWidth <= 768) {
                             this.sidebarOpen = false;
