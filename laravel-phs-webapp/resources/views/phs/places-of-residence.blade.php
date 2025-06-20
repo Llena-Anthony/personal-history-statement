@@ -25,7 +25,7 @@
                 </button>
             </div>
             <div id="residences" class="space-y-4">
-                <div class="residence p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="residence-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
@@ -39,6 +39,9 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
                             <input type="text" name="residences[0][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
                     </div>
                 </div>
             </div>
@@ -58,29 +61,47 @@
 
 @push('scripts')
 <script>
-    let residenceCount = 1;
-    document.getElementById('addResidence').addEventListener('click', function() {
-        const residencesContainer = document.getElementById('residences');
-        const newResidence = document.createElement('div');
-        newResidence.className = 'residence p-4 bg-white rounded-lg border border-gray-200';
-        newResidence.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
-                    <input type="number" name="residences[${residenceCount}][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">To (Year)</label>
-                    <input type="number" name="residences[${residenceCount}][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                    <input type="text" name="residences[${residenceCount}][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                </div>
-            </div>
-        `;
-        residencesContainer.appendChild(newResidence);
-        residenceCount++;
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupDynamicFields(containerId, addButtonId, entryClass, allowRemoveLast = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const addButton = document.getElementById(addButtonId);
+            if (!addButton) return;
+            
+            const templateEntry = container.querySelector('.' + entryClass);
+            if (!templateEntry) return;
+            
+            const template = templateEntry.cloneNode(true);
+            let index = container.querySelectorAll('.' + entryClass).length;
+
+            container.addEventListener('click', function(e) {
+                const removeBtn = e.target.closest('.remove-btn');
+                if (removeBtn) {
+                    const entry = removeBtn.closest('.' + entryClass);
+                    if (entry) {
+                        if (container.querySelectorAll('.' + entryClass).length > 1 || allowRemoveLast) {
+                            entry.remove();
+                        }
+                    }
+                }
+            });
+
+            addButton.addEventListener('click', function () {
+                const newEntry = template.cloneNode(true);
+                newEntry.querySelectorAll('input, select').forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        input.setAttribute('name', name.replace(/\[\d+\]/, '[' + index + ']'));
+                    }
+                    input.value = ''; // Clear the value of new inputs
+                });
+                
+                container.appendChild(newEntry);
+                index++;
+            });
+        }
+        setupDynamicFields('residences', 'addResidence', 'residence-entry', true);
     });
 </script>
 @endpush 

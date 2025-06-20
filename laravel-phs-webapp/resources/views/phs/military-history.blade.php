@@ -44,25 +44,47 @@
         <!-- Important Unit Assignments -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-[#1B365D]">Assignments</h3>
+                <h3 class="text-lg font-semibold text-[#1B365D]">Important Unit Assignment since enlisted / CAD</h3>
                 <button type="button" id="addAssignment" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
                     <i class="fas fa-plus mr-2"></i>Add Assignment
                 </button>
             </div>
             <div id="assignments" class="space-y-4">
-                <!-- Assignment template will be cloned here -->
+                <div class="assignment-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Unit/Assignment</label>
+                            <input type="text" name="assignments[0][unit]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Designation</label>
+                            <input type="text" name="assignments[0][designation]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                            <input type="date" name="assignments[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                            <input type="date" name="assignments[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Military Schools Attended -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-[#1B365D]">Military Schools Attended</h3>
-                <button type="button" class="add-school px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                <button type="button" id="addSchool" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
                     <i class="fas fa-plus mr-2"></i>Add School
                 </button>
             </div>
             <div id="schools" class="space-y-4">
-                <div class="school p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="school-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">School Name</label>
@@ -81,6 +103,9 @@
                             <input type="text" name="schools[0][rating]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
                     </div>
+                    <div class="flex justify-end mt-4">
+                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,17 +113,20 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-[#1B365D]">Decorations, Awards, or Commendations Received</h3>
-                <button type="button" class="add-award px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
+                <button type="button" id="addAward" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
                     <i class="fas fa-plus mr-2"></i>Add Award
                 </button>
             </div>
             <div id="awards" class="space-y-4">
-                <div class="award p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="award-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div class="grid grid-cols-1 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Award/Decoration</label>
                             <input type="text" name="awards[0][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
                     </div>
                 </div>
             </div>
@@ -114,5 +142,53 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function setupDynamicFields(containerId, addButtonId, entryClass, allowRemoveLast = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const addButton = document.getElementById(addButtonId);
+            if (!addButton) return;
+            
+            const templateEntry = container.querySelector('.' + entryClass);
+            if (!templateEntry) return;
+            
+            const template = templateEntry.cloneNode(true);
+            let index = container.querySelectorAll('.' + entryClass).length;
+
+            container.addEventListener('click', function(e) {
+                const removeBtn = e.target.closest('.remove-btn');
+                if (removeBtn) {
+                    const entry = removeBtn.closest('.' + entryClass);
+                    if (entry) {
+                        if (container.querySelectorAll('.' + entryClass).length > 1 || allowRemoveLast) {
+                            entry.remove();
+                        }
+                    }
+                }
+            });
+
+            addButton.addEventListener('click', function () {
+                const newEntry = template.cloneNode(true);
+                newEntry.querySelectorAll('input, select').forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        input.setAttribute('name', name.replace(/\[\d+\]/, '[' + index + ']'));
+                    }
+                    input.value = ''; // Clear the value of new inputs
+                });
+                
+                container.appendChild(newEntry);
+                index++;
+            });
+        }
+
+        // Allow removing the last assignment, school, and award
+        setupDynamicFields('assignments', 'addAssignment', 'assignment-entry', true);
+        setupDynamicFields('schools', 'addSchool', 'school-entry', true);
+        setupDynamicFields('awards', 'addAward', 'award-entry', true);
+    });
+</script>
 @endsection
 @php($currentSection = 'military-history') 

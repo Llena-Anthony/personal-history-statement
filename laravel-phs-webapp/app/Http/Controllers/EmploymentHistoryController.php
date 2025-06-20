@@ -42,6 +42,6 @@ class EmploymentHistoryController extends Controller
 
         // TODO: Add storage logic
         // For now, just redirect to the next section
-        return redirect()->route('phs.foreign-countries.create');
+        return redirect()->route('phs.organization.create');
     }
 } 
