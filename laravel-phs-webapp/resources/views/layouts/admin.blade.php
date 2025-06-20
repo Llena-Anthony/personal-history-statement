@@ -764,14 +764,6 @@
         </footer>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 flex flex-col items-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mb-4"></div>
-            <p class="text-gray-700 font-medium">Loading...</p>
-        </div>
-    </div>
-
     <!-- Logout Confirmation Modal -->
     <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="logoutModalContent">
@@ -907,10 +899,6 @@
 
             // Function to load content dynamically
             function loadContent(url, route) {
-                // Show loading overlay
-                loadingOverlay.classList.remove('hidden');
-                loadingOverlay.classList.add('flex');
-
                 // Fade out current content
                 mainContent.style.opacity = '0';
                 mainContent.style.transform = 'translateY(10px)';
@@ -931,36 +919,28 @@
                     // Extract the content from the yield('content') section
                     const newContent = tempDiv.querySelector('#mainContent') || tempDiv.querySelector('.content-scroll') || tempDiv;
                     
-                    // Update the content
-                    setTimeout(() => {
-                        mainContent.innerHTML = newContent.innerHTML;
-                        
-                        // Update active navigation
-                        updateActiveNav(route);
-                        
-                        // Update browser URL without reload
-                        window.history.pushState({route: route}, '', url);
-                        currentRoute = route;
-                        
-                        // Fade in new content
-                        mainContent.style.opacity = '1';
-                        mainContent.style.transform = 'translateY(0)';
-                        
-                        // Hide loading overlay
-                        loadingOverlay.classList.add('hidden');
-                        loadingOverlay.classList.remove('flex');
-                        
-                        // Update page title if available
-                        const titleElement = tempDiv.querySelector('title');
-                        if (titleElement) {
-                            document.title = titleElement.textContent;
-                        }
-                    }, 300);
+                    // Update the content immediately
+                    mainContent.innerHTML = newContent.innerHTML;
+                    
+                    // Update active navigation
+                    updateActiveNav(route);
+                    
+                    // Update browser URL without reload
+                    window.history.pushState({route: route}, '', url);
+                    currentRoute = route;
+                    
+                    // Fade in new content
+                    mainContent.style.opacity = '1';
+                    mainContent.style.transform = 'translateY(0)';
+                    
+                    // Update page title if available
+                    const titleElement = tempDiv.querySelector('title');
+                    if (titleElement) {
+                        document.title = titleElement.textContent;
+                    }
                 })
                 .catch(error => {
                     console.error('Error loading content:', error);
-                    loadingOverlay.classList.add('hidden');
-                    loadingOverlay.classList.remove('flex');
                     mainContent.style.opacity = '1';
                     mainContent.style.transform = 'translateY(0)';
                 });
