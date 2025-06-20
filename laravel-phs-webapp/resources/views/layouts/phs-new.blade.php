@@ -11,8 +11,56 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; height: 100vh; font-size: 14px; }
         .glass-card { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background-color: rgba(255, 255, 255, 0.8); }
-        .btn-primary { transition: all 0.2s ease; }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15); }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #1B365D;
+            color: white;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+            border: 1px solid transparent;
+        }
+        .btn-primary:hover {
+            background-color: #2B4B7D;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-weight: 600;
+            border: 1px solid #d1d5db;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-2px);
+        }
+        .btn-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-circle-sm {
+            width: 1.75rem;
+            height: 1.75rem;
+            font-size: 1rem;
+        }
+        .btn-blue { background-color: #1B365D; color: white; }
+        .btn-blue:hover { background-color: #2B4B7D; }
+        .btn-red { background-color: #ef4444; color: white; font-weight: bold; }
+        .btn-red:hover { background-color: #dc2626; }
         .fade-in { animation: fadeIn 0.6s ease-out; }
         .slide-in { animation: slideIn 0.6s ease-out; }
         .scale-in { animation: scaleIn 0.6s ease-out; }

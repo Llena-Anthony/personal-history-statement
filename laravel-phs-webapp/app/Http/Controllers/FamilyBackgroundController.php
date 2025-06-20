@@ -36,23 +36,24 @@ class FamilyBackgroundController extends Controller
     }
 
     /**
-     * Get the current status of all PHS sections
+     * Get the list of PHS sections.
+     * Overrides the method in PHSSectionTracking trait to define the main sections.
+     *
+     * @return array
      */
-    private function getSectionStatus()
+    protected function getSections()
     {
-        $sections = [
-            'personal-details' => session('phs_sections.personal-details', 'not-started'),
-            'family-background' => session('phs_sections.family-background', 'not-started'),
-            'educational-background' => session('phs_sections.educational-background', 'not-started'),
-            'employment-history' => session('phs_sections.employment-history', 'not-started'),
-            'military-history' => session('phs_sections.military-history', 'not-started'),
-            'places-of-residence' => session('phs_sections.places-of-residence', 'not-started'),
-            'foreign-countries' => session('phs_sections.foreign-countries', 'not-started'),
-            'personal-characteristics' => session('phs_sections.personal-characteristics', 'not-started'),
-            'marital-status' => session('phs_sections.marital-status', 'not-started'),
-            'family-history' => session('phs_sections.family-history', 'not-started'),
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'personal-characteristics',
+            'marital-status',
+            'family-history',
         ];
-
-        return $sections;
     }
 } 

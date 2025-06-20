@@ -14,7 +14,7 @@ class ForeignCountriesController extends Controller
     public function store(Request $request)
     {
         // Validation and storage logic will be implemented later
-        return redirect()->route('phs.military-history.create')
-            ->with('success', 'Foreign countries visited saved successfully. Please continue with your military history.');
+        return redirect()->route('phs.credit-reputation')
+            ->with('success', 'Foreign countries visited saved successfully. Please continue with your credit reputation.');
     }
 } 
