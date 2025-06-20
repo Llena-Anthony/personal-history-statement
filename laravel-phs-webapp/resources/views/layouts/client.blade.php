@@ -182,62 +182,6 @@
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%); 
         }
         
-        /* Profile Dropdown Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-        
-        .profile-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            min-width: 200px;
-            z-index: 50;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s ease;
-        }
-        
-        .profile-menu.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .profile-menu-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: #374151;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        
-        .profile-menu-item:last-child {
-            border-bottom: none;
-        }
-        
-        .profile-menu-item:hover {
-            background-color: #f9fafb;
-            color: #1B365D;
-        }
-        
-        .profile-menu-item.logout {
-            color: #dc2626;
-        }
-        
-        .profile-menu-item.logout:hover {
-            background-color: #fef2f2;
-            color: #b91c1c;
-        }
-        
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .sidebar { 

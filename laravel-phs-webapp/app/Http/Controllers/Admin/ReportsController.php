@@ -83,7 +83,7 @@ class ReportsController extends Controller
                 break;
         }
 
-        return view('admin.reports.index', compact(
+        $data = compact(
             'data',
             'summary',
             'reportType',
@@ -96,7 +96,14 @@ class ReportsController extends Controller
             'statuses',
             'reportTypes',
             'searchFields'
-        ));
+        );
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('admin.reports.index', $data)->render();
+        }
+
+        return view('admin.reports.index', $data);
     }
 
     private function getActivityReport(Request $request)

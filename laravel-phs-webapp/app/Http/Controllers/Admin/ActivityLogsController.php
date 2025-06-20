@@ -55,14 +55,21 @@ class ActivityLogsController extends Controller
             ->limit(10)
             ->get();
 
-        return view('admin.activity-logs.index', compact(
+        $data = compact(
             'activityLogs',
             'actions',
             'statuses',
             'stats',
             'actionStats',
             'searchFields'
-        ));
+        );
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('admin.activity-logs.index', $data)->render();
+        }
+
+        return view('admin.activity-logs.index', $data);
     }
 
     public function show(ActivityLog $activityLog)
