@@ -67,36 +67,477 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .phs-layout { display: flex; flex-direction: column; height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); position: relative; overflow: hidden; }
-        .phs-layout::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 20%, rgba(27, 54, 93, 0.03) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.02) 0%, transparent 50%); pointer-events: none; }
-        .phs-header { background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%); border-bottom: 3px solid transparent; background-clip: padding-box; position: relative; flex-shrink: 0; z-index: 40; box-shadow: 0 8px 32px rgba(27, 54, 93, 0.15); }
-        .phs-header::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%); }
-        .phs-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37); border-radius: 0 0 2rem 2rem; }
-        .header-content { border-radius: 0 0 2rem 2rem; position: relative; z-index: 1; }
-        .pma-crest { filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)); transition: all 0.3s ease; position: relative; width: 3.5rem; height: 3.5rem; }
-        .phs-main { flex: 1; display: flex; overflow: hidden; position: relative; margin: 0.25rem; }
-        .phs-sidebar { background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%); border: 2px solid transparent; background-clip: padding-box; position: relative; overflow: hidden; width: 320px; flex-shrink: 0; z-index: 30; border-radius: 1.5rem; box-shadow: 0 8px 32px rgba(27, 54, 93, 0.15); }
-        .phs-content { flex: 1; background: white; border-radius: 1.5rem; margin-left: 0.25rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(212, 175, 55, 0.1); }
-        .phs-scroll { flex: 1; overflow-y: auto; padding: 1.25rem 1.5rem; }
-        .phs-footer { background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%); border-top: 3px solid transparent; background-clip: padding-box; position: relative; flex-shrink: 0; z-index: 40; box-shadow: 0 -8px 32px rgba(27, 54, 93, 0.15); }
-        .phs-footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%); }
+        .phs-layout { 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%); 
+            position: relative; 
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInLayout 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInLayout {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .phs-header { 
+            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%); 
+            border-bottom: 3px solid transparent; 
+            background-clip: padding-box; 
+            position: relative; 
+            flex-shrink: 0; 
+            z-index: 40; 
+            box-shadow: 0 8px 32px rgba(27, 54, 93, 0.2);
+            animation: slideInHeader 0.4s ease-out 0.1s both;
+        }
+
+        @keyframes slideInHeader {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .phs-sidebar { 
+            background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%); 
+            border: 2px solid transparent; 
+            background-clip: padding-box; 
+            position: relative; 
+            overflow: hidden; 
+            width: 320px; 
+            flex-shrink: 0; 
+            z-index: 30; 
+            border-radius: 1.5rem; 
+            box-shadow: 0 8px 32px rgba(27, 54, 93, 0.2);
+            animation: slideInSidebar 0.4s ease-out 0.2s both;
+        }
+
+        @keyframes slideInSidebar {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .phs-content { 
+            flex: 1; 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); 
+            margin-left: 0.25rem; 
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            animation: fadeInContent 0.4s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .phs-layout::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: radial-gradient(circle at 20% 20%, rgba(27, 54, 93, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%), radial-gradient(circle at 40% 60%, rgba(27, 54, 93, 0.02) 0%, transparent 50%); 
+            pointer-events: none; 
+        }
+
+        .phs-header::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%); 
+        }
+
+        .phs-header::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: 3px; 
+            background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37); 
+            border-radius: 0 0 2rem 2rem; 
+        }
+
+        .header-content { 
+            border-radius: 0 0 2rem 2rem; 
+            position: relative; 
+            z-index: 1; 
+        }
+
+        .pma-crest { 
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)); 
+            transition: all 0.3s ease; 
+            position: relative; 
+            width: 3.5rem; 
+            height: 3.5rem; 
+        }
+
+        .phs-main { 
+            flex: 1; 
+            display: flex; 
+            overflow: hidden; 
+            position: relative; 
+            margin: 0.25rem; 
+        }
+
+        .phs-scroll { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 1.25rem 1.5rem; 
+        }
+
+        .phs-footer { 
+            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%); 
+            border-top: 3px solid transparent; 
+            background-clip: padding-box; 
+            position: relative; 
+            flex-shrink: 0; 
+            z-index: 40; 
+            box-shadow: 0 -8px 32px rgba(27, 54, 93, 0.15);
+            animation: slideInFooter 0.4s ease-out 0.4s both;
+        }
+
+        @keyframes slideInFooter {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .phs-footer::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%); 
+        }
         
         /* Section Navigation Styles */
-        .section-nav-item { transition: all 0.3s ease; border-radius: 0.75rem; margin-bottom: 0.5rem; }
-        .section-nav-item:hover { background-color: rgba(212, 175, 55, 0.1); }
-        .section-nav-item.visited { background-color: rgba(249, 115, 22, 0.2); border-left: 4px solid #f97316; }
-        .section-nav-item.completed { background-color: rgba(34, 197, 94, 0.2); border-left: 4px solid #22c55e; }
-        .section-nav-item.active { background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.1) 100%); border-left: 4px solid #D4AF37; }
+        .section-nav-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .section-nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .section-nav-item:hover::before {
+            opacity: 1;
+        }
+        .section-nav-item.active {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+            border-left: 4px solid #D4AF37;
+            transform: translateX(4px);
+        }
+        .section-nav-item.completed {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+            border-left: 4px solid #22c55e;
+        }
+        .section-nav-item.visited {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(249, 115, 22, 0.05) 100%);
+            border-left: 4px solid #f97316;
+        }
         
         /* Progress Bar */
-        .progress-bar { background: rgba(255, 255, 255, 0.1); border-radius: 1rem; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #D4AF37, #B38F2A); transition: width 0.5s ease; }
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37);
+            background-size: 200% 100%;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
         
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .phs-sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
-            .phs-sidebar.open { transform: translateX(0); }
-            .phs-content { margin-left: 0; }
+            .phs-sidebar { 
+                transform: translateX(-100%); 
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            }
+            .phs-sidebar.open { 
+                transform: translateX(0); 
+            }
+            .phs-content { 
+                margin-left: 0; 
+                border-radius: 1rem;
+            }
+            .content-scroll {
+                padding: 1rem;
+            }
+            .header-title {
+                font-size: 1rem;
+            }
+            .pma-crest {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .content-scroll {
+                padding: 0.75rem;
+            }
+            .header-title {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Enhanced Responsive Design */
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Smooth Transitions */
+        .content-area {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-scroll {
+            transition: padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Enhanced Typography */
+        .header-title {
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Better Focus States */
+        button:focus, a:focus {
+            outline: 2px solid #D4AF37;
+            outline-offset: 2px;
+        }
+
+        /* Improved Hover Effects */
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Enhanced Form Styling */
+        .form-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #1B365D, #D4AF37) border-box;
+        }
+
+        .form-input:focus {
+            border-color: #1B365D;
+            box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Enhanced Card Styling */
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Enhanced Button Styling */
+        .btn-primary {
+            background: linear-gradient(135deg, #1B365D, #2B4B7D);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #D4AF37, #B38F2A);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Enhanced Section Icons */
+        .section-icon {
+            background: linear-gradient(135deg, #1B365D, #2B4B7D);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(27, 54, 93, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-nav-item:hover .section-icon {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(27, 54, 93, 0.3);
+        }
+
+        .section-nav-item.active .section-icon {
+            background: linear-gradient(135deg, #D4AF37, #B38F2A);
+            transform: scale(1.1);
+        }
+
+        /* Enhanced Profile Section */
+        .profile-section {
+            background: linear-gradient(135deg, rgba(27, 54, 93, 0.1), rgba(212, 175, 55, 0.05));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-avatar {
+            border: 3px solid #D4AF37;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 32px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Enhanced Status Indicators */
+        .status-indicator {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .status-indicator.completed {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+        }
+
+        .status-indicator.visited {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            box-shadow: 0 0 8px rgba(249, 115, 22, 0.4);
+        }
+
+        .status-indicator.active {
+            background: linear-gradient(135deg, #D4AF37, #B38F2A);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Enhanced Scrollbar */
+        .phs-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .phs-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+
+        .phs-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #1B365D, #D4AF37);
+            border-radius: 4px;
+        }
+
+        .phs-scroll::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2B4B7D, #B38F2A);
         }
 
         /* Custom Scrollbar for Sidebar */
@@ -108,9 +549,26 @@
             background: #D4AF37;
             border-radius: 4px;
         }
+        .phs-sidebar nav::-webkit-scrollbar-thumb:hover {
+            background: #B38F2A;
+        }
         .phs-sidebar nav {
             scrollbar-width: thin;
             scrollbar-color: #D4AF37 #1B365D;
+        }
+
+        /* Enhanced Mobile Menu Button */
+        .mobile-menu-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
         }
 
         .max-w-4xl.mx-auto { max-width: 900px !important; margin-left: auto; margin-right: auto; }
@@ -146,6 +604,10 @@
                             <span class="mx-2">/</span>
                             <span>PHS Form</span>
                         </div>
+                        <!-- Logout Icon Button -->
+                        <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
+                            <i class="fas fa-power-off text-lg"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -156,23 +618,25 @@
             <!-- Sidebar -->
             <aside class="phs-sidebar text-white flex flex-col" :class="{ 'open': sidebarOpen }">
                 <!-- User Profile Section -->
-                <div class="p-6 border-b border-[#2B4B7D] flex flex-col items-center">
-                    <div class="relative mb-3">
-                        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-[#D4AF37]">
-                            <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
+                <div class="profile-section">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="relative">
+                            <div class="w-16 h-16 rounded-full overflow-hidden profile-avatar">
+                                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                                <i class="fas fa-check text-xs text-white"></i>
+                            </div>
                         </div>
-                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                            <i class="fas fa-check text-xs text-white"></i>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg text-white">{{ Auth::user()->name }}</h3>
+                            <p class="text-[#D4AF37] text-sm">Client</p>
                         </div>
-                    </div>
-                    <div class="text-center">
-                        <h3 class="font-bold text-lg">{{ Auth::user()->name }}</h3>
-                        <p class="text-[#D4AF37] text-sm">Client</p>
                     </div>
                     
                     <!-- Progress Bar -->
-                    <div class="w-full mt-4">
-                        <div class="flex justify-between text-xs mb-2">
+                    <div class="w-full">
+                        <div class="flex justify-between text-xs mb-2 text-white">
                             <span>Progress</span>
                             <span x-text="progressPercentage + '%'"></span>
                         </div>
@@ -193,7 +657,7 @@
                                  :data-route="section.route">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
+                                        <div class="section-icon"
                                              :class="getSectionIconClass(section)">
                                             <i :class="section.icon"></i>
                                         </div>
@@ -202,7 +666,7 @@
                                             <p class="text-xs text-gray-300" x-text="section.description"></p>
                                         </div>
                                     </div>
-                                    <div class="w-2 h-2 rounded-full" :class="getSectionStatusClass(section)"></div>
+                                    <div class="status-indicator" :class="getSectionStatusClass(section)"></div>
                                 </div>
                             </div>
                         </template>
@@ -211,17 +675,10 @@
                 
                 <!-- Action Buttons -->
                 <div class="p-6 border-t border-[#2B4B7D] space-y-3">
-                    <a href="{{ route('client.dashboard') }}" class="w-full inline-flex items-center justify-center px-4 py-2 border border-[#D4AF37] text-sm font-medium rounded-lg text-[#D4AF37] bg-transparent hover:bg-[#D4AF37] hover:text-white transition-all duration-300">
+                    <button onclick="goToDashboard()" class="w-full inline-flex items-center justify-center px-4 py-2 btn-secondary rounded-lg transition-all duration-300">
                         <i class="fas fa-home mr-2"></i>
                         Back to Dashboard
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 border border-red-400 text-sm font-medium rounded-lg text-red-400 bg-transparent hover:bg-red-400 hover:text-white transition-all duration-300">
-                            <i class="fas fa-sign-out-alt mr-2"></i>
-                            Logout
-                        </button>
-                    </form>
+                    </button>
                 </div>
             </aside>
             
@@ -250,6 +707,79 @@
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- Dashboard Transition Overlay -->
+    <div id="dashboard-transition-overlay" class="fixed inset-0 bg-[#1B365D] z-50 opacity-0 transition-opacity duration-300 ease-in-out pointer-events-none">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-white text-center">
+                <div class="mb-4">
+                    <img src="{{ asset('images/pma_logo.svg') }}" 
+                         alt="PMA Logo" 
+                         class="w-16 h-16 mx-auto">
+                </div>
+                <h3 class="text-xl font-semibold">Returning to Dashboard...</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="instructionsModalContent">
+            <div class="p-8">
+                <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mx-auto mb-6">
+                    <i class="fas fa-info-circle text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-[#1B365D] text-center mb-4">Welcome to Your Personal History Statement</h3>
+                <div class="space-y-4 text-gray-700 mb-8">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-[#1B365D] mb-3">INSTRUCTIONS</h4>
+                        <ol class="list-decimal list-inside text-base text-gray-700 space-y-3 mb-6">
+                            <li>Answer all questions completely; if a question is not applicable write "NA". Write "Unknown" only if you do not know the answer and if the answer cannot be derived from personal records. Use the blank pages at the back of this form for extra details.</li>
+                            <li>Type, print, or write carefully; illegible or incomplete forms will not receive due consideration.</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-red-600 mb-3">WARNING</h4>
+                        <ol class="list-decimal list-inside text-base text-gray-700 space-y-3">
+                            <li>The correctness of all statements of entries made herein may be ascertained through investigation.</li>
+                            <li>Any deliberate omission or distortion of information may give sufficient cause for denial of clearance and unfavorable result of the investigation.</li>
+                            <li>The statements made herein are classified <span class="font-bold">CONFIDENTIAL</span>. Revelation or use other than the authorized purpose is prohibited by PMA security policy.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <button onclick="acceptInstructions()" class="px-8 py-3 bg-[#1B365D] hover:bg-[#2B4B7D] text-white rounded-lg font-medium transition-colors">
+                        I Understand, Let's Begin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="logoutModalContent">
+            <div class="p-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
+                    <i class="fas fa-power-off text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 text-center mb-2">Confirm Logout</h3>
+                <p class="text-gray-600 text-center mb-6">Are you sure you want to log out of your account?</p>
+                <div class="flex space-x-3">
+                    <button onclick="hideLogoutConfirmation()" class="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                        @csrf
+                        <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -511,17 +1041,34 @@
             }
         }
         
+        // Show instructions on first load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show instructions every time the PHS form is accessed
+            setTimeout(showInstructions, 500); // Small delay for better UX
+        });
+
         // Update date and time
         function updateDateTime() {
             const now = new Date();
             const timeElement = document.getElementById('current-time');
             const dateElement = document.getElementById('current-date');
-            if (timeElement) { timeElement.textContent = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }); }
-            if (dateElement) { dateElement.textContent = now.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }); }
+            if (timeElement) { 
+                timeElement.textContent = now.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                }); 
+            }
+            if (dateElement) { 
+                dateElement.textContent = now.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                }); 
+            }
         }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
-        
+
         // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function(event) {
             const sidebar = document.querySelector('.phs-sidebar');
@@ -532,6 +1079,109 @@
                 }
             }
         });
+
+        // Enhanced instructions modal functions
+        function showInstructions() {
+            // Show instructions modal every time
+            const instructionsModal = document.getElementById('instructionsModal');
+            const instructionsModalContent = document.getElementById('instructionsModalContent');
+            
+            if (instructionsModal) {
+                instructionsModal.classList.remove('hidden');
+                instructionsModal.classList.add('flex');
+                
+                // Trigger animation
+                setTimeout(() => {
+                    instructionsModalContent.classList.remove('scale-95', 'opacity-0');
+                    instructionsModalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+        }
+
+        function acceptInstructions() {
+            // Hide instructions modal with animation
+            const instructionsModal = document.getElementById('instructionsModal');
+            const instructionsModalContent = document.getElementById('instructionsModalContent');
+            
+            if (instructionsModalContent) {
+                instructionsModalContent.classList.remove('scale-100', 'opacity-100');
+                instructionsModalContent.classList.add('scale-95', 'opacity-0');
+            }
+            
+            setTimeout(() => {
+                if (instructionsModal) {
+                    instructionsModal.classList.add('hidden');
+                    instructionsModal.classList.remove('flex');
+                }
+            }, 300);
+        }
+
+        // Close instructions modal when clicking outside
+        document.getElementById('instructionsModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                acceptInstructions();
+            }
+        });
+
+        // Logout confirmation functions
+        function showLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                hideLogoutConfirmation();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideLogoutConfirmation();
+            }
+        });
+
+        // Initialize date and time updates
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // Dashboard transition function
+        function goToDashboard() {
+            const transitionOverlay = document.getElementById('dashboard-transition-overlay');
+            
+            // Show overlay
+            transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            transitionOverlay.classList.add('opacity-100');
+            
+            // Navigate after brief delay
+            setTimeout(() => {
+                window.location.href = '{{ route("client.dashboard") }}';
+            }, 400);
+        }
     </script>
 </body>
 </html> 
