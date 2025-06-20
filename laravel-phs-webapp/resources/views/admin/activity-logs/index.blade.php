@@ -164,10 +164,9 @@
                             {{ $log->ip_address ?? 'N/A' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <div>
-                                <div>{{ $log->created_at->format('M d, Y') }}</div>
-                                <div class="text-xs text-gray-400">{{ $log->created_at->format('h:i A') }}</div>
-                            </div>
+                            <span class="time-ago" data-timestamp="{{ $log->created_at->toIso8601String() }}">
+                                {{ $log->created_at->diffForHumans() }}
+                            </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <a href="{{ route('admin.activity-logs.show', $log->id) }}" 

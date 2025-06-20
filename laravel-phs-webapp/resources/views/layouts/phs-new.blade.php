@@ -1051,9 +1051,11 @@
         
         // Show instructions on first load
         document.addEventListener('DOMContentLoaded', function() {
-            // Show instructions every time the PHS form is accessed
-            setTimeout(showInstructions, 500); // Small delay for better UX
+            @if(Route::currentRouteName() === 'phs.create') // show only on personal-details
+                setTimeout(showInstructions, 500);
+            @endif
         });
+
 
         // Update date and time
         function updateDateTime() {
