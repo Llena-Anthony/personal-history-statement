@@ -19,13 +19,31 @@
             body {
                 font-family: Arial, sans-serif;
                 font-size: 12pt;
-                min-height: 100 vh;
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-                margin: 10px;
+                background: white;
+                margin: 0;
+                padding: 0;
             }
 
-            .no-print {
-                display: block;
+            header, footer {
+                position: fixed;
+                width: 100%;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                text-align: center;
+                background: white;
+            }
+
+            header {
+                top: 0.3in;
+            }
+            footer {
+                bottom: 0.2in;
+            }
+            main {
+                margin-top: 1.2in;
+                margin-bottom: 1in;
+                text-align: justify;
             }
 
             .confidential {
@@ -112,46 +130,25 @@
                 text-indent: 50px;
             }
 
-            main {
-                position: block;
-                left: 0;
-                right: 0;
-                background: white;
-                text-align: justify;
-                padding-left: 0.2in;
-                padding-right: 0.2in;
-            }
-
-            header, footer {
-                position: block;
-                left: 0;
-                right: 0;
-                background: white;
-                text-align: center;
-            }
-
             header {
+                margin-top: 0.3in;
                 margin-bottom: 1pt;
             }
 
             footer {
-                margin-top: 12pt;
+                margin-bottom: 0.2in;
             }
 
             @media print {
-                body * {
-                    visibility: hidden;
-                }
-
-                #printable-area, #printable-area * {
-                    visibility: visible;
+                @page {
+                    margin: 1in;
                 }
             }
         </style>
     </head>
 
     <body>
-        <button onclick="print()">Print</button>
+        <button onclick="printDiv()">Print</button>
 
 		<div id="printable-area">
             <header>
@@ -622,8 +619,14 @@
 		</div>
 
         <script>
-            function print() {
+            function printDiv() {
+                const printContent = document.getElementById('printable-area').innerHTML;
+                const originalContent = document.body.innerHTML;
+
+                document.body.innerHTML = printContent;
                 window.print();
+                document.body.innerHTML = originalContent;
+                location.reload();
             }
         </script>
     </body>
