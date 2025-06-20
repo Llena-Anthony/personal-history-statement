@@ -19,93 +19,170 @@
             body {
                 font-family: Arial, sans-serif;
                 font-size: 12pt;
-                margin: 1in;
                 min-height: 100 vh;
                 background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                margin: 10px;
             }
 
             .no-print {
                 display: block;
             }
 
+            .confidential {
+                letter-spacing: 2px;
+                margin-bottom: 10pt;
+            }
 
-                header, footer {
-                    position: fixed;
-                    left: 0;
-                    right: 0;
-                    background: white;
-                    text-align: center;
-                    padding: 10px 0;
-                }
+            .confidential span {
+                text-decoration: underline;
+            }
 
-                header {
-                    top: 0;
-                }
+            .vision {
+                font-size: 10pt;
+                font-style: italic;
+            }
 
-                footer {
-                    bottom: 0;
-                }
-                #printable-area {
-                    font-family: Arial, sans-serif; margin: 1in;
-                }
-                table {
-                    width: 100%; border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid #000; padding: 2px;
-                }
+            #annex {
+                font-size: 9pt;
+                font-weight: bold;
+                text-align: left;
+                padding-left: 0.2in;
+            }
+
+            #fnr {
+                font-size: 9pt;
+                text-align: right;
+            }
+
+            .up {
+                font-size: 9pt;
+                text-align: left;
+            }
+            #doc-title {
+                text-align: center;
+            }
+            #doc-title span {
+                font-weight: bold;
+                text-decoration: underline;
+            }
+            .instruc {
+                font-weight: bold;
+                letter-spacing: 3pt;
+                text-decoration: underline;
+                text-align: center;
+                margin-top: 12pt;
+                margin-bottom: 11pt;
+            }
+            .signature {
+                width: 2.37in;
+                height: 0.3in;
+                text-align: center;
+                font-weight: bold;
+                font-size: 10pt;
+            }
+            .signature hr {
+                border: none;
+                border-top: 1px solid black;
+            }
+
+            ol {
+                text-indent: 50px;
+            }
+
+            .instruc-list {
+                list-style: decimal;
+                list-style-position: inside;
+            }
+
+            #sections {
+                list-style: upper-roman;
+                list-style-position: outside;
+            }
+
+            .section-name ol {
+                list-style: upper-alpha;
+                list-style-position: inside;
+            }
+
+            p {
+                text-indent: 50px;
+            }
+
+            li {
+                text-indent: 50px;
+            }
+
+            main {
+                position: block;
+                left: 0;
+                right: 0;
+                background: white;
+                text-align: justify;
+                padding-left: 0.2in;
+                padding-right: 0.2in;
+            }
+
+            header, footer {
+                position: block;
+                left: 0;
+                right: 0;
+                background: white;
+                text-align: center;
+            }
+
+            header {
+                margin-bottom: 1pt;
+            }
+
+            footer {
+                margin-top: 12pt;
+            }
 
             @media print {
-                body {
-                    background: white;
-                    margin: 1in;
+                body * {
+                    visibility: hidden;
                 }
 
-                header, footer {
-                    position: fixed;
-                    left: 0;
-                    right: 0;
-                    background: white;
-                    text-align: center;
-                    padding: 10px 0;
-                }
-
-                header {
-                    top: 0;
-                }
-
-                footer {
-                    bottom: 0;
-                }
-                #printable-area {
-                    font-family: Arial, sans-serif; margin: 1in;
-                }
-                table {
-                    width: 100%; border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid #000; padding: 2px;
+                #printable-area, #printable-area * {
+                    visibility: visible;
                 }
             }
         </style>
     </head>
 
-		<button onclick="print('printable-area')">Print</button>
-
     <body>
+        <button onclick="print()">Print</button>
+
 		<div id="printable-area">
             <header>
-                <p class='confidential' class="flex justify-center items-center h-screen">CONFIDENTIAL</p>
+                <p class='confidential'">
+                    <span>C</span>
+                    <span>O</span>
+                    <span>N</span>
+                    <span>F</span>
+                    <span>I</span>
+                    <span>D</span>
+                    <span>E</span>
+                    <span>N</span>
+                    <span>T</span>
+                    <span>I</span>
+                    <span>A</span>
+                    <span>L</span>
+                </p>
                 <p class='vision'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
                 <p id='annex'>ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
             </header>
             <main>
                 <p id='fnr'>File Nr:_______</p>
-                <p id='ghq'>GHQ, OJ2</p>
-                <p id='num-form'>200-054 Form</p>
-                <p id='doc-title'>PERSONAL HISTORY STATEMENT</p>
-                <p class='instruc'>INSTRUCTION</p>
-                <ol class='instruc-list'>
+                <p id='ghq' class='up'>GHQ, OJ2</p>
+                <p id='num-form' class='up'>200-054 Form</p>
+                <p id='doc-title'>
+                    <span>PERSONAL</span>
+                    <span>HISTORY</span>
+                    <span>STATEMENT</span>
+                </p>
+                <p class='instruc'>INSTRUCTIONS</p>
+                <ol class='instruc-list'">
                     <li>Answer all questions completely; if question is not applicable, write “NA”.write “Unknown”
                         only if you do not know the answer and cannot obtain the answer from personal records.
                         Use the blank pages at the back of this form for extra details on any question for which you
@@ -121,7 +198,7 @@
                         purpose is prohibited by AFPR G-200-054.</li>
                 </ol>
 
-                <ol id="sections" type="I">
+                <ol id="sections">
                     <li class="section-name">PERSONAL DETAIL
                         <div class="signature" id="personal">
                             <hr>
@@ -129,9 +206,9 @@
                         </div>
                         <ol type="A">
                             <li>Name:</li>
-                            <p>(Last Name)</p>
-                            <p>(First Name)</p>
-                            <p>(Middle Name)</p>
+                            <span>(Last Name)</span>
+                            <span>(First Name)</span>
+                            <span>(Middle Name)</span>
                             <li>Rank: AFPSN: Br of Svc: </li>
                             <li>Present Job/Assignment: </li>
                             <li>Business or Duty Address: </li>
@@ -162,10 +239,10 @@
                     <li>MARITAL STATUS
                         <ol type="A">
                             <li>Marital Status
-                            <p>(Single, Married, Separated or Widowed)</p>
+                            <span>(Single, Married, Separated or Widowed)</span>
                             </li>
                             <li>NAME OF SPOUSE:
-                                <p>(Full Name)</p>
+                                <span>(Full Name)</span>
                                 <p>Date and Place of Marriage: </p>
                                 <p>Date of Birth: Place of Birth: </p>
                                 <p>Occupation/Employer/Place of Employment: </p>
@@ -196,15 +273,15 @@
                     <li class="section-name">FAMILY HISTORY AND INFORMATION:
                         <ol type="A">
                             <li>FATHER:
-                                <p>(Full Name)</p>
-                                <p>Date and Place of Birth</p>
+                                <span>(Full Name)</span>
+                                <p>Date and Place of Birth:</p>
                                 <p>Complete Address: </p>
                                 <p>Occupation/Employer/Place of Employment: </p>
                                 <p>Citizenship: If dual, write both citizenship. If naturalized, give date and place where naturalized: </p>
                             </li>
                             <li>Mother:
-                                <p>(Full Name)</p>
-                                <p>Date and Place of Birth</p>
+                                <span>(Full Name)</span>
+                                <p>Date and Place of Birth:</p>
                                 <p>Complete Address: </p>
                                 <p>Occupation/Employer/Place of Employment: </p>
                                 <p>Citizenship: If dual, write both citizenship. If naturalized, give date and place where naturalized: </p>
@@ -214,7 +291,7 @@
                                     <thead>
                                         <tr>
                                             <th>NAME</th>
-                                            <th>Date of BIRTH</th>
+                                            <th>Date of BIRTH:</th>
                                             <th>CITIZENSHIP (IF DUAL WRITE BOTH)</th>
                                             <th>COMPLETE ADDRESS</th>
                                             <th>OCCUPATION</th>
@@ -224,8 +301,8 @@
                                 </table>
                             </li>
                             <li>STEP-PARENT OR GUARDIAN:
-                                <p>(Full Name)</p>
-                                <p>Date and Place of Birth</p>
+                                <span>(Full Name)</span>
+                                <p>Date and Place of Birth:</p>
                                 <p>Complete Address: </p>
                                 <p>Occupation/Employer/Place of Employment: </p>
                                 <p>Citizenship: If dual, write both citizenship. If naturalized, give date and place where naturalized: </p>
@@ -235,15 +312,15 @@
                                 <span class="sign">(Signature of Applicant)</span>
                             </div>
                             <li>FATHER-IN-LAW:
-                                <p>(Full Name)</p>
-                                <p>Date and Place of Birth</p>
+                                <span>(Full Name)</span>
+                                <p>Date and Place of Birth:</p>
                                 <p>Complete Address: </p>
                                 <p>Occupation/Employer/Place of Employment: </p>
                                 <p>Citizenship: If dual, write both citizenship. If naturalized, give date and place where naturalized: </p>
                             </li>
                             <li>MOTHER-IN-LAW:
-                                <p>(Full Name)</p>
-                                <p>Date and Place of Birth</p>
+                                <span>(Full Name)</span>
+                                <p>Date and Place of Birth:</p>
                                 <p>Complete Address: </p>
                                 <p>Occupation/Employer/Place of Employment: </p>
                                 <p>Citizenship: If dual, write both citizenship. If naturalized, give date and place where naturalized: </p>
@@ -253,37 +330,37 @@
                         <li>EDUCATIONAL BACKGROUND:
                             <ol type="A">
                                 <li>
-                                    <div class="educ-level">Elementary</div>
-                                    <div class="'educ-addr">Location</div>
-                                    <div class="educ-attend">Date of Attendance</div>
-                                    <div class="educ-grad">Year Graduated</div>
+                                    <span class="educ-level">Elementary</span>
+                                    <span class="'educ-addr">Location</span>
+                                    <span class="educ-attend">Date of Attendance</span>
+                                    <span class="educ-grad">Year Graduated</span>
                                     <table class="educ-table">
 
                                     </table>
                                 </li>
                                 <li>
-                                    <div class="educ-level">High School</div>
-                                    <div class="'educ-addr">Location</div>
-                                    <div class="educ-attend">Date of Attendance</div>
-                                    <div class="educ-grad">Year Graduated</div>
+                                    <span class="educ-level">High School</span>
+                                    <span class="'educ-addr">Location</span>
+                                    <span class="educ-attend">Date of Attendance</span>
+                                    <span class="educ-grad">Year Graduated</span>
                                     <table class="educ-table">
 
                                     </table>
                                 </li>
                                 <li>
-                                    <div class="educ-level">College</div>
-                                    <div class="'educ-addr">Location</div>
-                                    <div class="educ-attend">Date of Attendance</div>
-                                    <div class="educ-grad">Year Graduated</div>
+                                    <span class="educ-level">College</span>
+                                    <span class="'educ-addr">Location</span>
+                                    <span class="educ-attend">Date of Attendance</span>
+                                    <span class="educ-grad">Year Graduated</span>
                                     <table class="educ-table">
 
                                     </table>
                                 </li>
                                 <li>
-                                    <div class="educ-level">Elementary</div>
-                                    <div class="'educ-addr">Location</div>
-                                    <div class="educ-attend">Date of Attendance</div>
-                                    <div class="educ-grad">Year Graduated</div>
+                                    <span class="educ-level">Elementary</span>
+                                    <span class="'educ-addr">Location</span>
+                                    <span class="educ-attend">Date of Attendance</span>
+                                    <span class="educ-grad">Year Graduated</span>
                                     <table class="educ-table">
 
                                     </table>
@@ -319,7 +396,7 @@
                                         <thead>
                                             <tr>
                                                 <th>School/Location</th>
-                                                <th>Date of Arrendance</th>
+                                                <th>Date of Attendance</th>
                                                 <th>Nature of Training</th>
                                                 <th>Rating</th>
                                             </tr>
@@ -526,9 +603,28 @@
                 </div>
             </main>
             <footer>
-                <p class="confidential">CONFIDENTIAL</p>
+                <p class='confidential' class="flex justify-center items-center h-screen">
+                    <span>C</span>
+                    <span>O</span>
+                    <span>N</span>
+                    <span>F</span>
+                    <span>I</span>
+                    <span>D</span>
+                    <span>E</span>
+                    <span>N</span>
+                    <span>T</span>
+                    <span>I</span>
+                    <span>A</span>
+                    <span>L</span>
+                </p>
                 <p class="vision">AFP Core Values: Honor, Service, Patriotism</p>
             </footer>
 		</div>
+
+        <script>
+            function print() {
+                window.print();
+            }
+        </script>
     </body>
 </html>
