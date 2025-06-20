@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\PHSController;
 use App\Http\Controllers\FamilyHistoryController;
 use App\Http\Controllers\PrintController;
+use App\Http\Controllers\CreditReputationController;
+use App\Models\Miscellaneous;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,24 +110,42 @@ Route::middleware('auth')->group(function () {
     Route::post('/phs/family-history', [FamilyHistoryController::class, 'store'])->name('phs.family-history.store');
 
     // PHS Routes - Credit Reputation
-    Route::get('/phs/credit-reputation', function() { return view('phs.credit-reputation'); })->name('phs.credit-reputation');
-    Route::post('/phs/credit-reputation', function(Request $request) { return redirect()->route('phs.arrest-record')->with('success', 'Credit reputation saved.'); })->name('phs.credit-reputation.store');
+    Route::get('/phs/credit-reputation', [CreditReputationController::class, 'create'])->name('phs.credit-reputation');
+    Route::post('/phs/credit-reputation', [CreditReputationController::class, 'store'])->name('phs.credit-reputation.store');
 
     // PHS Routes - Arrest Record
     Route::get('/phs/arrest-record', function() { return view('phs.arrest-record'); })->name('phs.arrest-record');
-    Route::post('/phs/arrest-record', function(Request $request) { return redirect()->route('phs.employment-history-2')->with('success', 'Arrest record saved.'); })->name('phs.arrest-record.store');
+    Route::post('/phs/arrest-record', function(Request $request) { return redirect()->route('phs.employment-history')->with('success', 'Arrest record saved.'); })->name('phs.arrest-record.store');
 
     // PHS Routes - Employment History II
-    Route::get('/phs/employment-history-2', function() { return view('phs.employment-history-2'); })->name('phs.employment-history-2');
-    Route::post('/phs/employment-history-2', function(Request $request) { return redirect()->route('phs.organization')->with('success', 'Employment history II saved.'); })->name('phs.employment-history-2.store');
+    Route::get('/phs/employment-history-2', function() { return view('phs.employment-history'); })->name('phs.employment-history');
+    Route::post('/phs/employment-history-2', function(Request $request) { return redirect()->route('phs.organization')->with('success', 'Employment history II saved.'); })->name('phs.employment-history.store');
 
     // PHS Routes - Organization
     Route::get('/phs/organization', function() { return view('phs.organization'); })->name('phs.organization');
     Route::post('/phs/organization', function(Request $request) { return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); })->name('phs.organization.store');
 
     // PHS Routes - Miscellaneous
-    Route::get('/phs/miscellaneous', function() { return view('phs.miscellaneous'); })->name('phs.miscellaneous');
-    Route::post('/phs/miscellaneous', function(Request $request) { return redirect()->route('client.dashboard')->with('success', 'Miscellaneous information saved.'); })->name('phs.miscellaneous.store');
+    Route::get('/phs/miscellaneous', function() {
+        $miscellaneous = Miscellaneous::where('username', Auth::user()->username)->first();
+        return view('phs.miscellaneous', ['miscellaneous' => $miscellaneous]);
+    })->name('phs.miscellaneous');
+
+    Route::post('/phs/miscellaneous', function(Request $request) {
+        $validated = $request->validate([
+            'misc_type' => 'nullable|string|max:255',
+            'misc_details' => 'required|string',
+        ]);
+
+        Miscellaneous::updateOrCreate(
+            ['username' => Auth::user()->username],
+            $validated
+        );
+
+        session()->put('phs_sections.miscellaneous', 'completed');
+        
+        return redirect()->route('phs.miscellaneous')->with('show_confirmation', true); 
+    })->name('phs.miscellaneous.store');
 
     // Dashboard Route
     Route::get('/dashboard', [ClientHomeController::class, 'index'])->name('dashboard');

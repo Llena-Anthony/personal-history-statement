@@ -212,8 +212,8 @@
                     <i class="fas fa-times mr-2"></i>
                     Cancel
                 </a>
-                <button type="button" id="saveChangesBtn"
-                        class="px-6 py-2.5 bg-[#D4AF37] text-white rounded-lg hover:bg-[#B38F2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
+                <button type="button" id="saveChangesBtn" disabled
+                        class="px-6 py-2.5 bg-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-all duration-200 shadow-md flex items-center justify-center cursor-not-allowed">
                     <i class="fas fa-save mr-2"></i>
                     <span>Save Changes</span>
                 </button>
@@ -248,6 +248,9 @@
 </style>
 
 <script>
+// Store original form values
+let originalFormData = {};
+
 function previewImage(input) {
     const preview = document.getElementById('preview');
     const previewContainer = document.getElementById('image-preview');
@@ -287,6 +290,49 @@ function confirmProfileUpdate() {
     );
 }
 
+// Function to check if form has changes
+function checkFormChanges() {
+    const form = document.getElementById('admin-profile-form');
+    const saveBtn = document.getElementById('saveChangesBtn');
+    let hasChanges = false;
+    
+    // Check text inputs, selects, and textareas
+    const formInputs = form.querySelectorAll('input[type="text"], input[type="email"], select, textarea');
+    formInputs.forEach(input => {
+        const currentValue = input.value;
+        const originalValue = originalFormData[input.name] || '';
+        
+        if (currentValue !== originalValue) {
+            hasChanges = true;
+        }
+    });
+    
+    // Check file input
+    const fileInput = form.querySelector('input[type="file"]');
+    if (fileInput && fileInput.files.length > 0) {
+        hasChanges = true;
+    }
+    
+    // Check password fields (if any are filled)
+    const passwordFields = form.querySelectorAll('input[type="password"]');
+    passwordFields.forEach(field => {
+        if (field.value.trim() !== '') {
+            hasChanges = true;
+        }
+    });
+    
+    // Enable/disable save button
+    if (hasChanges) {
+        saveBtn.disabled = false;
+        saveBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+        saveBtn.classList.add('bg-[#D4AF37]', 'hover:bg-[#B38F2A]', 'focus:ring-[#D4AF37]');
+    } else {
+        saveBtn.disabled = true;
+        saveBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+        saveBtn.classList.remove('bg-[#D4AF37]', 'hover:bg-[#B38F2A]', 'focus:ring-[#D4AF37]');
+    }
+}
+
 // Show image preview if there's already an image
 document.addEventListener('DOMContentLoaded', function() {
     const currentImage = document.querySelector('.profile-container img');
@@ -299,6 +345,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize branch field visibility on page load
     toggleBranchField();
+    
+    // Store original form values
+    const form = document.getElementById('admin-profile-form');
+    const formInputs = form.querySelectorAll('input[type="text"], input[type="email"], select, textarea');
+    formInputs.forEach(input => {
+        originalFormData[input.name] = input.value;
+    });
+    
+    // Add event listeners for form changes
+    form.addEventListener('input', checkFormChanges);
+    form.addEventListener('change', checkFormChanges);
+    
+    // Add event listener for file input
+    const fileInput = form.querySelector('input[type="file"]');
+    if (fileInput) {
+        fileInput.addEventListener('change', checkFormChanges);
+    }
+    
+    // Add event listeners for password fields
+    const passwordFields = form.querySelectorAll('input[type="password"]');
+    passwordFields.forEach(field => {
+        field.addEventListener('input', checkFormChanges);
+    });
 
     // Confirmation button logic
     const saveBtn = document.getElementById('saveChangesBtn');
@@ -306,13 +375,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let confirmTimeout;
     if (saveBtn && confirmBtn) {
         saveBtn.addEventListener('click', function() {
-            saveBtn.style.display = 'none';
-            confirmBtn.style.display = 'flex';
-            confirmBtn.classList.add('scale-105');
-            confirmTimeout = setTimeout(() => {
-                confirmBtn.style.display = 'none';
-                saveBtn.style.display = 'flex';
-            }, 5000); // 5 seconds to confirm
+            if (!saveBtn.disabled) {
+                saveBtn.style.display = 'none';
+                confirmBtn.style.display = 'flex';
+                confirmBtn.classList.add('scale-105');
+                confirmTimeout = setTimeout(() => {
+                    confirmBtn.style.display = 'none';
+                    saveBtn.style.display = 'flex';
+                }, 5000); // 5 seconds to confirm
+            }
         });
         confirmBtn.addEventListener('click', function() {
             clearTimeout(confirmTimeout);

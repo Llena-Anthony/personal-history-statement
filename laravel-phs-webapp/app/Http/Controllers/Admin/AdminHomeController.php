@@ -17,7 +17,7 @@ class AdminHomeController extends Controller
     {
         // User Statistics
         $totalUsers = User::count();
-        $activeUsers = User::where('last_login_at', '>=', now()->subDays(30))->count();
+        $enabledUsers = User::where('is_active', true)->count();
         $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
 
         // Submission Statistics
@@ -72,9 +72,9 @@ class AdminHomeController extends Controller
             ->take(10)
             ->get();
 
-        return view('admin.dashboard', compact(
+        $data = compact(
             'totalUsers',
-            'activeUsers',
+            'enabledUsers',
             'newUsersThisMonth',
             'totalPHSSubmissions',
             'newPHSSubmissionsThisMonth',
@@ -83,6 +83,13 @@ class AdminHomeController extends Controller
             'submissionStats',
             'monthlyStats',
             'recentActivities'
-        ));
+        );
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('admin.dashboard', $data)->render();
+        }
+
+        return view('admin.dashboard', $data);
     }
 } 

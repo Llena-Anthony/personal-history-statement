@@ -11,8 +11,56 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; overflow: hidden; height: 100vh; font-size: 14px; }
         .glass-card { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); background-color: rgba(255, 255, 255, 0.8); }
-        .btn-primary { transition: all 0.2s ease; }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15); }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #1B365D;
+            color: white;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+            border: 1px solid transparent;
+        }
+        .btn-primary:hover {
+            background-color: #2B4B7D;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-weight: 600;
+            border: 1px solid #d1d5db;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-2px);
+        }
+        .btn-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-circle-sm {
+            width: 1.75rem;
+            height: 1.75rem;
+            font-size: 1rem;
+        }
+        .btn-blue { background-color: #1B365D; color: white; }
+        .btn-blue:hover { background-color: #2B4B7D; }
+        .btn-red { background-color: #ef4444; color: white; font-weight: bold; }
+        .btn-red:hover { background-color: #dc2626; }
         .fade-in { animation: fadeIn 0.6s ease-out; }
         .slide-in { animation: slideIn 0.6s ease-out; }
         .scale-in { animation: scaleIn 0.6s ease-out; }
@@ -141,7 +189,8 @@
                         <template x-for="section in sections" :key="section.id">
                             <div class="section-nav-item p-3 cursor-pointer" 
                                  :class="getSectionClass(section)"
-                                 @click="navigateToSection(section)">
+                                 @click="navigateToSection(section)"
+                                 :data-route="section.route">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
@@ -150,13 +199,10 @@
                                         </div>
                                         <div>
                                             <p class="font-medium text-sm" x-text="section.title"></p>
-                                            <p class="text-xs opacity-75" x-text="section.description"></p>
+                                            <p class="text-xs text-gray-300" x-text="section.description"></p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-2 h-2 rounded-full" :class="getSectionStatusClass(section)"></div>
-                                        <i class="fas fa-chevron-right text-xs opacity-50"></i>
-                                    </div>
+                                    <div class="w-2 h-2 rounded-full" :class="getSectionStatusClass(section)"></div>
                                 </div>
                             </div>
                         </template>
@@ -181,7 +227,7 @@
             
             <!-- Content Area -->
             <div class="phs-content">
-                <div class="phs-scroll">
+                <div class="phs-scroll" id="phsContent">
                     @yield('content')
                 </div>
             </div>
@@ -302,9 +348,9 @@
                     },
                     {
                         id: 'employment-history-2',
-                        title: 'XII: Employment tHistory',
-                        description: 'Additional employment',
-                        icon: 'fas fa-briefcase',
+                        title: 'XII: Character and Reputation',
+                        description: 'Character and reputation information',
+                        icon: 'fas fa-user-shield',
                         route: '#',
                         status: 'not-started'
                     },
@@ -351,13 +397,77 @@
                     return 'bg-gray-400';
                 },
                 
-                navigateToSection(section) {
+                async navigateToSection(section) {
                     this.currentSection = section.id;
                     if (section.status === 'not-started') {
                         section.status = 'visited';
                     }
-                    // Allow free navigation without form validation
-                    window.location.href = section.route;
+                    
+                    // Check if route is available
+                    if (section.route === '#') {
+                        console.log('Section not yet implemented:', section.title);
+                        return;
+                    }
+                    
+                    // Load content dynamically
+                    await this.loadContent(section.route, section.id);
+                },
+                
+                async loadContent(url, sectionId) {
+                    const contentArea = document.getElementById('phsContent');
+                    
+                    // Fade out current content
+                    contentArea.style.opacity = '0';
+                    contentArea.style.transform = 'translateY(10px)';
+                    
+                    try {
+                        // Fetch new content
+                        const response = await fetch(url, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'text/html, application/xhtml+xml'
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        
+                        const html = await response.text();
+                        
+                        // Create a temporary div to parse the HTML
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        
+                        // Extract the content from the yield('content') section
+                        const newContent = tempDiv.querySelector('#phsContent') || tempDiv.querySelector('.phs-scroll') || tempDiv;
+                        
+                        // Update the content
+                        contentArea.innerHTML = newContent.innerHTML;
+                        
+                        // Update browser URL without reload
+                        window.history.pushState({section: sectionId}, '', url);
+                        
+                        // Fade in new content
+                        contentArea.style.opacity = '1';
+                        contentArea.style.transform = 'translateY(0)';
+                        
+                        // Update page title if available
+                        const titleElement = tempDiv.querySelector('title');
+                        if (titleElement) {
+                            document.title = titleElement.textContent;
+                        }
+                        
+                        // Close sidebar on mobile
+                        if (window.innerWidth <= 768) {
+                            this.sidebarOpen = false;
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error loading content:', error);
+                        // Fallback to regular navigation
+                        window.location.href = url;
+                    }
                 },
                 
                 toggleSidebar() {
@@ -376,6 +486,27 @@
                     if (section && section.status === 'not-started') {
                         section.status = 'visited';
                     }
+                },
+                
+                init() {
+                    // Initialize content transition styles
+                    const contentArea = document.getElementById('phsContent');
+                    if (contentArea) {
+                        contentArea.style.transition = 'all 0.3s ease-in-out';
+                    }
+                    
+                    // Handle browser back/forward buttons
+                    window.addEventListener('popstate', (event) => {
+                        if (event.state && event.state.section) {
+                            const section = this.sections.find(s => s.id === event.state.section);
+                            if (section) {
+                                this.navigateToSection(section);
+                            }
+                        }
+                    });
+                    
+                    // Mark current section as visited
+                    this.markSectionAsVisited(this.currentSection);
                 }
             }
         }

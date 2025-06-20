@@ -131,4 +131,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-@endpush 
+@endpush
+@php($currentSection = 'employment-history') 

@@ -143,6 +143,24 @@
             overflow-y: auto; 
             padding: 1.25rem; 
         }
+
+        .content-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .content-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #D4AF37, #B38F2A);
+            border-radius: 4px;
+        }
+
+        .content-scroll::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #B38F2A, #D4AF37);
+        }
         
         .admin-footer { 
             background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%); 
@@ -164,62 +182,6 @@
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%); 
         }
         
-        /* Profile Dropdown Styles */
-        .profile-dropdown {
-            position: relative;
-        }
-        
-        .profile-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            min-width: 200px;
-            z-index: 50;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s ease;
-        }
-        
-        .profile-menu.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .profile-menu-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: #374151;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        
-        .profile-menu-item:last-child {
-            border-bottom: none;
-        }
-        
-        .profile-menu-item:hover {
-            background-color: #f9fafb;
-            color: #1B365D;
-        }
-        
-        .profile-menu-item.logout {
-            color: #dc2626;
-        }
-        
-        .profile-menu-item.logout:hover {
-            background-color: #fef2f2;
-            color: #b91c1c;
-        }
-        
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .sidebar { 
@@ -232,7 +194,66 @@
             .content-area { 
                 max-width: 100vw; 
                 margin-left: 0; 
+                border-radius: 1rem;
             }
+            .content-scroll {
+                padding: 1rem;
+            }
+            .header-title {
+                font-size: 1rem;
+            }
+            .pma-crest {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .content-scroll {
+                padding: 0.75rem;
+            }
+            .header-title {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Enhanced Responsive Design */
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Smooth Transitions */
+        .content-area {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .content-scroll {
+            transition: padding 0.3s ease-in-out;
+        }
+
+        /* Enhanced Typography */
+        .header-title {
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+
+        /* Better Focus States */
+        button:focus, a:focus {
+            outline: 2px solid #D4AF37;
+            outline-offset: 2px;
+        }
+
+        /* Improved Hover Effects */
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -248,10 +269,11 @@
                             <i class="fas fa-bars text-lg"></i>
                         </button>
                         <div class="flex items-center space-x-3">
-                            <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
+                            <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity">
+                                <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest select-none" draggable="false">
+                            </a>
                             <div class="hidden sm:block">
                                 <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
-                                <p class="text-[#D4AF37] text-xs font-medium">Client Portal</p>
                             </div>
                         </div>
                     </div>
@@ -262,48 +284,28 @@
                             <div class="font-medium" id="current-time"></div>
                             <div class="text-[#D4AF37] text-xs" id="current-date"></div>
                         </div>
-                        
-                        <!-- Profile Dropdown -->
-                        <div class="profile-dropdown">
-                            <button onclick="toggleProfileMenu()" class="flex items-center space-x-2 text-white hover:text-[#D4AF37] transition-colors">
-                                <div class="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center overflow-hidden">
-                                    @if(auth()->user()->profile_picture)
-                                        <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
-                                             alt="Profile" 
-                                             class="w-full h-full object-cover">
-                                    @else
-                                        <i class="fas fa-user text-[#1B365D] text-sm"></i>
-                                    @endif
-                                </div>
-                                <span class="hidden sm:block text-sm font-medium">{{ auth()->user()->name }}</span>
-                                <i class="fas fa-chevron-down text-xs"></i>
-                            </button>
-                            
-                            <div class="profile-menu" id="profileMenu">
-                                <a href="{{ route('profile.edit') }}" class="profile-menu-item">
-                                    <i class="fas fa-user-edit mr-3 text-[#1B365D]"></i>
-                                    Edit Profile
-                                </a>
-                                <a href="{{ route('client.dashboard') }}" class="profile-menu-item">
-                                    <i class="fas fa-tachometer-alt mr-3 text-[#1B365D]"></i>
-                                    Dashboard
-                                </a>
-                                <div class="border-t border-gray-200 my-1"></div>
-                                <form method="POST" action="{{ route('logout') }}" class="block">
-                                    @csrf
-                                    <button type="submit" class="profile-menu-item logout w-full text-left">
-                                        <i class="fas fa-sign-out-alt mr-3"></i>
-                                        Sign Out
-                                    </button>
-                                </form>
+                        <!-- User Avatar and Name (no dropdown) -->
+                        <div class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center overflow-hidden">
+                                @if(auth()->user()->profile_picture)
+                                    <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
+                                         alt="Profile" 
+                                         class="w-full h-full object-cover">
+                                @else
+                                    <i class="fas fa-user text-[#1B365D] text-sm"></i>
+                                @endif
                             </div>
+                            <span class="hidden sm:block text-sm font-medium">{{ auth()->user()->name }}</span>
                         </div>
-                        
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Client</span>
                             <span class="mx-2">/</span>
                             <span>@yield('header', 'Dashboard')</span>
                         </div>
+                        <!-- Logout Icon Button -->
+                        <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
+                            <i class="fas fa-power-off text-lg"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -357,60 +359,104 @@
         </footer>
     </div>
     
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="logoutModalContent">
+            <div class="p-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
+                    <i class="fas fa-power-off text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 text-center mb-2">Confirm Logout</h3>
+                <p class="text-gray-600 text-center mb-6">Are you sure you want to log out of your account?</p>
+                <div class="flex space-x-3">
+                    <button onclick="hideLogoutConfirmation()" class="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                        @csrf
+                        <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         function updateDateTime() {
             const now = new Date();
             const timeElement = document.getElementById('current-time');
             const dateElement = document.getElementById('current-date');
-            if (timeElement) { 
+            
+            if (timeElement) {
                 timeElement.textContent = now.toLocaleTimeString('en-US', { 
                     hour12: true, 
                     hour: '2-digit', 
                     minute: '2-digit' 
-                }); 
+                });
             }
-            if (dateElement) { 
+            
+            if (dateElement) {
                 dateElement.textContent = now.toLocaleDateString('en-US', { 
                     weekday: 'short', 
                     year: 'numeric', 
                     month: 'short', 
                     day: 'numeric' 
-                }); 
+                });
             }
         }
-        
-        function toggleProfileMenu() {
-            const menu = document.getElementById('profileMenu');
-            menu.classList.toggle('show');
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
         }
-        
-        // Close profile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const profileDropdown = document.querySelector('.profile-dropdown');
-            const profileMenu = document.getElementById('profileMenu');
+
+        // Logout confirmation functions
+        function showLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
             
-            if (!profileDropdown.contains(event.target)) {
-                profileMenu.classList.remove('show');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                hideLogoutConfirmation();
             }
         });
-        
-        setInterval(updateDateTime, 1000); 
-        updateDateTime();
-        
-        function toggleSidebar() { 
-            const sidebar = document.querySelector('.sidebar'); 
-            sidebar.classList.toggle('open'); 
-        }
-        
-        document.addEventListener('click', function(event) { 
-            const sidebar = document.querySelector('.sidebar'); 
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn'); 
-            if (window.innerWidth <= 768) { 
-                if (!sidebar.contains(event.target) && !mobileMenuBtn.contains(event.target)) { 
-                    sidebar.classList.remove('open'); 
-                } 
-            } 
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideLogoutConfirmation();
+            }
         });
+
+        // Update date and time every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
     </script>
 </body>
 </html> 

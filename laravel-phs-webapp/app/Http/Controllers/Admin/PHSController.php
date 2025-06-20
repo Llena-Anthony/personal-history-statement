@@ -61,7 +61,14 @@ class PHSController extends Controller
             return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
         })->toArray();
 
-        return view('admin.phs.index', compact('submissions', 'searchFields'));
+        $data = compact('submissions', 'searchFields');
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('admin.phs.index', $data)->render();
+        }
+
+        return view('admin.phs.index', $data);
     }
 
     public function show(PHSSubmission $submission)

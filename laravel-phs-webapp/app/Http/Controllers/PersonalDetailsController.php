@@ -8,7 +8,14 @@ class PersonalDetailsController extends Controller
 {
     public function create()
     {
-        return view('phs.personal-details');
+        $data = []; // Add any data you need to pass to the view
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.personal-details', $data)->render();
+        }
+
+        return view('phs.personal-details', $data);
     }
 
     public function store(Request $request)

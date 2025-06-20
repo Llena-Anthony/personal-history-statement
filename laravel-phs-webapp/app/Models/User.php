@@ -160,4 +160,9 @@ class User extends Authenticatable
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function creditReputation()
+    {
+        return $this->hasOne(CreditReputation::class);
+    }
 }
