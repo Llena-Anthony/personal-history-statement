@@ -246,5 +246,22 @@
             }
         }));
     });
+
+    function capitalizeWords(str) {
+        return str.replace(/\b\w/g, function(char) { return char.toUpperCase(); });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        ['first_name', 'middle_name', 'last_name'].forEach(function(id) {
+            var input = document.getElementById(id);
+            if (input) {
+                input.addEventListener('input', function(e) {
+                    var start = input.selectionStart;
+                    var end = input.selectionEnd;
+                    input.value = capitalizeWords(input.value.toLowerCase());
+                    input.setSelectionRange(start, end);
+                });
+            }
+        });
+    });
 </script>
 @endsection 

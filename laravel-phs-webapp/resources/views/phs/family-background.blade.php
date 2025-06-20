@@ -137,42 +137,61 @@
         </div>
 
         <!-- Siblings Information -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" x-data="{ siblingCount: 0 }">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
                 Siblings Information
             </h3>
-            
-            <div class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label for="siblings_count" class="block text-sm font-medium text-gray-700 mb-2">
-                            Number of Siblings
-                        </label>
-                        <input type="number" name="siblings_count" id="siblings_count" min="0"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                               placeholder="0">
+            <div class="mb-6 max-w-xs">
+                <label for="sibling_count" class="block text-sm font-medium text-gray-700 mb-2">
+                    Number of Siblings
+                </label>
+                <input type="number" min="0" max="20" name="sibling_count" id="sibling_count"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                    placeholder="Enter number of siblings"
+                    x-model.number="siblingCount">
+            </div>
+            <template x-for="i in siblingCount" :key="i">
+                <div class="border border-gray-200 rounded-lg p-4 mb-6">
+                    <h4 class="text-lg font-medium text-[#1B365D] mb-4">Sibling <span x-text="i"></span></h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label :for="'siblings_' + (i-1) + '_full_name'" class="block text-sm font-medium text-gray-700 mb-2">
+                                Full Name
+                            </label>
+                            <input type="text" :name="'siblings[' + (i-1) + '][full_name]'" :id="'siblings_' + (i-1) + '_full_name'"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                placeholder="Enter sibling's full name">
+                        </div>
+                        <div>
+                            <label :for="'siblings_' + (i-1) + '_occupation'" class="block text-sm font-medium text-gray-700 mb-2">
+                                Occupation
+                            </label>
+                            <input type="text" :name="'siblings[' + (i-1) + '][occupation]'" :id="'siblings_' + (i-1) + '_occupation'"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                placeholder="Enter occupation">
+                        </div>
                     </div>
-                    
-                    <div>
-                        <label for="brothers_count" class="block text-sm font-medium text-gray-700 mb-2">
-                            Number of Brothers
-                        </label>
-                        <input type="number" name="brothers_count" id="brothers_count" min="0"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                               placeholder="0">
-                    </div>
-                    
-                    <div>
-                        <label for="sisters_count" class="block text-sm font-medium text-gray-700 mb-2">
-                            Number of Sisters
-                        </label>
-                        <input type="number" name="sisters_count" id="sisters_count" min="0"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                               placeholder="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label :for="'siblings_' + (i-1) + '_address'" class="block text-sm font-medium text-gray-700 mb-2">
+                                Address
+                            </label>
+                            <textarea :name="'siblings[' + (i-1) + '][address]'" :id="'siblings_' + (i-1) + '_address'" rows="2"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                placeholder="Enter address"></textarea>
+                        </div>
+                        <div>
+                            <label :for="'siblings_' + (i-1) + '_contact'" class="block text-sm font-medium text-gray-700 mb-2">
+                                Contact Number
+                            </label>
+                            <input type="tel" :name="'siblings[' + (i-1) + '][contact]'" :id="'siblings_' + (i-1) + '_contact'"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                placeholder="Enter contact number">
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
 
         <!-- Action Buttons -->

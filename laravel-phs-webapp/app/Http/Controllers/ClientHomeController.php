@@ -20,13 +20,10 @@ class ClientHomeController extends Controller
             $phsStatus = $phsSubmission->status;
         }
         
-        // Get PDS status (placeholder for now)
-        $pdsStatus = null;
-        
         $data = [
             'user' => $user,
             'phsStatus' => $phsStatus,
-            'pdsStatus' => $pdsStatus
+            'pdsStatus' => null // Placeholder - always null
         ];
         
         // Return appropriate view based on route

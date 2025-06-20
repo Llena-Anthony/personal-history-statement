@@ -56,7 +56,7 @@ class ProfileController extends Controller
 
         try {
             // Update basic information
-            $user->name = $request->name;
+            $user->name = ucwords(strtolower($request->name));
             $user->username = $request->username;
             $user->email = $request->email;
             $user->organic_role = $request->organic_role ?: null;
@@ -74,6 +74,13 @@ class ProfileController extends Controller
                     return back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
                 }
                 $user->password = Hash::make($request->new_password);
+                $user->save();
+
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('login')->with('success', 'Password changed successfully. Please log in again.');
             }
 
             // Handle profile photo upload

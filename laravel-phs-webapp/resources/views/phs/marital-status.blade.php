@@ -176,7 +176,7 @@
         </div>
 
         <!-- Children Information -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div id="children-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hidden">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
                 Children Information
@@ -235,10 +235,18 @@
     // Marital status change handler
     document.getElementById('marital_status').addEventListener('change', function() {
         const spouseSection = document.getElementById('spouse-section');
+        const childrenSection = document.getElementById('children-section');
+        
         if (this.value === 'Married') {
             spouseSection.classList.remove('hidden');
-        } else {
+            childrenSection.classList.remove('hidden');
+        } else if (this.value === 'Single') {
             spouseSection.classList.add('hidden');
+            childrenSection.classList.add('hidden');
+        } else {
+            // For Widowed, Separated - show children section but hide spouse
+            spouseSection.classList.add('hidden');
+            childrenSection.classList.remove('hidden');
         }
     });
 

@@ -76,6 +76,11 @@ class AdminUserController extends Controller
             'organic_group' => ['required', 'string', 'in:civilian,enlisted,officer'],
         ]);
 
+        // Capitalize first letter of each word for names
+        $validated['first_name'] = ucwords(strtolower($validated['first_name']));
+        $validated['middle_name'] = $validated['middle_name'] ? ucwords(strtolower($validated['middle_name'])) : null;
+        $validated['last_name'] = ucwords(strtolower($validated['last_name']));
+
         // Generate username from first letters of each first name + last name (no spaces)
         $firstNames = explode(' ', preg_replace('/\s+/', ' ', trim($validated['first_name'])));
         $firstLetters = '';
@@ -152,7 +157,11 @@ class AdminUserController extends Controller
             // Create the user
             $userData = [
                 'username' => $validated['username'],
-                'name' => trim($userData['first_name'] . ' ' . $userData['middle_name'] . ' ' . $userData['last_name']),
+                'name' => trim(
+                    ucwords(strtolower($userData['first_name'])) . ' ' .
+                    ($userData['middle_name'] ? ucwords(strtolower($userData['middle_name'])) . ' ' : '') .
+                    ucwords(strtolower($userData['last_name']))
+                ),
                 'email' => $userData['email'],
                 'password' => Hash::make($validated['password']),
                 'usertype' => $userData['user_type'],

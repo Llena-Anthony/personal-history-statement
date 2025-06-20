@@ -36,7 +36,7 @@
         </div>
 
         <!-- Profile Form -->
-        <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="p-8">
+        <form id="admin-profile-form" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="p-8">
             @csrf
             @method('PUT')
 
@@ -212,25 +212,20 @@
                     <i class="fas fa-times mr-2"></i>
                     Cancel
                 </a>
-                <button type="button" onclick="confirmProfileUpdate()" 
-                        class="px-6 py-2.5 bg-[#D4AF37] text-white rounded-lg hover:bg-[#B38F2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-200 shadow-md hover:shadow-lg">
+                <button type="button" id="saveChangesBtn"
+                        class="px-6 py-2.5 bg-[#D4AF37] text-white rounded-lg hover:bg-[#B38F2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
                     <i class="fas fa-save mr-2"></i>
-                    Save Changes
+                    <span>Save Changes</span>
+                </button>
+                <button type="submit" id="confirmSaveBtn" style="display:none;"
+                        class="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center animate-fade-in">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>Click to Confirm</span>
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-<!-- Confirmation Modal for Profile Update -->
-<x-confirmation-modal 
-    id="profileUpdateModal"
-    title="Confirm Profile Update"
-    message="Are you sure you want to update your profile information? This action cannot be undone."
-    confirmText="Update Profile"
-    cancelText="Cancel"
-    confirmClass="bg-[#D4AF37] hover:bg-[#B38F2A]"
-/>
 
 <style>
 @keyframes fade-in {
@@ -287,7 +282,7 @@ function confirmProfileUpdate() {
         'profileUpdateModal',
         'Are you sure you want to update your profile information? This action cannot be undone.',
         function() {
-            document.querySelector('form').submit();
+            document.getElementById('admin-profile-form').submit();
         }
     );
 }
@@ -304,6 +299,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize branch field visibility on page load
     toggleBranchField();
+
+    // Confirmation button logic
+    const saveBtn = document.getElementById('saveChangesBtn');
+    const confirmBtn = document.getElementById('confirmSaveBtn');
+    let confirmTimeout;
+    if (saveBtn && confirmBtn) {
+        saveBtn.addEventListener('click', function() {
+            saveBtn.style.display = 'none';
+            confirmBtn.style.display = 'flex';
+            confirmBtn.classList.add('scale-105');
+            confirmTimeout = setTimeout(() => {
+                confirmBtn.style.display = 'none';
+                saveBtn.style.display = 'flex';
+            }, 5000); // 5 seconds to confirm
+        });
+        confirmBtn.addEventListener('click', function() {
+            clearTimeout(confirmTimeout);
+        });
+    }
 });
 </script>
 @endsection 
