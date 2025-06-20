@@ -189,7 +189,8 @@
                         <template x-for="section in sections" :key="section.id">
                             <div class="section-nav-item p-3 cursor-pointer" 
                                  :class="getSectionClass(section)"
-                                 @click="navigateToSection(section)">
+                                 @click="navigateToSection(section)"
+                                 :data-route="section.route">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
@@ -198,13 +199,10 @@
                                         </div>
                                         <div>
                                             <p class="font-medium text-sm" x-text="section.title"></p>
-                                            <p class="text-xs opacity-75" x-text="section.description"></p>
+                                            <p class="text-xs text-gray-300" x-text="section.description"></p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-2 h-2 rounded-full" :class="getSectionStatusClass(section)"></div>
-                                        <i class="fas fa-chevron-right text-xs opacity-50"></i>
-                                    </div>
+                                    <div class="w-2 h-2 rounded-full" :class="getSectionStatusClass(section)"></div>
                                 </div>
                             </div>
                         </template>
@@ -229,7 +227,7 @@
             
             <!-- Content Area -->
             <div class="phs-content">
-                <div class="phs-scroll">
+                <div class="phs-scroll" id="phsContent">
                     @yield('content')
                 </div>
             </div>
@@ -350,9 +348,9 @@
                     },
                     {
                         id: 'employment-history-2',
-                        title: 'XII: Employment tHistory',
-                        description: 'Additional employment',
-                        icon: 'fas fa-briefcase',
+                        title: 'XII: Character and Reputation',
+                        description: 'Character and reputation information',
+                        icon: 'fas fa-user-shield',
                         route: '#',
                         status: 'not-started'
                     },
@@ -399,13 +397,77 @@
                     return 'bg-gray-400';
                 },
                 
-                navigateToSection(section) {
+                async navigateToSection(section) {
                     this.currentSection = section.id;
                     if (section.status === 'not-started') {
                         section.status = 'visited';
                     }
-                    // Allow free navigation without form validation
-                    window.location.href = section.route;
+                    
+                    // Check if route is available
+                    if (section.route === '#') {
+                        console.log('Section not yet implemented:', section.title);
+                        return;
+                    }
+                    
+                    // Load content dynamically
+                    await this.loadContent(section.route, section.id);
+                },
+                
+                async loadContent(url, sectionId) {
+                    const contentArea = document.getElementById('phsContent');
+                    
+                    // Fade out current content
+                    contentArea.style.opacity = '0';
+                    contentArea.style.transform = 'translateY(10px)';
+                    
+                    try {
+                        // Fetch new content
+                        const response = await fetch(url, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'text/html, application/xhtml+xml'
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        
+                        const html = await response.text();
+                        
+                        // Create a temporary div to parse the HTML
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        
+                        // Extract the content from the yield('content') section
+                        const newContent = tempDiv.querySelector('#phsContent') || tempDiv.querySelector('.phs-scroll') || tempDiv;
+                        
+                        // Update the content
+                        contentArea.innerHTML = newContent.innerHTML;
+                        
+                        // Update browser URL without reload
+                        window.history.pushState({section: sectionId}, '', url);
+                        
+                        // Fade in new content
+                        contentArea.style.opacity = '1';
+                        contentArea.style.transform = 'translateY(0)';
+                        
+                        // Update page title if available
+                        const titleElement = tempDiv.querySelector('title');
+                        if (titleElement) {
+                            document.title = titleElement.textContent;
+                        }
+                        
+                        // Close sidebar on mobile
+                        if (window.innerWidth <= 768) {
+                            this.sidebarOpen = false;
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error loading content:', error);
+                        // Fallback to regular navigation
+                        window.location.href = url;
+                    }
                 },
                 
                 toggleSidebar() {
@@ -424,6 +486,27 @@
                     if (section && section.status === 'not-started') {
                         section.status = 'visited';
                     }
+                },
+                
+                init() {
+                    // Initialize content transition styles
+                    const contentArea = document.getElementById('phsContent');
+                    if (contentArea) {
+                        contentArea.style.transition = 'all 0.3s ease-in-out';
+                    }
+                    
+                    // Handle browser back/forward buttons
+                    window.addEventListener('popstate', (event) => {
+                        if (event.state && event.state.section) {
+                            const section = this.sections.find(s => s.id === event.state.section);
+                            if (section) {
+                                this.navigateToSection(section);
+                            }
+                        }
+                    });
+                    
+                    // Mark current section as visited
+                    this.markSectionAsVisited(this.currentSection);
                 }
             }
         }

@@ -16,7 +16,14 @@ class FamilyBackgroundController extends Controller
      */
     public function create()
     {
-        return view('phs.family-background', $this->getCommonViewData('family-background'));
+        $data = $this->getCommonViewData('family-background');
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.family-background', $data)->render();
+        }
+
+        return view('phs.family-background', $data);
     }
 
     /**

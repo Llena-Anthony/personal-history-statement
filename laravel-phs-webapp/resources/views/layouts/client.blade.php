@@ -194,7 +194,66 @@
             .content-area { 
                 max-width: 100vw; 
                 margin-left: 0; 
+                border-radius: 1rem;
             }
+            .content-scroll {
+                padding: 1rem;
+            }
+            .header-title {
+                font-size: 1rem;
+            }
+            .pma-crest {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .content-scroll {
+                padding: 0.75rem;
+            }
+            .header-title {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Enhanced Responsive Design */
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Smooth Transitions */
+        .content-area {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .content-scroll {
+            transition: padding 0.3s ease-in-out;
+        }
+
+        /* Enhanced Typography */
+        .header-title {
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+
+        /* Better Focus States */
+        button:focus, a:focus {
+            outline: 2px solid #D4AF37;
+            outline-offset: 2px;
+        }
+
+        /* Improved Hover Effects */
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>

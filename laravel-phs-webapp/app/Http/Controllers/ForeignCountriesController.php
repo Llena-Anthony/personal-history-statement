@@ -8,7 +8,14 @@ class ForeignCountriesController extends Controller
 {
     public function create()
     {
-        return view('phs.foreign-countries');
+        $data = []; // Add any data you need to pass to the view
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.foreign-countries', $data)->render();
+        }
+
+        return view('phs.foreign-countries', $data);
     }
 
     public function store(Request $request)

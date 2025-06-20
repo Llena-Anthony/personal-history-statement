@@ -34,7 +34,7 @@
                 <i class="fas fa-puzzle-piece text-white text-xl"></i>
             </div>
             <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">XII: Miscellaneous</h1>
+                <h1 class="text-3xl font-bold text-[#1B365D]">XII: Character and Reputation</h1>
             </div>
         </div>
     </div>

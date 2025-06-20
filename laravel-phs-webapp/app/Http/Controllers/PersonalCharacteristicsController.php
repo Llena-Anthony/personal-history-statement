@@ -8,7 +8,14 @@ class PersonalCharacteristicsController extends Controller
 {
     public function create()
     {
-        return view('phs.personal-characteristics');
+        $data = []; // Add any data you need to pass to the view
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.personal-characteristics', $data)->render();
+        }
+
+        return view('phs.personal-characteristics', $data);
     }
 
     public function store(Request $request)

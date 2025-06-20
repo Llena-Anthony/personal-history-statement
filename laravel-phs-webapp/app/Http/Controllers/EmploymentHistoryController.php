@@ -16,7 +16,14 @@ class EmploymentHistoryController extends Controller
      */
     public function create()
     {
-        return view('phs.employment-history', $this->getCommonViewData('employment-history'));
+        $data = $this->getCommonViewData('employment-history');
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.employment-history', $data)->render();
+        }
+
+        return view('phs.employment-history', $data);
     }
 
     /**

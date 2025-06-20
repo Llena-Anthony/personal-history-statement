@@ -14,7 +14,14 @@ class MaritalStatusController extends Controller
 
     public function create()
     {
-        return view('phs.marital-status', $this->getCommonViewData('marital-status'));
+        $data = $this->getCommonViewData('marital-status');
+
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.marital-status', $data)->render();
+        }
+
+        return view('phs.marital-status', $data);
     }
 
     public function store(Request $request)
