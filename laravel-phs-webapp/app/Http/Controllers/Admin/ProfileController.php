@@ -92,9 +92,9 @@ class ProfileController extends Controller
                 ]);
 
                 // Delete old profile photo if exists
-                if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
-                    Storage::disk('public')->delete($user->profile_photo_path);
-                    Log::info('Old profile photo deleted', ['path' => $user->profile_photo_path]);
+                if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                    Storage::disk('public')->delete($user->profile_picture);
+                    Log::info('Old profile photo deleted', ['path' => $user->profile_picture]);
                 }
 
                 // Store the new profile photo
@@ -107,7 +107,7 @@ class ProfileController extends Controller
                     Storage::disk('public')->makeDirectory('profile-photos');
                 }
                 
-                $user->profile_photo_path = $path;
+                $user->profile_picture = $path;
                 
                 Log::info('Profile photo uploaded successfully', [
                     'path' => $path,

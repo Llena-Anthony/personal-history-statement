@@ -610,9 +610,11 @@
                         
                         <!-- PMA Logo/Crest -->
                         <div class="flex items-center space-x-3">
-                            <img src="{{ asset('images/pma_logo.svg') }}" 
-                                 alt="PMA Logo" 
-                                 class="pma-crest">
+                            <a href="{{ route('admin.dashboard') }}" class="hover:opacity-80 transition-opacity">
+                                <img src="{{ asset('images/pma_logo.svg') }}" 
+                                     alt="PMA Logo" 
+                                     class="pma-crest select-none" draggable="false">
+                            </a>
                             <div class="hidden sm:block">
                                 <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
                                 <p class="text-[#D4AF37] text-xs font-medium">Administrative Portal</p>
@@ -640,6 +642,10 @@
                             <span class="mx-2">/</span>
                             <span>@yield('header', 'Dashboard')</span>
                         </div>
+                        <!-- Logout Icon Button -->
+                        <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
+                            <i class="fas fa-power-off text-lg"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -694,14 +700,8 @@
 
             <!-- Logout Section -->
                 <div class="p-6 border-t border-[#2B4B7D] mt-auto relative z-10">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                        <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-3 border border-[#D4AF37] text-sm font-medium rounded-xl text-[#D4AF37] bg-transparent hover:bg-gradient-to-r hover:from-[#D4AF37] hover:to-[#B38F2A] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37] transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02]">
-                            <i class="fas fa-sign-out-alt mr-2 transition-transform duration-300"></i>
-                        Logout
-                    </button>
-                </form>
-            </div>
+                <!-- Logout button removed from sidebar, now in header -->
+                </div>
         </aside>
 
             <!-- Content Area -->
@@ -754,6 +754,30 @@
         </footer>
     </div>
 
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="logoutModalContent">
+            <div class="p-6">
+                <div class="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
+                    <i class="fas fa-power-off text-2xl text-red-600"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 text-center mb-2">Confirm Logout</h3>
+                <p class="text-gray-600 text-center mb-6">Are you sure you want to log out of your account?</p>
+                <div class="flex space-x-3">
+                    <button onclick="hideLogoutConfirmation()" class="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                        @csrf
+                        <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Update current time and date
         function updateDateTime() {
@@ -797,12 +821,51 @@
             }
         });
 
-        // Update time every second
+        // Logout confirmation functions
+        function showLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                hideLogoutConfirmation();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideLogoutConfirmation();
+            }
+        });
+
+        // Update date and time every second
         updateDateTime();
         setInterval(updateDateTime, 1000);
-
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
     </script>
 
     <!-- Alpine.js -->
