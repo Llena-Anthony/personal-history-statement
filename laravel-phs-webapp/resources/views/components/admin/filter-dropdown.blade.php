@@ -20,7 +20,7 @@
             </button>
             
             <!-- Status Dropdown -->
-            <div x-show="open" 
+            <div x-show="open" x-cloak
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 transform scale-95"
                  x-transition:enter-end="opacity-100 transform scale-100"
@@ -52,7 +52,7 @@
             </button>
             
             <!-- User Type Dropdown -->
-            <div x-show="open" 
+            <div x-show="open" x-cloak
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 transform scale-95"
                  x-transition:enter-end="opacity-100 transform scale-100"
@@ -84,7 +84,7 @@
             </button>
             
             <!-- Date Range Dropdown -->
-            <div x-show="open" 
+            <div x-show="open" x-cloak
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 transform scale-95"
                  x-transition:enter-end="opacity-100 transform scale-100"
@@ -137,7 +137,7 @@
             </button>
             
             <!-- Action Dropdown -->
-            <div x-show="open" 
+            <div x-show="open" x-cloak
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 transform scale-95"
                  x-transition:enter-end="opacity-100 transform scale-100"
@@ -169,7 +169,7 @@
             </button>
             
             <!-- User Dropdown -->
-            <div x-show="open" 
+            <div x-show="open" x-cloak
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0 transform scale-95"
                  x-transition:enter-end="opacity-100 transform scale-100"

@@ -96,7 +96,6 @@
                     }
                     input.value = ''; // Clear the value of new inputs
                 });
-                
                 container.appendChild(newEntry);
                 index++;
             });

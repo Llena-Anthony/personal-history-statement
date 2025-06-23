@@ -86,7 +86,7 @@
                         <option value="">Select user type</option>
                         <option value="admin" {{ old('user_type') == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="personnel" {{ old('user_type') == 'personnel' ? 'selected' : '' }}>Personnel</option>
-                        <option value="regular" {{ old('user_type') == 'client' ? 'selected' : '' }}>Client</option>
+                        <option value="client" {{ old('user_type') == 'client' ? 'selected' : '' }}>Client</option>
                     </select>
                 </div>
 

@@ -94,7 +94,8 @@ class LogUserActivity
     {
         $statusCode = $response->getStatusCode();
 
-        if ($statusCode >= 200 && $statusCode < 300) {
+        // Treat 2xx and 3xx as success
+        if ($statusCode >= 200 && $statusCode < 400) {
             return 'success';
         } elseif ($statusCode >= 400 && $statusCode < 500) {
             return 'warning';

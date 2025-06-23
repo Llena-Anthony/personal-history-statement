@@ -25,158 +25,202 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-male mr-3 text-[#D4AF37]"></i>
-                Father's Information
+                Father Details
             </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Father's Name -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label for="father_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Father's Full Name
-                    </label>
-                    <input type="text" name="father_name" id="father_name"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="Enter father's full name">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                    <input type="text" name="father_first_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
-
-                <!-- Father's Occupation -->
                 <div>
-                    <label for="father_occupation" class="block text-sm font-medium text-gray-700 mb-2">
-                        Father's Occupation
-                    </label>
-                    <input type="text" name="father_occupation" id="father_occupation"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="Enter father's occupation">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name *</label>
+                    <input type="text" name="father_middle_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                    <input type="text" name="father_last_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Suffix (e.g. Sr, IV, etc)</label>
+                    <input type="text" name="father_suffix" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Father's Address -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
-                    <label for="father_address" class="block text-sm font-medium text-gray-700 mb-2">
-                        Father's Address
-                    </label>
-                    <textarea name="father_address" id="father_address" rows="3"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                              placeholder="Enter father's address"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth *</label>
+                    <input type="date" name="father_birth_date" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
-
-                <!-- Father's Contact -->
                 <div>
-                    <label for="father_contact" class="block text-sm font-medium text-gray-700 mb-2">
-                        Father's Contact Number
-                    </label>
-                    <input type="tel" name="father_contact" id="father_contact"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="Enter contact number">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth *</label>
+                    <input type="text" name="father_birth_place" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                    <input type="text" name="father_occupation" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Employer</label>
+                    <input type="text" name="father_employer" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Employment</label>
+                    <input type="text" name="father_place_of_employment" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Citizenship</label>
+                    <input type="text" name="father_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Other Citizenship</label>
+                    <input type="text" name="father_other_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
+                    <input type="text" name="father_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
             </div>
         </div>
 
         <!-- Mother's Information -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-female mr-3 text-[#D4AF37]"></i>
-                Mother's Information
+                Mother Details
             </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Mother's Name -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label for="mother_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mother's Full Name
-                    </label>
-                    <input type="text" name="mother_name" id="mother_name"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="Enter mother's full name">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                    <input type="text" name="mother_first_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
-
-                <!-- Mother's Occupation -->
                 <div>
-                    <label for="mother_occupation" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mother's Occupation
-                    </label>
-                    <input type="text" name="mother_occupation" id="mother_occupation"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="Enter mother's occupation">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name *</label>
+                    <input type="text" name="mother_middle_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                    <input type="text" name="mother_last_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Suffix (e.g. Sr, IV, etc)</label>
+                    <input type="text" name="mother_suffix" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Mother's Address -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div>
-                    <label for="mother_address" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mother's Address
-                    </label>
-                    <textarea name="mother_address" id="mother_address" rows="3"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                              placeholder="Enter mother's address"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth *</label>
+                    <input type="date" name="mother_birth_date" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
-
-                <!-- Mother's Contact -->
                 <div>
-                    <label for="mother_contact" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mother's Contact Number
-                    </label>
-                    <input type="tel" name="mother_contact" id="mother_contact"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="Enter contact number">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth *</label>
+                    <input type="text" name="mother_birth_place" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                    <input type="text" name="mother_occupation" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Employer</label>
+                    <input type="text" name="mother_employer" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Employment</label>
+                    <input type="text" name="mother_place_of_employment" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Citizenship</label>
+                    <input type="text" name="mother_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Other Citizenship</label>
+                    <input type="text" name="mother_other_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
+                    <input type="text" name="mother_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
             </div>
         </div>
 
-        <!-- Siblings Information -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" x-data="{ siblingCount: 0 }">
+        <!-- Children Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8" x-data="{ childCount: 0 }">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
-                Siblings Information
+                Children Information
             </h3>
             <div class="mb-6 max-w-xs">
-                <label for="sibling_count" class="block text-sm font-medium text-gray-700 mb-2">
-                    Number of Siblings
+                <label for="child_count" class="block text-sm font-medium text-gray-700 mb-2">
+                    Number of Children
                 </label>
-                <input type="number" min="0" max="20" name="sibling_count" id="sibling_count"
+                <input type="number" min="0" max="20" name="child_count" id="child_count"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                    placeholder="Enter number of siblings"
-                    x-model.number="siblingCount">
+                    placeholder="Enter number of children"
+                    x-model.number="childCount">
             </div>
-            <template x-for="i in siblingCount" :key="i">
+            <template x-for="i in childCount" :key="i">
                 <div class="border border-gray-200 rounded-lg p-4 mb-6">
-                    <h4 class="text-lg font-medium text-[#1B365D] mb-4">Sibling <span x-text="i"></span></h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <h4 class="text-lg font-medium text-[#1B365D] mb-4">Child <span x-text="i"></span></h4>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                            <label :for="'siblings_' + (i-1) + '_full_name'" class="block text-sm font-medium text-gray-700 mb-2">
-                                Full Name
-                            </label>
-                            <input type="text" :name="'siblings[' + (i-1) + '][full_name]'" :id="'siblings_' + (i-1) + '_full_name'"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                placeholder="Enter sibling's full name">
+                            <label :for="'children_' + (i-1) + '_first_name'" class="block text-sm font-medium text-gray-700 mb-1">First Name *</label>
+                            <input type="text" :name="'children[' + (i-1) + '][first_name]'" :id="'children_' + (i-1) + '_first_name'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
                         <div>
-                            <label :for="'siblings_' + (i-1) + '_occupation'" class="block text-sm font-medium text-gray-700 mb-2">
-                                Occupation
-                            </label>
-                            <input type="text" :name="'siblings[' + (i-1) + '][occupation]'" :id="'siblings_' + (i-1) + '_occupation'"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                placeholder="Enter occupation">
+                            <label :for="'children_' + (i-1) + '_middle_name'" class="block text-sm font-medium text-gray-700 mb-1">Middle Name *</label>
+                            <input type="text" :name="'children[' + (i-1) + '][middle_name]'" :id="'children_' + (i-1) + '_middle_name'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label :for="'children_' + (i-1) + '_last_name'" class="block text-sm font-medium text-gray-700 mb-1">Last Name *</label>
+                            <input type="text" :name="'children[' + (i-1) + '][last_name]'" :id="'children_' + (i-1) + '_last_name'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label :for="'children_' + (i-1) + '_suffix'" class="block text-sm font-medium text-gray-700 mb-1">Suffix (e.g. Sr, IV, etc)</label>
+                            <input type="text" :name="'children[' + (i-1) + '][suffix]'" :id="'children_' + (i-1) + '_suffix'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
-                            <label :for="'siblings_' + (i-1) + '_address'" class="block text-sm font-medium text-gray-700 mb-2">
-                                Address
-                            </label>
-                            <textarea :name="'siblings[' + (i-1) + '][address]'" :id="'siblings_' + (i-1) + '_address'" rows="2"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                placeholder="Enter address"></textarea>
+                            <label :for="'children_' + (i-1) + '_birth_date'" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth *</label>
+                            <input type="date" :name="'children[' + (i-1) + '][birth_date]'" :id="'children_' + (i-1) + '_birth_date'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
                         <div>
-                            <label :for="'siblings_' + (i-1) + '_contact'" class="block text-sm font-medium text-gray-700 mb-2">
-                                Contact Number
-                            </label>
-                            <input type="tel" :name="'siblings[' + (i-1) + '][contact]'" :id="'siblings_' + (i-1) + '_contact'"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                placeholder="Enter contact number">
+                            <label :for="'children_' + (i-1) + '_birth_place'" class="block text-sm font-medium text-gray-700 mb-1">Place of Birth *</label>
+                            <input type="text" :name="'children[' + (i-1) + '][birth_place]'" :id="'children_' + (i-1) + '_birth_place'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <label :for="'children_' + (i-1) + '_occupation'" class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                            <input type="text" :name="'children[' + (i-1) + '][occupation]'" :id="'children_' + (i-1) + '_occupation'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label :for="'children_' + (i-1) + '_employer'" class="block text-sm font-medium text-gray-700 mb-1">Employer</label>
+                            <input type="text" :name="'children[' + (i-1) + '][employer]'" :id="'children_' + (i-1) + '_employer'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label :for="'children_' + (i-1) + '_place_of_employment'" class="block text-sm font-medium text-gray-700 mb-1">Place of Employment</label>
+                            <input type="text" :name="'children[' + (i-1) + '][place_of_employment]'" :id="'children_' + (i-1) + '_place_of_employment'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <label :for="'children_' + (i-1) + '_citizenship'" class="block text-sm font-medium text-gray-700 mb-1">Citizenship</label>
+                            <input type="text" :name="'children[' + (i-1) + '][citizenship]'" :id="'children_' + (i-1) + '_citizenship'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label :for="'children_' + (i-1) + '_other_citizenship'" class="block text-sm font-medium text-gray-700 mb-1">Other Citizenship</label>
+                            <input type="text" :name="'children[' + (i-1) + '][other_citizenship]'" :id="'children_' + (i-1) + '_other_citizenship'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label :for="'children_' + (i-1) + '_naturalized_details'" class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
+                            <input type="text" :name="'children[' + (i-1) + '][naturalized_details]'" :id="'children_' + (i-1) + '_naturalized_details'" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
                     </div>
                 </div>

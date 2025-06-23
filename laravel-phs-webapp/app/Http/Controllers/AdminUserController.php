@@ -79,7 +79,7 @@ class AdminUserController extends Controller
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'user_type' => ['required', 'string', 'in:admin,personnel,regular'],
+            'user_type' => ['required', 'string', 'in:admin,personnel,client'],
             'organic_group' => ['required', 'string', 'in:civilian,enlisted,officer'],
         ]);
 
