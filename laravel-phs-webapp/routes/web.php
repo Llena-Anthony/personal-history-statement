@@ -115,11 +115,69 @@ Route::middleware('auth')->group(function () {
 
     // PHS Routes - Arrest Record
     Route::get('/phs/arrest-record', function() { return view('phs.arrest-record'); })->name('phs.arrest-record');
-    Route::post('/phs/arrest-record', function(Request $request) { return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record saved.'); })->name('phs.arrest-record.store');
+    Route::post('/phs/arrest-record', function(Request $request) { 
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'arrested' => 'nullable|in:yes,no',
+                'arrested_explanation' => 'nullable|string|max:1000',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'arrested' => 'required|in:yes,no',
+                'arrested_explanation' => 'required_if:arrested,yes|string|max:1000',
+            ]);
+        }
+
+        // Save arrest record data (you may need to create a model for this)
+        // For now, just mark as completed
+        session()->put('phs_sections.arrest-record', 'completed');
+        
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Arrest record information saved successfully']);
+        }
+        
+        return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record saved.'); 
+    })->name('phs.arrest-record.store');
 
     // PHS Routes - Organization
     Route::get('/phs/organization', function() { return view('phs.organization'); })->name('phs.organization');
-    Route::post('/phs/organization', function(Request $request) { return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); })->name('phs.organization.store');
+    Route::post('/phs/organization', function(Request $request) { 
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'organizations.*.name' => 'nullable|string|max:255',
+                'organizations.*.position' => 'nullable|string|max:255',
+                'organizations.*.years' => 'nullable|string|max:255',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'organizations.*.name' => 'required|string|max:255',
+                'organizations.*.position' => 'required|string|max:255',
+                'organizations.*.years' => 'required|string|max:255',
+            ]);
+        }
+
+        // Save organization data (you may need to create a model for this)
+        // For now, just mark as completed
+        session()->put('phs_sections.organization', 'completed');
+        
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
+        }
+        
+        return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); 
+    })->name('phs.organization.store');
 
     // PHS Routes - Character and Reputation
     Route::get('/phs/character-and-reputation', function() {
@@ -128,10 +186,22 @@ Route::middleware('auth')->group(function () {
     })->name('phs.character-and-reputation');
 
     Route::post('/phs/character-and-reputation', function(Request $request) {
-        $validated = $request->validate([
-            'misc_type' => 'nullable|string|max:255',
-            'misc_details' => 'required|string',
-        ]);
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'misc_type' => 'nullable|string|max:255',
+                'misc_details' => 'nullable|string',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'misc_type' => 'nullable|string|max:255',
+                'misc_details' => 'required|string',
+            ]);
+        }
 
         Miscellaneous::updateOrCreate(
             ['username' => Auth::user()->username, 'misc_type' => 'character-reputation'],
@@ -139,6 +209,11 @@ Route::middleware('auth')->group(function () {
         );
 
         session()->put('phs_sections.character-reputation', 'completed');
+        
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Character and reputation information saved successfully']);
+        }
         
         return redirect()->route('phs.organization')->with('success', 'Character and reputation information saved successfully!'); 
     })->name('phs.character-and-reputation.store');
@@ -150,10 +225,22 @@ Route::middleware('auth')->group(function () {
     })->name('phs.miscellaneous');
 
     Route::post('/phs/miscellaneous', function(Request $request) {
-        $validated = $request->validate([
-            'misc_type' => 'nullable|string|max:255',
-            'misc_details' => 'required|string',
-        ]);
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'misc_type' => 'nullable|string|max:255',
+                'misc_details' => 'nullable|string',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'misc_type' => 'nullable|string|max:255',
+                'misc_details' => 'required|string',
+            ]);
+        }
 
         Miscellaneous::updateOrCreate(
             ['username' => Auth::user()->username, 'misc_type' => 'general-miscellaneous'],
@@ -161,6 +248,11 @@ Route::middleware('auth')->group(function () {
         );
 
         session()->put('phs_sections.miscellaneous', 'completed');
+        
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
+        }
         
         return redirect()->route('client.dashboard')->with('success', 'Miscellaneous information saved successfully!');
     })->name('phs.miscellaneous.store');

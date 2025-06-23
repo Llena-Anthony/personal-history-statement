@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Foreign Countries Visited')
+@section('title', 'IX: Foreign Countries Visited')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -44,10 +44,10 @@
             </div>
         </div>
         <div class="flex justify-between pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.employment-history.create') }}" class="btn-secondary">
+            <button type="button" onclick="window.navigateToPreviousSection('foreign-countries')" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </a>
-            <button type="submit" class="btn-primary">
+            </button>
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'foreign-countries')">
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>

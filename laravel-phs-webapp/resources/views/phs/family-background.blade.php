@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', request()->routeIs('phs.family-history.create') ? 'Family History' : 'Family Background')
+@section('title', request()->routeIs('phs.family-history.create') ? 'IV: Family History' : 'IV: Family Background')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -229,12 +229,12 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.create') }}" class="btn-secondary">
+            <button type="button" onclick="window.navigateToPreviousSection('family-background')" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Previous Section
-            </a>
+            </button>
             
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'family-background')">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>

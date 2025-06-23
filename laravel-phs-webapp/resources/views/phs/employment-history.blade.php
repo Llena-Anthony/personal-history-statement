@@ -63,10 +63,10 @@
             </div>
 
             <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
-                <a href="{{ route('phs.places-of-residence.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                <button type="button" onclick="window.navigateToPreviousSection('employment-history')" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>Previous Section
-                </a>
-                <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
+                </button>
+                <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors" onclick="handleFormSubmit(event, 'employment-history')">
                     Save & Continue<i class="fas fa-arrow-right ml-2"></i>
                 </button>
             </div>

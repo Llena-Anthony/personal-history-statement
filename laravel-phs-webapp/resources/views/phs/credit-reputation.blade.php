@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Credit Reputation')
+@section('title', 'X: Credit Reputation')
 
 @section('content')
 <div class="max-w-4xl mx-auto" x-data="creditReputationForm()">
@@ -126,7 +126,7 @@
             <a href="{{ route('phs.foreign-countries.create') }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </a>
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'credit-reputation')">
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>

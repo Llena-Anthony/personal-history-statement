@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Marital Status')
+@section('title', 'III: Marital Status')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -205,14 +205,15 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.educational-background') }}" 
+            <button type="button" onclick="window.navigateToPreviousSection('marital-status')" 
                class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Previous Section
-            </a>
+            </button>
             
             <button type="submit" 
-                    class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+                    class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all"
+                    onclick="handleFormSubmit(event, 'marital-status')">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>
