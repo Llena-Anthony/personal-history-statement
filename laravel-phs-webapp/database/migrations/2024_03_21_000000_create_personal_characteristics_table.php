@@ -15,12 +15,13 @@ return new class extends Migration
             $table->integer('age');
             $table->decimal('height', 3, 2); // meters
             $table->decimal('weight', 5, 2); // kg
-            $table->enum('body_build', ['slim', 'medium', 'athletic', 'heavy']);
-            $table->enum('complexion', ['fair', 'medium', 'dark', 'olive']);
+            $table->enum('body_build', ['heavy', 'medium', 'light']);
+            $table->enum('complexion', ['dark', 'fair', 'light']);
             $table->enum('blood_type', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
-            $table->enum('hair_color', ['black', 'brown', 'blonde', 'red', 'gray', 'white']);
+            $table->string('hair_color', 50);
+            $table->string('eye_color', 50);
             $table->text('distinguishing_features')->nullable();
-            $table->enum('health_status', ['excellent', 'good', 'fair', 'poor']);
+            $table->enum('health_status', ['excellent', 'good', 'poor']);
             $table->string('recent_illness')->nullable();
             $table->decimal('shoe_size', 3, 1); // US size
             $table->enum('cap_size', ['XS', 'S', 'M', 'L', 'XL', 'XXL']);
