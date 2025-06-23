@@ -10,9 +10,11 @@ return new class extends Migration
     {
         Schema::create('children', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('family_background_id')->constrained()->onDelete('cascade');
-            $table->string('full_name');
-            $table->date('date_of_birth');
+            $table->foreignId('marital_status_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->date('birth_date');
+            $table->string('citizenship_address')->nullable();
+            $table->string('parent_name')->nullable();
             $table->timestamps();
         });
     }

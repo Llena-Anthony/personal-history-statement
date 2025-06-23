@@ -183,17 +183,32 @@
             </h3>
             
             <div id="children-container" class="space-y-4">
-                <div class="child-entry grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-lg">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
-                        <input type="text" name="children[0][name]" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                               placeholder="Enter child's name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                        <input type="date" name="children[0][birth_date]" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                <!-- Initial child entry (default, not removable) -->
+                <div class="child-entry p-4 border border-gray-200 rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                            <input type="text" name="children[0][name]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter child's name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                            <input type="date" name="children[0][birth_date]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship/Address</label>
+                            <input type="text" name="children[0][citizenship_address]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter citizenship/address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father/Mother</label>
+                            <input type="text" name="children[0][parent_name]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter father or mother's name">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -233,45 +248,72 @@
         }));
     });
 
-    // Marital status change handler
-    document.getElementById('marital_status').addEventListener('change', function() {
+    // Handle marital status changes to show/hide spouse and children sections
+    document.addEventListener('DOMContentLoaded', () => {
+        const maritalStatusSelect = document.getElementById('marital_status');
         const spouseSection = document.getElementById('spouse-section');
         const childrenSection = document.getElementById('children-section');
-        
-        if (this.value === 'Married') {
-            spouseSection.classList.remove('hidden');
-            childrenSection.classList.remove('hidden');
-        } else if (this.value === 'Single') {
-            spouseSection.classList.add('hidden');
-            childrenSection.classList.add('hidden');
-        } else {
-            // For Widowed, Separated - show children section but hide spouse
-            spouseSection.classList.add('hidden');
-            childrenSection.classList.remove('hidden');
-        }
+
+        const toggleSections = () => {
+            const status = maritalStatusSelect.value;
+            if (status === 'Married') {
+                spouseSection.classList.remove('hidden');
+                childrenSection.classList.remove('hidden');
+            } else {
+                spouseSection.classList.add('hidden');
+                childrenSection.classList.add('hidden');
+            }
+        };
+
+        maritalStatusSelect.addEventListener('change', toggleSections);
+        toggleSections(); // Initial check
     });
 
-    // Add child functionality
-    let childCount = 1;
-    document.getElementById('add-child').addEventListener('click', function() {
+    // Dynamic child entry management
+    document.getElementById('add-child').addEventListener('click', () => {
         const container = document.getElementById('children-container');
-        const newChild = document.createElement('div');
-        newChild.className = 'child-entry grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-lg';
-        newChild.innerHTML = `
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
-                <input type="text" name="children[${childCount}][name]" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                       placeholder="Enter child's name">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                <input type="date" name="children[${childCount}][birth_date]" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+        const index = container.children.length;
+
+        const newChildEntry = `
+            <div class="child-entry p-4 border border-gray-200 rounded-lg mt-4 relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                        <input type="text" name="children[${index}][name]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter child's name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        <input type="date" name="children[${index}][birth_date]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship/Address</label>
+                        <input type="text" name="children[${index}][citizenship_address]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter citizenship/address">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father/Mother</label>
+                        <input type="text" name="children[${index}][parent_name]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter father or mother's name">
+                    </div>
+                </div>
+                <button type="button" class="remove-child absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                    <i class="fas fa-times-circle"></i>
+                </button>
             </div>
         `;
-        container.appendChild(newChild);
-        childCount++;
+        container.insertAdjacentHTML('beforeend', newChildEntry);
+    });
+
+    // Remove child entry
+    document.getElementById('children-container').addEventListener('click', (e) => {
+        if (e.target.closest('.remove-child')) {
+            e.target.closest('.child-entry').remove();
+        }
     });
 </script>
 @endsection 

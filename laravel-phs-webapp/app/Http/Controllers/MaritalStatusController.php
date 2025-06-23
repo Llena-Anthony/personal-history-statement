@@ -135,8 +135,8 @@ class MaritalStatusController extends Controller
                         $maritalStatus->children()->create([
                             'name' => $childData['name'],
                             'birth_date' => $childData['birth_date'],
-                            'citizenship_address' => $childData['citizenship_address'],
-                            'parent_name' => $childData['parent_name'],
+                            'citizenship_address' => $childData['citizenship_address'] ?? null,
+                            'parent_name' => $childData['parent_name'] ?? null,
                         ]);
                     }
                 }
