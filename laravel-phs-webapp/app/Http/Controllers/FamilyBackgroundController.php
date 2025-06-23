@@ -79,6 +79,17 @@ class FamilyBackgroundController extends Controller
                 'spouse_citizenship' => 'nullable|string|max:255',
                 'spouse_other_citizenship' => 'nullable|string|max:255',
                 'spouse_naturalized_details' => 'nullable|string|max:255',
+                'siblings' => 'nullable|array',
+                'siblings.*.first_name' => 'nullable|string|max:255',
+                'siblings.*.middle_name' => 'nullable|string|max:255',
+                'siblings.*.last_name' => 'nullable|string|max:255',
+                'siblings.*.date_of_birth' => 'nullable|date',
+                'siblings.*.citizenship' => 'nullable|string|max:255',
+                'siblings.*.dual_citizenship' => 'nullable|string|max:255',
+                'siblings.*.complete_address' => 'nullable|string|max:255',
+                'siblings.*.occupation' => 'nullable|string|max:255',
+                'siblings.*.employer' => 'nullable|string|max:255',
+                'siblings.*.employer_address' => 'nullable|string|max:255',
             ]);
         } else {
             // Full validation for final submission
@@ -119,6 +130,17 @@ class FamilyBackgroundController extends Controller
                 'spouse_citizenship' => 'nullable|string|max:255',
                 'spouse_other_citizenship' => 'nullable|string|max:255',
                 'spouse_naturalized_details' => 'nullable|string|max:255',
+                'siblings' => 'nullable|array',
+                'siblings.*.first_name' => 'nullable|string|max:255',
+                'siblings.*.middle_name' => 'nullable|string|max:255',
+                'siblings.*.last_name' => 'nullable|string|max:255',
+                'siblings.*.date_of_birth' => 'nullable|date',
+                'siblings.*.citizenship' => 'nullable|string|max:255',
+                'siblings.*.dual_citizenship' => 'nullable|string|max:255',
+                'siblings.*.complete_address' => 'nullable|string|max:255',
+                'siblings.*.occupation' => 'nullable|string|max:255',
+                'siblings.*.employer' => 'nullable|string|max:255',
+                'siblings.*.employer_address' => 'nullable|string|max:255',
             ]);
         }
 
@@ -127,10 +149,31 @@ class FamilyBackgroundController extends Controller
             $validated['user_id'] = auth()->id();
 
             // Store in FamilyBackground model
-            \App\Models\FamilyBackground::updateOrCreate(
+            $familyBackground = \App\Models\FamilyBackground::updateOrCreate(
                 ['user_id' => auth()->id()],
                 $validated
             );
+
+            // Save siblings (delete old, create new)
+            if (isset($validated['siblings'])) {
+                $familyBackground->siblings()->delete();
+                foreach ($validated['siblings'] as $sibling) {
+                    if (!empty($sibling['first_name']) || !empty($sibling['last_name'])) {
+                        $familyBackground->siblings()->create([
+                            'first_name' => $sibling['first_name'] ?? null,
+                            'middle_name' => $sibling['middle_name'] ?? null,
+                            'last_name' => $sibling['last_name'] ?? null,
+                            'date_of_birth' => $sibling['date_of_birth'] ?? null,
+                            'citizenship' => $sibling['citizenship'] ?? null,
+                            'dual_citizenship' => $sibling['dual_citizenship'] ?? null,
+                            'complete_address' => $sibling['complete_address'] ?? null,
+                            'occupation' => $sibling['occupation'] ?? null,
+                            'employer' => $sibling['employer'] ?? null,
+                            'employer_address' => $sibling['employer_address'] ?? null,
+                        ]);
+                    }
+                }
+            }
 
             // Mark both family-background and family-history as completed
             $this->markSectionAsCompleted('family-background');

@@ -49,12 +49,6 @@ class FamilyBackground extends Model
         'mother_citizenship',
         'mother_other_citizenship',
         'mother_naturalized_details',
-        // Sibling fields
-        'sibling1_full_name', 'sibling1_occupation', 'sibling1_address', 'sibling1_contact',
-        'sibling2_full_name', 'sibling2_occupation', 'sibling2_address', 'sibling2_contact',
-        'sibling3_full_name', 'sibling3_occupation', 'sibling3_address', 'sibling3_contact',
-        'sibling4_full_name', 'sibling4_occupation', 'sibling4_address', 'sibling4_contact',
-        'sibling5_full_name', 'sibling5_occupation', 'sibling5_address', 'sibling5_contact',
     ];
 
     public function user()
@@ -65,5 +59,10 @@ class FamilyBackground extends Model
     public function children()
     {
         return $this->hasMany(Child::class);
+    }
+
+    public function siblings()
+    {
+        return $this->hasMany(Sibling::class);
     }
 } 
