@@ -83,6 +83,10 @@
                     <input type="text" name="father_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="If naturalized, provide date and place">
                 </div>
             </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Complete Address</label>
+                <input type="text" name="father_complete_address" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+            </div>
         </div>
 
         <!-- Mother's Information -->
@@ -146,6 +150,214 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
                     <input type="text" name="mother_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="If naturalized, provide date and place">
                 </div>
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Complete Address</label>
+                <input type="text" name="mother_complete_address" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+            </div>
+        </div>
+
+        <!-- Step-parent or Guardian Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-user-shield mr-3 text-[#D4AF37]"></i>
+                Step-parent or Guardian Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <input type="text" name="step_parent_guardian_first_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+                    <input type="text" name="step_parent_guardian_middle_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter middle name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <input type="text" name="step_parent_guardian_last_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter last name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Suffix (e.g. Sr, IV, etc)</label>
+                    <input type="text" name="step_parent_guardian_suffix" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="e.g. Sr, IV, etc">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                    <input type="date" name="step_parent_guardian_birth_date" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth</label>
+                    <input type="text" name="step_parent_guardian_birth_place" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter place of birth">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                    <input type="text" name="step_parent_guardian_occupation" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter occupation">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Employer</label>
+                    <input type="text" name="step_parent_guardian_employer" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Employment</label>
+                    <input type="text" name="step_parent_guardian_place_of_employment" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter place of employment">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Citizenship</label>
+                    <input type="text" name="step_parent_guardian_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Other Citizenship</label>
+                    <input type="text" name="step_parent_guardian_other_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter other citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
+                    <input type="text" name="step_parent_guardian_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="If naturalized, provide date and place">
+                </div>
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Complete Address</label>
+                <input type="text" name="step_parent_guardian_complete_address" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+            </div>
+        </div>
+
+        <!-- Father-in-law Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-male mr-3 text-[#D4AF37]"></i>
+                Father-in-law Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <input type="text" name="father_in_law_first_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+                    <input type="text" name="father_in_law_middle_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter middle name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <input type="text" name="father_in_law_last_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter last name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Suffix (e.g. Sr, IV, etc)</label>
+                    <input type="text" name="father_in_law_suffix" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="e.g. Sr, IV, etc">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                    <input type="date" name="father_in_law_birth_date" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth</label>
+                    <input type="text" name="father_in_law_birth_place" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter place of birth">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                    <input type="text" name="father_in_law_occupation" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter occupation">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Employer</label>
+                    <input type="text" name="father_in_law_employer" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Employment</label>
+                    <input type="text" name="father_in_law_place_of_employment" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter place of employment">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Citizenship</label>
+                    <input type="text" name="father_in_law_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Other Citizenship</label>
+                    <input type="text" name="father_in_law_other_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter other citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
+                    <input type="text" name="father_in_law_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="If naturalized, provide date and place">
+                </div>
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Complete Address</label>
+                <input type="text" name="father_in_law_complete_address" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+            </div>
+        </div>
+
+        <!-- Mother-in-law Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-female mr-3 text-[#D4AF37]"></i>
+                Mother-in-law Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <input type="text" name="mother_in_law_first_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Middle Name</label>
+                    <input type="text" name="mother_in_law_middle_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter middle name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <input type="text" name="mother_in_law_last_name" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter last name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Suffix (e.g. Sr, IV, etc)</label>
+                    <input type="text" name="mother_in_law_suffix" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="e.g. Sr, IV, etc">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                    <input type="date" name="mother_in_law_birth_date" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth</label>
+                    <input type="text" name="mother_in_law_birth_place" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter place of birth">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Occupation</label>
+                    <input type="text" name="mother_in_law_occupation" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter occupation">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Employer</label>
+                    <input type="text" name="mother_in_law_employer" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Place of Employment</label>
+                    <input type="text" name="mother_in_law_place_of_employment" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter place of employment">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Citizenship</label>
+                    <input type="text" name="mother_in_law_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Other Citizenship</label>
+                    <input type="text" name="mother_in_law_other_citizenship" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter other citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">If Naturalized (Provide Date and Place)</label>
+                    <input type="text" name="mother_in_law_naturalized_details" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="If naturalized, provide date and place">
+                </div>
+            </div>
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Complete Address</label>
+                <input type="text" name="mother_in_law_complete_address" class="w-full rounded-lg px-4 py-3 border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
             </div>
         </div>
 
