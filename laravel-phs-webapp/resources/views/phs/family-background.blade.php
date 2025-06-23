@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Family Background')
+@section('title', request()->routeIs('phs.family-history.create') ? 'Family History' : 'Family Background')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -11,14 +11,14 @@
                 <i class="fas fa-users text-white text-xl"></i>
             </div>
             <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">Family Background</h1>
+                <h1 class="text-3xl font-bold text-[#1B365D]">{{ request()->routeIs('phs.family-history.create') ? 'Family History' : 'Family Background' }}</h1>
                 <p class="text-gray-600">Please provide information about your family</p>
             </div>
         </div>
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.family-background.store') }}" class="space-y-8">
+    <form method="POST" action="{{ request()->routeIs('phs.family-history.create') ? route('phs.family-history.store') : route('phs.family-background.store') }}" class="space-y-8">
         @csrf
         
         <!-- Father's Information -->
@@ -246,10 +246,10 @@
     // Initialize Alpine.js data for this section
     document.addEventListener('alpine:init', () => {
         Alpine.data('familyBackground', () => ({
-            currentSection: 'family-background',
+            currentSection: '{{ request()->routeIs("phs.family-history.create") ? "family-history" : "family-background" }}',
             init() {
                 // Mark this section as visited
-                this.markSectionAsVisited('family-background');
+                this.markSectionAsVisited(this.currentSection);
             }
         }));
     });

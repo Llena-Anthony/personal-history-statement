@@ -149,12 +149,14 @@
                     { label: 'I', name: 'Personal Details', url: '{{ route('phs.create') }}', status: '{{ session('phs_section_status.I', 'default') }}', route: 'phs.create' },
                     { label: 'II', name: 'Personal Characteristics', url: '{{ route('phs.personal-characteristics.create') }}', status: '{{ session('phs_section_status.II', 'default') }}', route: 'phs.personal-characteristics.create' },
                     { label: 'III', name: 'Marital Status', url: '{{ route('phs.marital-status.create') }}', status: '{{ session('phs_section_status.III', 'default') }}', route: 'phs.marital-status.create' },
-                    { label: 'IV', name: 'Family History and Information', url: '{{ route('phs.family-history.create') }}', status: '{{ session('phs_section_status.IV', 'default') }}', route: 'phs.family-history.create' },
+                    { label: 'IV', name: 'Family History and Information', url: '{{ route('phs.family-background.create') }}', status: '{{ session('phs_section_status.IV', 'default') }}', route: 'phs.family-background.create' },
                     { label: 'V', name: 'Educational Background', url: '{{ route('phs.educational-background') }}', status: '{{ session('phs_section_status.V', 'default') }}', route: 'phs.educational-background' },
                     { label: 'VI', name: 'Military History', url: '{{ route('phs.military-history.create') }}', status: '{{ session('phs_section_status.VI', 'default') }}', route: 'phs.military-history.create' },
                     { label: 'VII', name: 'Places of Residence Since Birth', url: '{{ route('phs.places-of-residence.create') }}', status: '{{ session('phs_section_status.VII', 'default') }}', route: 'phs.places-of-residence.create' },
                     { label: 'VIII', name: 'Employment History', url: '{{ route('phs.employment-history.create') }}', status: '{{ session('phs_section_status.VIII', 'default') }}', route: 'phs.employment-history.create' },
                     { label: 'IX', name: 'Foreign Countries Visited', url: '{{ route('phs.foreign-countries.create') }}', status: '{{ session('phs_section_status.IX', 'default') }}', route: 'phs.foreign-countries.create' },
+                    { label: 'X', name: 'Credit Reputation', url: '{{ route('phs.credit-reputation') }}', status: '{{ session('phs_section_status.X', 'default') }}', route: 'phs.credit-reputation' },
+                    { label: 'XI', name: 'Arrest Record and Conduct', url: '{{ route('phs.arrest-record') }}', status: '{{ session('phs_section_status.XI', 'default') }}', route: 'phs.arrest-record' },
                 ]
             }
         }

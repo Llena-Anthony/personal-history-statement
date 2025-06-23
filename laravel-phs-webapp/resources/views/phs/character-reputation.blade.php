@@ -36,7 +36,7 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.arrest-record') }}" class="btn-secondary">
+            <a href="{{ route('phs.organization') }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </a>
             <button type="submit" class="btn-primary">
@@ -46,4 +46,4 @@
     </form>
 </div>
 @endsection
-@php($currentSection = 'miscellaneous') 
+@php($currentSection = 'character-and-reputation') 

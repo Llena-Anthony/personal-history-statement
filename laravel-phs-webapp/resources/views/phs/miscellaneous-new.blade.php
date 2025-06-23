@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Character and Reputation')
+@section('title', 'Miscellaneous')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -12,13 +12,13 @@
                 <i class="fas fa-puzzle-piece text-white text-xl"></i>
             </div>
             <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">XII: Character and Reputation</h1>
+                <h1 class="text-3xl font-bold text-[#1B365D]">XIV: Miscellaneous</h1>
             </div>
         </div>
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.character-and-reputation.store') }}" class="space-y-10">
+    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10">
         @csrf
         
         <!-- Questions -->
@@ -36,7 +36,7 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.arrest-record') }}" class="btn-secondary">
+            <a href="{{ route('phs.organization') }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </a>
             <button type="submit" class="btn-primary">

@@ -813,11 +813,11 @@
                         status: 'not-started'
                     },
                     {
-                        id: 'family-history',
-                        title: 'IV: Family History',
+                        id: 'family-background',
+                        title: 'IV: Family Background',
                         description: 'Extended family',
                         icon: 'fas fa-tree',
-                        route: '{{ route("phs.family-history.create") }}',
+                        route: '{{ route("phs.family-background.create") }}',
                         status: 'not-started'
                     },
                     {
@@ -865,7 +865,7 @@
                         title: 'X: Credit Reputation',
                         description: 'Credit standing',
                         icon: 'fas fa-credit-card',
-                        route: '#',
+                        route: '{{ route("phs.credit-reputation") }}',
                         status: 'not-started'
                     },
                     {
@@ -873,15 +873,15 @@
                         title: 'XI: Arrest Record and Conduct',
                         description: 'Legal and conduct history',
                         icon: 'fas fa-gavel',
-                        route: '#',
+                        route: '{{ route("phs.arrest-record") }}',
                         status: 'not-started'
                     },
                     {
-                        id: 'employment-history-2',
+                        id: 'miscellaneous',
                         title: 'XII: Character and Reputation',
                         description: 'Character and reputation information',
                         icon: 'fas fa-user-shield',
-                        route: '#',
+                        route: '{{ route("phs.character-and-reputation") }}',
                         status: 'not-started'
                     },
                     {
@@ -889,15 +889,7 @@
                         title: 'XIII: Organization',
                         description: 'Memberships',
                         icon: 'fas fa-users-cog',
-                        route: '#',
-                        status: 'not-started'
-                    },
-                    {
-                        id: 'miscellaneous',
-                        title: 'XIV: Miscellaneous',
-                        description: 'Other information',
-                        icon: 'fas fa-ellipsis-h',
-                        route: '#',
+                        route: '{{ route("phs.organization") }}',
                         status: 'not-started'
                     }
                 ],
