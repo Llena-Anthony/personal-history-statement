@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MaritalStatus;
+use App\Models\FamilyBackground;
 use App\Models\Child;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,8 +51,10 @@ class MaritalStatusController extends Controller
                 'children' => 'nullable|array',
                 'children.*.name' => 'nullable|string|max:255',
                 'children.*.birth_date' => 'nullable|date',
-                'children.*.citizenship_address' => 'nullable|string|max:255',
-                'children.*.parent_name' => 'nullable|string|max:255',
+                'children.*.citizenship' => 'nullable|string|max:255',
+                'children.*.address' => 'nullable|string|max:255',
+                'children.*.father_name' => 'nullable|string|max:255',
+                'children.*.mother_name' => 'nullable|string|max:255',
             ]);
         } else {
             // Full validation for final submission
@@ -74,8 +77,10 @@ class MaritalStatusController extends Controller
                 'children' => 'nullable|array',
                 'children.*.name' => 'nullable|string|max:255',
                 'children.*.birth_date' => 'nullable|date',
-                'children.*.citizenship_address' => 'nullable|string|max:255',
-                'children.*.parent_name' => 'nullable|string|max:255',
+                'children.*.citizenship' => 'nullable|string|max:255',
+                'children.*.address' => 'nullable|string|max:255',
+                'children.*.father_name' => 'nullable|string|max:255',
+                'children.*.mother_name' => 'nullable|string|max:255',
             ]);
         }
 
@@ -127,16 +132,24 @@ class MaritalStatusController extends Controller
             }
 
             if (isset($validated['children'])) {
+                // Get or create family background for children
+                $familyBackground = FamilyBackground::firstOrCreate(
+                    ['user_id' => auth()->id()],
+                    ['user_id' => auth()->id()]
+                );
+                
                 // Delete existing children and recreate
-                $maritalStatus->children()->delete();
+                $familyBackground->children()->delete();
                 
                 foreach ($validated['children'] as $childData) {
                     if (!empty($childData['name'])) {
-                        $maritalStatus->children()->create([
-                            'name' => $childData['name'],
-                            'birth_date' => $childData['birth_date'],
-                            'citizenship_address' => $childData['citizenship_address'] ?? null,
-                            'parent_name' => $childData['parent_name'] ?? null,
+                        $familyBackground->children()->create([
+                            'full_name' => $childData['name'],
+                            'date_of_birth' => $childData['birth_date'],
+                            'citizenship' => $childData['citizenship'] ?? null,
+                            'address' => $childData['address'] ?? null,
+                            'father_name' => $childData['father_name'] ?? null,
+                            'mother_name' => $childData['mother_name'] ?? null,
                         ]);
                     }
                 }

@@ -10,19 +10,21 @@ class Child extends Model
     use HasFactory;
 
     protected $fillable = [
-        'marital_status_id',
-        'name',
-        'birth_date',
-        'citizenship_address',
-        'parent_name',
+        'family_background_id',
+        'full_name',
+        'date_of_birth',
+        'citizenship',
+        'address',
+        'father_name',
+        'mother_name',
     ];
 
     protected $casts = [
-        'birth_date' => 'date',
+        'date_of_birth' => 'date',
     ];
 
-    public function maritalStatus()
+    public function familyBackground()
     {
-        return $this->belongsTo(MaritalStatus::class);
+        return $this->belongsTo(FamilyBackground::class);
     }
 } 
