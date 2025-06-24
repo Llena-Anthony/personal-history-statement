@@ -502,7 +502,7 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('family-background')" class="btn-secondary">
+            <button type="button" onclick="window.navigateToPreviousSection('family-background')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Previous Section
             </button>
