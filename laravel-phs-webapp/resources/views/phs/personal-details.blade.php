@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Personal Details')
+@section('title', 'I: Personal Details')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -32,9 +32,9 @@
                 <!-- First Name -->
                 <div>
                     <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        First Name <span class="text-red-500">*</span>
+                        First Name
                     </label>
-                    <input type="text" name="first_name" id="first_name" required
+                    <input type="text" name="first_name" id="first_name"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your first name">
                     @error('first_name')
@@ -45,9 +45,9 @@
                 <!-- Middle Name -->
                 <div>
                     <label for="middle_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Middle Name <span class="text-red-500">*</span>
+                        Middle Name
                     </label>
-                    <input type="text" name="middle_name" id="middle_name" required
+                    <input type="text" name="middle_name" id="middle_name"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your middle name">
                     @error('middle_name')
@@ -58,9 +58,9 @@
                 <!-- Last Name -->
                 <div>
                     <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Last Name <span class="text-red-500">*</span>
+                        Last Name
                     </label>
-                    <input type="text" name="last_name" id="last_name" required
+                    <input type="text" name="last_name" id="last_name"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your last name">
                     @error('last_name')
@@ -103,9 +103,9 @@
                 <!-- Date of Birth -->
                 <div>
                     <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">
-                        Date of Birth <span class="text-red-500">*</span>
+                        Date of Birth
                     </label>
-                    <input type="date" name="date_of_birth" id="date_of_birth" required
+                    <input type="date" name="date_of_birth" id="date_of_birth"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                     @error('date_of_birth')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -115,9 +115,9 @@
                 <!-- Place of Birth -->
                 <div>
                     <label for="place_of_birth" class="block text-sm font-medium text-gray-700 mb-2">
-                        Place of Birth <span class="text-red-500">*</span>
+                        Place of Birth
                     </label>
-                    <input type="text" name="place_of_birth" id="place_of_birth" required
+                    <input type="text" name="place_of_birth" id="place_of_birth"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="City, Province">
                     @error('place_of_birth')
@@ -190,9 +190,9 @@
                 <!-- Region -->
                 <div>
                     <label for="home_region" class="block text-sm font-medium text-gray-700 mb-2">
-                        Region <span class="text-red-500">*</span>
+                        Region
                     </label>
-                    <select name="home_region" id="home_region" required
+                    <select name="home_region" id="home_region"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadProvinces('home')">
                         <option value="">Select Region</option>
@@ -202,9 +202,9 @@
                 <!-- Province -->
                 <div>
                     <label for="home_province" class="block text-sm font-medium text-gray-700 mb-2">
-                        Province <span class="text-red-500">*</span>
+                        Province
                     </label>
-                    <select name="home_province" id="home_province" required
+                    <select name="home_province" id="home_province"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadCities('home')">
                         <option value="">Select Province</option>
@@ -214,9 +214,9 @@
                 <!-- City/Municipality -->
                 <div>
                     <label for="home_city" class="block text-sm font-medium text-gray-700 mb-2">
-                        City/Municipality <span class="text-red-500">*</span>
+                        City/Municipality
                     </label>
-                    <select name="home_city" id="home_city" required
+                    <select name="home_city" id="home_city"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadBarangays('home')">
                         <option value="">Select City/Municipality</option>
@@ -228,9 +228,9 @@
                 <!-- Barangay -->
                 <div>
                     <label for="home_barangay" class="block text-sm font-medium text-gray-700 mb-2">
-                        Barangay <span class="text-red-500">*</span>
+                        Barangay
                     </label>
-                    <select name="home_barangay" id="home_barangay" required
+                    <select name="home_barangay" id="home_barangay"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Barangay</option>
                     </select>
@@ -239,9 +239,9 @@
                 <!-- Street Address -->
                 <div>
                     <label for="home_street" class="block text-sm font-medium text-gray-700 mb-2">
-                        Street Address <span class="text-red-500">*</span>
+                        Street Address
                     </label>
-                    <input type="text" name="home_street" id="home_street" required
+                    <input type="text" name="home_street" id="home_street"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="House/Unit No., Street Name">
                 </div>
@@ -356,9 +356,9 @@
                 <!-- Mobile -->
                 <div>
                     <label for="mobile" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mobile Number <span class="text-red-500">*</span>
+                        Mobile Number
                     </label>
-                    <input type="tel" name="mobile" id="mobile" required
+                    <input type="tel" name="mobile" id="mobile"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="+63 9XX XXX XXXX">
                 </div>
@@ -442,12 +442,12 @@
     
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('client.dashboard') }}" class="btn-secondary">
+            <a href="{{ route('client.dashboard') }}" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Dashboard
             </a>
             
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'personal-details')">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>

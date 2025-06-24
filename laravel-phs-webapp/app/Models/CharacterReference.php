@@ -29,4 +29,9 @@ class CharacterReference extends Model
     {
         return $this->belongsTo(AddressDetails::class, 'ref_address', 'addr_id');
     }
+
+    public function refName()
+    {
+        return $this->belongsTo(NameDetails::class, 'ref_name_id');
+    }
 } 

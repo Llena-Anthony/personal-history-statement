@@ -93,6 +93,46 @@
                             <span class="text-sm {{ request()->routeIs('phs.foreign-countries.create') ? 'font-bold' : 'font-medium' }}">Foreign Countries Visited</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('phs.credit-reputation') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.credit-reputation') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.credit-reputation') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                <span class="text-xs text-white font-bold">X</span>
+                            </span>
+                            <span class="text-sm {{ request()->routeIs('phs.credit-reputation') ? 'font-bold' : 'font-medium' }}">Credit Reputation</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('phs.arrest-record') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.arrest-record') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.arrest-record') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                <span class="text-xs text-white font-bold">XI</span>
+                            </span>
+                            <span class="text-sm {{ request()->routeIs('phs.arrest-record') ? 'font-bold' : 'font-medium' }}">Arrest Record and Conduct</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('phs.character-and-reputation') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.character-and-reputation') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.character-and-reputation') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                <span class="text-xs text-white font-bold">XII</span>
+                            </span>
+                            <span class="text-sm {{ request()->routeIs('phs.character-and-reputation') ? 'font-bold' : 'font-medium' }}">Character and Reputation</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('phs.organization') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.organization') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.organization') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                <span class="text-xs text-white font-bold">XIII</span>
+                            </span>
+                            <span class="text-sm {{ request()->routeIs('phs.organization') ? 'font-bold' : 'font-medium' }}">Organization</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('phs.miscellaneous') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.miscellaneous') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.miscellaneous') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                                <span class="text-xs text-white font-bold">XIV</span>
+                            </span>
+                            <span class="text-sm {{ request()->routeIs('phs.miscellaneous') ? 'font-bold' : 'font-medium' }}">Miscellaneous</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>

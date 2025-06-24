@@ -3,125 +3,153 @@
 @section('title', 'VIII: Employment History')
 
 @section('content')
-<div class="max-w-5xl mx-auto">
-    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-bold text-[#1B365D] mb-6">VIII: Employment History</h2>
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
+                <i class="fas fa-briefcase text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-[#1B365D]">Employment History</h1>
+                <p class="text-gray-600">Please provide your employment information</p>
+            </div>
+        </div>
+    </div>
 
-        <form method="POST" action="{{ route('phs.employment-history.store') }}" class="space-y-6">
-            @csrf
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-[#1B365D]">Employment Entries</h3>
-                <button type="button" id="addEmployment" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Add Employment
-                </button>
+    <form method="POST" action="{{ route('phs.employment-history.store') }}" class="space-y-8">
+        @csrf
+        <!-- Employment Entries -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-[#1B365D] flex items-center">
+                    <i class="fas fa-building mr-3 text-[#D4AF37]"></i>
+                    Employment Entries
+                </h3>
             </div>
             <div id="employment-entries" class="space-y-4">
-                <div class="employment-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-gray-700">Business/Company Name <span class="text-xs text-gray-400">(Strictly no abbreviations. Write in full.)</span></label>
-                            <input type="text" name="company_name[]" value="{{ old('company_name.0') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                <!-- Initial employment entry (default, not removable) -->
+                <div class="employment-entry p-4 border border-gray-200 rounded-lg" data-index="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
+                            <input type="date" name="employment[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-gray-700">Type of Employment</label>
-                            <input type="text" name="employment_type[]" value="{{ old('employment_type.0') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
+                            <input type="date" name="employment[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700">Business/Company Address</label>
-                            <input type="text" name="company_address[]" value="{{ old('company_address.0') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type of Employment</label>
+                            <input type="text" name="employment[0][type]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employment type">
                         </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-gray-700">Start</label>
-                            <input type="month" name="start_date[]" value="{{ old('start_date.0') }}" placeholder="MM/YYYY" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name of Employer</label>
+                            <input type="text" name="employment[0][employer_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer name">
                         </div>
-                        <div class="md:col-span-1">
-                            <label class="block text-sm font-medium text-gray-700">End</label>
-                            <input type="month" name="end_date[]" value="{{ old('end_date.0') }}" placeholder="MM/YYYY" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Address of Employer</label>
+                            <input type="text" name="employment[0][employer_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer address">
                         </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Leaving</label>
+                            <input type="text" name="employment[0][reason_leaving]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter reason for leaving">
+                        </div>
                     </div>
                 </div>
             </div>
+            <button type="button" id="add-employment" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                <i class="fas fa-plus mr-1"></i> Add Another Employment
+            </button>
+        </div>
 
-            <hr class="my-8">
-            
+        <!-- Dismissal Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-exclamation-triangle mr-3 text-[#D4AF37]"></i>
+                Dismissal Information
+            </h3>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Have you been dismissed or forced to resign from a position?</label>
-                    <select name="dismissed" id="dismissed-select" class="mt-1 block w-full md:w-1/4 px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Have you been dismissed or forced to resign from a position?</label>
+                    <select name="dismissed" id="dismissed-select" class="w-full md:w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         <option value="">Select an option</option>
                         <option value="no" {{ old('dismissed') == 'no' ? 'selected' : '' }}>No</option>
                         <option value="yes" {{ old('dismissed') == 'yes' ? 'selected' : '' }}>Yes</option>
                     </select>
                 </div>
                 <div id="dismissed-explanation" class="{{ old('dismissed') == 'yes' ? '' : 'hidden' }}">
-                    <label for="dismissed_explanation" class="block text-sm font-medium text-gray-700">Why were you dismissed or forced to resign from a position?</label>
-                    <input type="text" name="dismissed_explanation" id="dismissed_explanation" value="{{ old('dismissed_explanation') }}" class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37] transition-colors" placeholder="Explain the circumstances here...">
+                    <label for="dismissed_explanation" class="block text-sm font-medium text-gray-700 mb-2">If yes, please explain</label>
+                    <input type="text" name="dismissed_explanation" id="dismissed_explanation" value="{{ old('dismissed_explanation') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Explain the circumstances here...">
                 </div>
             </div>
+        </div>
 
-            <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
-                <a href="{{ route('phs.places-of-residence.create') }}" class="px-6 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Previous Section
-                </a>
-                <button type="submit" class="px-6 py-2.5 rounded-lg bg-[#1B365D] text-white hover:bg-[#2B4B7D] transition-colors">
-                    Save & Continue<i class="fas fa-arrow-right ml-2"></i>
-                </button>
-            </div>
-        </form>
-    </div>
+        <!-- Navigation Buttons -->
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+            <button type="button" onclick="window.navigateToPreviousSection('employment-history')" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Previous Section
+            </button>
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'employment-history')">
+                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </form>
 </div>
-@endsection
 
-@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    function setupDynamicFields(containerId, addButtonId, entryClass, allowRemoveLast = false) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
+    // Employment Entries functionality
+    const employmentContainer = document.getElementById('employment-entries');
+    const addEmploymentBtn = document.getElementById('add-employment');
 
-        const addButton = document.getElementById(addButtonId);
-        if (!addButton) return;
-        
-        const templateEntry = container.querySelector('.' + entryClass);
-        if (!templateEntry) return;
-        
-        const template = templateEntry.cloneNode(true);
-        let index = container.querySelectorAll('.' + entryClass).length;
+    addEmploymentBtn.addEventListener('click', () => {
+        const entries = employmentContainer.querySelectorAll('.employment-entry');
+        const idx = entries.length;
+        const employmentEntry = document.createElement('div');
+        employmentEntry.className = 'employment-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+        employmentEntry.setAttribute('data-index', idx);
+        employmentEntry.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
+                    <input type="date" name="employment[${idx}][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
+                    <input type="date" name="employment[${idx}][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Type of Employment</label>
+                    <input type="text" name="employment[${idx}][type]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employment type">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name of Employer</label>
+                    <input type="text" name="employment[${idx}][employer_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Address of Employer</label>
+                    <input type="text" name="employment[${idx}][employer_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer address">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Leaving</label>
+                    <input type="text" name="employment[${idx}][reason_leaving]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter reason for leaving">
+                </div>
+            </div>
+            <button type="button" class="remove-employment absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+        `;
+        employmentContainer.appendChild(employmentEntry);
+    });
 
-        container.addEventListener('click', function(e) {
-            const removeBtn = e.target.closest('.remove-btn');
-            if (removeBtn) {
-                const entry = removeBtn.closest('.' + entryClass);
-                if (entry) {
-                    if (container.querySelectorAll('.' + entryClass).length > 1 || allowRemoveLast) {
-                        entry.remove();
-                    }
-                }
+    employmentContainer.addEventListener('click', (e) => {
+        if (e.target.closest('.remove-employment')) {
+            const entries = employmentContainer.querySelectorAll('.employment-entry');
+            if (entries.length > 1) {
+                e.target.closest('.employment-entry').remove();
             }
-        });
+        }
+    });
 
-        addButton.addEventListener('click', function () {
-            const newEntry = template.cloneNode(true);
-            newEntry.querySelectorAll('input, select').forEach(input => {
-                const name = input.getAttribute('name');
-                if (name) {
-                    // Update array index for new entries
-                    const newName = name.replace(/\[\d*\]/, `[${index}]`);
-                    input.name = newName;
-                }
-                input.value = ''; // Clear the value of new inputs
-            });
-            
-            container.appendChild(newEntry);
-            index++;
-        });
-    }
-
-    setupDynamicFields('employment-entries', 'addEmployment', 'employment-entry', true);
-
+    // Dismissal select logic
     const dismissedSelect = document.getElementById('dismissed-select');
     if (dismissedSelect) {
         dismissedSelect.addEventListener('change', function() {
@@ -131,5 +159,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-@endpush
+@endsection
 @php($currentSection = 'employment-history') 

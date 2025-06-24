@@ -21,6 +21,7 @@ use App\Http\Controllers\PrintController;
 use App\Http\Controllers\CreditReputationController;
 use App\Models\Miscellaneous;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CharacterReputationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,9 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/phs/military-history', [MilitaryHistoryController::class, 'create'])->name('phs.military-history.create');
     Route::post('/phs/military-history', [MilitaryHistoryController::class, 'store'])->name('phs.military-history.store');
 
-    // PHS Routes - Places of Residence
-    Route::get('/phs/places-of-residence', [PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence.create');
-    Route::post('/phs/places-of-residence', [PlacesOfResidenceController::class, 'store'])->name('phs.places-of-residence.store');
+    // PHS Routes - Places of Residence Since Birth
+    Route::get('/phs/places-of-residence-since-birth', [PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence.create');
+    Route::post('/phs/places-of-residence-since-birth', [PlacesOfResidenceController::class, 'store'])->name('phs.places-of-residence.store');
 
     // PHS Routes - Employment History
     Route::get('/phs/employment-history', [EmploymentHistoryController::class, 'create'])->name('phs.employment-history.create');
@@ -105,9 +106,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'create'])->name('phs.personal-characteristics.create');
     Route::post('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'store'])->name('phs.personal-characteristics.store');
 
-    // PHS Routes - Family History
-    Route::get('/phs/family-history', [FamilyHistoryController::class, 'create'])->name('phs.family-history.create');
-    Route::post('/phs/family-history', [FamilyHistoryController::class, 'store'])->name('phs.family-history.store');
+    // PHS Routes - Family History (redirected to Family Background)
+    Route::get('/phs/family-history', [FamilyBackgroundController::class, 'create'])->name('phs.family-history.create');
+    Route::post('/phs/family-history', [FamilyBackgroundController::class, 'store'])->name('phs.family-history.store');
 
     // PHS Routes - Credit Reputation
     Route::get('/phs/credit-reputation', [CreditReputationController::class, 'create'])->name('phs.credit-reputation');
@@ -115,36 +116,111 @@ Route::middleware('auth')->group(function () {
 
     // PHS Routes - Arrest Record
     Route::get('/phs/arrest-record', function() { return view('phs.arrest-record'); })->name('phs.arrest-record');
-    Route::post('/phs/arrest-record', function(Request $request) { return redirect()->route('phs.employment-history')->with('success', 'Arrest record saved.'); })->name('phs.arrest-record.store');
+    Route::post('/phs/arrest-record', function(Request $request) { 
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'arrested' => 'nullable|in:yes,no',
+                'arrested_explanation' => 'nullable|string|max:1000',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'arrested' => 'required|in:yes,no',
+                'arrested_explanation' => 'required_if:arrested,yes|string|max:1000',
+            ]);
+        }
 
-    // PHS Routes - Employment History II
-    Route::get('/phs/employment-history-2', function() { return view('phs.employment-history'); })->name('phs.employment-history');
-    Route::post('/phs/employment-history-2', function(Request $request) { return redirect()->route('phs.organization')->with('success', 'Employment history II saved.'); })->name('phs.employment-history.store');
+        // Save arrest record data (you may need to create a model for this)
+        // For now, just mark as completed
+        session()->put('phs_sections.arrest-record', 'completed');
+        
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Arrest record information saved successfully']);
+        }
+        
+        return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record saved.'); 
+    })->name('phs.arrest-record.store');
 
     // PHS Routes - Organization
     Route::get('/phs/organization', function() { return view('phs.organization'); })->name('phs.organization');
-    Route::post('/phs/organization', function(Request $request) { return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); })->name('phs.organization.store');
+    Route::post('/phs/organization', function(Request $request) { 
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'organizations.*.name' => 'nullable|string|max:255',
+                'organizations.*.position' => 'nullable|string|max:255',
+                'organizations.*.years' => 'nullable|string|max:255',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'organizations.*.name' => 'required|string|max:255',
+                'organizations.*.position' => 'required|string|max:255',
+                'organizations.*.years' => 'required|string|max:255',
+            ]);
+        }
+
+        // Save organization data (you may need to create a model for this)
+        // For now, just mark as completed
+        session()->put('phs_sections.organization', 'completed');
+        
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
+        }
+        
+        return redirect()->route('phs.miscellaneous')->with('success', 'Organization saved.'); 
+    })->name('phs.organization.store');
+
+    // PHS Routes - Character and Reputation
+    Route::get('/phs/character-and-reputation', [CharacterReputationController::class, 'create'])->name('phs.character-and-reputation');
+    Route::post('/phs/character-and-reputation', [CharacterReputationController::class, 'store'])->name('phs.character-and-reputation.store');
 
     // PHS Routes - Miscellaneous
     Route::get('/phs/miscellaneous', function() {
-        $miscellaneous = Miscellaneous::where('username', Auth::user()->username)->first();
-        return view('phs.miscellaneous', ['miscellaneous' => $miscellaneous]);
+        $miscellaneous = Miscellaneous::where('username', Auth::user()->username)->where('misc_type', 'general-miscellaneous')->first();
+        return view('phs.miscellaneous-new', ['miscellaneous' => $miscellaneous]);
     })->name('phs.miscellaneous');
 
     Route::post('/phs/miscellaneous', function(Request $request) {
-        $validated = $request->validate([
-            'misc_type' => 'nullable|string|max:255',
-            'misc_details' => 'required|string',
-        ]);
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        // For save-only mode, use minimal validation
+        if ($isSaveOnly) {
+            $validated = $request->validate([
+                'misc_type' => 'nullable|string|max:255',
+                'misc_details' => 'nullable|string',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'misc_type' => 'nullable|string|max:255',
+                'misc_details' => 'required|string',
+            ]);
+        }
 
         Miscellaneous::updateOrCreate(
-            ['username' => Auth::user()->username],
+            ['username' => Auth::user()->username, 'misc_type' => 'general-miscellaneous'],
             $validated
         );
 
         session()->put('phs_sections.miscellaneous', 'completed');
         
-        return redirect()->route('phs.miscellaneous')->with('show_confirmation', true); 
+        // Return appropriate response based on mode
+        if ($isSaveOnly) {
+            return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
+        }
+        
+        return redirect()->route('client.dashboard')->with('success', 'Miscellaneous information saved successfully!');
     })->name('phs.miscellaneous.store');
 
     // Dashboard Route

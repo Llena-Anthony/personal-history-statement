@@ -783,6 +783,146 @@
     </div>
     
     <script>
+        // PHS Section Navigation Utility
+        const PHSSectionOrder = [
+            'personal-details',
+            'personal-characteristics', 
+            'marital-status',
+            'family-background',
+            'educational-background',
+            'military-history',
+            'places-of-residence',
+            'employment-history',
+            'foreign-countries',
+            'credit-reputation',
+            'arrest-record',
+            'character-and-reputation',
+            'organization',
+            'miscellaneous'
+        ];
+
+        const PHSSectionRoutes = {
+            'personal-details': '{{ route("phs.create") }}',
+            'personal-characteristics': '{{ route("phs.personal-characteristics.create") }}',
+            'marital-status': '{{ route("phs.marital-status.create") }}',
+            'family-background': '{{ route("phs.family-background.create") }}',
+            'educational-background': '{{ route("phs.educational-background") }}',
+            'military-history': '{{ route("phs.military-history.create") }}',
+            'places-of-residence': '{{ route("phs.places-of-residence.create") }}',
+            'employment-history': '{{ route("phs.employment-history.create") }}',
+            'foreign-countries': '{{ route("phs.foreign-countries.create") }}',
+            'credit-reputation': '{{ route("phs.credit-reputation") }}',
+            'arrest-record': '{{ route("phs.arrest-record") }}',
+            'character-and-reputation': '{{ route("phs.character-and-reputation") }}',
+            'organization': '{{ route("phs.organization") }}',
+            'miscellaneous': '{{ route("phs.miscellaneous") }}'
+        };
+
+        function getNextSection(currentSection) {
+            const currentIndex = PHSSectionOrder.indexOf(currentSection);
+            if (currentIndex === -1 || currentIndex === PHSSectionOrder.length - 1) {
+                return null; // No next section
+            }
+            return PHSSectionOrder[currentIndex + 1];
+        }
+
+        function getPreviousSection(currentSection) {
+            const currentIndex = PHSSectionOrder.indexOf(currentSection);
+            if (currentIndex <= 0) {
+                return null; // No previous section
+            }
+            return PHSSectionOrder[currentIndex - 1];
+        }
+
+        function getSectionRoute(sectionId) {
+            return PHSSectionRoutes[sectionId] || '#';
+        }
+
+        // Global function for dynamic navigation
+        window.navigateToNextSection = async function(currentSection) {
+            const nextSection = getNextSection(currentSection);
+            
+            if (!nextSection) {
+                return true;
+            }
+
+            const nextRoute = getSectionRoute(nextSection);
+            
+            if (nextRoute === '#') {
+                return false;
+            }
+
+            await saveCurrentSectionData(currentSection);
+
+            await window.phsNavigationInstance.loadContent(nextRoute, nextSection);
+            return false; // Prevent form submission
+        };
+
+        window.navigateToPreviousSection = async function(currentSection) {
+            const prevSection = getPreviousSection(currentSection);
+            if (!prevSection) {
+                // This is the first section, go to dashboard
+                window.location.href = '{{ route("client.dashboard") }}';
+                return false;
+            }
+
+            const prevRoute = getSectionRoute(prevSection);
+            if (prevRoute === '#') {
+                return false;
+            }
+
+            // Navigate to previous section
+            await window.phsNavigationInstance.loadContent(prevRoute, prevSection);
+            return false; // Prevent form submission
+        };
+
+        // Global function for handling form submission
+        window.handleFormSubmit = async function(event, currentSection) {
+            // Prevent default form submission
+            event.preventDefault();
+            
+            // Check if this is the last section (miscellaneous)
+            if (currentSection === 'miscellaneous') {
+                // For the last section, allow normal form submission with full validation
+                event.target.form.submit();
+                return;
+            }
+            
+            // For intermediate sections, use dynamic navigation
+            const shouldSubmit = await window.navigateToNextSection(currentSection);
+            
+            if (shouldSubmit) {
+                event.target.form.submit();
+            }
+        };
+
+        // Save current section data without validation
+        async function saveCurrentSectionData(sectionId) {
+            const form = document.querySelector('form');
+            if (!form) {
+                return;
+            }
+
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-Save-Only': 'true' // Custom header to indicate save-only mode
+                    }
+                });
+
+                if (response.ok) {
+                    // Mark section as visited
+                    window.phsNavigationInstance.markSectionAsVisited(sectionId);
+                }
+            } catch (error) {
+            }
+        }
+
         function phsNavigation(initialSection) {
             return {
                 sidebarOpen: false,
@@ -813,17 +953,17 @@
                         status: 'not-started'
                     },
                     {
-                        id: 'family-history',
-                        title: 'IV: Family History',
+                        id: 'family-background',
+                        title: 'IV: Family Background',
                         description: 'Extended family',
                         icon: 'fas fa-tree',
-                        route: '{{ route("phs.family-history.create") }}',
+                        route: '{{ route("phs.family-background.create") }}',
                         status: 'not-started'
                     },
                     {
                         id: 'educational-background',
                         title: 'V: Educational Background',
-                        description: 'Education history',
+                        description: 'Academic history',
                         icon: 'fas fa-graduation-cap',
                         route: '{{ route("phs.educational-background") }}',
                         status: 'not-started'
@@ -838,7 +978,7 @@
                     },
                     {
                         id: 'places-of-residence',
-                        title: 'VII: Places of Residence Since Birth',
+                        title: 'VII: Places of Residence',
                         description: 'Residential history',
                         icon: 'fas fa-home',
                         route: '{{ route("phs.places-of-residence.create") }}',
@@ -865,7 +1005,7 @@
                         title: 'X: Credit Reputation',
                         description: 'Credit standing',
                         icon: 'fas fa-credit-card',
-                        route: '#',
+                        route: '{{ route("phs.credit-reputation") }}',
                         status: 'not-started'
                     },
                     {
@@ -873,15 +1013,15 @@
                         title: 'XI: Arrest Record and Conduct',
                         description: 'Legal and conduct history',
                         icon: 'fas fa-gavel',
-                        route: '#',
+                        route: '{{ route("phs.arrest-record") }}',
                         status: 'not-started'
                     },
                     {
-                        id: 'employment-history-2',
+                        id: 'character-and-reputation',
                         title: 'XII: Character and Reputation',
                         description: 'Character and reputation information',
                         icon: 'fas fa-user-shield',
-                        route: '#',
+                        route: '{{ route("phs.character-and-reputation") }}',
                         status: 'not-started'
                     },
                     {
@@ -889,15 +1029,15 @@
                         title: 'XIII: Organization',
                         description: 'Memberships',
                         icon: 'fas fa-users-cog',
-                        route: '#',
+                        route: '{{ route("phs.organization") }}',
                         status: 'not-started'
                     },
                     {
                         id: 'miscellaneous',
                         title: 'XIV: Miscellaneous',
-                        description: 'Other information',
-                        icon: 'fas fa-ellipsis-h',
-                        route: '#',
+                        description: 'Additional information',
+                        icon: 'fas fa-puzzle-piece',
+                        route: '{{ route("phs.miscellaneous") }}',
                         status: 'not-started'
                     }
                 ],
@@ -935,7 +1075,6 @@
                     
                     // Check if route is available
                     if (section.route === '#') {
-                        console.log('Section not yet implemented:', section.title);
                         return;
                     }
                     
@@ -945,22 +1084,36 @@
                 
                 async loadContent(url, sectionId) {
                     const contentArea = document.getElementById('phsContent');
-                    
-                    // Fade out current content
-                    contentArea.style.opacity = '0';
-                    contentArea.style.transform = 'translateY(10px)';
-                    
+                    if (!contentArea) {
+                        window.location.href = url;
+                        return;
+                    }
+
                     try {
+                        // Update current section immediately and trigger Alpine.js reactivity
+                        this.currentSection = sectionId;
+                        
+                        // Force Alpine.js to update by dispatching a custom event
+                        window.dispatchEvent(new CustomEvent('phs-section-changed', { 
+                            detail: { sectionId: sectionId } 
+                        }));
+                        
+                        // Mark that this is not the initial load (prevents modal from showing)
+                        window.isInitialLoad = false;
+                        
+                        // Fade out current content
+                        contentArea.style.opacity = '0.5';
+                        contentArea.style.transform = 'translateY(10px)';
+                        
                         // Fetch new content
                         const response = await fetch(url, {
                             headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'text/html, application/xhtml+xml'
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
                         });
                         
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            throw new Error('Failed to load content');
                         }
                         
                         const html = await response.text();
@@ -1002,7 +1155,6 @@
                         }
                         
                     } catch (error) {
-                        console.error('Error loading content:', error);
                         // Fallback to regular navigation
                         window.location.href = url;
                     }
@@ -1043,19 +1195,37 @@
                         }
                     });
                     
+                    // Listen for section changes from AJAX navigation
+                    window.addEventListener('phs-section-changed', (event) => {
+                        if (event.detail && event.detail.sectionId) {
+                            this.currentSection = event.detail.sectionId;
+                            // Mark section as visited
+                            this.markSectionAsVisited(event.detail.sectionId);
+                        }
+                    });
+                    
                     // Mark current section as visited
                     this.markSectionAsVisited(this.currentSection);
                 }
             }
         }
         
-        // Show instructions on first load
+        // Initialize global navigation instance
+        window.phsNavigationInstance = phsNavigation('{{ $currentSection ?? 'personal-details' }}');
+        
+        // Initialize the navigation instance
         document.addEventListener('DOMContentLoaded', function() {
-            @if(Route::currentRouteName() === 'phs.create') // show only on personal-details
+            if (window.phsNavigationInstance) {
+                window.phsNavigationInstance.init();
+            }
+            
+            // Only show instructions on initial page load for personal-details
+            @if(Route::currentRouteName() === 'phs.create')
+                // Set a flag to indicate this is the initial load
+                window.isInitialLoad = true;
                 setTimeout(showInstructions, 500);
             @endif
         });
-
 
         // Update date and time
         function updateDateTime() {
@@ -1092,7 +1262,11 @@
 
         // Enhanced instructions modal functions
         function showInstructions() {
-            // Show instructions modal every time
+            // Only show instructions modal on initial page load
+            if (!window.isInitialLoad) {
+                return;
+            }
+            
             const instructionsModal = document.getElementById('instructionsModal');
             const instructionsModalContent = document.getElementById('instructionsModalContent');
             

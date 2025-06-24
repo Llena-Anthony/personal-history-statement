@@ -1,31 +1,9 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Miscellaneous')
+@section('title', 'Character and Reputation')
 
 @section('content')
-<div class="max-w-4xl mx-auto" x-data="confirmationModal()">
-
-    <!-- Confirmation Modal -->
-    <div x-show="showConfirmation" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm mx-auto text-center">
-            <!-- Initial Confirmation View -->
-            <div x-show="modalState === 'confirm'">
-                <h2 class="text-2xl font-bold mb-4 text-[#1B365D]">Confirmation</h2>
-                <p class="text-gray-700 mb-6">Please double-check all your entries before proceeding. Are you sure you want to finalize your submission?</p>
-                <div class="flex justify-center space-x-4">
-                    <button @click="showConfirmation = false" class="btn-secondary">Go Back & Review</button>
-                    <button @click="startCountdown" class="btn-primary">Confirm & Proceed</button>
-                </div>
-            </div>
-
-            <!-- Countdown View -->
-            <div x-show="modalState === 'countdown'">
-                <h2 class="text-2xl font-bold mb-4 text-green-600">Success!</h2>
-                <p class="text-gray-700 mb-6">Your Personal History Statement has been submitted. Thank you.</p>
-                <p class="text-gray-500">Redirecting to your dashboard in <strong x-text="countdown">5</strong> seconds...</p>
-            </div>
-        </div>
-    </div>
+<div class="max-w-4xl mx-auto">
 
     <!-- Header -->
     <div class="mb-8">
@@ -40,7 +18,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10">
+    <form method="POST" action="{{ route('phs.character-and-reputation.store') }}" class="space-y-10">
         @csrf
         
         <!-- Questions -->
@@ -58,34 +36,14 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="#" class="btn-secondary">
+            <button type="button" onclick="window.navigateToPreviousSection('miscellaneous')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </a>
+            </button>
             <button type="submit" class="btn-primary">
-                Save & Finish <i class="fas fa-check ml-2"></i>
+                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>
 </div>
-
-<script>
-    function confirmationModal() {
-        return {
-            showConfirmation: {{ session('show_confirmation', 'false') }},
-            modalState: 'confirm', // 'confirm' or 'countdown'
-            countdown: 5,
-            startCountdown() {
-                this.modalState = 'countdown';
-                const interval = setInterval(() => {
-                    this.countdown--;
-                    if (this.countdown <= 0) {
-                        clearInterval(interval);
-                        window.location.href = "{{ route('client.dashboard') }}";
-                    }
-                }, 1000);
-            }
-        }
-    }
-</script>
 @endsection
 @php($currentSection = 'miscellaneous') 

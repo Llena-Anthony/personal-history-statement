@@ -19,6 +19,7 @@ class PersonalCharacteristic extends Model
         'complexion',
         'blood_type',
         'hair_color',
+        'eye_color',
         'distinguishing_features',
         'health_status',
         'recent_illness',

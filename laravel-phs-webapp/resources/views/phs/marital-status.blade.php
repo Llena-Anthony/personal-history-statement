@@ -1,6 +1,6 @@
 @extends('layouts.phs-new')
 
-@section('title', 'Marital Status')
+@section('title', 'III: Marital Status')
 
 @section('content')
 <div class="max-w-4xl mx-auto">
@@ -54,7 +54,6 @@
             </h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Spouse Name -->
                 <div>
                     <label for="spouse_first_name" class="block text-sm font-medium text-gray-700 mb-2">
                         First Name *
@@ -63,7 +62,6 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter first name">
                 </div>
-
                 <div>
                     <label for="spouse_middle_name" class="block text-sm font-medium text-gray-700 mb-2">
                         Middle Name
@@ -72,7 +70,6 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter middle name">
                 </div>
-
                 <div>
                     <label for="spouse_last_name" class="block text-sm font-medium text-gray-700 mb-2">
                         Last Name *
@@ -81,7 +78,6 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter last name">
                 </div>
-
                 <div>
                     <label for="spouse_suffix" class="block text-sm font-medium text-gray-700 mb-2">
                         Suffix
@@ -93,7 +89,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Marriage Details -->
                 <div>
                     <label for="marriage_date" class="block text-sm font-medium text-gray-700 mb-2">
                         Date of Marriage *
@@ -101,7 +96,6 @@
                     <input type="date" name="marriage_date" id="marriage_date"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                 </div>
-
                 <div>
                     <label for="marriage_place" class="block text-sm font-medium text-gray-700 mb-2">
                         Place of Marriage *
@@ -113,7 +107,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Spouse Birth Details -->
                 <div>
                     <label for="spouse_birth_date" class="block text-sm font-medium text-gray-700 mb-2">
                         Spouse's Date of Birth *
@@ -121,7 +114,6 @@
                     <input type="date" name="spouse_birth_date" id="spouse_birth_date"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                 </div>
-
                 <div>
                     <label for="spouse_birth_place" class="block text-sm font-medium text-gray-700 mb-2">
                         Spouse's Place of Birth *
@@ -132,8 +124,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Spouse Employment -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 <div>
                     <label for="spouse_occupation" class="block text-sm font-medium text-gray-700 mb-2">
                         Spouse's Occupation
@@ -142,7 +133,6 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter occupation">
                 </div>
-
                 <div>
                     <label for="spouse_employer" class="block text-sm font-medium text-gray-700 mb-2">
                         Spouse's Employer
@@ -151,10 +141,17 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter employer">
                 </div>
+                <div>
+                    <label for="spouse_employment_place" class="block text-sm font-medium text-gray-700 mb-2">
+                        Place of Employment
+                    </label>
+                    <input type="text" name="spouse_employment_place" id="spouse_employment_place"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter place of employment">
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Spouse Contact -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                 <div>
                     <label for="spouse_contact" class="block text-sm font-medium text-gray-700 mb-2">
                         Spouse's Contact Number
@@ -163,7 +160,6 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter contact number">
                 </div>
-
                 <div>
                     <label for="spouse_citizenship" class="block text-sm font-medium text-gray-700 mb-2">
                         Spouse's Citizenship *
@@ -171,6 +167,14 @@
                     <input type="text" name="spouse_citizenship" id="spouse_citizenship"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter citizenship">
+                </div>
+                <div>
+                    <label for="spouse_other_citizenship" class="block text-sm font-medium text-gray-700 mb-2">
+                        Other Citizenship
+                    </label>
+                    <input type="text" name="spouse_other_citizenship" id="spouse_other_citizenship"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Enter other citizenship">
                 </div>
             </div>
         </div>
@@ -183,17 +187,44 @@
             </h3>
             
             <div id="children-container" class="space-y-4">
-                <div class="child-entry grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-lg">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
-                        <input type="text" name="children[0][name]" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                               placeholder="Enter child's name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                        <input type="date" name="children[0][birth_date]" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                <!-- Initial child entry (default, not removable) -->
+                <div class="child-entry p-4 border border-gray-200 rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                            <input type="text" name="children[0][name]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter child's name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                            <input type="date" name="children[0][birth_date]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
+                            <input type="text" name="children[0][citizenship]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter citizenship">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                            <input type="text" name="children[0][address]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father</label>
+                            <input type="text" name="children[0][father_name]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter father's name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name of Mother</label>
+                            <input type="text" name="children[0][mother_name]" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                   placeholder="Enter mother's name">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,14 +236,11 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.educational-background') }}" 
-               class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+            <button type="button" onclick="window.navigateToPreviousSection('marital-status')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Previous Section
-            </a>
-            
-            <button type="submit" 
-                    class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+            </button>
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'marital-status')">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>
@@ -232,45 +260,91 @@
         }));
     });
 
-    // Marital status change handler
-    document.getElementById('marital_status').addEventListener('change', function() {
+    // Handle marital status changes to show/hide spouse and children sections
+    document.addEventListener('DOMContentLoaded', () => {
+        const maritalStatusSelect = document.getElementById('marital_status');
         const spouseSection = document.getElementById('spouse-section');
         const childrenSection = document.getElementById('children-section');
-        
-        if (this.value === 'Married') {
-            spouseSection.classList.remove('hidden');
-            childrenSection.classList.remove('hidden');
-        } else if (this.value === 'Single') {
-            spouseSection.classList.add('hidden');
-            childrenSection.classList.add('hidden');
-        } else {
-            // For Widowed, Separated - show children section but hide spouse
-            spouseSection.classList.add('hidden');
-            childrenSection.classList.remove('hidden');
-        }
+
+        const toggleSections = () => {
+            const status = maritalStatusSelect.value;
+            
+            // Show spouse section only if married
+            if (status === 'Married') {
+                spouseSection.classList.remove('hidden');
+            } else {
+                spouseSection.classList.add('hidden');
+            }
+
+            // Show children section for any status except the default empty one
+            if (status) {
+                childrenSection.classList.remove('hidden');
+            } else {
+                childrenSection.classList.add('hidden');
+            }
+        };
+
+        maritalStatusSelect.addEventListener('change', toggleSections);
+        toggleSections(); // Initial check
     });
 
-    // Add child functionality
-    let childCount = 1;
-    document.getElementById('add-child').addEventListener('click', function() {
+    // Dynamic child entry management
+    document.getElementById('add-child').addEventListener('click', () => {
         const container = document.getElementById('children-container');
-        const newChild = document.createElement('div');
-        newChild.className = 'child-entry grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-gray-200 rounded-lg';
-        newChild.innerHTML = `
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
-                <input type="text" name="children[${childCount}][name]" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                       placeholder="Enter child's name">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                <input type="date" name="children[${childCount}][birth_date]" 
-                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+        const index = container.children.length;
+
+        const newChildEntry = `
+            <div class="child-entry p-4 border border-gray-200 rounded-lg mt-4 relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                        <input type="text" name="children[${index}][name]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter child's name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        <input type="date" name="children[${index}][birth_date]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
+                        <input type="text" name="children[${index}][citizenship]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter citizenship">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <input type="text" name="children[${index}][address]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter address">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father</label>
+                        <input type="text" name="children[${index}][father_name]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter father's name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name of Mother</label>
+                        <input type="text" name="children[${index}][mother_name]" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter mother's name">
+                    </div>
+                </div>
+                <button type="button" class="remove-child absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                    <i class="fas fa-times-circle"></i>
+                </button>
             </div>
         `;
-        container.appendChild(newChild);
-        childCount++;
+        container.insertAdjacentHTML('beforeend', newChildEntry);
+    });
+
+    // Remove child entry
+    document.getElementById('children-container').addEventListener('click', (e) => {
+        if (e.target.closest('.remove-child')) {
+            e.target.closest('.child-entry').remove();
+        }
     });
 </script>
 @endsection 

@@ -12,9 +12,7 @@ class MaritalStatus extends Model
     protected $fillable = [
         'user_id',
         'marital_status',
-        'spouse_first_name',
-        'spouse_middle_name',
-        'spouse_last_name',
+        'spouse_name_id',
         'spouse_suffix',
         'marriage_date',
         'marriage_place',
@@ -38,8 +36,8 @@ class MaritalStatus extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function children()
+    public function spouseName()
     {
-        return $this->hasMany(Child::class);
+        return $this->belongsTo(NameDetails::class, 'spouse_name_id');
     }
 } 

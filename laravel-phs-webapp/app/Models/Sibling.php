@@ -5,29 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Child extends Model
+class Sibling extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'marital_status_id',
+        'family_background_id',
         'name_id',
-        'birth_date',
-        'citizenship_address',
-        'parent_name',
+        'date_of_birth',
         'citizenship',
-        'address',
-        'father_name',
-        'mother_name',
+        'dual_citizenship',
+        'complete_address',
+        'occupation',
+        'employer',
+        'employer_address',
     ];
 
     protected $casts = [
-        'birth_date' => 'date',
+        'date_of_birth' => 'date',
     ];
 
-    public function maritalStatus()
+    public function familyBackground()
     {
-        return $this->belongsTo(MaritalStatus::class);
+        return $this->belongsTo(FamilyBackground::class);
     }
 
     public function name()

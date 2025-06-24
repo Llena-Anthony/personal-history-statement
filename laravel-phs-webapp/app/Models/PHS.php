@@ -11,9 +11,7 @@ class PHS extends Model
 
     protected $fillable = [
         'user_id',
-        'first_name',
-        'middle_name',
-        'last_name',
+        'name_id',
         'suffix',
         'date_of_birth',
         'place_of_birth',
@@ -60,5 +58,10 @@ class PHS extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function name()
+    {
+        return $this->belongsTo(NameDetails::class, 'name_id');
     }
 } 
