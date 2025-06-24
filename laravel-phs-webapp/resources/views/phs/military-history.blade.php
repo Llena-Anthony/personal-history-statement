@@ -15,179 +15,268 @@
             </div>
         </div>
     </div>
+
     <form method="POST" action="{{ route('phs.military-history.store') }}" class="space-y-8">
         @csrf
+        
         <!-- Basic Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 class="text-lg font-semibold text-[#1B365D] mb-4">Basic Information</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-info-circle mr-3 text-[#D4AF37]"></i>
+                Basic Military Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Date of Enlistment in the AFP</label>
                     <input type="date" name="enlistment_date" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Date of Commission</label>
-                    <input type="date" name="commission_date" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Source of Commission</label>
+                    <input type="text" name="commission_source" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter source of commission">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Source of Commission</label>
-                    <select name="commission_source" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                        <option value="">Select Source</option>
-                        <option value="PMA">PMA</option>
-                        <option value="ROTC">ROTC</option>
-                        <option value="OCC">OCC</option>
-                        <option value="Other">Other</option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date of Commission (From)</label>
+                    <input type="date" name="commission_date_from" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date of Commission (To)</label>
+                    <input type="date" name="commission_date_to" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                 </div>
             </div>
         </div>
-        <!-- Important Unit Assignments -->
+
+        <!-- Unit Assignments -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-[#1B365D]">Important Unit Assignment since enlisted / CAD</h3>
-                <button type="button" id="addAssignment" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Add Assignment
-                </button>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-[#1B365D] flex items-center">
+                    <i class="fas fa-map-marker-alt mr-3 text-[#D4AF37]"></i>
+                    Important Unit Assignments since enlisted/CAD
+                </h3>
             </div>
-            <div id="assignments" class="space-y-4">
-                <div class="assignment-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div id="assignments-container" class="space-y-4">
+                <!-- Initial assignment entry (default, not removable) -->
+                <div class="assignment-entry p-4 border border-gray-200 rounded-lg" data-index="0">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Unit/Assignment</label>
-                            <input type="text" name="assignments[0][unit]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Designation</label>
-                            <input type="text" name="assignments[0][designation]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
                             <input type="date" name="assignments[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
                             <input type="date" name="assignments[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Unit/Office</label>
+                            <input type="text" name="assignments[0][unit_office]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter unit or office">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">CO/Chief of Office</label>
+                            <input type="text" name="assignments[0][co_chief]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter CO or Chief of Office">
+                        </div>
                     </div>
                 </div>
             </div>
+            <button type="button" id="add-assignment" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                <i class="fas fa-plus mr-1"></i> Add Another Assignment
+            </button>
         </div>
-        <!-- Military Schools Attended -->
+
+        <!-- Military Schools -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-[#1B365D]">Military Schools Attended</h3>
-                <button type="button" id="addSchool" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Add School
-                </button>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-[#1B365D] flex items-center">
+                    <i class="fas fa-graduation-cap mr-3 text-[#D4AF37]"></i>
+                    Military Schools Attended
+                </h3>
             </div>
-            <div id="schools" class="space-y-4">
-                <div class="school-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div id="schools-container" class="space-y-4">
+                <!-- Initial school entry (default, not removable) -->
+                <div class="school-entry p-4 border border-gray-200 rounded-lg" data-index="0">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">School Name</label>
-                            <input type="text" name="schools[0][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">School</label>
+                            <input type="text" name="schools[0][school]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter school name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" name="schools[0][location]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter school location">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Attendance</label>
-                            <input type="date" name="schools[0][date]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <input type="number" name="schools[0][date_attended]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="YYYY" min="1900" max="2030">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nature of Training</label>
-                            <input type="text" name="schools[0][training]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <input type="text" name="schools[0][nature_training]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter nature of training">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
-                            <input type="text" name="schools[0][rating]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <input type="text" name="schools[0][rating]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter rating">
                         </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
                     </div>
                 </div>
             </div>
+            <button type="button" id="add-school" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                <i class="fas fa-plus mr-1"></i> Add Another School
+            </button>
         </div>
-        <!-- Decorations and Awards -->
+
+        <!-- Awards -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-[#1B365D]">Decorations, Awards, or Commendations Received</h3>
-                <button type="button" id="addAward" class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Add Award
-                </button>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-[#1B365D] flex items-center">
+                    <i class="fas fa-medal mr-3 text-[#D4AF37]"></i>
+                    Decorations, Awards, or Commendations Received
+                </h3>
             </div>
-            <div id="awards" class="space-y-4">
-                <div class="award-entry p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div id="awards-container" class="space-y-4">
+                <!-- Initial award entry (default, not removable) -->
+                <div class="award-entry p-4 border border-gray-200 rounded-lg" data-index="0">
                     <div class="grid grid-cols-1 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Award/Decoration</label>
-                            <input type="text" name="awards[0][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <input type="text" name="awards[0][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter award or decoration name">
                         </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button type="button" class="remove-btn text-red-500 hover:text-red-700 font-semibold">Remove</button>
                     </div>
                 </div>
             </div>
+            <button type="button" id="add-award" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                <i class="fas fa-plus mr-1"></i> Add Another Award
+            </button>
         </div>
+
         <!-- Navigation Buttons -->
-        <div class="flex justify-between pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('military-history')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+            <button type="button" onclick="window.navigateToPreviousSection('military-history')" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </button>
-            <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all" onclick="handleFormSubmit(event, 'military-history')">
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'military-history')">
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>
 </div>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        function setupDynamicFields(containerId, addButtonId, entryClass, allowRemoveLast = false) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
+    document.addEventListener('DOMContentLoaded', () => {
+        // Unit Assignments functionality
+        const assignmentsContainer = document.getElementById('assignments-container');
+        const addAssignmentBtn = document.getElementById('add-assignment');
 
-            const addButton = document.getElementById(addButtonId);
-            if (!addButton) return;
-            
-            const templateEntry = container.querySelector('.' + entryClass);
-            if (!templateEntry) return;
-            
-            const template = templateEntry.cloneNode(true);
-            let index = container.querySelectorAll('.' + entryClass).length;
+        addAssignmentBtn.addEventListener('click', () => {
+            const entries = assignmentsContainer.querySelectorAll('.assignment-entry');
+            const idx = entries.length;
+            const assignmentEntry = document.createElement('div');
+            assignmentEntry.className = 'assignment-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+            assignmentEntry.setAttribute('data-index', idx);
+            assignmentEntry.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
+                        <input type="date" name="assignments[${idx}][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
+                        <input type="date" name="assignments[${idx}][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Unit/Office</label>
+                        <input type="text" name="assignments[${idx}][unit_office]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter unit or office">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">CO/Chief of Office</label>
+                        <input type="text" name="assignments[${idx}][co_chief]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter CO or Chief of Office">
+                    </div>
+                </div>
+                <button type="button" class="remove-assignment absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+            `;
+            assignmentsContainer.appendChild(assignmentEntry);
+        });
 
-            container.addEventListener('click', function(e) {
-                const removeBtn = e.target.closest('.remove-btn');
-                if (removeBtn) {
-                    const entry = removeBtn.closest('.' + entryClass);
-                    if (entry) {
-                        if (container.querySelectorAll('.' + entryClass).length > 1 || allowRemoveLast) {
-                            entry.remove();
-                        }
+        assignmentsContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-assignment')) {
+                const entries = assignmentsContainer.querySelectorAll('.assignment-entry');
+                if (entries.length > 1) {
+                    e.target.closest('.assignment-entry').remove();
+                }
+            }
+        });
+
+        // Military Schools functionality
+        const schoolsContainer = document.getElementById('schools-container');
+        const addSchoolBtn = document.getElementById('add-school');
+
+        addSchoolBtn.addEventListener('click', () => {
+            const entries = schoolsContainer.querySelectorAll('.school-entry');
+            const idx = entries.length;
+            const schoolEntry = document.createElement('div');
+            schoolEntry.className = 'school-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+            schoolEntry.setAttribute('data-index', idx);
+            schoolEntry.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">School</label>
+                        <input type="text" name="schools[${idx}][school]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter school name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <input type="text" name="schools[${idx}][location]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter school location">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Attendance</label>
+                        <input type="number" name="schools[${idx}][date_attended]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="YYYY" min="1900" max="2030">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nature of Training</label>
+                        <input type="text" name="schools[${idx}][nature_training]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter nature of training">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <input type="text" name="schools[${idx}][rating]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter rating">
+                    </div>
+                </div>
+                <button type="button" class="remove-school absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+            `;
+            schoolsContainer.appendChild(schoolEntry);
+        });
+
+        schoolsContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-school')) {
+                const entries = schoolsContainer.querySelectorAll('.school-entry');
+                if (entries.length > 1) {
+                    e.target.closest('.school-entry').remove();
                     }
                 }
             });
 
-            addButton.addEventListener('click', function () {
-                const newEntry = template.cloneNode(true);
-                newEntry.querySelectorAll('input, select').forEach(input => {
-                    const name = input.getAttribute('name');
-                    if (name) {
-                        input.setAttribute('name', name.replace(/\[\d+\]/, '[' + index + ']'));
-                    }
-                    input.value = ''; // Clear the value of new inputs
-                });
-                
-                container.appendChild(newEntry);
-                index++;
-            });
-        }
+        // Awards functionality
+        const awardsContainer = document.getElementById('awards-container');
+        const addAwardBtn = document.getElementById('add-award');
 
-        // Allow removing the last assignment, school, and award
-        setupDynamicFields('assignments', 'addAssignment', 'assignment-entry', true);
-        setupDynamicFields('schools', 'addSchool', 'school-entry', true);
-        setupDynamicFields('awards', 'addAward', 'award-entry', true);
+        addAwardBtn.addEventListener('click', () => {
+            const entries = awardsContainer.querySelectorAll('.award-entry');
+            const idx = entries.length;
+            const awardEntry = document.createElement('div');
+            awardEntry.className = 'award-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+            awardEntry.setAttribute('data-index', idx);
+            awardEntry.innerHTML = `
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <input type="text" name="awards[${idx}][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter award or decoration name">
+                    </div>
+                </div>
+                <button type="button" class="remove-award absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+            `;
+            awardsContainer.appendChild(awardEntry);
+        });
+
+        awardsContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-award')) {
+                const entries = awardsContainer.querySelectorAll('.award-entry');
+                if (entries.length > 1) {
+                    e.target.closest('.award-entry').remove();
+                }
+            }
+        });
     });
 </script>
 @endsection
