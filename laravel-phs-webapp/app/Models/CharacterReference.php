@@ -12,7 +12,7 @@ class CharacterReference extends Model
 
     protected $fillable = [
         'username',
-        'ref_name',
+        'ref_name_id',
         'ref_occupation',
         'ref_employer',
         'ref_address',
@@ -28,5 +28,10 @@ class CharacterReference extends Model
     public function address()
     {
         return $this->belongsTo(AddressDetails::class, 'ref_address', 'addr_id');
+    }
+
+    public function refName()
+    {
+        return $this->belongsTo(NameDetails::class, 'ref_name_id');
     }
 } 

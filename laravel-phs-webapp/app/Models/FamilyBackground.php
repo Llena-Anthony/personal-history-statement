@@ -11,9 +11,14 @@ class FamilyBackground extends Model
 
     protected $fillable = [
         'user_id',
-        'spouse_first_name',
-        'spouse_middle_name',
-        'spouse_last_name',
+        // Name foreign keys
+        'spouse_name_id',
+        'father_name_id',
+        'mother_name_id',
+        'step_parent_guardian_name_id',
+        'father_in_law_name_id',
+        'mother_in_law_name_id',
+        // Spouse details (non-name fields)
         'spouse_suffix',
         'spouse_birth_date',
         'spouse_birth_place',
@@ -25,9 +30,7 @@ class FamilyBackground extends Model
         'spouse_naturalized_details',
         'spouse_business_address',
         'spouse_telephone',
-        'father_first_name',
-        'father_middle_name',
-        'father_last_name',
+        // Father details (non-name fields)
         'father_suffix',
         'father_birth_date',
         'father_birth_place',
@@ -38,9 +41,7 @@ class FamilyBackground extends Model
         'father_other_citizenship',
         'father_naturalized_details',
         'father_complete_address',
-        'mother_first_name',
-        'mother_middle_name',
-        'mother_last_name',
+        // Mother details (non-name fields)
         'mother_suffix',
         'mother_birth_date',
         'mother_birth_place',
@@ -51,10 +52,7 @@ class FamilyBackground extends Model
         'mother_other_citizenship',
         'mother_naturalized_details',
         'mother_complete_address',
-        // Step-parent or Guardian
-        'step_parent_guardian_first_name',
-        'step_parent_guardian_middle_name',
-        'step_parent_guardian_last_name',
+        // Step-parent or Guardian details (non-name fields)
         'step_parent_guardian_suffix',
         'step_parent_guardian_birth_date',
         'step_parent_guardian_birth_place',
@@ -65,10 +63,7 @@ class FamilyBackground extends Model
         'step_parent_guardian_other_citizenship',
         'step_parent_guardian_naturalized_details',
         'step_parent_guardian_complete_address',
-        // Father-in-law
-        'father_in_law_first_name',
-        'father_in_law_middle_name',
-        'father_in_law_last_name',
+        // Father-in-law details (non-name fields)
         'father_in_law_suffix',
         'father_in_law_birth_date',
         'father_in_law_birth_place',
@@ -79,10 +74,7 @@ class FamilyBackground extends Model
         'father_in_law_other_citizenship',
         'father_in_law_naturalized_details',
         'father_in_law_complete_address',
-        // Mother-in-law
-        'mother_in_law_first_name',
-        'mother_in_law_middle_name',
-        'mother_in_law_last_name',
+        // Mother-in-law details (non-name fields)
         'mother_in_law_suffix',
         'mother_in_law_birth_date',
         'mother_in_law_birth_place',
@@ -108,5 +100,36 @@ class FamilyBackground extends Model
     public function siblings()
     {
         return $this->hasMany(Sibling::class);
+    }
+
+    // Name relationships
+    public function spouseName()
+    {
+        return $this->belongsTo(NameDetails::class, 'spouse_name_id');
+    }
+
+    public function fatherName()
+    {
+        return $this->belongsTo(NameDetails::class, 'father_name_id');
+    }
+
+    public function motherName()
+    {
+        return $this->belongsTo(NameDetails::class, 'mother_name_id');
+    }
+
+    public function stepParentGuardianName()
+    {
+        return $this->belongsTo(NameDetails::class, 'step_parent_guardian_name_id');
+    }
+
+    public function fatherInLawName()
+    {
+        return $this->belongsTo(NameDetails::class, 'father_in_law_name_id');
+    }
+
+    public function motherInLawName()
+    {
+        return $this->belongsTo(NameDetails::class, 'mother_in_law_name_id');
     }
 } 

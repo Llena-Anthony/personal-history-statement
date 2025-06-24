@@ -10,9 +10,11 @@ class Child extends Model
     use HasFactory;
 
     protected $fillable = [
-        'family_background_id',
-        'full_name',
-        'date_of_birth',
+        'marital_status_id',
+        'name_id',
+        'birth_date',
+        'citizenship_address',
+        'parent_name',
         'citizenship',
         'address',
         'father_name',
@@ -20,11 +22,16 @@ class Child extends Model
     ];
 
     protected $casts = [
-        'date_of_birth' => 'date',
+        'birth_date' => 'date',
     ];
 
-    public function familyBackground()
+    public function maritalStatus()
     {
-        return $this->belongsTo(FamilyBackground::class);
+        return $this->belongsTo(MaritalStatus::class);
+    }
+
+    public function name()
+    {
+        return $this->belongsTo(NameDetails::class, 'name_id');
     }
 } 

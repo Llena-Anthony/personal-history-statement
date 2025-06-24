@@ -11,14 +11,27 @@ class Sibling extends Model
 
     protected $fillable = [
         'family_background_id',
-        'full_name',
+        'name_id',
+        'date_of_birth',
+        'citizenship',
+        'dual_citizenship',
+        'complete_address',
         'occupation',
-        'address',
-        'contact',
+        'employer',
+        'employer_address',
+    ];
+
+    protected $casts = [
+        'date_of_birth' => 'date',
     ];
 
     public function familyBackground()
     {
         return $this->belongsTo(FamilyBackground::class);
+    }
+
+    public function name()
+    {
+        return $this->belongsTo(NameDetails::class, 'name_id');
     }
 } 

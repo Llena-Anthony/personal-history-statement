@@ -8,6 +8,7 @@ use App\Models\Child;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Traits\PHSSectionTracking;
+use App\Services\NameService;
 
 class MaritalStatusController extends Controller
 {
@@ -84,69 +85,53 @@ class MaritalStatusController extends Controller
             ]);
         }
 
+        // Capitalize spouse name
+        foreach (['spouse_first_name', 'spouse_middle_name', 'spouse_last_name'] as $part) {
+            if (isset($validated[$part]) && $validated[$part]) {
+                $validated[$part] = ucwords(strtolower($validated[$part]));
+            }
+        }
+
         try {
             DB::beginTransaction();
 
-            // Check if marital status already exists for this user
+            // Create or find NameDetails for spouse
+            $spouseName = NameService::createOrFindName(
+                $validated['spouse_first_name'] ?? null,
+                $validated['spouse_last_name'] ?? null,
+                $validated['spouse_middle_name'] ?? null,
+                null,
+                $validated['spouse_suffix'] ?? null
+            );
+            $maritalData = $validated;
+            unset($maritalData['spouse_first_name'], $maritalData['spouse_middle_name'], $maritalData['spouse_last_name']);
+            $maritalData['spouse_name_id'] = $spouseName ? $spouseName->name_id : null;
+            $maritalData['user_id'] = auth()->id();
             $maritalStatus = MaritalStatus::where('user_id', auth()->id())->first();
-            
             if ($maritalStatus) {
-                // Update existing marital status
-                $maritalStatus->update([
-                    'marital_status' => $validated['marital_status'],
-                    'spouse_first_name' => $validated['spouse_first_name'] ?? null,
-                    'spouse_middle_name' => $validated['spouse_middle_name'] ?? null,
-                    'spouse_last_name' => $validated['spouse_last_name'] ?? null,
-                    'spouse_suffix' => $validated['spouse_suffix'] ?? null,
-                    'marriage_date' => $validated['marriage_date'] ?? null,
-                    'marriage_place' => $validated['marriage_place'] ?? null,
-                    'spouse_birth_date' => $validated['spouse_birth_date'] ?? null,
-                    'spouse_birth_place' => $validated['spouse_birth_place'] ?? null,
-                    'spouse_occupation' => $validated['spouse_occupation'] ?? null,
-                    'spouse_employer' => $validated['spouse_employer'] ?? null,
-                    'spouse_employment_place' => $validated['spouse_employment_place'] ?? null,
-                    'spouse_contact' => $validated['spouse_contact'] ?? null,
-                    'spouse_citizenship' => $validated['spouse_citizenship'] ?? null,
-                    'spouse_other_citizenship' => $validated['spouse_other_citizenship'] ?? null,
-                ]);
+                $maritalStatus->update($maritalData);
             } else {
-                // Create new marital status
-                $maritalStatus = MaritalStatus::create([
-                    'user_id' => auth()->id(),
-                    'marital_status' => $validated['marital_status'],
-                    'spouse_first_name' => $validated['spouse_first_name'] ?? null,
-                    'spouse_middle_name' => $validated['spouse_middle_name'] ?? null,
-                    'spouse_last_name' => $validated['spouse_last_name'] ?? null,
-                    'spouse_suffix' => $validated['spouse_suffix'] ?? null,
-                    'marriage_date' => $validated['marriage_date'] ?? null,
-                    'marriage_place' => $validated['marriage_place'] ?? null,
-                    'spouse_birth_date' => $validated['spouse_birth_date'] ?? null,
-                    'spouse_birth_place' => $validated['spouse_birth_place'] ?? null,
-                    'spouse_occupation' => $validated['spouse_occupation'] ?? null,
-                    'spouse_employer' => $validated['spouse_employer'] ?? null,
-                    'spouse_employment_place' => $validated['spouse_employment_place'] ?? null,
-                    'spouse_contact' => $validated['spouse_contact'] ?? null,
-                    'spouse_citizenship' => $validated['spouse_citizenship'] ?? null,
-                    'spouse_other_citizenship' => $validated['spouse_other_citizenship'] ?? null,
-                ]);
+                $maritalStatus = MaritalStatus::create($maritalData);
             }
 
             if (isset($validated['children'])) {
-                // Get or create family background for children
                 $familyBackground = FamilyBackground::firstOrCreate(
                     ['user_id' => auth()->id()],
                     ['user_id' => auth()->id()]
                 );
-                
-                // Delete existing children and recreate
                 $familyBackground->children()->delete();
-                
                 foreach ($validated['children'] as $childData) {
                     if (!empty($childData['name'])) {
+                        $childNameParts = NameService::parseFullName($childData['name']);
+                        $childName = NameService::createOrFindName(
+                            $childNameParts['first_name'],
+                            $childNameParts['last_name'],
+                            $childNameParts['middle_name']
+                        );
                         $familyBackground->children()->create([
-                            'full_name' => $childData['name'],
-                            'date_of_birth' => $childData['birth_date'],
-                            'citizenship' => $childData['citizenship'] ?? null,
+                            'name_id' => $childName ? $childName->name_id : null,
+                            'birth_date' => $childData['birth_date'],
+                            'citizenship_address' => $childData['citizenship'] ?? null,
                             'address' => $childData['address'] ?? null,
                             'father_name' => $childData['father_name'] ?? null,
                             'mother_name' => $childData['mother_name'] ?? null,
