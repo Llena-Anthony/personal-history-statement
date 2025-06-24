@@ -21,6 +21,7 @@ use App\Http\Controllers\PrintController;
 use App\Http\Controllers\CreditReputationController;
 use App\Models\Miscellaneous;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CharacterReputationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -180,43 +181,8 @@ Route::middleware('auth')->group(function () {
     })->name('phs.organization.store');
 
     // PHS Routes - Character and Reputation
-    Route::get('/phs/character-and-reputation', function() {
-        $miscellaneous = Miscellaneous::where('username', Auth::user()->username)->where('misc_type', 'character-reputation')->first();
-        return view('phs.character-reputation', ['miscellaneous' => $miscellaneous]);
-    })->name('phs.character-and-reputation');
-
-    Route::post('/phs/character-and-reputation', function(Request $request) {
-        // Check if this is a save-only request (for dynamic navigation)
-        $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
-        // For save-only mode, use minimal validation
-        if ($isSaveOnly) {
-            $validated = $request->validate([
-                'misc_type' => 'nullable|string|max:255',
-                'misc_details' => 'nullable|string',
-            ]);
-        } else {
-            // Full validation for final submission
-            $validated = $request->validate([
-                'misc_type' => 'nullable|string|max:255',
-                'misc_details' => 'required|string',
-            ]);
-        }
-
-        Miscellaneous::updateOrCreate(
-            ['username' => Auth::user()->username, 'misc_type' => 'character-reputation'],
-            $validated
-        );
-
-        session()->put('phs_sections.character-reputation', 'completed');
-        
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Character and reputation information saved successfully']);
-        }
-        
-        return redirect()->route('phs.organization')->with('success', 'Character and reputation information saved successfully!'); 
-    })->name('phs.character-and-reputation.store');
+    Route::get('/phs/character-and-reputation', [CharacterReputationController::class, 'create'])->name('phs.character-and-reputation');
+    Route::post('/phs/character-and-reputation', [CharacterReputationController::class, 'store'])->name('phs.character-and-reputation.store');
 
     // PHS Routes - Miscellaneous
     Route::get('/phs/miscellaneous', function() {

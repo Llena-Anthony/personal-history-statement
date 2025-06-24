@@ -12,7 +12,7 @@ class CharacterReference extends Model
 
     protected $fillable = [
         'username',
-        'ref_name_id',
+        'ref_name',
         'ref_occupation',
         'ref_employer',
         'ref_address',

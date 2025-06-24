@@ -44,7 +44,7 @@
             </div>
         </div>
         <div class="flex justify-between pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('organization')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+            <button type="button" onclick="window.navigateToPreviousSection('organization')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </button>
             <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all" onclick="handleFormSubmit(event, 'organization')">
@@ -55,3 +55,35 @@
 </div>
 @endsection
 @php($currentSection = 'organization') 
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let orgIndex = 1;
+        document.getElementById('addOrganization').addEventListener('click', function (e) {
+            e.preventDefault();
+            const orgsDiv = document.getElementById('organizations');
+            const newOrg = document.createElement('div');
+            newOrg.className = 'organization p-4 bg-gray-50 rounded-lg border border-gray-200 mt-2';
+            newOrg.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Organization Name</label>
+                        <input type="text" name="organizations[${orgIndex}][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Position</label>
+                        <input type="text" name="organizations[${orgIndex}][position]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year(s) of Membership</label>
+                        <input type="text" name="organizations[${orgIndex}][years]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                </div>
+            `;
+            orgsDiv.appendChild(newOrg);
+            orgIndex++;
+        });
+    });
+</script>
+@endpush 
