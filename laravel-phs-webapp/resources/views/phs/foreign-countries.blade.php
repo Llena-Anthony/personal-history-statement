@@ -27,11 +27,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date of Visit (From)</label>
-                            <input type="month" name="countries[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter month and year">
+                            <input type="month" name="countries[0][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter month/year">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date of Visit (To)</label>
-                            <input type="month" name="countries[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter month and year">
+                            <input type="month" name="countries[0][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter month/year">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Country Visited</label>
@@ -78,11 +78,11 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class=\"grid grid-cols-1 md:grid-cols-2 gap-6\">
                 <div>
                     <label class=\"block text-sm font-medium text-gray-700 mb-1\">Date of Visit (From)</label>
-                    <input type=\"month\" name=\"countries[${idx}][from]\" class=\"w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]\" placeholder=\"Enter month and year\">
+                    <input type=\"month\" name=\"countries[${idx}][from]\" class=\"w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]\" placeholder=\"Enter month/year\">
                 </div>
                 <div>
                     <label class=\"block text-sm font-medium text-gray-700 mb-1\">Date of Visit (To)</label>
-                    <input type=\"month\" name=\"countries[${idx}][to]\" class=\"w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]\" placeholder=\"Enter month and year\">
+                    <input type=\"month\" name=\"countries[${idx}][to]\" class=\"w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]\" placeholder=\"Enter month/year\">
                 </div>
                 <div class=\"md:col-span-2\">
                     <label class=\"block text-sm font-medium text-gray-700 mb-1\">Country Visited</label>

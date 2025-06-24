@@ -4,126 +4,140 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto" x-data="creditReputationForm()">
-    <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center space-x-4 mb-4">
             <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
                 <i class="fas fa-credit-card text-white text-xl"></i>
             </div>
             <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">X: Credit Reputation</h1>
+                <h1 class="text-3xl font-bold text-[#1B365D]">Credit Reputation</h1>
+                <p class="text-gray-600">Please provide your credit reputation information</p>
             </div>
         </div>
     </div>
-
-    <!-- Form -->
-    <form method="POST" action="{{ route('phs.credit-reputation.store') }}" class="space-y-10">
+    <form method="POST" action="{{ route('phs.credit-reputation.store') }}" class="space-y-8">
         @csrf
-
-        <!-- Question A -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center">
-                <label class="font-medium text-gray-800">A. Are you entirely dependent on your salary?</label>
-                <select name="dependent_on_salary" x-model="dependent_on_salary" class="form-input w-40">
-                    <option value="">Select</option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </select>
-            </div>
-            <template x-if="dependent_on_salary === '0'">
-                <div class="pl-6 space-y-2">
-                    <template x-for="(income, index) in other_incomes" :key="index">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" :name="'other_incomes[' + index + '][source]'" x-model="income.source" class="form-input flex-grow" placeholder="If no, state other source of income...">
-                            <button type="button" @click="removeIncome(index)" x-show="other_incomes.length > 1" class="btn-circle btn-circle-sm btn-red">&times;</button>
+        <!-- Combined Section for A-D -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-credit-card mr-3 text-[#D4AF37]"></i>
+                Credit Reputation Information
+            </h3>
+            <div class="space-y-8">
+                <!-- Dependent on Salary -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Are you entirely dependent on your salary?</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="dependent_on_salary" x-model="dependent_on_salary" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <template x-if="dependent_on_salary === '0'">
+                            <div class="col-span-2">
+                                <label class='block text-sm font-medium text-gray-700 mb-2'>If no, state other source of income:</label>
+                                <div class="space-y-4">
+                                    <template x-for="(income, index) in other_incomes" :key="index">
+                                        <div class="other-income-entry p-4 border border-gray-200 rounded-lg mt-4 relative">
+                                            <div class="grid grid-cols-1 gap-2">
+                                                <input type="text" :name="'other_incomes[' + index + '][source]'" x-model="income.source" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter other source of income">
+                                            </div>
+                                            <button type="button" @click="removeIncome(index)" x-show="other_incomes.length > 1 && index > 0" class="remove-income absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button type="button" @click="addIncome" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                                    <i class="fas fa-plus mr-1"></i> Add Another Source of Income
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <!-- Banks/Loans -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name and address of banks or other credit institutions with which you have accounts/loans:</label>
+                    <div id="bank-accounts-list" class="space-y-4">
+                        <template x-for="(account, index) in bank_accounts" :key="index">
+                            <div class="bank-account-entry p-4 border border-gray-200 rounded-lg mt-4 relative">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <input type="text" :name="'bank_accounts[' + index + '][bank_name]'" x-model="account.bank_name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter name of bank or credit institution">
+                                    <input type="text" :name="'bank_accounts[' + index + '][address]'" x-model="account.address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter address of bank or credit institution">
+                                </div>
+                                <button type="button" @click="removeAccount(index)" x-show="bank_accounts.length > 1 && index > 0" class="remove-account absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                            </div>
+                        </template>
+                    </div>
+                    <button type="button" @click="addAccount" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                        <i class="fas fa-plus mr-1"></i> Add Another Bank/Credit Institution
+                    </button>
+                </div>
+                <!-- Assets and Liabilities -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Have you filed a statement of your assets and liabilities with any government agency?</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="has_filed_assets_liabilities" x-model="has_filed_assets_liabilities" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="has_filed_assets_liabilities === '1'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If yes, what agency and when?</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <input type="text" name="assets_liabilities_agency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter name of agency">
+                                <input type="date" name="assets_liabilities_date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter date (DD/MM/YYYY)">
+                            </div>
                         </div>
                     </template>
-                    <button type="button" @click="addIncome" class="btn-circle btn-blue"><i class="fas fa-plus"></i></button>
                 </div>
-            </template>
-        </div>
-
-        <!-- Question B -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center">
-                <label class="font-medium text-gray-800">B. Do you have accounts or loans in banks and/or other credit institution?</label>
-                <select name="has_loans" x-model="has_loans" class="form-input w-40">
-                    <option value="">Select</option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </select>
-            </div>
-            <template x-if="has_loans === '1'">
-                <div class="pl-6 space-y-2">
-                    <template x-for="(account, index) in bank_accounts" :key="index">
-                         <div class="flex items-center space-x-2">
-                            <input type="text" :name="'bank_accounts[' + index + '][bank_name]'" x-model="account.bank_name" class="form-input flex-grow" placeholder="Name of bank or credit institution...">
-                            <input type="text" :name="'bank_accounts[' + index + '][address]'" x-model="account.address" class="form-input flex-grow" placeholder="Address of bank or credit institution...">
-                             <button type="button" @click="removeAccount(index)" x-show="bank_accounts.length > 1" class="btn-circle btn-circle-sm btn-red">&times;</button>
+                <!-- ITR -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Have you filed your latest income tax returns?</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="has_filed_itr" x-model="has_filed_itr" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="has_filed_itr === '1'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Amount paid for the last calendar year:</label>
+                            <input type="number" step="0.01" name="itr_amount" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter amount paid for the last calendar year">
                         </div>
                     </template>
-                    <button type="button" @click="addAccount" class="btn-circle btn-blue"><i class="fas fa-plus"></i></button>
                 </div>
-            </template>
-        </div>
-
-        <!-- Question C -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center">
-                <label class="font-medium text-gray-800">C. Have you filed a statement of your Assets and Liabilities with any government agency?</label>
-                <select name="has_filed_assets_liabilities" x-model="has_filed_assets_liabilities" class="form-input w-40">
-                    <option value="">Select</option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </select>
             </div>
-            <template x-if="has_filed_assets_liabilities === '1'">
-                <div class="pl-6 flex items-center space-x-2">
-                    <input type="text" name="assets_liabilities_agency" class="form-input flex-grow" placeholder="Name of agency">
-                    <input type="text" name="assets_liabilities_date" onfocus="(this.type='date')" onblur="(this.type='text')" class="form-input flex-grow" placeholder="DD/MM/YYYY">
-                </div>
-            </template>
         </div>
-        
-        <!-- Question D -->
-        <div class="space-y-3">
-            <div class="flex justify-between items-center">
-                <label class="font-medium text-gray-800">D. Have you filed your latest Income Tax Returns?</label>
-                <select name="has_filed_itr" x-model="has_filed_itr" class="form-input w-40">
-                    <option value="">Select</option>
-                    <option value="1">Yes</option>
-                    <option value="0">No</option>
-                </select>
-            </div>
-             <template x-if="has_filed_itr === '1'">
-                <div class="pl-6">
-                    <input type="number" step="0.01" name="itr_amount" class="form-input" placeholder="000.00">
-                </div>
-            </template>
-        </div>
-        
-        <!-- Question E -->
-        <div class="space-y-4">
-            <label class="font-medium text-gray-800">E. Three (3) credit references in the Philippines.</label>
-            <div class="pl-6 space-y-4">
+        <!-- Credit References -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-8">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-user-friends mr-3 text-[#D4AF37]"></i>
+                Three (3) credit references in the Philippines
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @foreach ($characterReferences as $i => $reference)
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Credit Reference <span class="text-xs italic">(Strictly no abbreviations. Write in full.)</span></label>
-                        <input type="text" name="character_references[{{ $i }}][name]" value="{{ old('character_references.'.$i.'.name', $reference->name) }}" class="form-input">
-                    </div>
-                     <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Credit Reference Address</label>
-                        <input type="text" name="character_references[{{ $i }}][address]" value="{{ old('character_references.'.$i.'.address', $reference->address) }}" class="form-input">
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Name</label>
+                    <input type="text" name="character_references[{{ $i }}][name]" value="{{ old('character_references.'.$i.'.name', $reference->name) }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter credit reference name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Address</label>
+                    <input type="text" name="character_references[{{ $i }}][address]" value="{{ old('character_references.'.$i.'.address', $reference->address) }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter credit reference address">
                 </div>
                 @endforeach
             </div>
         </div>
-
         <!-- Action Buttons -->
-        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('phs.foreign-countries.create') }}" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
+            <a href="{{ route('phs.foreign-countries.create') }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </a>
             <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'credit-reputation')">
