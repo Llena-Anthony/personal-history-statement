@@ -220,7 +220,7 @@
         border-radius: 0.5rem;
         background-color: #f3f4f6;
         color: #1f2937;
-        font-weight: 600;
+        font-weight: 500;
         border: 1px solid #d1d5db;
         transition: background-color 0.2s;
     }
