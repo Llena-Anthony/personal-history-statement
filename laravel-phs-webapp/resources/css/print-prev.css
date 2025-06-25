@@ -200,6 +200,23 @@ body {
     border-bottom: 1px solid black;
     font-size: 11pt;
 }
+.citizenship {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 1.5in;
+    margin-left: 0.85in;
+    font-size: 11pt;
+    text-align: left;
+}
+#partial-inlaw {
+    margin-top: 53pt;
+    margin-left: 1.2in;
+    margin-right: 0.3in;
+}
+#military {
+    margin-top: -10pt;
+    margin-left: 15pt;
+}
 #source-comm {
     border: none;
     border-bottom: 1px solid black;

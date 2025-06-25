@@ -309,11 +309,11 @@
                     <p id='annex'>ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
                 </div>
 
-                <div>
+                <div id="partial-inlaw">
                     <p>Date and Place of Birth:</p>
                     <p>Complete Address: </p>
                     <p>Occupation/Employer/Place of Employment: </p>
-                    <p>Citizenship: If dual, write both citizenship. If naturalized, give date and place where naturalized: </p>
+                    <p>Citizenship:</p> <span> <div class="citizenship"></div> </span><span>If dual, write both citizenship. If naturalized, give date and place where naturalized: </span>
                 </div>
 
                 <div class="section-name"><span class="list-rom">V.</span><span class="section-title">EDUCATIONAL BACKGROUND:</span>
@@ -427,26 +427,28 @@
                     <div class="additional"><span>(Use Separate Sheet for Additional Information)</span></div>
 
                     <div><span class="list-alpha">E.</span>Military Schools Attended</div>
-                    <table class="military-school">
-                        <thead>
-                            <tr>
-                                <th>School/Location</th>
-                                <th>Date of Attendance</th>
-                                <th>Nature of Training</th>
-                                <th>Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
-                        </tbody>
-                    </table>
+                    <div class="ml-14 mt-4">
+                        <table class="military-school">
+                            <thead>
+                                <tr>
+                                    <th>School/Location</th>
+                                    <th>Date of Attendance</th>
+                                    <th>Nature of Training</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                                <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="signature" id="military">
                         <span class="sign">(Signature of Applicant)</span>
                     </div>
