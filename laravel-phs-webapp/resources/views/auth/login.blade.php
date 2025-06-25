@@ -45,6 +45,29 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .countdown-enter {
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .countdown-exit {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+
         .slideshow {
             position: fixed;
             top: 0;
@@ -159,13 +182,14 @@
                             @enderror
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="remember" name="remember"
-                                    class="h-4 w-4 text-[#1B365D] focus:ring-[#1B365D] border-gray-300 rounded">
-                                <label for="remember" class="ml-2 block text-sm text-[#1B365D]">Remember me</label>
-                            </div>
+                        <div class="mt-4">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="remember" class="form-checkbox text-indigo-600">
+                                <span class="ml-2 text-sm text-gray-600">Remember Me</span>
+                            </label>
+                        </div>
 
+                        <div class="flex items-center justify-between">
                             <div class="text-sm">
                                 <a href="{{ route('password.request') }}" class="font-medium text-[#1B365D] hover:text-[#D4AF37] transition-colors duration-200">Forgot password?</a>
                             </div>
@@ -235,6 +259,110 @@
             toggleIcon.classList.add('fa-eye');
         }
     }
+
+    // Enhanced error handling for rate limiting with real-time countdown
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check for stored countdown on page load (for page refreshes) - PRIORITY
+        const storedCountdown = localStorage.getItem('rateLimitCountdown');
+        let countdownInterval = null;
+        let errorElement = null;
+        let initialSeconds = null;
+        let startTime = null;
+
+        function startLiveCountdown(remainingSeconds, errorEl) {
+            if (!errorEl) return;
+            initialSeconds = remainingSeconds;
+            startTime = Date.now();
+            // Extract the static part of the error message
+            let staticMsg = errorEl.textContent.replace(/\d+\s*seconds?/, '');
+            // If message doesn't end with 'before trying again.', add it
+            if (!staticMsg.trim().endsWith('before trying again.')) {
+                staticMsg = staticMsg.trim() + ' before trying again.';
+            }
+            // Set up the live countdown
+            countdownInterval = setInterval(function() {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const secondsLeft = Math.max(0, initialSeconds - elapsed);
+                errorEl.innerHTML = staticMsg + ' <span id="live-seconds" style="font-weight:bold;">' + secondsLeft + '</span> seconds before trying again.';
+                if (secondsLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    localStorage.removeItem('rateLimitCountdown');
+                    errorEl.innerHTML = '<i class="fas fa-check-circle mr-1 text-green-600"></i>You can now try logging in again.';
+                    errorEl.classList.remove('text-red-600', 'font-semibold');
+                    errorEl.classList.add('text-green-600');
+                    errorEl.style.animation = 'fadeIn 0.5s ease-in';
+                    // Re-enable submit button
+                    const submitBtn = document.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Sign in';
+                    }
+                }
+            }, 1000);
+        }
+
+        // On page load, check for error message
+        const errorMessages = document.querySelectorAll('.text-red-600');
+        errorMessages.forEach(function(error) {
+            if (error.textContent.includes('Too many login attempts')) {
+                errorElement = error;
+                // Extract the wait time from the error message
+                const timeMatch = error.textContent.match(/(\d+)\s*seconds?/);
+                let remainingSeconds = timeMatch ? parseInt(timeMatch[1]) : 60;
+                // Store countdown data for persistence
+                try {
+                    localStorage.setItem('rateLimitCountdown', JSON.stringify({
+                        startTime: Date.now(),
+                        duration: remainingSeconds
+                    }));
+                } catch (error) {
+                    console.warn('Could not store countdown data:', error);
+                }
+                // Disable the submit button
+                const submitBtn = document.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    submitBtn.innerHTML = '<i class="fas fa-clock mr-2"></i>Please wait...';
+                }
+                startLiveCountdown(remainingSeconds, errorElement);
+            }
+        });
+
+        // If page is refreshed and countdown is active, update the error message
+        if (storedCountdown && !errorElement) {
+            try {
+                const countdownData = JSON.parse(storedCountdown);
+                const elapsed = Math.floor((Date.now() - countdownData.startTime) / 1000);
+                let remainingSeconds = Math.max(0, countdownData.duration - elapsed);
+                if (remainingSeconds > 0) {
+                    // Find the username error area or create one
+                    let usernameField = document.querySelector('[name="username"]');
+                    if (usernameField) {
+                        let errorDiv = document.createElement('p');
+                        errorDiv.className = 'mt-2 text-sm text-red-600';
+                        errorDiv.style.fontWeight = 'bold';
+                        errorDiv.innerHTML = 'Too many login attempts. Please wait <span id="live-seconds">' + remainingSeconds + '</span> seconds before trying again.';
+                        usernameField.parentNode.parentNode.appendChild(errorDiv);
+                        errorElement = errorDiv;
+                        // Disable the submit button
+                        const submitBtn = document.querySelector('button[type="submit"]');
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                            submitBtn.innerHTML = '<i class="fas fa-clock mr-2"></i>Please wait...';
+                        }
+                        startLiveCountdown(remainingSeconds, errorElement);
+                    }
+                } else {
+                    localStorage.removeItem('rateLimitCountdown');
+                }
+            } catch (error) {
+                localStorage.removeItem('rateLimitCountdown');
+            }
+        }
+    });
 
     // Slideshow functionality
     document.addEventListener('DOMContentLoaded', function() {

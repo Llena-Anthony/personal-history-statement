@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -25,6 +26,15 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        // Custom handler for throttle exceptions on login
+        $this->renderable(function (ThrottleRequestsException $e, $request) {
+            if ($request->is('login') && $request->isMethod('post')) {
+                return back()->withErrors([
+                    'username' => 'Too many login attempts. Please wait a minute before trying again.',
+                ])->withInput($request->only('username'));
+            }
         });
     }
 }
