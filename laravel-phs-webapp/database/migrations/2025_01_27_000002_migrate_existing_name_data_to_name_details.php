@@ -122,17 +122,19 @@ return new class extends Migration
         }
 
         // Migrate Siblings name data
-        $siblings = DB::table('siblings')->get();
-        foreach ($siblings as $record) {
-            if ($record->first_name && $record->last_name) {
-                $nameId = DB::table('name_details')->insertGetId([
-                    'first_name' => $record->first_name,
-                    'middle_name' => $record->middle_name,
-                    'last_name' => $record->last_name,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-                DB::table('siblings')->where('id', $record->id)->update(['name_id' => $nameId]);
+        if (Schema::hasTable('siblings')) {
+            $siblings = DB::table('siblings')->get();
+            foreach ($siblings as $record) {
+                if ($record->first_name && $record->last_name) {
+                    $nameId = DB::table('name_details')->insertGetId([
+                        'first_name' => $record->first_name,
+                        'middle_name' => $record->middle_name,
+                        'last_name' => $record->last_name,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                    DB::table('siblings')->where('id', $record->id)->update(['name_id' => $nameId]);
+                }
             }
         }
 

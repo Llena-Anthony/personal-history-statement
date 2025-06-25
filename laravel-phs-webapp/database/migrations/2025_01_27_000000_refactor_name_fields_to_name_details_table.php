@@ -38,11 +38,13 @@ return new class extends Migration
         });
 
         // 3. Add name_details foreign key to siblings table
-        Schema::table('siblings', function (Blueprint $table) {
-            if (!Schema::hasColumn('siblings', 'name_id')) {
-                $table->foreignId('name_id')->nullable()->constrained('name_details', 'name_id')->onDelete('set null');
-            }
-        });
+        if (Schema::hasTable('siblings')) {
+            Schema::table('siblings', function (Blueprint $table) {
+                if (!Schema::hasColumn('siblings', 'name_id')) {
+                    $table->foreignId('name_id')->nullable()->constrained('name_details', 'name_id')->onDelete('set null');
+                }
+            });
+        }
 
         // 4. Add name_details foreign key to character_references table
         Schema::table('character_references', function (Blueprint $table) {
@@ -103,12 +105,14 @@ return new class extends Migration
             }
         });
 
-        Schema::table('siblings', function (Blueprint $table) {
-            if (Schema::hasColumn('siblings', 'name_id')) {
-                $table->dropForeign(['name_id']);
-                $table->dropColumn('name_id');
-            }
-        });
+        if (Schema::hasTable('siblings')) {
+            Schema::table('siblings', function (Blueprint $table) {
+                if (Schema::hasColumn('siblings', 'name_id')) {
+                    $table->dropForeign(['name_id']);
+                    $table->dropColumn('name_id');
+                }
+            });
+        }
 
         Schema::table('character_references', function (Blueprint $table) {
             if (Schema::hasColumn('character_references', 'ref_name_id')) {

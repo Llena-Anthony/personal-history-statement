@@ -18,6 +18,23 @@ class MaritalStatusController extends Controller
     {
         $data = $this->getCommonViewData('marital-status');
 
+        // Load existing marital status data
+        $maritalStatus = MaritalStatus::where('user_id', auth()->id())->first();
+        if ($maritalStatus) {
+            $data['maritalStatus'] = $maritalStatus;
+            
+            // Load spouse name details
+            if ($maritalStatus->spouseName) {
+                $data['spouseName'] = $maritalStatus->spouseName;
+            }
+        }
+
+        // Load existing family background data for children
+        $familyBackground = FamilyBackground::where('user_id', auth()->id())->first();
+        if ($familyBackground) {
+            $data['children'] = $familyBackground->children()->with('nameDetails')->get();
+        }
+
         // Check if it's an AJAX request
         if (request()->ajax()) {
             return view('phs.marital-status', $data)->render();
@@ -40,6 +57,9 @@ class MaritalStatusController extends Controller
                 'spouse_last_name' => 'nullable|string|max:255',
                 'spouse_suffix' => 'nullable|string|max:10',
                 'marriage_date' => 'nullable|date',
+                'marriage_date_type' => 'nullable|in:exact,month_year',
+                'marriage_month' => 'nullable|string|max:2',
+                'marriage_year' => 'nullable|integer|min:1900|max:2030',
                 'marriage_place' => 'nullable|string|max:255',
                 'spouse_birth_date' => 'nullable|date',
                 'spouse_birth_place' => 'nullable|string|max:255',
@@ -66,6 +86,9 @@ class MaritalStatusController extends Controller
                 'spouse_last_name' => 'nullable|required_if:marital_status,Married|string|max:255',
                 'spouse_suffix' => 'nullable|string|max:10',
                 'marriage_date' => 'nullable|required_if:marital_status,Married|date',
+                'marriage_date_type' => 'nullable|required_if:marital_status,Married|in:exact,month_year',
+                'marriage_month' => 'nullable|required_if:marriage_date_type,month_year|string|max:2',
+                'marriage_year' => 'nullable|required_if:marriage_date_type,month_year|integer|min:1900|max:2030',
                 'marriage_place' => 'nullable|required_if:marital_status,Married|string|max:255',
                 'spouse_birth_date' => 'nullable|required_if:marital_status,Married|date',
                 'spouse_birth_place' => 'nullable|required_if:marital_status,Married|string|max:255',
@@ -89,6 +112,18 @@ class MaritalStatusController extends Controller
         foreach (['spouse_first_name', 'spouse_middle_name', 'spouse_last_name'] as $part) {
             if (isset($validated[$part]) && $validated[$part]) {
                 $validated[$part] = ucwords(strtolower($validated[$part]));
+            }
+        }
+
+        // Process marriage date based on date type
+        if (isset($validated['marriage_date_type'])) {
+            if ($validated['marriage_date_type'] === 'month_year') {
+                // Clear exact date when using month/year
+                $validated['marriage_date'] = null;
+            } else {
+                // Clear month/year when using exact date
+                $validated['marriage_month'] = null;
+                $validated['marriage_year'] = null;
             }
         }
 
