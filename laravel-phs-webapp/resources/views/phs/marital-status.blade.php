@@ -37,17 +37,17 @@
                     <select name="marital_status" id="marital_status" required
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Marital Status</option>
-                        <option value="Single">Single</option>
-                        <option value="Married">Married</option>
-                        <option value="Widowed">Widowed</option>
-                        <option value="Separated">Separated</option>
+                        <option value="Single" {{ isset($maritalStatus) && $maritalStatus->marital_status === 'Single' ? 'selected' : '' }}>Single</option>
+                        <option value="Married" {{ isset($maritalStatus) && $maritalStatus->marital_status === 'Married' ? 'selected' : '' }}>Married</option>
+                        <option value="Widowed" {{ isset($maritalStatus) && $maritalStatus->marital_status === 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                        <option value="Separated" {{ isset($maritalStatus) && $maritalStatus->marital_status === 'Separated' ? 'selected' : '' }}>Separated</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <!-- Spouse Information (Conditional) -->
-        <div id="spouse-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hidden">
+        <div id="spouse-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 {{ isset($maritalStatus) && $maritalStatus->marital_status === 'Married' ? '' : 'hidden' }}">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-user mr-3 text-[#D4AF37]"></i>
                 Spouse Information
@@ -59,6 +59,7 @@
                         First Name *
                     </label>
                     <input type="text" name="spouse_first_name" id="spouse_first_name"
+                           value="{{ isset($spouseName) ? $spouseName->first_name : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter first name">
                 </div>
@@ -67,6 +68,7 @@
                         Middle Name
                     </label>
                     <input type="text" name="spouse_middle_name" id="spouse_middle_name"
+                           value="{{ isset($spouseName) ? $spouseName->middle_name : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter middle name">
                 </div>
@@ -75,6 +77,7 @@
                         Last Name *
                     </label>
                     <input type="text" name="spouse_last_name" id="spouse_last_name"
+                           value="{{ isset($spouseName) ? $spouseName->last_name : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter last name">
                 </div>
@@ -83,6 +86,7 @@
                         Suffix
                     </label>
                     <input type="text" name="spouse_suffix" id="spouse_suffix"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_suffix : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="e.g., Jr., Sr., III">
                 </div>
@@ -93,14 +97,38 @@
                     <label for="marriage_date" class="block text-sm font-medium text-gray-700 mb-2">
                         Date of Marriage *
                     </label>
-                    <input type="date" name="marriage_date" id="marriage_date"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                    <div class="flex space-x-2">
+                        <select name="marriage_date_type" id="marriage_date_type" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                            <option value="exact" {{ isset($maritalStatus) && $maritalStatus->marriage_date_type === 'exact' ? 'selected' : '' }}>Exact Date</option>
+                            <option value="month_year" {{ isset($maritalStatus) && $maritalStatus->marriage_date_type === 'month_year' ? 'selected' : '' }}>Month/Year</option>
+                        </select>
+                        <input type="date" name="marriage_date" id="marriage_date" value="{{ isset($maritalStatus) && $maritalStatus->marriage_date ? $maritalStatus->marriage_date->format('Y-m-d') : '' }}" class="w-2/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                        <div class="w-2/3 flex space-x-2 {{ isset($maritalStatus) && $maritalStatus->marriage_date_type === 'month_year' ? '' : 'hidden' }}" id="marriage-month-year-group">
+                            <select name="marriage_month" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Month</option>
+                                <option value="01" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '01' ? 'selected' : '' }}>January</option>
+                                <option value="02" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '02' ? 'selected' : '' }}>February</option>
+                                <option value="03" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '03' ? 'selected' : '' }}>March</option>
+                                <option value="04" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '04' ? 'selected' : '' }}>April</option>
+                                <option value="05" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '05' ? 'selected' : '' }}>May</option>
+                                <option value="06" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '06' ? 'selected' : '' }}>June</option>
+                                <option value="07" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '07' ? 'selected' : '' }}>July</option>
+                                <option value="08" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '08' ? 'selected' : '' }}>August</option>
+                                <option value="09" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '09' ? 'selected' : '' }}>September</option>
+                                <option value="10" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '10' ? 'selected' : '' }}>October</option>
+                                <option value="11" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '11' ? 'selected' : '' }}>November</option>
+                                <option value="12" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '12' ? 'selected' : '' }}>December</option>
+                            </select>
+                            <input type="number" name="marriage_year" min="1900" max="2030" value="{{ isset($maritalStatus) ? $maritalStatus->marriage_year : '' }}" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Year">
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label for="marriage_place" class="block text-sm font-medium text-gray-700 mb-2">
                         Place of Marriage *
                     </label>
                     <input type="text" name="marriage_place" id="marriage_place"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->marriage_place : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter place of marriage">
                 </div>
@@ -112,6 +140,7 @@
                         Spouse's Date of Birth *
                     </label>
                     <input type="date" name="spouse_birth_date" id="spouse_birth_date"
+                           value="{{ isset($maritalStatus) && $maritalStatus->spouse_birth_date ? $maritalStatus->spouse_birth_date->format('Y-m-d') : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                 </div>
                 <div>
@@ -119,6 +148,7 @@
                         Spouse's Place of Birth *
                     </label>
                     <input type="text" name="spouse_birth_place" id="spouse_birth_place"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_birth_place : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter place of birth">
                 </div>
@@ -130,6 +160,7 @@
                         Spouse's Occupation
                     </label>
                     <input type="text" name="spouse_occupation" id="spouse_occupation"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_occupation : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter occupation">
                 </div>
@@ -138,6 +169,7 @@
                         Spouse's Employer
                     </label>
                     <input type="text" name="spouse_employer" id="spouse_employer"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_employer : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter employer">
                 </div>
@@ -146,6 +178,7 @@
                         Place of Employment
                     </label>
                     <input type="text" name="spouse_employment_place" id="spouse_employment_place"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_employment_place : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter place of employment">
                 </div>
@@ -157,6 +190,7 @@
                         Spouse's Contact Number
                     </label>
                     <input type="tel" name="spouse_contact" id="spouse_contact"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_contact : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter contact number">
                 </div>
@@ -165,6 +199,7 @@
                         Spouse's Citizenship *
                     </label>
                     <input type="text" name="spouse_citizenship" id="spouse_citizenship"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_citizenship : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter citizenship">
                 </div>
@@ -173,6 +208,7 @@
                         Other Citizenship
                     </label>
                     <input type="text" name="spouse_other_citizenship" id="spouse_other_citizenship"
+                           value="{{ isset($maritalStatus) ? $maritalStatus->spouse_other_citizenship : '' }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter other citizenship">
                 </div>
@@ -180,7 +216,7 @@
         </div>
 
         <!-- Children Information -->
-        <div id="children-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hidden">
+        <div id="children-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 {{ isset($maritalStatus) && $maritalStatus->marital_status ? '' : 'hidden' }}">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
                 Children Information
@@ -286,6 +322,24 @@
 
         maritalStatusSelect.addEventListener('change', toggleSections);
         toggleSections(); // Initial check
+
+        // Handle marriage date type changes
+        const marriageDateTypeSelect = document.getElementById('marriage_date_type');
+        const marriageDateInput = document.getElementById('marriage_date');
+        const marriageMonthYearGroup = document.getElementById('marriage-month-year-group');
+
+        const handleMarriageDateTypeChange = () => {
+            if (marriageDateTypeSelect.value === 'exact') {
+                marriageDateInput.classList.remove('hidden');
+                marriageMonthYearGroup.classList.add('hidden');
+            } else {
+                marriageDateInput.classList.add('hidden');
+                marriageMonthYearGroup.classList.remove('hidden');
+            }
+        };
+
+        marriageDateTypeSelect.addEventListener('change', handleMarriageDateTypeChange);
+        handleMarriageDateTypeChange(); // Initial check
     });
 
     // Dynamic child entry management
