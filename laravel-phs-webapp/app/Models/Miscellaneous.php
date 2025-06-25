@@ -13,7 +13,10 @@ class Miscellaneous extends Model
     protected $fillable = [
         'username',
         'misc_type',
-        'misc_details'
+        'misc_details',
+        'hobbies_sports_pastimes',
+        'languages_dialects',
+        'lie_detection_test'
     ];
 
     public function user()

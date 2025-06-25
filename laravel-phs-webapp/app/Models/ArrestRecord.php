@@ -17,7 +17,17 @@ class ArrestRecord extends Model
         'arresting_agency',
         'place_of_arrest',
         'case_status',
-        'case_details'
+        'case_details',
+        'investigated_arrested',
+        'investigated_arrested_details',
+        'family_investigated_arrested',
+        'family_investigated_arrested_details',
+        'administrative_case',
+        'administrative_case_details',
+        'pd1081_arrested',
+        'pd1081_arrested_details',
+        'intoxicating_liquor_narcotics',
+        'intoxicating_liquor_narcotics_details'
     ];
 
     protected $casts = [

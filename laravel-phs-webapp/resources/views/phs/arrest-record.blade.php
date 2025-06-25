@@ -3,7 +3,7 @@
 @section('title', 'XI: Arrest Record and Conduct')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto" x-data="arrestRecordForm()">
     <div class="mb-8">
         <div class="flex items-center space-x-4 mb-4">
             <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
@@ -17,34 +17,171 @@
     </div>
     <form method="POST" action="{{ route('phs.arrest-record.store') }}" class="space-y-8">
         @csrf
+        <!-- Arrest Record and Conduct Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <div class="mb-4">
-                <h3 class="text-lg font-semibold text-[#1B365D]">Arrest Record</h3>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+                <i class="fas fa-gavel mr-3 text-[#D4AF37]"></i>
+                Arrest Record and Conduct Information
+            </h3>
+            <div class="space-y-8">
+                <!-- Question A: Have you ever been investigated/arrested, indicted or convicted for any violation of law? -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Have you ever been arrested?</label>
-                    <select name="arrested" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                        <option value="">Select</option>
-                        <option value="no">No</option>
-                        <option value="yes">Yes</option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Have you ever been investigated/arrested, indicted or convicted for any violation of law?
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="investigated_arrested" x-model="investigated_arrested" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="investigated_arrested === 'yes'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If so, state name of court, nature of offense and disposition of case:</label>
+                            <textarea name="investigated_arrested_details" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter details including court name, nature of offense, and disposition of case"></textarea>
+                        </div>
+                    </template>
                 </div>
+
+                <!-- Question B: Has any member of your family ever been investigated/arrested, indicted or convicted for any violation of law? -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">If yes, please explain</label>
-                    <input type="text" name="arrested_explanation" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Has any member of your family ever been investigated/arrested, indicted or convicted for any violation of law?
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="family_investigated_arrested" x-model="family_investigated_arrested" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="family_investigated_arrested === 'yes'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If so, state name of court, nature of offense and disposition of case:</label>
+                            <textarea name="family_investigated_arrested_details" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter details including court name, nature of offense, and disposition of case"></textarea>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Question C: Have you ever been charged of any administrative case? -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Have you ever been charged of any administrative case?
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="administrative_case" x-model="administrative_case" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="administrative_case === 'yes'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If so, explain:</label>
+                            <textarea name="administrative_case_details" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter explanation of the administrative case"></textarea>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Question D: Have you ever been arrested or detained pursuant to the provisions of PD 1081 and its implementing orders? -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Have you ever been arrested or detained pursuant to the provisions of PD 1081 and its implementing orders (GO, PD, LOI)?
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="pd1081_arrested" x-model="pd1081_arrested" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="pd1081_arrested === 'yes'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If so, state the nature of offense and disposition of case:</label>
+                            <textarea name="pd1081_arrested_details" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter nature of offense and disposition of case"></textarea>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Question E: Do you take/use intoxicating liquor or narcotics? -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Do you take/use intoxicating liquor or narcotics?
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <select name="intoxicating_liquor_narcotics" x-model="intoxicating_liquor_narcotics" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <template x-if="intoxicating_liquor_narcotics === 'yes'">
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">If so, to what extent:</label>
+                            <textarea name="intoxicating_liquor_narcotics_details" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter the extent of use"></textarea>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>
-        <div class="flex justify-between pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('arrest-record')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all">
+
+        <!-- Action Buttons -->
+        <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
+            <a href="{{ route('phs.credit-reputation') }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </button>
-            <button type="submit" class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all" onclick="handleFormSubmit(event, 'arrest-record')">
+            </a>
+            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'arrest-record')">
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>
 </div>
+
+<script>
+    function arrestRecordForm() {
+        return {
+            investigated_arrested: '{{ old('investigated_arrested', $arrestRecord->investigated_arrested ?? '') }}',
+            family_investigated_arrested: '{{ old('family_investigated_arrested', $arrestRecord->family_investigated_arrested ?? '') }}',
+            administrative_case: '{{ old('administrative_case', $arrestRecord->administrative_case ?? '') }}',
+            pd1081_arrested: '{{ old('pd1081_arrested', $arrestRecord->pd1081_arrested ?? '') }}',
+            intoxicating_liquor_narcotics: '{{ old('intoxicating_liquor_narcotics', $arrestRecord->intoxicating_liquor_narcotics ?? '') }}',
+        }
+    }
+</script>
+
+@push('styles')
+<style>
+    .form-input {
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        padding: 0.5rem 0.75rem;
+        width: 100%;
+        transition: box-shadow 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    }
+    .form-input:focus {
+        border-color: #1B365D;
+        box-shadow: 0 0 0 2px rgba(27, 54, 93, 0.3);
+        outline: none;
+    }
+    .btn-primary {
+        @apply inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all;
+    }
+    .btn-secondary {
+        @apply inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all;
+    }
+</style>
+@endpush
+
 @endsection
 @php($currentSection = 'arrest-record') 

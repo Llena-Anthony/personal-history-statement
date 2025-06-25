@@ -21,32 +21,143 @@
     <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10">
         @csrf
         
-        <!-- Miscellaneous Section -->
+        <!-- Hobbies, Sports, and Pastimes Section -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
-                <i class="fas fa-puzzle-piece mr-3 text-[#D4AF37]"></i>
-                Miscellaneous Information
+                <i class="fas fa-running mr-3 text-[#D4AF37]"></i>
+                Hobbies, Sports, and Pastimes
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="misc_type" class="block font-medium text-gray-800 mb-1">Type</label>
-                    <input type="text" name="misc_type" id="misc_type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="e.g., Hobbies, Skills, Awards (if not military)" value="{{ old('misc_type', $miscellaneous->misc_type ?? '') }}">
-                </div>
-                <div class="md:col-span-2">
-                    <label for="misc_details" class="block font-medium text-gray-800 mb-1">Details</label>
-                    <p class="text-sm text-gray-600 mb-2">Please provide any other information that you believe should be included in this statement to assist in determining your qualifications for a position of trust. If none, write "NONE".</p>
-                    <textarea name="misc_details" id="misc_details" rows="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors resize-none" placeholder="Type here...">{{ old('misc_details', $miscellaneous->misc_details ?? '') }}</textarea>
+            <div>
+                <label for="hobbies_sports_pastimes" class="block font-medium text-gray-800 mb-1">Please list your hobbies, sports, and pastimes:</label>
+                <textarea name="hobbies_sports_pastimes" id="hobbies_sports_pastimes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors resize-none" placeholder="e.g., Reading, Basketball, Photography, etc. If none, write 'NONE'">{{ old('hobbies_sports_pastimes', $miscellaneous->hobbies_sports_pastimes ?? '') }}</textarea>
+            </div>
+        </div>
+
+        <!-- Language and Dialect Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
+                <i class="fas fa-language mr-3 text-[#D4AF37]"></i>
+                Language and Dialect Proficiency
+            </h2>
+            <p class="text-sm text-gray-600 mb-4">Indicate your proficiency level as FLUENT, FAIR, or POOR for each language/dialect.</p>
+            
+            <div id="languages-container">
+                <!-- Dynamic language rows will be added here -->
+                @if(isset($languages) && count($languages) > 0)
+                    @foreach($languages as $index => $language)
+                        <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="{{ $index }}">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
+                                    <input type="text" name="languages[{{ $index }}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" value="{{ $language['language'] ?? '' }}">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
+                                    <select name="languages[{{ $index }}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Select</option>
+                                        <option value="FLUENT" {{ ($language['speak'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                        <option value="FAIR" {{ ($language['speak'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                        <option value="POOR" {{ ($language['speak'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
+                                    <select name="languages[{{ $index }}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Select</option>
+                                        <option value="FLUENT" {{ ($language['read'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                        <option value="FAIR" {{ ($language['read'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                        <option value="POOR" {{ ($language['read'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
+                                    <select name="languages[{{ $index }}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Select</option>
+                                        <option value="FLUENT" {{ ($language['write'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                        <option value="FAIR" {{ ($language['write'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                        <option value="POOR" {{ ($language['write'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @if($index > 0)
+                                <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                                    <i class="fas fa-times-circle"></i>
+                                </button>
+                            @endif
+                        </div>
+                    @endforeach
+                @else
+                    <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="0">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
+                                <input type="text" name="languages[0][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
+                                <select name="languages[0][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Select</option>
+                                    <option value="FLUENT">FLUENT</option>
+                                    <option value="FAIR">FAIR</option>
+                                    <option value="POOR">POOR</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
+                                <select name="languages[0][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Select</option>
+                                    <option value="FLUENT">FLUENT</option>
+                                    <option value="FAIR">FAIR</option>
+                                    <option value="POOR">POOR</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
+                                <select name="languages[0][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Select</option>
+                                    <option value="FLUENT">FLUENT</option>
+                                    <option value="FAIR">FAIR</option>
+                                    <option value="POOR">POOR</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            
+            <button type="button" id="add-language" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium cursor-pointer">
+                <i class="fas fa-plus mr-1"></i> Add Another Language
+            </button>
+        </div>
+
+        <!-- Lie Detection Test Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
+                <i class="fas fa-question-circle mr-3 text-[#D4AF37]"></i>
+                Lie Detection Test
+            </h2>
+            <div>
+                <label class="block font-medium text-gray-800 mb-3">Are you willing to undergo periodic lie detection test?</label>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="lie_detection_test" value="yes" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'yes' ? 'checked' : '' }}>
+                        <span class="text-gray-800">Yes</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="lie_detection_test" value="no" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'no' ? 'checked' : '' }}>
+                        <span class="text-gray-800">No</span>
+                    </label>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('miscellaneous')" class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all shadow-none">
+            <button type="button" onclick="window.navigateToPreviousSection('miscellaneous')" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </button>
             <button type="button" id="finishBtn" class="btn-primary">
-                Finish <i class="fas fa-arrow-right ml-2"></i>
+                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>
@@ -63,14 +174,79 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const finishBtn = document.getElementById('finishBtn');
     const form = finishBtn.closest('form');
     const modal = document.getElementById('redirectModal');
     const secondsSpan = document.getElementById('redirectSeconds');
+    const addLanguageBtn = document.getElementById('add-language');
+    const languagesContainer = document.getElementById('languages-container');
     let submitted = false;
+
+    // Add language row functionality
+    if (addLanguageBtn && languagesContainer) {
+        addLanguageBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const entries = languagesContainer.querySelectorAll('.language-entry');
+            const idx = entries.length;
+            const newRow = document.createElement('div');
+            newRow.className = 'language-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+            newRow.setAttribute('data-index', idx);
+            newRow.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
+                        <input type="text" name="languages[${idx}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
+                        <select name="languages[${idx}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <option value="">Select</option>
+                            <option value="FLUENT">FLUENT</option>
+                            <option value="FAIR">FAIR</option>
+                            <option value="POOR">POOR</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
+                        <select name="languages[${idx}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <option value="">Select</option>
+                            <option value="FLUENT">FLUENT</option>
+                            <option value="FAIR">FAIR</option>
+                            <option value="POOR">POOR</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
+                        <select name="languages[${idx}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                            <option value="">Select</option>
+                            <option value="FLUENT">FLUENT</option>
+                            <option value="FAIR">FAIR</option>
+                            <option value="POOR">POOR</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            `;
+            languagesContainer.appendChild(newRow);
+        });
+    }
+
+    // Remove language row functionality
+    if (languagesContainer) {
+        languagesContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-language')) {
+                const entries = languagesContainer.querySelectorAll('.language-entry');
+                if (entries.length > 1) {
+                    e.target.closest('.language-entry').remove();
+                }
+            }
+        });
+    }
 
     finishBtn.addEventListener('click', function (e) {
         if (submitted) return; // Prevent double submission
@@ -93,6 +269,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-@endpush
 @endsection
 @php($currentSection = 'miscellaneous') 
