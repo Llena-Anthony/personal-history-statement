@@ -22,7 +22,7 @@ class EnsurePersonalDetailsCompleted
 
         // Adjust these relationship checks as needed
         if (!$user || !$user->personalChar || !$user->userDetails) {
-            return redirect()->route('phs.personal-details')->with('error', 'Please complete Personal Details first.');
+            return redirect()->route('phs.create')->with('error', 'Please complete Personal Details first.');
         }
 
         return $next($request);
