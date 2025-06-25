@@ -401,37 +401,54 @@
                     <p id='annex'>ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
                 </div>
 
-                <div class="section-name"><span>VI.</span><span class="section-title">MILITARY HISTORY:</span>
-                    <div><span class="list-alpha">A.</span>Date Enlisted in AFP: </div>
-                    <div><span class="list-alpha">B.</span>Date of Commision: _ : _ </div>
-                    <div><span class="list-alpha">C.</span>Source of Commission: </div>
-                    <div><span class="list-alpha">D.</span>Important Unit Assignment since enlisted/CAD
-                        <table class="unit-assign">
-                            <thead>
-                                <tr>
-                                    <th>INCLUSIVE DATES</th>
-                                    <th>UNIT/OFFICE</th>
-                                    <th>CO/CHIEF OF OFFICE</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <p>(Use Separate Sheet for Additional Information)</p>
-                    </div>
-                    <div><span class="list-alpha">E.</span>Military Schools Attended
-                        <table class="military-school">
-                            <thead>
-                                <tr>
-                                    <th>School/Location</th>
-                                    <th>Date of Attendance</th>
-                                    <th>Nature of Training</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <div class="signature" id="military">
-                            <hr>
-                            <span class="sign">(Signature of Applicant)</span>
-                        </div>
+                <div class="section-name" id="military-hist"><span class="list-rom">VI.</span><span class="section-title">MILITARY HISTORY:</span>
+                    <div><span class="list-alpha">A.</span>Date Enlisted in AFP: <div id="date-enlist"></div></div>
+                    <div class="flex"><span class="list-alpha">B.</span>Date of Commision: <div class="date-comm"></div> <span>:</span> <div class="date-comm"></div> </div>
+                    <div><span class="list-alpha">C.</span>Source of Commission: <div id="source-comm"></div> </div>
+                    <div><span class="list-alpha">D.</span>Important Unit Assignment since enlisted/CAD</div>
+                    <table class="unit-assign">
+                        <thead>
+                            <tr>
+                                <th>INCLUSIVE DATES</th>
+                                <th>UNIT/OFFICE</th>
+                                <th>CO/CHIEF OF OFFICE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="additional"><span>(Use Separate Sheet for Additional Information)</span></div>
+
+                    <div><span class="list-alpha">E.</span>Military Schools Attended</div>
+                    <table class="military-school">
+                        <thead>
+                            <tr>
+                                <th>School/Location</th>
+                                <th>Date of Attendance</th>
+                                <th>Nature of Training</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr> <tr><td></td><td></td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="signature" id="military">
+                        <span class="sign">(Signature of Applicant)</span>
                     </div>
                 </div>
 
@@ -493,7 +510,7 @@
                         <tr><td></td></tr><tr><td></td></tr>
                     </tbody>
                 </table>
-                <div id="additional"><span>(Use Separate Sheet for Additional Information)</span></div>
+                <div class="additional"><span>(Use Separate Sheet for Additional Information)</span></div>
                 <div class="section-name"><span class="list-rom">VII.</span><span class="section-title">PLACES OF RESIDENCE SINCE BIRTH:</span> </div>
                 <table id="residence-table">
                     <tbody>

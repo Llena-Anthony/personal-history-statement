@@ -153,9 +153,11 @@ body {
 }
 .employment-table {
     margin-left: 0.5in;
+    width: 7in;
 }
 .employment-table th {
     font-weight: normal;
+    text-align: center;
 }
 .employment-table td {
     border-bottom: 1px solid black;
@@ -163,7 +165,7 @@ body {
     font-size: 11pt;
     text-align: left;
 }
-.employment-table thead tr td+td {
+.employment-table thead tr td+th {
     width: 1in;
 }
 .xmark {
@@ -171,12 +173,54 @@ body {
     font-family: Arial, sans-serif;
     width: 0.1in;
 }
-#employ {
-    margin-top: 80pt;
-}
-#additional {
+.additional {
     text-align: center;
     margin-bottom: 5pt;;
+}
+.unit-assign, .military-school {
+    width: 100%;
+}
+.unit-assign th, .military-school th {
+    font-weight: normal;
+    text-align: center;
+    border: none;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.unit-assign td, .military-school td {
+    font-size: 11pt;
+    text-align: left;
+    border: 1px solid black;
+    height: 12pt;
+}
+.date-comm {
+    width: 2in;
+    border: none;
+    border-bottom: 1px solid black;
+    font-size: 11pt;
+}
+#source-comm {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 4.55in;
+    margin-left: auto;
+    text-align: left;
+    font-size: 11pt;
+}
+#date-enlist {
+    border: none;
+    border-bottom: 1px solid black;
+    font-size: 11pt;
+    text-align: left;
+    width: 4.7in;
+    margin-left: auto;
+}
+#military-hist {
+    margin-top: 80pt;
+}
+#employ {
+    margin-top: 80pt;
 }
 #residence-table {
     margin-bottom: 5pt;
