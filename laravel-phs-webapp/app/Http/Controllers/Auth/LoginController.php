@@ -68,8 +68,11 @@ class LoginController extends Controller
             if ($user->usertype === 'admin') {
                 return redirect()->intended('admin/dashboard');
             }
-            // All other users (clients) go to /dashboard
-            return redirect()->intended('/dashboard');
+            if ($user->usertype === 'personnel') {
+                return redirect()->intended('personnel/dashboard');
+            }
+            return redirect()->intended('client/dashboard');
+
         }
 
         // Log failed login attempt for incorrect password
