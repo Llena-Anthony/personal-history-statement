@@ -25,7 +25,7 @@ class FamilyBackgroundController extends Controller
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.family-background', $data)->render();
+            return view('phs.sections.family-background-content', $data);
         }
 
         return view('phs.family-background', $data);

@@ -123,7 +123,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/phs/arrest-record', [ArrestRecordController::class, 'store'])->name('phs.arrest-record.store');
 
     // PHS Routes - Organization
-    Route::get('/phs/organization', function() { return view('phs.organization'); })->name('phs.organization');
+    Route::get('/phs/organization', function() { 
+        if (request()->ajax()) {
+            return view('phs.sections.organization-content');
+        }
+        return view('phs.organization'); 
+    })->name('phs.organization');
+
     Route::post('/phs/organization', function(Request $request) { 
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
@@ -256,10 +262,16 @@ Route::middleware('auth')->group(function () {
             $languages = json_decode($miscellaneous->languages_dialects, true) ?: [];
         }
         
-        return view('phs.miscellaneous-new', [
+        $viewData = [
             'miscellaneous' => $miscellaneous,
             'languages' => $languages
-        ]);
+        ];
+
+        if (request()->ajax()) {
+            return view('phs.sections.miscellaneous-content', $viewData);
+        }
+
+        return view('phs.miscellaneous-new', $viewData);
     })->name('phs.miscellaneous');
 
     Route::post('/phs/miscellaneous', function(Request $request) {

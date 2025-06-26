@@ -13,9 +13,9 @@ class PlacesOfResidenceController extends Controller
     {
         $data = $this->getCommonViewData('places-of-residence');
 
-        // Check if it's an AJAX request
+        // Return partial for AJAX requests, full view for normal requests
         if (request()->ajax()) {
-            return view('phs.places-of-residence', $data)->render();
+            return view('phs.sections.places-of-residence-content', $data);
         }
 
         return view('phs.places-of-residence', $data);

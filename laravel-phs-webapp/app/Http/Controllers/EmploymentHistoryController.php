@@ -20,7 +20,7 @@ class EmploymentHistoryController extends Controller
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.employment-history', $data)->render();
+            return view('phs.sections.employment-history-content', $data);
         }
 
         return view('phs.employment-history', $data);

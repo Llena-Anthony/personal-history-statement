@@ -27,9 +27,9 @@ class MilitaryHistoryController extends Controller
             $data['awards'] = MilitaryAward::whereIn('history_id', $data['schools']->pluck('history_id'))->get();
         }
 
-        // Check if it's an AJAX request
+        // Return partial for AJAX requests, full view for normal requests
         if (request()->ajax()) {
-            return view('phs.military-history', $data)->render();
+            return view('phs.sections.military-history-content', $data);
         }
 
         return view('phs.military-history', $data);

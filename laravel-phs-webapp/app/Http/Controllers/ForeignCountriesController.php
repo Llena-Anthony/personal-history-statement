@@ -15,7 +15,7 @@ class ForeignCountriesController extends Controller
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.foreign-countries', $data)->render();
+            return view('phs.sections.foreign-countries-content', $data);
         }
 
         return view('phs.foreign-countries', $data);
