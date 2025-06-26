@@ -41,8 +41,8 @@
             </div>
         </div>
 
-        <!-- Spouse Information (Conditional) -->
-        <div id="spouse-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 {{ isset($maritalStatus) && $maritalStatus->marital_status === 'Married' ? '' : 'hidden' }}">
+        <!-- Spouse Information (Always Visible) -->
+        <div id="spouse-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-user mr-3 text-[#D4AF37]"></i>
                 Spouse Information
@@ -93,30 +93,26 @@
                         Date of Marriage *
                     </label>
                     <div class="flex space-x-2">
-                        <select name="marriage_date_type" id="marriage_date_type" class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                            <option value="exact" {{ isset($maritalStatus) && $maritalStatus->marriage_date_type === 'exact' ? 'selected' : '' }}>Exact Date</option>
-                            <option value="month_year" {{ isset($maritalStatus) && $maritalStatus->marriage_date_type === 'month_year' ? 'selected' : '' }}>Month/Year</option>
+                        <select name="marriage_month" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                            <option value="">Month</option>
+                            <option value="01" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '01' ? 'selected' : '' }}>January</option>
+                            <option value="02" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '02' ? 'selected' : '' }}>February</option>
+                            <option value="03" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '03' ? 'selected' : '' }}>March</option>
+                            <option value="04" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '04' ? 'selected' : '' }}>April</option>
+                            <option value="05" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '05' ? 'selected' : '' }}>May</option>
+                            <option value="06" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '06' ? 'selected' : '' }}>June</option>
+                            <option value="07" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '07' ? 'selected' : '' }}>July</option>
+                            <option value="08" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '08' ? 'selected' : '' }}>August</option>
+                            <option value="09" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '09' ? 'selected' : '' }}>September</option>
+                            <option value="10" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '10' ? 'selected' : '' }}>October</option>
+                            <option value="11" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '11' ? 'selected' : '' }}>November</option>
+                            <option value="12" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '12' ? 'selected' : '' }}>December</option>
                         </select>
-                        <input type="date" name="marriage_date" id="marriage_date" value="{{ isset($maritalStatus) && $maritalStatus->marriage_date ? $maritalStatus->marriage_date->format('Y-m-d') : '' }}" class="w-2/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                        <div class="w-2/3 flex space-x-2 {{ isset($maritalStatus) && $maritalStatus->marriage_date_type === 'month_year' ? '' : 'hidden' }}" id="marriage-month-year-group">
-                            <select name="marriage_month" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                                <option value="">Month</option>
-                                <option value="01" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '01' ? 'selected' : '' }}>January</option>
-                                <option value="02" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '02' ? 'selected' : '' }}>February</option>
-                                <option value="03" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '03' ? 'selected' : '' }}>March</option>
-                                <option value="04" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '04' ? 'selected' : '' }}>April</option>
-                                <option value="05" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '05' ? 'selected' : '' }}>May</option>
-                                <option value="06" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '06' ? 'selected' : '' }}>June</option>
-                                <option value="07" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '07' ? 'selected' : '' }}>July</option>
-                                <option value="08" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '08' ? 'selected' : '' }}>August</option>
-                                <option value="09" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '09' ? 'selected' : '' }}>September</option>
-                                <option value="10" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '10' ? 'selected' : '' }}>October</option>
-                                <option value="11" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '11' ? 'selected' : '' }}>November</option>
-                                <option value="12" {{ isset($maritalStatus) && $maritalStatus->marriage_month === '12' ? 'selected' : '' }}>December</option>
-                            </select>
-                            <input type="number" name="marriage_year" min="1900" max="2030" value="{{ isset($maritalStatus) ? $maritalStatus->marriage_year : '' }}" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Year">
-                        </div>
+                        <input type="number" name="marriage_year" min="1900" max="2030" value="{{ isset($maritalStatus) ? $maritalStatus->marriage_year : '' }}" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Year">
                     </div>
+                    <!-- Hidden fields to maintain compatibility with backend -->
+                    <input type="hidden" name="marriage_date_type" value="month_year">
+                    <input type="hidden" name="marriage_date" value="">
                 </div>
                 <div>
                     <label for="marriage_place" class="block text-sm font-medium text-gray-700 mb-2">
@@ -210,8 +206,8 @@
             </div>
         </div>
 
-        <!-- Children Information -->
-        <div id="children-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 {{ isset($maritalStatus) && $maritalStatus->marital_status ? '' : 'hidden' }}">
+        <!-- Children Information (Always Visible) -->
+        <div id="children-section" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
                 Children Information

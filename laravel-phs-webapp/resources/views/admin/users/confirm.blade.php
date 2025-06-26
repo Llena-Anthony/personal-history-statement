@@ -109,7 +109,12 @@
             <p class="font-semibold">Password: <span id="modalPassword"></span></p>
             <p class="text-xs text-gray-500 mt-2">Please save these credentials as they won't be shown again.</p>
         </div>
-        <button id="closeSuccessModal" class="px-6 py-2 bg-green-700 text-white rounded-xl">OK</button>
+        <div class="text-center mt-4 space-x-4">
+            <button id="sendToEmailBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                📤 Send to Email
+            </button>
+            <button id="closeSuccessModal" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">OK</button>
+        </div>
     </div>
 </div>
 
@@ -190,6 +195,28 @@ function showSuccessModal(username, password, message, redirectUrl) {
         modal.classList.remove('flex');
         window.location.href = redirectUrl;
     };
+    document.getElementById('sendToEmailBtn').onclick = function() {
+        sendToEmail(username, password);
+    };
+}
+
+function sendToEmail(username, password) {
+    fetch(`/phs/send-credentials/${username}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || 'Email sent!');
+    })
+    .catch(error => {
+        alert('Failed to send email.');
+        console.error(error);
+    });
 }
 </script>
 @endsection

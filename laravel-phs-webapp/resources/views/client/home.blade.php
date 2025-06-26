@@ -28,7 +28,7 @@
     <!-- Progress Overview -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- PHS Progress Card -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <a href="{{ route('phs.create') }}" class="block group cursor-pointer bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -73,14 +73,12 @@
                     <i class="fas fa-clock mr-1"></i>
                     Last updated: {{ now()->format('M d, Y') }}
                 </div>
-                <a href="{{ route('phs.create') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-[#1B365D] text-white text-sm font-medium rounded-lg hover:bg-[#2B4B7D] transition-all duration-300 hover:shadow-md transform hover:scale-105"
-                   id="start-phs-btn">
+                <span class="inline-flex items-center px-4 py-2 bg-[#1B365D] text-white text-sm font-medium rounded-lg pointer-events-none opacity-80">
                     <i class="fas fa-edit mr-2"></i>
                     @if($phsStatus == 'completed') Review @else Start @endif
-                </a>
+                </span>
             </div>
-        </div>
+        </a>
 
         <!-- PDS Progress Card (Grayed Out Placeholder) -->
         <div class="bg-gray-100 rounded-2xl shadow-lg p-6 border border-gray-200 opacity-60">
@@ -134,7 +132,8 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- PHS Action -->
-            <div class="group relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 hover:shadow-lg transition-all duration-300 hover:scale-105">
+            <div class="group relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
+                <a href="{{ route('phs.create') }}" class="absolute inset-0 z-10" aria-label="Go to PHS"></a>
                 <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-4 mx-auto group-hover:bg-[#2B4B7D] transition-colors duration-300">
                     <i class="fas fa-file-alt text-2xl text-white"></i>
                 </div>
@@ -143,12 +142,10 @@
                     Complete your comprehensive PHS form with detailed personal, educational, and professional information.
                 </p>
                 <div class="text-center">
-                    <a href="{{ route('phs.create') }}" 
-                       class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white font-medium rounded-lg hover:bg-[#2B4B7D] transition-all duration-300 hover:shadow-md transform hover:scale-105"
-                       id="phs-action-btn">
+                    <span class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white font-medium rounded-lg pointer-events-none opacity-80">
                         <i class="fas fa-edit mr-2"></i>
                         @if($phsStatus == 'completed') Review PHS @else Start PHS @endif
-                    </a>
+                    </span>
                 </div>
             </div>
 
@@ -170,7 +167,8 @@
             </div>
 
             <!-- Profile Action -->
-            <div class="group relative bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 hover:shadow-lg transition-all duration-300 hover:scale-105">
+            <div class="group relative bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
+                <a href="{{ route('profile.edit') }}" class="absolute inset-0 z-10" aria-label="Go to Profile"></a>
                 <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-4 mx-auto group-hover:bg-[#2B4B7D] transition-colors duration-300">
                     <i class="fas fa-user-edit text-2xl text-white"></i>
                 </div>
@@ -179,11 +177,10 @@
                     Update your personal information, contact details, and account settings.
                 </p>
                 <div class="text-center">
-                    <a href="{{ route('profile.edit') }}" 
-                       class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white font-medium rounded-lg hover:bg-[#2B4B7D] transition-all duration-200 hover:shadow-md">
+                    <span class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white font-medium rounded-lg pointer-events-none opacity-80">
                         <i class="fas fa-cog mr-2"></i>
                         Manage Profile
-                    </a>
+                    </span>
                 </div>
             </div>
         </div>
@@ -216,11 +213,13 @@
                 </div>
                 
                 <div class="text-center group">
-                    <div class="w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-mountain text-[#1B365D] text-2xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-2">Location</h3>
-                    <p class="text-gray-200 text-sm">Fort Del Pilar, Baguio City, Philippines</p>
+                    <a href="https://www.google.com/maps/place/Philippine+Military+Academy+(PMA)/@16.3448472,120.6101311,14.18z/data=!4m10!1m2!2m1!1sPMA!3m6!1s0x3391a140001b5169:0x3e6e8c0c41cfb35a!8m2!3d16.360888!4d120.619414!15sCgNQTUGSAQ9taWxpdGFyeV9zY2hvb2yqASoQATIdEAEiGVhxt5fJUUiIqeZ8vr3CUEe_6KFeKT8HghAyBxACIgNwbWHgAQA!16zL20vMDhwbmY1?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="block group cursor-pointer hover:shadow-lg transition-shadow duration-300">
+                        <div class="w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-mountain text-[#1B365D] text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Location</h3>
+                        <p class="text-gray-200 text-sm">Fort Del Pilar, Baguio City, Philippines</p>
+                    </a>
                 </div>
             </div>
             
@@ -235,6 +234,10 @@
                        class="flex items-center space-x-2 text-[#D4AF37] hover:text-white transition-colors duration-200">
                         <i class="fab fa-facebook text-lg"></i>
                         <span>Facebook Page</span>
+                    </a>
+                    <a href="https://www.pma.edu.ph/charter.pdf" target="_blank" class="flex items-center space-x-2 text-[#D4AF37] hover:text-white transition-colors duration-200">
+                        <i class="fas fa-file-alt text-lg"></i>
+                        <span>PMA Charter's Chart</span>
                     </a>
                 </div>
             </div>

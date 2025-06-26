@@ -170,7 +170,7 @@
             background-clip: padding-box;
             position: relative;
             overflow: hidden;
-            width: 260px;
+            width: 280px;
             flex-shrink: 0;
             z-index: 30;
             border-radius: 1.5rem;
@@ -209,13 +209,15 @@
             padding: 1.5rem 1.25rem;
             background: linear-gradient(135deg, rgba(43, 75, 125, 0.4) 0%, rgba(27, 54, 93, 0.3) 100%);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.75rem;
             margin: 0.75rem;
             border-radius: 1.5rem;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             border: 1px solid rgba(212, 175, 55, 0.2);
+            min-height: 100px;
+            max-width: calc(100% - 1.5rem);
         }
 
         .profile-container::before {
@@ -237,7 +239,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            border: 1px solid;
+            /* border: 1px solid; */
             border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.3), transparent) 1;
             border-radius: 1.5rem;
             pointer-events: none;
@@ -267,22 +269,31 @@
             flex-grow: 1;
             position: relative;
             z-index: 1;
+            min-width: 0;
+            max-width: calc(100% - 60px);
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+            overflow: visible;
         }
         
         .profile-container .user-name {
             font-size: 0.875rem;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.125rem;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            white-space: normal;
+            overflow: visible;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
-            display: inline-block;
+            display: block;
             text-decoration: none;
+            width: 100%;
+            max-width: 100%;
+            line-height: 1.2;
+            word-wrap: break-word;
         }
         
         .profile-container .user-name:hover {
@@ -306,10 +317,29 @@
             width: 100%;
         }
         
+        .profile-container .user-username {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #D4AF37;
+            margin-bottom: 0.125rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            white-space: normal;
+            overflow: visible;
+            width: 100%;
+            max-width: 100%;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+        
         .profile-container .user-role {
             font-size: 0.6875rem;
             color: #94a3b8;
             letter-spacing: 0.5px;
+            text-transform: capitalize;
+            font-weight: 400;
+            white-space: normal;
+            overflow: visible;
+            word-wrap: break-word;
         }
         
         .tab-container {
@@ -433,7 +463,7 @@
             display: flex;
             flex-direction: column;
             border: 1px solid rgba(212, 175, 55, 0.1);
-            max-width: calc(100vw - 280px - 1rem);
+            max-width: calc(100vw - 300px - 1rem);
         }
 
         .content-scroll {
@@ -627,25 +657,16 @@
 
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
+                        <!-- Philippine Standard Time -->
+                        <a href="https://oras.pagasa.dost.gov.ph/index.shtml" target="_blank" rel="noopener noreferrer" class="hidden md:block text-xs text-right hover:underline focus:underline outline-none">
+                            <div class="font-bold text-white">Philippine Standard Time:</div>
+                            <div id="ph-time-value-admin" class="text-yellow-400"></div>
+                        </a>
                         <!-- Notifications -->
                         <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
                             <i class="fas fa-bell text-lg"></i>
                             <span class="notification-badge">3</span>
                         </button>
-                        
-                        <!-- Current Time -->
-                        <div class="hidden md:block text-white text-xs">
-                            <div class="font-medium" id="current-time"></div>
-                            <div class="text-[#D4AF37] text-xs" id="current-date"></div>
-                        </div>
-                        
-                        <!-- Philippine Standard Time -->
-                        <div class="flex items-center space-x-4">
-                            <div id="ph-time-header-admin" class="text-right">
-                                <div style="font-weight:bold;">Philippine Standard Time:</div>
-                                <div id="ph-time-value-admin"></div>
-                            </div>
-                        </div>
                         <!-- Breadcrumb -->
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Admin</span>
@@ -671,10 +692,15 @@
                 <div class="user-info">
                         <a href="{{ route('admin.profile.edit') }}" 
                            class="user-name"
-                           title="Manage Profile">
+                           title="{{ Auth::user()->username }} - {{ Auth::user()->name }}">
                             {{ Auth::user()->name }}
                         </a>
-                    <div class="user-role">Administrator</div>
+                    <div class="user-username">
+                        {{ '@' . Auth::user()->username }}
+                    </div>
+                    <div class="user-role">
+                        {{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}
+                    </div>
                     </div>
                 </div>
                 
@@ -991,7 +1017,7 @@
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
-                hour: '2-digit',
+                hour: 'numeric',
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: true,

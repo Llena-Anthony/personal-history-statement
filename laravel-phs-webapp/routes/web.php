@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CharacterReputationController;
 use App\Http\Controllers\ArrestRecordController;
 use App\Models\AddressDetails;
+use App\Http\Controllers\CredentialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -340,6 +341,9 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard Route
     Route::get('/dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
+
+    // PHS Routes - Send Credentials
+    Route::post('/phs/send-credentials/{user}', [CredentialController::class, 'sendEmail'])->name('phs.send-credentials');
 });
 
 // Admin Routes

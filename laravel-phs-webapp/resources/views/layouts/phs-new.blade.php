@@ -1486,51 +1486,6 @@
         }
 
         window.initializeMaritalStatus = function() {
-            // Handle marital status changes to show/hide spouse and children sections
-            const maritalStatusSelect = document.getElementById('marital_status');
-            const spouseSection = document.getElementById('spouse-section');
-            const childrenSection = document.getElementById('children-section');
-
-            if (!maritalStatusSelect) return;
-
-            const toggleSections = () => {
-                const status = maritalStatusSelect.value;
-                // Show spouse section only if married
-                if (status === 'Married') {
-                    spouseSection.classList.remove('hidden');
-                } else {
-                    spouseSection.classList.add('hidden');
-                }
-                // Show children section for any status except the default empty one
-                if (status) {
-                    childrenSection.classList.remove('hidden');
-                } else {
-                    childrenSection.classList.add('hidden');
-                }
-            };
-            maritalStatusSelect.removeEventListener('change', toggleSections);
-            maritalStatusSelect.addEventListener('change', toggleSections);
-            toggleSections();
-
-            // Handle marriage date type changes
-            const marriageDateTypeSelect = document.getElementById('marriage_date_type');
-            const marriageDateInput = document.getElementById('marriage_date');
-            const marriageMonthYearGroup = document.getElementById('marriage-month-year-group');
-            if (marriageDateTypeSelect && marriageDateInput && marriageMonthYearGroup) {
-                const handleMarriageDateTypeChange = () => {
-                    if (marriageDateTypeSelect.value === 'exact') {
-                        marriageDateInput.classList.remove('hidden');
-                        marriageMonthYearGroup.classList.add('hidden');
-                    } else {
-                        marriageDateInput.classList.add('hidden');
-                        marriageMonthYearGroup.classList.remove('hidden');
-                    }
-                };
-                marriageDateTypeSelect.removeEventListener('change', handleMarriageDateTypeChange);
-                marriageDateTypeSelect.addEventListener('change', handleMarriageDateTypeChange);
-                handleMarriageDateTypeChange();
-            }
-
             // Dynamic child entry management
             const addChildButton = document.getElementById('add-child');
             const childrenContainer = document.getElementById('children-container');
