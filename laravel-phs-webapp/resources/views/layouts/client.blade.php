@@ -280,12 +280,12 @@
                     
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
-                        <div class="hidden md:block text-white text-xs">
+                        <a href="https://oras.pagasa.dost.gov.ph/index.shtml" target="_blank" rel="noopener noreferrer" class="hidden md:block text-white text-xs hover:underline focus:underline outline-none">
                             <div id="ph-time-header-client" class="text-right">
                                 <div style="font-weight:bold;">Philippine Standard Time:</div>
                                 <div id="ph-time-value-client"></div>
                             </div>
-                        </div>
+                        </a>
                         <!-- User Avatar and Name (no dropdown) -->
                         <div class="flex items-center space-x-2 text-white">
                             <div class="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center overflow-hidden">

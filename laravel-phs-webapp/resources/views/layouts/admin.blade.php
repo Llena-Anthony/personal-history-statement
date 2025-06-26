@@ -658,10 +658,10 @@
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
                         <!-- Philippine Standard Time -->
-                        <div class="hidden md:block text-xs text-right">
+                        <a href="https://oras.pagasa.dost.gov.ph/index.shtml" target="_blank" rel="noopener noreferrer" class="hidden md:block text-xs text-right hover:underline focus:underline outline-none">
                             <div class="font-bold text-white">Philippine Standard Time:</div>
                             <div id="ph-time-value-admin" class="text-yellow-400"></div>
-                        </div>
+                        </a>
                         <!-- Notifications -->
                         <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
                             <i class="fas fa-bell text-lg"></i>
