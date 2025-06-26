@@ -586,18 +586,22 @@
                             <i class="fas fa-bars text-lg"></i>
                         </button>
                         <div class="flex items-center space-x-3">
-                            <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
+                            <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
+                            </a>
                             <div class="hidden sm:block">
-                                <h1 class="header-title text-white font-bold text-lg">Personal History Statement</h1>
-                                <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
+                                <a href="{{ route('client.dashboard') }}" onclick="event.preventDefault(); if(window.location.pathname === '{{ url('/dashboard') }}'){ window.location.reload(); } else { window.location.href='{{ route('client.dashboard') }}'; }" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                    <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
+                                    <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
-                        <div class="hidden md:block text-white text-xs">
-                            <div class="font-medium" id="current-time"></div>
-                            <div class="text-[#D4AF37] text-xs" id="current-date"></div>
+                        <div id="ph-time-header" class="text-right text-white">
+                            <div style="font-weight:bold;">Philippine Standard Time:</div>
+                            <div id="ph-time-value"></div>
                         </div>
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Client</span>
@@ -621,9 +625,11 @@
                 <div class="profile-section">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="relative">
-                            <div class="w-16 h-16 rounded-full overflow-hidden profile-avatar">
-                                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
-                            </div>
+                            <a href="{{ route('profile.edit') }}">
+                                <div class="w-16 h-16 rounded-full overflow-hidden profile-avatar">
+                                    <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
+                                </div>
+                            </a>
                             <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                                 <i class="fas fa-check text-xs text-white"></i>
                             </div>
@@ -2719,6 +2725,26 @@
         window.initializeCharacterReferences = function() {
             // No dynamic JS needed for character references
         };
+
+        function updatePHTimeHeader() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            };
+            const dateTime = now.toLocaleString('en-US', options);
+            const el = document.getElementById('ph-time-value');
+            if (el) el.textContent = dateTime;
+        }
+        setInterval(updatePHTimeHeader, 1000);
+        updatePHTimeHeader();
     </script>
 </body>
 </html> 

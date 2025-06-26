@@ -639,6 +639,13 @@
                             <div class="text-[#D4AF37] text-xs" id="current-date"></div>
                         </div>
                         
+                        <!-- Philippine Standard Time -->
+                        <div class="flex items-center space-x-4">
+                            <div id="ph-time-header-admin" class="text-right">
+                                <div style="font-weight:bold;">Philippine Standard Time:</div>
+                                <div id="ph-time-value-admin"></div>
+                            </div>
+                        </div>
                         <!-- Breadcrumb -->
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Admin</span>
@@ -744,7 +751,11 @@
                         <!-- Center Section -->
                         <div class="text-center text-white text-xs">
                             <p class="text-[#D4AF37] font-medium">"Character, Excellence, Service"</p>
-                            <p class="mt-1">Fort Del Pilar, Baguio City, Philippines</p>
+                            <a href="https://www.google.com/maps/place/Philippine+Military+Academy+(PMA)/@16.3595363,120.6175352,17z/data=!4m10!1m2!2m1!1sPMA!3m6!1s0x3391a140001b5169:0x3e6e8c0c41cfb35a!8m2!3d16.360888!4d120.619414!15sCgNQTUGSAQ9taWxpdGFyeV9zY2hvb2yqASoQATIdEAEiGVhxt5fJUUiIqeZ8vr3CUEe_6KFeKT8HghAyBxACIgNwbWHgAQA!16zL20vMDhwbmY1?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D" 
+                               target="_blank" 
+                               class="mt-1 hover:text-[#D4AF37] transition-colors duration-200 cursor-pointer">
+                                Fort Del Pilar, Baguio City, Philippines
+                            </a>
                         </div>
 
                         <!-- Right Section -->
@@ -972,6 +983,26 @@
             // Initialize content transition styles
             mainContent.style.transition = 'all 0.3s ease-in-out';
         });
+
+        function updatePHTimeHeaderAdmin() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            };
+            const dateTime = now.toLocaleString('en-US', options);
+            const el = document.getElementById('ph-time-value-admin');
+            if (el) el.textContent = dateTime;
+        }
+        setInterval(updatePHTimeHeaderAdmin, 1000);
+        updatePHTimeHeaderAdmin();
     </script>
 </body>
 </html> 
