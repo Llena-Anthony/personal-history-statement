@@ -165,4 +165,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(CreditReputation::class);
     }
+
+    /**
+     * Get the user's personal characteristics.
+     */
+    public function personalChar()
+    {
+        return $this->hasOne(PersonalCharacteristic::class);
+    }
+
+    /**
+     * Get the user's personal details.
+     */
+    public function userDetails()
+    {
+        return $this->hasOne(UserDetails::class, 'username', 'username');
+    }
 }

@@ -1123,10 +1123,23 @@
                         tempDiv.innerHTML = html;
                         
                         // Extract the content from the yield('content') section
-                        const newContent = tempDiv.querySelector('#phsContent') || tempDiv.querySelector('.phs-scroll') || tempDiv;
+                        // Try multiple selectors to find the content
+                        let newContent = tempDiv.querySelector('#phsContent');
+                        if (!newContent) {
+                            newContent = tempDiv.querySelector('.phs-scroll');
+                        }
+                        if (!newContent) {
+                            // If we can't find the specific content wrapper, look for the main content area
+                            newContent = tempDiv.querySelector('main') || tempDiv.querySelector('.max-w-4xl') || tempDiv;
+                        }
                         
                         // Update the content
-                        contentArea.innerHTML = newContent.innerHTML;
+                        if (newContent && newContent.innerHTML) {
+                            contentArea.innerHTML = newContent.innerHTML;
+                        } else {
+                            // Fallback: use the entire response
+                            contentArea.innerHTML = html;
+                        }
                         
                         // Update browser URL without reload
                         window.history.pushState({section: sectionId}, '', url);
