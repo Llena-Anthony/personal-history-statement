@@ -7,6 +7,7 @@ dayjs.extend(relativeTime);
 
 // Add any custom JavaScript here
 document.addEventListener('DOMContentLoaded', () => {
+    alert('JS loaded!');
     // Initialize any JavaScript components here
     console.log('PHS Online System initialized');
 
@@ -23,6 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateTimeAgo, 60000); // Update every minute
 
     // Sibling dynamic add/remove logic
+    function updateSiblingRemoveButtons() {
+        const entries = document.querySelectorAll('#siblings-container .sibling-entry');
+        const removeBtns = document.querySelectorAll('#siblings-container .remove-sibling');
+        if (entries.length <= 1) {
+            removeBtns.forEach(btn => btn.classList.add('hidden'));
+        } else {
+            removeBtns.forEach(btn => btn.classList.remove('hidden'));
+        }
+    }
+
     window.addSibling = function() {
         const container = document.getElementById('siblings-container');
         const template = document.getElementById('sibling-template');
@@ -45,22 +56,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const clone = document.createElement('div');
         clone.innerHTML = template.innerHTML.replace(/__INDEX__/g, index);
         const siblingEntry = clone.firstElementChild;
-        // Show the remove button for dynamic siblings
-        const removeBtn = siblingEntry.querySelector('.remove-sibling');
-        if (removeBtn) {
-            removeBtn.classList.remove('hidden');
-            removeBtn.addEventListener('click', function() {
-                siblingEntry.remove();
-            });
-        }
         container.appendChild(siblingEntry);
+        updateSiblingRemoveButtons();
     };
 
-    // Attach remove event to existing dynamic siblings (if any)
-    document.querySelectorAll('.remove-sibling').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const entry = btn.closest('.sibling-entry');
-            if (entry) entry.remove();
+    // Event delegation for removing siblings
+    const siblingsContainer = document.getElementById('siblings-container');
+    if (siblingsContainer) {
+        siblingsContainer.addEventListener('click', function(e) {
+            const btn = e.target.closest('.remove-sibling');
+            if (btn) {
+                const entry = btn.closest('.sibling-entry');
+                if (entry) entry.remove();
+                updateSiblingRemoveButtons();
+            }
         });
-    });
+    }
+
+    updateSiblingRemoveButtons();
 });
