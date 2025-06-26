@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use App\Traits\ProfilePictureHandler;
 
 class ProfileController extends Controller
 {
+    use ProfilePictureHandler;
+
     public function edit()
     {
         $user = Auth::user();
@@ -83,7 +86,7 @@ class ProfileController extends Controller
                 return redirect()->route('login')->with('success', 'Password changed successfully. Please log in again.');
             }
 
-            // Handle profile photo upload
+            // Handle profile photo upload using the trait
             if ($request->hasFile('profile_photo')) {
                 Log::info('Profile photo upload started', [
                     'user_id' => $user->id,
@@ -91,28 +94,14 @@ class ProfileController extends Controller
                     'file_size' => $request->file('profile_photo')->getSize()
                 ]);
 
-                // Delete old profile photo if exists
-                if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
-                    Storage::disk('public')->delete($user->profile_picture);
-                    Log::info('Old profile photo deleted', ['path' => $user->profile_picture]);
-                }
-
-                // Store the new profile photo
-                $file = $request->file('profile_photo');
-                $filename = 'profile_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('profile-photos', $filename, 'public');
-                
-                // Ensure the directory exists
-                if (!Storage::disk('public')->exists('profile-photos')) {
-                    Storage::disk('public')->makeDirectory('profile-photos');
-                }
+                // Use the trait method for efficient profile picture handling
+                $path = $this->handleProfilePictureUpload(
+                    $request->file('profile_photo'),
+                    $user->profile_picture,
+                    $user->id
+                );
                 
                 $user->profile_picture = $path;
-                
-                Log::info('Profile photo uploaded successfully', [
-                    'path' => $path,
-                    'full_url' => url('storage/' . $path)
-                ]);
             }
 
             $user->save();
