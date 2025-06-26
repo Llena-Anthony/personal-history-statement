@@ -337,7 +337,11 @@
                         <!-- Center Section -->
                         <div class="text-center text-white text-xs">
                             <p class="text-[#D4AF37] font-medium">"Character, Excellence, Service"</p>
-                            <p class="mt-1">Fort Del Pilar, Baguio City, Philippines</p>
+                            <a href="https://www.google.com/maps/place/Philippine+Military+Academy+(PMA)/@16.3595363,120.6175352,17z/data=!4m10!1m2!2m1!1sPMA!3m6!1s0x3391a140001b5169:0x3e6e8c0c41cfb35a!8m2!3d16.360888!4d120.619414!15sCgNQTUGSAQ9taWxpdGFyeV9zY2hvb2yqASoQATIdEAEiGVhxt5fJUUiIqeZ8vr3CUEe_6KFeKT8HghAyBxACIgNwbWHgAQA!16zL20vMDhwbmY1?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D" 
+                               target="_blank" 
+                               class="mt-1 hover:text-[#D4AF37] transition-colors duration-200 cursor-pointer">
+                                Fort Del Pilar, Baguio City, Philippines
+                            </a>
                         </div>
                         <!-- Right Section -->
                         <div class="flex items-center space-x-4 text-white text-xs">

@@ -17,6 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
     <style>
         /* Base Styles */
         body {
@@ -131,7 +133,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <p class="text-sm">© {{ date('Y') }} Philippine Military Academy. All rights reserved.</p>
-                <p class="text-sm mt-2">Fort Del Pilar, Baguio City, Philippines 2600</p>
+                <a href="https://www.google.com/maps/place/Philippine+Military+Academy+(PMA)/@16.3595363,120.6175352,17z/data=!4m10!1m2!2m1!1sPMA!3m6!1s0x3391a140001b5169:0x3e6e8c0c41cfb35a!8m2!3d16.360888!4d120.619414!15sCgNQTUGSAQ9taWxpdGFyeV9zY2hvb2yqASoQATIdEAEiGVhxt5fJUUiIqeZ8vr3CUEe_6KFeKT8HghAyBxACIgNwbWHgAQA!16zL20vMDhwbmY1?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D" 
+                   target="_blank" 
+                   class="text-sm mt-2 hover:text-[#D4AF37] transition-colors duration-200 cursor-pointer">
+                    Fort Del Pilar, Baguio City, Philippines 2600
+                </a>
             </div>
         </div>
     </footer>
