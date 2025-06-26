@@ -657,25 +657,16 @@
 
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
+                        <!-- Philippine Standard Time -->
+                        <div class="hidden md:block text-xs text-right">
+                            <div class="font-bold text-white">Philippine Standard Time:</div>
+                            <div id="ph-time-value-admin" class="text-yellow-400"></div>
+                        </div>
                         <!-- Notifications -->
                         <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
                             <i class="fas fa-bell text-lg"></i>
                             <span class="notification-badge">3</span>
                         </button>
-                        
-                        <!-- Current Time -->
-                        <div class="hidden md:block text-white text-xs">
-                            <div class="font-medium" id="current-time"></div>
-                            <div class="text-[#D4AF37] text-xs" id="current-date"></div>
-                        </div>
-                        
-                        <!-- Philippine Standard Time -->
-                        <div class="flex items-center space-x-4">
-                            <div id="ph-time-header-admin" class="text-right">
-                                <div style="font-weight:bold;">Philippine Standard Time:</div>
-                                <div id="ph-time-value-admin"></div>
-                            </div>
-                        </div>
                         <!-- Breadcrumb -->
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Admin</span>
@@ -1026,7 +1017,7 @@
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
-                hour: '2-digit',
+                hour: 'numeric',
                 minute: '2-digit',
                 second: '2-digit',
                 hour12: true,
