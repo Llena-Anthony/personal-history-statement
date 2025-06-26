@@ -260,12 +260,24 @@ class AdminUserController extends Controller
             'is_active' => ['required', 'boolean'],
         ]);
 
-        $user->update([
-            'usertype' => $validated['usertype'],
-            'is_active' => $validated['is_active'],
-        ]);
+        try {
+            $user->update([
+                'usertype' => $validated['usertype'],
+                'is_active' => $validated['is_active'],
+                'is_admin' => $validated['usertype'] === 'admin',
+            ]);
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User updated successfully.');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('User update failed', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->with('error', 'An error occurred while updating the user: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 } 
