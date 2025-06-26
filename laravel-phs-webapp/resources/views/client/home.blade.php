@@ -239,6 +239,11 @@
                         <i class="fab fa-facebook text-lg"></i>
                         <span>Facebook Page</span>
                     </a>
+                    <a href="https://www.pma.edu.ph/charter.pdf" target="_blank"
+                       class="flex items-center space-x-2 text-[#D4AF37] hover:text-white transition-colors duration-200">
+                        <i class="fas fa-file-alt text-lg"></i>
+                        <span>PMA Citizen's Charter</span>
+                    </a>
                 </div>
             </div>
         </div>

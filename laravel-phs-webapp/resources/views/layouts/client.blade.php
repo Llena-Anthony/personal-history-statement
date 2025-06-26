@@ -281,8 +281,10 @@
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
                         <div class="hidden md:block text-white text-xs">
-                            <div class="font-medium" id="current-time"></div>
-                            <div class="text-[#D4AF37] text-xs" id="current-date"></div>
+                            <div id="ph-time-header-client" class="text-right">
+                                <div style="font-weight:bold;">Philippine Standard Time:</div>
+                                <div id="ph-time-value-client"></div>
+                            </div>
                         </div>
                         <!-- User Avatar and Name (no dropdown) -->
                         <div class="flex items-center space-x-2 text-white">
@@ -461,6 +463,26 @@
         // Update date and time every second
         updateDateTime();
         setInterval(updateDateTime, 1000);
+
+        function updatePHTimeHeaderClient() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            };
+            const dateTime = now.toLocaleString('en-US', options);
+            const el = document.getElementById('ph-time-value-client');
+            if (el) el.textContent = dateTime;
+        }
+        setInterval(updatePHTimeHeaderClient, 1000);
+        updatePHTimeHeaderClient();
     </script>
 </body>
 </html> 

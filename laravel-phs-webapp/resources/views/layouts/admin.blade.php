@@ -639,6 +639,13 @@
                             <div class="text-[#D4AF37] text-xs" id="current-date"></div>
                         </div>
                         
+                        <!-- Philippine Standard Time -->
+                        <div class="flex items-center space-x-4">
+                            <div id="ph-time-header-admin" class="text-right">
+                                <div style="font-weight:bold;">Philippine Standard Time:</div>
+                                <div id="ph-time-value-admin"></div>
+                            </div>
+                        </div>
                         <!-- Breadcrumb -->
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Admin</span>
@@ -976,6 +983,26 @@
             // Initialize content transition styles
             mainContent.style.transition = 'all 0.3s ease-in-out';
         });
+
+        function updatePHTimeHeaderAdmin() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            };
+            const dateTime = now.toLocaleString('en-US', options);
+            const el = document.getElementById('ph-time-value-admin');
+            if (el) el.textContent = dateTime;
+        }
+        setInterval(updatePHTimeHeaderAdmin, 1000);
+        updatePHTimeHeaderAdmin();
     </script>
 </body>
 </html> 
