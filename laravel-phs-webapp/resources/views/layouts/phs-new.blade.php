@@ -599,7 +599,7 @@
                     </div>
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
-                        <div id="ph-time-header" class="text-right">
+                        <div id="ph-time-header" class="text-right text-white">
                             <div style="font-weight:bold;">Philippine Standard Time:</div>
                             <div id="ph-time-value"></div>
                         </div>
