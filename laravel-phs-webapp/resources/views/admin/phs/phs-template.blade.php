@@ -313,47 +313,192 @@
                     <p>Date and Place of Birth:</p>
                     <p>Complete Address: </p>
                     <p>Occupation/Employer/Place of Employment: </p>
-                    <p>Citizenship:</p> <span> <div class="citizenship"></div> </span><span>If dual, write both citizenship. If naturalized, give date and place where naturalized: </span>
+                    <p>Citizenship: <span class="citizenship inline-block border-b border-black w-32 align-bottom"> </span>
+                        If dual, write both citizenship. If naturalized, give date and place where naturalized:
+                        <span class="citizenship inline-block border-b border-black w-2/3 align-bottom"> </span></p>
                 </div>
 
                 <div class="section-name"><span class="list-rom">V.</span><span class="section-title">EDUCATIONAL BACKGROUND:</span>
-                    <div>
-                        <span class="list-alpha">A.</span><span class="educ-level">Elementary</span>
-                        <span class="'educ-addr">Location</span>
-                        <span class="educ-attend">Date of Attendance</span>
-                        <span class="educ-grad">Year Graduated</span>
-                        <table class="educ-table">
-
-                        </table>
+                    <div class="flex">
+                        <span class="list-alpha">A.</span>
+                        <div class="educ-level w-20 mr-32">Elementary</div>
+                        <div class="'educ-addr w-20 mr-28">Location</div>
+                        <div class="educ-attend w-14 mr-16">Date of Attendance</div>
+                        <div class="educ-grad w-14">Year Graduated</div>
                     </div>
-                    <div>
-                        <span class="list-alpha">B.</span><span class="educ-level">High School</span>
-                        <span class="'educ-addr">Location</span>
-                        <span class="educ-attend">Date of Attendance</span>
-                        <span class="educ-grad">Year Graduated</span>
-                        <table class="educ-table">
 
-                        </table>
-                    </div>
-                    <div>
-                        <span class="list-alpha">C.</span><span class="educ-level">College</span>
-                        <span class="'educ-addr">Location</span>
-                        <span class="educ-attend">Date of Attendance</span>
-                        <span class="educ-grad">Year Graduated</span>
-                        <table class="educ-table">
+                    <table class="educ-table table-auto border-collapse w-full">
+                        <tbody>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
 
-                        </table>
-                    </div>
-                    <div>
-                        <span class="list-alpha">D.</span><span class="educ-level">Post Graduate</span>
-                        <span class="'educ-addr">Location</span>
-                        <span class="educ-attend">Date of Attendance</span>
-                        <span class="educ-grad">Year Graduated</span>
-                        <table class="educ-table">
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
 
-                        </table>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="flex mt-4">
+                        <span class="list-alpha">B.</span>
+                        <div class="educ-level w-32 mr-20">High School:</div>
+                        <div class="'educ-addr w-20 mr-28">Location</div>
+                        <div class="educ-attend w-14 mr-16">Date of Attendance</div>
+                        <div class="educ-grad w-14">Year Graduated</div>
                     </div>
-                    <div><span class="list-alpha">E.</span>Other Schools/Training Attended and Date of Attendance: </div>
+
+                    <table class="educ-table table-auto border-collapse w-full">
+                        <tbody>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="flex mt-4">
+                        <span class="list-alpha">C.</span>
+                        <div class="educ-level w-20 mr-32">College:</div>
+                        <div class="'educ-addr w-20 mr-28">Location</div>
+                        <div class="educ-attend w-14 mr-16">Date of Attendance</div>
+                        <div class="educ-grad w-14">Year Graduated</div>
+                    </div>
+
+                    <table class="educ-table table-auto border-collapse w-full">
+                        <tbody>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="flex">
+                        <span class="list-alpha">D.</span>
+                        <div class="educ-level w-32 mr-20">Post Graduate:</div>
+                        <div class="'educ-addr w-20 mr-28">Location</div>
+                        <div class="educ-attend w-14 mr-16">Date of Attendance</div>
+                        <div class="educ-grad w-14">Year Graduated</div>
+                    </div>
+
+                    <table class="educ-table table-auto border-collapse w-full">
+                        <tbody>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="w-2/5"></td>
+                                <td class="w-[2.3in]"></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mt-4"><span class="list-alpha">E.</span>Other Schools/Training Attended and Date of Attendance: </div>
+                    <div class="ml-[1.3in]"><span <span class="citizenship inline-block border-b border-black w-full align-bottom"></span></div>
                     <div><span class="list-alpha">F.</span>Civil Service, If any and other Similar Qualification Acquired: </div>
                     <div class="signature" id="educational">
                         <hr>

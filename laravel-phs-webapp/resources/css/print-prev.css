@@ -201,16 +201,16 @@ body {
     font-size: 11pt;
 }
 .citizenship {
-    border: none;
-    border-bottom: 1px solid black;
-    width: 1.5in;
-    margin-left: 0.85in;
     font-size: 11pt;
     text-align: left;
 }
+.educ-table td {
+    border: 1px solid black;
+    height: 12pt;
+}
 #partial-inlaw {
     margin-top: 53pt;
-    margin-left: 1.2in;
+    margin-left: 1.1in;
     margin-right: 0.3in;
 }
 #military {
