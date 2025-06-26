@@ -5,10 +5,6 @@ body {
     margin: 0;
     padding: 0;
 }
-.list-num {
-    margin-left: 0.5in;
-    margin-right: 0.5in;
-}
 .list-rom {
     font-weight: bold;
     margin-right: 0.5in;
@@ -23,10 +19,6 @@ body {
 }
 .fluency {
     text-decoration: underline;
-}
-.up {
-    font-size: 9pt;
-    text-align: left;
 }
 .mark {
     border: 2px solid black;
@@ -50,15 +42,6 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
-.instruc {
-    font-size: 12pt;
-    font-weight: bold;
-    letter-spacing: 3pt;
-    text-decoration: underline;
-    text-align: center;
-    margin-top: 12pt;
-    margin-bottom: 11pt;
-}
 .signature {
     border-top: 1px solid black;
     width: 2.37in;
@@ -69,10 +52,6 @@ body {
     transform: rotate(-90deg);
     transform-origin: top left;
     white-space: nowrap;
-}
-.instruc-list {
-    list-style: decimal;
-    list-style-position: inside;
 }
 .applicant {
     margin-left: auto;
@@ -314,25 +293,6 @@ body {
 #signed {
     margin-top: 11pt;
     margin-bottom: 33pt;
-}
-#annex {
-    font-size: 9pt;
-    font-weight: bold;
-    text-align: left;
-    text-decoration: underline;
-    text-decoration-thickness: 1.5px;
-}
-#fnr {
-    font-size: 9pt;
-    text-align: right;
-}
-#doc-title {
-    font-size: 12pt;
-    text-align: center;
-}
-#doc-title span {
-    font-weight: bold;
-    text-decoration: underline;
 }
 #admin-officer {
     display: grid;

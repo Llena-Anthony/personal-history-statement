@@ -46,105 +46,104 @@
                 </div>
 
                 {{-- Title --}}
-                <p id='fnr'>File Nr:_______</p>
-                <p id='ghq' class='up'>GHQ, OJ2</p>
-                <p id='num-form' class='up'>200-054 Form</p>
-                <p id='doc-title'>
-                    <span>PERSONAL</span>
-                    <span>HISTORY</span>
-                    <span>STATEMENT</span>
+                <p class="text-[9pt] text-right mt-[60pt]">File Nr:_______</p>
+                <p class="text-[9pt] text-left">GHQ, OJ2</p>
+                <p class="text-[9pt] text-left">200-054 Form</p>
+                <p class="text-[12pt] font-bold text-center">
+                    <span class="underline">PERSONAL</span>
+                    <span class="underline">HISTORY</span>
+                    <span class="underline">STATEMENT</span>
                 </p>
 
                 {{-- Instruction --}}
-                <p class='instruc'>INSTRUCTIONS</p>
-                <p><span class='list-num'>1.</span>Answer all questions completely; if question is not applicable, write “NA”.write “Unknown”
+                <p class="text-[12pt] font-bold tracking-[3px] text-center underline mt-[12pt] mb-[11pt]">INSTRUCTIONS</p>
+                <p class=" mb-[10pt]"><span class="ml-[0.5in] mr-[0.5in]">1.</span>Answer all questions completely; if question is not applicable, write “NA”.write “Unknown”
                     only if you do not know the answer and cannot obtain the answer from personal records.
                     Use the blank pages at the back of this form for extra details on any question for which you
                     do not have sufficient space.
                 </p>
-                <p><span class='list-num'>2.</span>Write carefully, Illegible or incomplete forms will not receive consideration.</p>
+                <p><span class="ml-[0.5in] mr-[0.5in]">2.</span>Write carefully, Illegible or incomplete forms will not receive consideration.</p>
 
                 {{-- Warning --}}
-                <p class='instruc'>WARNING</p>
-                <p><span class='list-num'>1.</span>The correctness of all statement of entries made herein will be investigated.</p>
-                <p><span class='list-num'>2.</span>Any deliberate omission or distortion of material facts may give sufficient cause for denial of clearance.</p>
-                <p><span class='list-num'>3.</span>The statements made herein are classified CONFIDENTIAL. Revelation or use for other than the authorized
+                <p class="text-[12pt] font-bold tracking-[3px] text-center underline mt-[12pt] mb-[11pt]">WARNING</p>
+                <p class=" mb-[10pt]"><span class="ml-[0.5in] mr-[0.5in]">1.</span>The correctness of all statement of entries made herein will be investigated.</p>
+                <p class=" mb-[10pt]"><span class="ml-[0.5in] mr-[0.5in]">2.</span>Any deliberate omission or distortion of material facts may give sufficient cause for denial of clearance.</p>
+                <p class=" mb-[10pt]"><span class="ml-[0.5in] mr-[0.5in]">3.</span>The statements made herein are classified CONFIDENTIAL. Revelation or use for other than the authorized
                     purpose is prohibited by AFPR G-200-054.</p>
 
                 {{-- Section I - Personal Detail --}}
-                <div class="section-name"><span class="list-rom">I.</span><span class="section-title">PERSONAL DETAIL</span>
+                <div class="font-bold"><span class="mr-[0.5in]">I.</span><span>PERSONAL DETAIL</span></div>
 
-                    {{-- Signature --}}
-                    <div class="signature mt-[180pt]" id="personal">
-                        <span class="sign">(Signature of Applicant)</span>
-                    </div>
+                {{-- Signature --}}
+                <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold transform-rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
 
-                    {{-- Personal-A --}}
-                    <div class="flex mt-[-190pt] ml-[0.6in]"><span class="mr-[0.5in]">A.</span>
-                        Name:<div class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2"></div>
-                    </div>
-                    <div class="ml-[1.8in] text-center">
-                        <span class="mr-[0.9in]">(Last Name)</span>
-                        <span class="mr-[0.7in]">(First Name)</span>
-                        <span>(Middle Name)</span>
-                    </div>
+                {{-- Personal-A --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>
+                    Name:<div class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2"></div>
+                </div>
+                <div class="ml-[1.8in] text-center">
+                    <span class="mr-[0.9in]">(Last Name)</span>
+                    <span class="mr-[0.7in]">(First Name)</span>
+                    <span>(Middle Name)</span>
+                </div>
 
-                    {{-- Personal-B --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">B.</span>
-                        Rank:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
-                        AFPSN:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.65in] pl-2"></div>
-                        Br of Svc:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.7in] pl-2"></div>
-                    </div>
+                {{-- Personal-B --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">B.</span>
+                    Rank:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
+                    AFPSN:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.65in] pl-2"></div>
+                    Br of Svc:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.7in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-C --}}
-                    <div  class="flex ml-[0.6in]"><span class="mr-[0.5in]">C.</span>Present Job/Assignment:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.45in] pl-2"></div>
-                    </div>
+                {{-- Personal-C --}}
+                <div  class="flex ml-[0.6in]"><span class="mr-[0.5in]">C.</span>Present Job/Assignment:
+                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.45in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-D --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">D.</span>Business or Duty Address:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.35in] pl-2"></div>
-                    </div>
+                {{-- Personal-D --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">D.</span>Business or Duty Address:
+                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.35in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-E --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Home Address:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[5.1in] pl-2"></div>
-                    </div>
+                {{-- Personal-E --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Home Address:
+                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[5.1in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-F --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">F.</span>
-                        Birth Date:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                        Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
-                    </div>
+                {{-- Personal-F --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">F.</span>
+                    Birth Date:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-G --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">G.</span>CHANGE IN NAME (If by Court Action, give details):
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[2.6in] pl-2"></div>
-                    </div>
+                {{-- Personal-G --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">G.</span>CHANGE IN NAME (If by Court Action, give details):
+                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[2.6in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-H --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">H.</span>
-                        NICKNAMES: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
-                        NATIONALITY:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
-                    </div>
+                {{-- Personal-H --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">H.</span>
+                    NICKNAMES: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
+                    NATIONALITY:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-I --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">I.</span>
-                        TAX IDENTIFICATION NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[2in] pl-2"></div>
-                        RELIGION:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                    </div>
+                {{-- Personal-I --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">I.</span>
+                    TAX IDENTIFICATION NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[2in] pl-2"></div>
+                    RELIGION:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-J --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">J.</span>
-                        MOBILE NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                        EMAIL ADDRESS:<div class="border-b border-black text-[11pt] text-left ml-auto w-[2.5in] pl-2"></div>
-                    </div>
+                {{-- Personal-J --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">J.</span>
+                    MOBILE NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    EMAIL ADDRESS:<div class="border-b border-black text-[11pt] text-left ml-auto w-[2.5in] pl-2"></div>
+                </div>
 
-                    {{-- Personal-K --}}
-                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">K.</span>
-                        PASSPORT NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                        DATE OF EXPIRATION:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.9in] pl-2"></div>
-                    </div>
+                {{-- Personal-K --}}
+                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">K.</span>
+                    PASSPORT NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    DATE OF EXPIRATION:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.9in] pl-2"></div>
                 </div>
 
                 {{-- Footer --}}
