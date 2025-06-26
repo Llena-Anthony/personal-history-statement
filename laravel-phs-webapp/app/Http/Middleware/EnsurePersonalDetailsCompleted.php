@@ -20,8 +20,9 @@ class EnsurePersonalDetailsCompleted
     {
         $user = Auth::user();
 
-        // Adjust these relationship checks as needed
-        if (!$user || !$user->personalChar || !$user->userDetails) {
+        // Only check for Personal Details completion (section I)
+        // Personal Characteristics is section II and shouldn't require itself to be completed
+        if (!$user || !$user->userDetails) {
             return redirect()->route('phs.create')->with('error', 'Please complete Personal Details first.');
         }
 

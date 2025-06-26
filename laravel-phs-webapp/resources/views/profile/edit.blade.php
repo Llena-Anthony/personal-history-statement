@@ -79,20 +79,37 @@
                                 <i class="fas fa-upload mr-2 text-[#1B365D]"></i>
                                 Upload New Picture
                             </label>
+                            <!-- Drag and Drop Area -->
+                            <div 
+                                id="drop-area"
+                                class="flex flex-col items-center justify-center border-2 border-dashed border-[#D4AF37] rounded-xl p-6 mb-4 cursor-pointer bg-yellow-50 hover:bg-yellow-100 transition"
+                                onclick="document.getElementById('profile_picture').click();"
+                                ondragover="event.preventDefault(); this.classList.add('bg-yellow-100');"
+                                ondragleave="this.classList.remove('bg-yellow-100');"
+                                ondrop="handleDrop(event);"
+                            >
+                                <i class="fas fa-cloud-upload-alt text-3xl text-[#D4AF37] mb-2"></i>
+                                <span class="font-medium text-[#D4AF37]">Drag your file here or click to choose</span>
+                                <span class="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (Max: 2MB)</span>
+                                <input 
+                                    type="file" 
+                                    id="profile_picture" 
+                                    name="profile_picture" 
+                                    class="hidden"
+                                    accept="image/*"
+                                    onchange="previewImage(this); showFileName(this);"
+                                >
+                                <span id="file-name" class="text-xs text-gray-700 mt-2"></span>
+                            </div>
+                            <!-- End Drag and Drop Area -->
                             <div class="flex items-center space-x-4">
-                                <input type="file" 
-                                       name="profile_picture" 
-                                       id="profile_picture"
-                                       accept="image/*"
-                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-[#1B365D] file:text-white hover:file:bg-[#2B4B7D] transition-colors duration-200"
-                                       onchange="previewImage(this)">
+                                <!-- Remove old input, now handled above -->
                                 <button type="submit" 
                                         class="inline-flex items-center px-4 py-2 bg-[#1B365D] text-white text-sm font-medium rounded-xl hover:bg-[#2B4B7D] transition-colors duration-200">
                                     <i class="fas fa-save mr-2"></i>
                                     Upload
                                 </button>
                             </div>
-                            <p class="text-xs text-gray-500 mt-2">Supported formats: JPG, PNG, GIF (Max: 2MB)</p>
                         </div>
                     </form>
 
@@ -135,7 +152,7 @@
                            value="{{ old('name', $user->name) }}" 
                            class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed" 
                            readonly>
-                    <p class="text-xs text-gray-500 mt-1">Name cannot be changed. Contact administrator for updates.</p>
+                    <p class="text-xs text-gray-500 mt-1">Name cannot be here. Edit your full name in the PHS Form</p>
                 </div>
 
                 <div>
@@ -351,18 +368,39 @@ function togglePasswordVisibility(inputId, toggleId) {
     }
 }
 
+function handleDrop(event) {
+    event.preventDefault();
+    event.currentTarget.classList.remove('bg-yellow-100');
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        const input = document.getElementById('profile_picture');
+        input.files = files;
+        showFileName(input);
+        previewImage(input);
+    }
+}
+
+function showFileName(input) {
+    const fileNameSpan = document.getElementById('file-name');
+    if (input.files && input.files.length > 0) {
+        fileNameSpan.textContent = input.files[0].name;
+    } else {
+        fileNameSpan.textContent = '';
+    }
+}
+
 function previewImage(input) {
     const preview = document.getElementById('image-preview');
-    const previewImg = document.getElementById('preview-img');
-    
+    const img = document.getElementById('preview-img');
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            previewImg.src = e.target.result;
+            img.src = e.target.result;
             preview.classList.remove('hidden');
         }
         reader.readAsDataURL(input.files[0]);
     } else {
+        img.src = '';
         preview.classList.add('hidden');
     }
 }

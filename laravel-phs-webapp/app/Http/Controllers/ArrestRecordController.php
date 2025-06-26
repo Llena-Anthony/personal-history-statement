@@ -11,6 +11,11 @@ class ArrestRecordController extends Controller
     public function create()
     {
         $arrestRecord = ArrestRecord::where('username', Auth::user()->username)->first();
+        
+        if (request()->ajax()) {
+            return view('phs.sections.arrest-record-content', compact('arrestRecord'));
+        }
+
         return view('phs.arrest-record', compact('arrestRecord'));
     }
 

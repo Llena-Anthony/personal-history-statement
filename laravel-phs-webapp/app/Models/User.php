@@ -55,6 +55,7 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -134,6 +135,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's profile picture URL with fallback
+     *
+     * @return string
+     */
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->getProfilePhotoUrlAttribute();
+    }
+
+    /**
      * Get the user's last login time safely.
      *
      * @return string
@@ -164,5 +175,36 @@ class User extends Authenticatable
     public function creditReputation()
     {
         return $this->hasOne(CreditReputation::class);
+    }
+
+    /**
+     * Get the user's personal characteristics.
+     */
+    public function personalChar()
+    {
+        return $this->hasOne(PersonalCharacteristic::class);
+    }
+
+    /**
+     * Get the user's personal details.
+     */
+    public function userDetails()
+    {
+        return $this->hasOne(UserDetails::class, 'username', 'username');
+    }
+
+    /**
+     * Boot method to handle model events
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Delete profile picture when user is deleted
+        static::deleting(function ($user) {
+            if ($user->profile_picture) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_picture);
+            }
+        });
     }
 }

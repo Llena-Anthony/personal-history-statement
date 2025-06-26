@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Traits\ProfilePictureHandler;
 
 class ProfileController extends Controller
 {
+    use ProfilePictureHandler;
+
     public function edit()
     {
         return view('profile.edit', [
@@ -51,17 +53,21 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
-        // Delete old profile picture if exists
-        if ($user->profile_picture) {
-            Storage::disk('public')->delete($user->profile_picture);
+        try {
+            // Use the trait method for efficient profile picture handling
+            $path = $this->handleProfilePictureUpload(
+                $request->file('profile_picture'),
+                $user->profile_picture,
+                $user->id
+            );
+            
+            $user->profile_picture = $path;
+            $user->save();
+
+            return back()->with('success', 'Profile picture updated successfully.');
+            
+        } catch (\Exception $e) {
+            return back()->withErrors(['profile_picture' => 'Failed to upload profile picture. Please try again.']);
         }
-
-        // Store new profile picture
-        $path = $request->file('profile_picture')->store('profile-pictures', 'public');
-        
-        $user->profile_picture = $path;
-        $user->save();
-
-        return back()->with('success', 'Profile picture updated successfully.');
     }
 } 

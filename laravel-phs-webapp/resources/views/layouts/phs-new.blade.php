@@ -586,18 +586,22 @@
                             <i class="fas fa-bars text-lg"></i>
                         </button>
                         <div class="flex items-center space-x-3">
-                            <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
+                            <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
+                            </a>
                             <div class="hidden sm:block">
-                                <h1 class="header-title text-white font-bold text-lg">Personal History Statement</h1>
-                                <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
+                                <a href="{{ route('client.dashboard') }}" onclick="event.preventDefault(); if(window.location.pathname === '{{ url('/dashboard') }}'){ window.location.reload(); } else { window.location.href='{{ route('client.dashboard') }}'; }" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                    <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
+                                    <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <!-- Right Section -->
                     <div class="flex items-center space-x-4">
-                        <div class="hidden md:block text-white text-xs">
-                            <div class="font-medium" id="current-time"></div>
-                            <div class="text-[#D4AF37] text-xs" id="current-date"></div>
+                        <div id="ph-time-header" class="text-right text-white">
+                            <div style="font-weight:bold;">Philippine Standard Time:</div>
+                            <div id="ph-time-value"></div>
                         </div>
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Client</span>
@@ -621,9 +625,11 @@
                 <div class="profile-section">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="relative">
-                            <div class="w-16 h-16 rounded-full overflow-hidden profile-avatar">
-                                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
-                            </div>
+                            <a href="{{ route('profile.edit') }}">
+                                <div class="w-16 h-16 rounded-full overflow-hidden profile-avatar">
+                                    <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
+                                </div>
+                            </a>
                             <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                                 <i class="fas fa-check text-xs text-white"></i>
                             </div>
@@ -1123,10 +1129,26 @@
                         tempDiv.innerHTML = html;
                         
                         // Extract the content from the yield('content') section
-                        const newContent = tempDiv.querySelector('#phsContent') || tempDiv.querySelector('.phs-scroll') || tempDiv;
+                        // The AJAX response contains the full layout, so we need to find the content within it
+                        let newContent = tempDiv.querySelector('#phsContent');
+                        if (!newContent) {
+                            // If we can't find phsContent, look for the content directly
+                            newContent = tempDiv.querySelector('.max-w-4xl') || tempDiv.querySelector('main') || tempDiv.querySelector('form');
+                        }
                         
                         // Update the content
-                        contentArea.innerHTML = newContent.innerHTML;
+                        if (newContent && newContent.innerHTML) {
+                            // If we found phsContent, extract its inner content
+                            if (newContent.id === 'phsContent') {
+                                contentArea.innerHTML = newContent.innerHTML;
+                            } else {
+                                // If we found the content directly, use it
+                                contentArea.innerHTML = newContent.outerHTML;
+                            }
+                        } else {
+                            // Fallback: use the entire response
+                            contentArea.innerHTML = html;
+                        }
                         
                         // Update browser URL without reload
                         window.history.pushState({section: sectionId}, '', url);
@@ -1146,6 +1168,102 @@
                             // Small delay to ensure DOM is ready
                             setTimeout(() => {
                                 window.initializePersonalDetails();
+                            }, 100);
+                        }
+                        
+                        // Initialize marital status functionality
+                        if (sectionId === 'marital-status') {
+                            setTimeout(() => {
+                                console.log('Initializing marital status section...');
+                                window.initializeMaritalStatus();
+                            }, 100);
+                        }
+                        
+                        // Initialize family background functionality
+                        if (sectionId === 'family-background') {
+                            setTimeout(() => {
+                                console.log('Initializing family background section...');
+                                window.initializeFamilyBackground();
+                            }, 100);
+                        }
+                        
+                        // Initialize educational background functionality
+                        if (sectionId === 'educational-background') {
+                            setTimeout(() => {
+                                console.log('Initializing educational background section...');
+                                window.initializeEducationalBackground();
+                            }, 100);
+                        }
+                        
+                        // Initialize military history functionality
+                        if (sectionId === 'military-history') {
+                            setTimeout(() => {
+                                console.log('Initializing military history section...');
+                                window.initializeMilitaryHistory();
+                            }, 100);
+                        }
+                        
+                        // Initialize employment history functionality
+                        if (sectionId === 'employment-history') {
+                            setTimeout(() => {
+                                console.log('Initializing employment history section...');
+                                window.initializeEmploymentHistory();
+                            }, 100);
+                        }
+                        
+                        // Initialize foreign countries functionality
+                        if (sectionId === 'foreign-countries') {
+                            setTimeout(() => {
+                                console.log('Initializing foreign countries section...');
+                                window.initializeForeignCountries();
+                            }, 100);
+                        }
+                        
+                        // Initialize credit reputation functionality
+                        if (sectionId === 'credit-reputation') {
+                            setTimeout(() => {
+                                console.log('Initializing credit reputation section...');
+                                window.initializeCreditReputation();
+                            }, 100);
+                        }
+                        
+                        // Initialize arrest record functionality
+                        if (sectionId === 'arrest-record') {
+                            setTimeout(() => {
+                                console.log('Initializing arrest record section...');
+                                window.initializeArrestRecord();
+                            }, 100);
+                        }
+                        
+                        // Initialize character reputation functionality
+                        if (sectionId === 'character-and-reputation') {
+                            setTimeout(() => {
+                                console.log('Initializing character reputation section...');
+                                window.initializeCharacterReputation();
+                            }, 100);
+                        }
+                        
+                        // Initialize organization functionality
+                        if (sectionId === 'organization') {
+                            setTimeout(() => {
+                                console.log('Initializing organization section...');
+                                window.initializeOrganization();
+                            }, 100);
+                        }
+                        
+                        // Initialize miscellaneous functionality
+                        if (sectionId === 'miscellaneous') {
+                            setTimeout(() => {
+                                console.log('Initializing miscellaneous section...');
+                                window.initializeMiscellaneous();
+                            }, 100);
+                        }
+                        
+                        // Initialize places of residence functionality
+                        if (sectionId === 'places-of-residence') {
+                            setTimeout(() => {
+                                console.log('Initializing places of residence section...');
+                                window.initializePlacesOfResidence();
                             }, 100);
                         }
                         
@@ -1366,6 +1484,1471 @@
                 window.location.href = '{{ route("client.dashboard") }}';
             }, 400);
         }
+
+        window.initializeMaritalStatus = function() {
+            // Dynamic child entry management
+            const addChildButton = document.getElementById('add-child');
+            const childrenContainer = document.getElementById('children-container');
+            if (addChildButton && childrenContainer) {
+                addChildButton.removeEventListener('click', addChildHandler);
+                addChildButton.addEventListener('click', addChildHandler);
+                childrenContainer.removeEventListener('click', removeChildHandler);
+                childrenContainer.addEventListener('click', removeChildHandler);
+            }
+            function addChildHandler() {
+                const container = document.getElementById('children-container');
+                const index = container.children.length;
+                const newChildEntry = `
+                    <div class="child-entry p-4 border border-gray-200 rounded-lg mt-4 relative">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                                <input type="text" name="children[${index}][name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter child's name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                                <input type="date" name="children[${index}][birth_date]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
+                                <input type="text" name="children[${index}][citizenship]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter citizenship">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                                <input type="text" name="children[${index}][address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter address">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father</label>
+                                <input type="text" name="children[${index}][father_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter father's name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Name of Mother</label>
+                                <input type="text" name="children[${index}][mother_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter mother's name">
+                            </div>
+                        </div>
+                        <button type="button" class="remove-child absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', newChildEntry);
+            }
+            function removeChildHandler(e) {
+                if (e.target.closest('.remove-child')) {
+                    e.target.closest('.child-entry').remove();
+                }
+            }
+        };
+
+        // Global function for Educational Background initialization
+        window.initializeEducationalBackground = function() {
+            // Helper to add entry
+            function addEntry(containerId, entryClass, fields, labelPrefix) {
+                const container = document.getElementById(containerId);
+                const addBtn = document.getElementById('add-' + labelPrefix);
+                if (!container || !addBtn) return;
+
+                function addHandler() {
+                    const entries = container.querySelectorAll('.' + entryClass);
+                    const idx = entries.length;
+                    const entry = document.createElement('div');
+                    entry.className = entryClass + ' p-4 border border-gray-200 rounded-lg mt-4 relative';
+                    entry.setAttribute('data-index', idx);
+                    let html = '<div class="grid grid-cols-1 md:grid-cols-2 gap-6">';
+                    fields.forEach(f => {
+                        html += `<div><label class='block text-sm font-medium text-gray-700 mb-2'>${f.label}</label>`;
+                        if (f.type === 'select') {
+                            html += `<select name='${labelPrefix}[${idx}][${f.name}]' class='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors'>`;
+                            f.options.forEach(opt => {
+                                html += `<option value='${opt}'>${opt}</option>`;
+                            });
+                            html += `</select>`;
+                        } else {
+                            html += `<input type='${f.type}' name='${labelPrefix}[${idx}][${f.name}]' class='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors' placeholder='${f.placeholder}'`;
+                            if (f.min) html += ` min='${f.min}'`;
+                            if (f.max) html += ` max='${f.max}'`;
+                            html += '>';
+                        }
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                    entry.innerHTML = html + `<button type='button' class='remove-${labelPrefix} absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors'><i class='fas fa-times-circle'></i></button>`;
+                    container.appendChild(entry);
+                }
+                function removeHandler(e) {
+                    if (e.target.closest('.remove-' + labelPrefix)) {
+                        const entries = container.querySelectorAll('.' + entryClass);
+                        if (entries.length > 1) {
+                            e.target.closest('.' + entryClass).remove();
+                        }
+                    }
+                }
+                addBtn.removeEventListener('click', addHandler);
+                addBtn.addEventListener('click', addHandler);
+                container.removeEventListener('click', removeHandler);
+                container.addEventListener('click', removeHandler);
+            }
+            // Elementary
+            addEntry('elementary-container', 'elementary-entry', [
+                {label:'School Name', name:'school', type:'text', placeholder:'Enter school name'},
+                {label:'School Address', name:'address', type:'text', placeholder:'Enter school address'},
+                {label:'Year Started', name:'start', type:'number', placeholder:'YYYY', min:1900, max:2030},
+                {label:'Year Graduated', name:'graduate', type:'number', placeholder:'YYYY', min:1900, max:2030}
+            ], 'elementary');
+            // Highschool
+            addEntry('highschool-container', 'highschool-entry', [
+                {label:'School Name', name:'school', type:'text', placeholder:'Enter school name'},
+                {label:'School Address', name:'address', type:'text', placeholder:'Enter school address'},
+                {label:'Year Started', name:'start', type:'number', placeholder:'YYYY', min:1900, max:2030},
+                {label:'Year Graduated', name:'graduate', type:'number', placeholder:'YYYY', min:1900, max:2030}
+            ], 'highschool');
+            // College
+            addEntry('college-container', 'college-entry', [
+                {label:'School Name', name:'school', type:'text', placeholder:'Enter school name'},
+                {label:'School Address', name:'address', type:'text', placeholder:'Enter school address'},
+                {label:'Course/Degree', name:'course', type:'text', placeholder:'e.g., Bachelor of Science in Computer Science'},
+                {label:'Year Level', name:'year_level', type:'text', placeholder:'Year Level'},
+                {label:'Year Started', name:'start', type:'number', placeholder:'YYYY', min:1900, max:2030},
+                {label:'Year Graduated', name:'graduate', type:'number', placeholder:'YYYY', min:1900, max:2030}
+            ], 'college');
+            // Postgraduate
+            addEntry('postgraduate-container', 'postgraduate-entry', [
+                {label:'School Name', name:'school', type:'text', placeholder:'Enter school name'},
+                {label:'School Address', name:'address', type:'text', placeholder:'Enter school address'},
+                {label:'Year Started', name:'start', type:'number', placeholder:'YYYY', min:1900, max:2030},
+                {label:'Year Graduated', name:'graduate', type:'number', placeholder:'YYYY', min:1900, max:2030}
+            ], 'postgraduate');
+        };
+
+        // Global function for Military History initialization
+        window.initializeMilitaryHistory = function() {
+            // Date type synchronization functions
+            function synchronizeDateTypes(container, selectElement) {
+                const type = selectElement.value;
+                const dateInput = container.querySelector('input[type="date"]');
+                const monthYearGroup = container.querySelector('.flex.space-x-2.hidden, .flex.space-x-2:not(.hidden)');
+                
+                if (type === 'exact') {
+                    dateInput.classList.remove('hidden');
+                    monthYearGroup.classList.add('hidden');
+                } else {
+                    dateInput.classList.add('hidden');
+                    monthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            function synchronizeAssignmentDateTypes(assignmentEntry, selectElement) {
+                const type = selectElement.value;
+                const isFrom = selectElement.name.includes('from');
+                const dateInput = assignmentEntry.querySelector(`input[name="assignments[${assignmentEntry.dataset.index}][${isFrom ? 'from' : 'to'}"]`);
+                const monthYearGroup = assignmentEntry.querySelector(`#assignment-${isFrom ? 'from' : 'to'}-month-year-group-${assignmentEntry.dataset.index}`);
+                
+                if (type === 'exact') {
+                    dateInput.classList.remove('hidden');
+                    monthYearGroup.classList.add('hidden');
+                } else {
+                    dateInput.classList.add('hidden');
+                    monthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            function synchronizeSchoolDateTypes(schoolEntry, selectElement) {
+                const type = selectElement.value;
+                const isFrom = selectElement.name.includes('from');
+                const dateInput = schoolEntry.querySelector(`input[name="schools[${schoolEntry.dataset.index}][date_attended_${isFrom ? 'from' : 'to'}"]`);
+                const monthYearGroup = schoolEntry.querySelector(`#school-date-${isFrom ? 'from' : 'to'}-month-year-group-${schoolEntry.dataset.index}`);
+                
+                if (type === 'exact') {
+                    dateInput.classList.remove('hidden');
+                    monthYearGroup.classList.add('hidden');
+                } else {
+                    dateInput.classList.add('hidden');
+                    monthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            // Initialize date type synchronization for existing elements
+            const enlistmentDateType = document.querySelector('select[name="enlistment_date_type"]');
+            const commissionDateFromType = document.querySelector('select[name="commission_date_from_type"]');
+            const commissionDateToType = document.querySelector('select[name="commission_date_to_type"]');
+
+            if (enlistmentDateType) {
+                enlistmentDateType.addEventListener('change', function() {
+                    synchronizeDateTypes(this.closest('.flex.space-x-2'), this);
+                });
+            }
+
+            if (commissionDateFromType) {
+                commissionDateFromType.addEventListener('change', function() {
+                    synchronizeDateTypes(this.closest('.flex.space-x-2'), this);
+                });
+            }
+
+            if (commissionDateToType) {
+                commissionDateToType.addEventListener('change', function() {
+                    synchronizeDateTypes(this.closest('.flex.space-x-2'), this);
+                });
+            }
+
+            // Initialize existing assignment date types
+            document.querySelectorAll('.assignment-entry').forEach(entry => {
+                const fromTypeSelect = entry.querySelector('select[name*="from_type"]');
+                const toTypeSelect = entry.querySelector('select[name*="to_type"]');
+                
+                if (fromTypeSelect) {
+                    fromTypeSelect.addEventListener('change', function() {
+                        synchronizeAssignmentDateTypes(entry, this);
+                    });
+                }
+                
+                if (toTypeSelect) {
+                    toTypeSelect.addEventListener('change', function() {
+                        synchronizeAssignmentDateTypes(entry, this);
+                    });
+                }
+            });
+
+            // Initialize existing school date types
+            document.querySelectorAll('.school-entry').forEach(entry => {
+                const fromTypeSelect = entry.querySelector('select[name*="from_type"]');
+                const toTypeSelect = entry.querySelector('select[name*="to_type"]');
+                
+                if (fromTypeSelect) {
+                    fromTypeSelect.addEventListener('change', function() {
+                        synchronizeSchoolDateTypes(entry, this);
+                    });
+                }
+                
+                if (toTypeSelect) {
+                    toTypeSelect.addEventListener('change', function() {
+                        synchronizeSchoolDateTypes(entry, this);
+                    });
+                }
+            });
+
+            // Assignments functionality
+            const assignmentsContainer = document.getElementById('assignments-container');
+            const addAssignmentBtn = document.getElementById('add-assignment');
+
+            if (addAssignmentBtn && assignmentsContainer) {
+                addAssignmentBtn.removeEventListener('click', addAssignmentHandler);
+                addAssignmentBtn.addEventListener('click', addAssignmentHandler);
+                assignmentsContainer.removeEventListener('click', removeAssignmentHandler);
+                assignmentsContainer.addEventListener('click', removeAssignmentHandler);
+            }
+
+            function addAssignmentHandler() {
+                const entries = assignmentsContainer.querySelectorAll('.assignment-entry');
+                const idx = entries.length;
+                const assignmentEntry = document.createElement('div');
+                assignmentEntry.className = 'assignment-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                assignmentEntry.setAttribute('data-index', idx);
+                assignmentEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
+                            <div class="flex space-x-2">
+                                <select name="assignments[${idx}][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="assignments[${idx}][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="assignment-from-month-year-group-${idx}">
+                                    <select name="assignments[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="assignments[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
+                            <div class="flex space-x-2">
+                                <select name="assignments[${idx}][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="assignments[${idx}][to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="assignment-to-month-year-group-${idx}">
+                                    <select name="assignments[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="assignments[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Unit/Office</label>
+                            <input type="text" name="assignments[${idx}][unit_office]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter unit or office">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">CO/Chief of Office</label>
+                            <input type="text" name="assignments[${idx}][co_chief]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter CO or Chief of Office">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-assignment absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                `;
+                assignmentsContainer.appendChild(assignmentEntry);
+
+                // Add event listeners for the new assignment date type selects
+                const newAssignmentFromTypeSelect = assignmentEntry.querySelector(`select[name="assignments[${idx}][from_type]"]`);
+                const newAssignmentToTypeSelect = assignmentEntry.querySelector(`select[name="assignments[${idx}][to_type]"]`);
+                
+                newAssignmentFromTypeSelect.addEventListener('change', function() {
+                    synchronizeAssignmentDateTypes(assignmentEntry, this);
+                });
+                
+                newAssignmentToTypeSelect.addEventListener('change', function() {
+                    synchronizeAssignmentDateTypes(assignmentEntry, this);
+                });
+            }
+
+            function removeAssignmentHandler(e) {
+                if (e.target.closest('.remove-assignment')) {
+                    const entries = assignmentsContainer.querySelectorAll('.assignment-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.assignment-entry').remove();
+                    }
+                }
+            }
+
+            // Military Schools functionality
+            const schoolsContainer = document.getElementById('schools-container');
+            const addSchoolBtn = document.getElementById('add-school');
+
+            if (addSchoolBtn && schoolsContainer) {
+                addSchoolBtn.removeEventListener('click', addSchoolHandler);
+                addSchoolBtn.addEventListener('click', addSchoolHandler);
+                schoolsContainer.removeEventListener('click', removeSchoolHandler);
+                schoolsContainer.addEventListener('click', removeSchoolHandler);
+            }
+
+            function addSchoolHandler() {
+                const entries = schoolsContainer.querySelectorAll('.school-entry');
+                const idx = entries.length;
+                const schoolEntry = document.createElement('div');
+                schoolEntry.className = 'school-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                schoolEntry.setAttribute('data-index', idx);
+                schoolEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">School</label>
+                            <input type="text" name="schools[${idx}][school]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter school name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" name="schools[${idx}][location]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter school location">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Attendance (From)</label>
+                            <div class="flex space-x-2">
+                                <select name="schools[${idx}][date_attended_from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="schools[${idx}][date_attended_from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="school-date-from-month-year-group-${idx}">
+                                    <select name="schools[${idx}][date_attended_from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="schools[${idx}][date_attended_from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Attendance (To)</label>
+                            <div class="flex space-x-2">
+                                <select name="schools[${idx}][date_attended_to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="schools[${idx}][date_attended_to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="school-date-to-month-year-group-${idx}">
+                                    <select name="schools[${idx}][date_attended_to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="schools[${idx}][date_attended_to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nature of Training</label>
+                            <input type="text" name="schools[${idx}][nature_training]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter nature of training">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                            <input type="text" name="schools[${idx}][rating]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter rating">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-school absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                `;
+                schoolsContainer.appendChild(schoolEntry);
+
+                // Add event listeners for the new school date type selects
+                const newSchoolFromTypeSelect = schoolEntry.querySelector(`select[name="schools[${idx}][date_attended_from_type]"]`);
+                const newSchoolToTypeSelect = schoolEntry.querySelector(`select[name="schools[${idx}][date_attended_to_type]"]`);
+                
+                newSchoolFromTypeSelect.addEventListener('change', function() {
+                    synchronizeSchoolDateTypes(schoolEntry, this);
+                });
+                
+                newSchoolToTypeSelect.addEventListener('change', function() {
+                    synchronizeSchoolDateTypes(schoolEntry, this);
+                });
+            }
+
+            function removeSchoolHandler(e) {
+                if (e.target.closest('.remove-school')) {
+                    const entries = schoolsContainer.querySelectorAll('.school-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.school-entry').remove();
+                    }
+                }
+            }
+
+            // Awards functionality
+            const awardsContainer = document.getElementById('awards-container');
+            const addAwardBtn = document.getElementById('add-award');
+
+            if (addAwardBtn && awardsContainer) {
+                addAwardBtn.removeEventListener('click', addAwardHandler);
+                addAwardBtn.addEventListener('click', addAwardHandler);
+                awardsContainer.removeEventListener('click', removeAwardHandler);
+                awardsContainer.addEventListener('click', removeAwardHandler);
+            }
+
+            function addAwardHandler() {
+                const entries = awardsContainer.querySelectorAll('.award-entry');
+                const idx = entries.length;
+                const awardEntry = document.createElement('div');
+                awardEntry.className = 'award-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                awardEntry.setAttribute('data-index', idx);
+                awardEntry.innerHTML = `
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <input type="text" name="awards[${idx}][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter award or decoration name">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-award absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                `;
+                awardsContainer.appendChild(awardEntry);
+            }
+
+            function removeAwardHandler(e) {
+                if (e.target.closest('.remove-award')) {
+                    const entries = awardsContainer.querySelectorAll('.award-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.award-entry').remove();
+                    }
+                }
+            }
+        };
+
+        // Global function for Places of Residence initialization
+        window.initializePlacesOfResidence = function() {
+            // Residence History functionality
+            const residencesContainer = document.getElementById('residences-container');
+            const addResidenceBtn = document.getElementById('add-residence');
+
+            if (addResidenceBtn && residencesContainer) {
+                addResidenceBtn.removeEventListener('click', addResidenceHandler);
+                addResidenceBtn.addEventListener('click', addResidenceHandler);
+                residencesContainer.removeEventListener('click', removeResidenceHandler);
+                residencesContainer.addEventListener('click', removeResidenceHandler);
+            }
+
+            function addResidenceHandler() {
+                const entries = residencesContainer.querySelectorAll('.residence-entry');
+                const idx = entries.length;
+                const residenceEntry = document.createElement('div');
+                residenceEntry.className = 'residence-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                residenceEntry.setAttribute('data-index', idx);
+                residenceEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
+                            <input type="number" name="residences[${idx}][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="YYYY" min="1900" max="2030">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">To (Year)</label>
+                            <input type="number" name="residences[${idx}][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="YYYY" min="1900" max="2030">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                            <input type="text" name="residences[${idx}][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-residence absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                `;
+                residencesContainer.appendChild(residenceEntry);
+            }
+
+            function removeResidenceHandler(e) {
+                if (e.target.closest('.remove-residence')) {
+                    const entries = residencesContainer.querySelectorAll('.residence-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.residence-entry').remove();
+                    }
+                }
+            }
+        };
+
+        // Global function for Employment History initialization
+        window.initializeEmploymentHistory = function() {
+            // Function to handle employment date type changes
+            function handleEmploymentDateTypeChange(selectElement, isFrom = true) {
+                const entry = selectElement.closest('.employment-entry');
+                const index = entry.getAttribute('data-index');
+                const dateInput = entry.querySelector(`input[name="employment[${index}][${isFrom ? 'from' : 'to'}"]`);
+                const monthYearGroup = entry.querySelector(`#employment-${isFrom ? 'from' : 'to'}-month-year-group-${index}`);
+                
+                if (selectElement.value === 'exact') {
+                    dateInput.classList.remove('hidden');
+                    monthYearGroup.classList.add('hidden');
+                } else {
+                    dateInput.classList.add('hidden');
+                    monthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            // Function to synchronize employment date types for a specific entry
+            function synchronizeEmploymentDateTypes(entry, changedSelect) {
+                const index = entry.getAttribute('data-index');
+                const fromSelect = entry.querySelector(`select[name="employment[${index}][from_type]"]`);
+                const toSelect = entry.querySelector(`select[name="employment[${index}][to_type]"]`);
+                
+                console.log('Synchronizing employment dates for entry', index, ':', {
+                    changedSelect: changedSelect.name,
+                    fromSelectValue: fromSelect.value,
+                    toSelectValue: toSelect.value
+                });
+                
+                if (changedSelect === fromSelect) {
+                    toSelect.value = fromSelect.value;
+                    console.log('Updated "to" select to:', toSelect.value);
+                } else {
+                    fromSelect.value = toSelect.value;
+                    console.log('Updated "from" select to:', fromSelect.value);
+                }
+                
+                // Always update both UI states after synchronization
+                const fromDateInput = entry.querySelector(`input[name="employment[${index}][from]"]`);
+                const fromMonthYearGroup = entry.querySelector(`#employment-from-month-year-group-${index}`);
+                const toDateInput = entry.querySelector(`input[name="employment[${index}][to]"]`);
+                const toMonthYearGroup = entry.querySelector(`#employment-to-month-year-group-${index}`);
+                
+                if (fromSelect.value === 'exact') {
+                    fromDateInput.classList.remove('hidden');
+                    fromMonthYearGroup.classList.add('hidden');
+                    toDateInput.classList.remove('hidden');
+                    toMonthYearGroup.classList.add('hidden');
+                } else {
+                    fromDateInput.classList.add('hidden');
+                    fromMonthYearGroup.classList.remove('hidden');
+                    toDateInput.classList.add('hidden');
+                    toMonthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            // Add event listeners for initial employment date type selects
+            const initialEmploymentFromTypeSelect = document.querySelector('select[name="employment[0][from_type]"]');
+            const initialEmploymentToTypeSelect = document.querySelector('select[name="employment[0][to_type]"]');
+            const initialEmploymentEntry = document.querySelector('.employment-entry[data-index="0"]');
+            
+            if (initialEmploymentFromTypeSelect && initialEmploymentEntry) {
+                initialEmploymentFromTypeSelect.removeEventListener('change', function() {
+                    synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
+                });
+                initialEmploymentFromTypeSelect.addEventListener('change', function() {
+                    synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
+                });
+            }
+            
+            if (initialEmploymentToTypeSelect && initialEmploymentEntry) {
+                initialEmploymentToTypeSelect.removeEventListener('change', function() {
+                    synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
+                });
+                initialEmploymentToTypeSelect.addEventListener('change', function() {
+                    synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
+                });
+            }
+
+            // Employment Entries functionality
+            const employmentContainer = document.getElementById('employment-entries');
+            const addEmploymentBtn = document.getElementById('add-employment');
+
+            if (addEmploymentBtn && employmentContainer) {
+                addEmploymentBtn.removeEventListener('click', addEmploymentHandler);
+                addEmploymentBtn.addEventListener('click', addEmploymentHandler);
+                employmentContainer.removeEventListener('click', removeEmploymentHandler);
+                employmentContainer.addEventListener('click', removeEmploymentHandler);
+            }
+
+            function addEmploymentHandler() {
+                const entries = employmentContainer.querySelectorAll('.employment-entry');
+                const idx = entries.length;
+                const employmentEntry = document.createElement('div');
+                employmentEntry.className = 'employment-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                employmentEntry.setAttribute('data-index', idx);
+                employmentEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
+                            <div class="flex space-x-2">
+                                <select name="employment[${idx}][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="employment[${idx}][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="employment-from-month-year-group-${idx}">
+                                    <select name="employment[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="employment[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
+                            <div class="flex space-x-2">
+                                <select name="employment[${idx}][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="employment[${idx}][to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="employment-to-month-year-group-${idx}">
+                                    <select name="employment[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="employment[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type of Employment</label>
+                            <input type="text" name="employment[${idx}][type]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employment type">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name of Employer</label>
+                            <input type="text" name="employment[${idx}][employer_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Address of Employer</label>
+                            <input type="text" name="employment[${idx}][employer_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer address">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Leaving</label>
+                            <input type="text" name="employment[${idx}][reason_leaving]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter reason for leaving">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-employment absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                `;
+                employmentContainer.appendChild(employmentEntry);
+
+                // Add event listeners for the new employment date type selects
+                const newEmploymentFromTypeSelect = employmentEntry.querySelector(`select[name="employment[${idx}][from_type]"]`);
+                const newEmploymentToTypeSelect = employmentEntry.querySelector(`select[name="employment[${idx}][to_type]"]`);
+                
+                newEmploymentFromTypeSelect.addEventListener('change', function() {
+                    synchronizeEmploymentDateTypes(employmentEntry, this);
+                });
+                
+                newEmploymentToTypeSelect.addEventListener('change', function() {
+                    synchronizeEmploymentDateTypes(employmentEntry, this);
+                });
+            }
+
+            function removeEmploymentHandler(e) {
+                if (e.target.closest('.remove-employment')) {
+                    const entries = employmentContainer.querySelectorAll('.employment-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.employment-entry').remove();
+                    }
+                }
+            }
+
+            // Dismissal select logic
+            const dismissedSelect = document.getElementById('dismissed-select');
+            if (dismissedSelect) {
+                dismissedSelect.removeEventListener('change', function() {
+                    const explanation = document.getElementById('dismissed-explanation');
+                    explanation.classList.toggle('hidden', this.value !== 'yes');
+                });
+                dismissedSelect.addEventListener('change', function() {
+                    const explanation = document.getElementById('dismissed-explanation');
+                    explanation.classList.toggle('hidden', this.value !== 'yes');
+                });
+            }
+        };
+
+        // Global function for Foreign Countries initialization
+        window.initializeForeignCountries = function() {
+            // Function to handle country date type changes
+            function handleCountryDateTypeChange(selectElement, isFrom = true) {
+                const entry = selectElement.closest('.country-entry');
+                const index = entry.getAttribute('data-index');
+                const dateInput = entry.querySelector(`input[name="countries[${index}][${isFrom ? 'from' : 'to'}"]`);
+                const monthYearGroup = entry.querySelector(`#country-${isFrom ? 'from' : 'to'}-month-year-group-${index}`);
+                
+                if (selectElement.value === 'exact') {
+                    dateInput.classList.remove('hidden');
+                    monthYearGroup.classList.add('hidden');
+                } else {
+                    dateInput.classList.add('hidden');
+                    monthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            // Function to synchronize country date types for a specific entry
+            function synchronizeCountryDateTypes(entry, changedSelect) {
+                const index = entry.getAttribute('data-index');
+                const fromSelect = entry.querySelector(`select[name="countries[${index}][from_type]"]`);
+                const toSelect = entry.querySelector(`select[name="countries[${index}][to_type]"]`);
+                
+                console.log('Synchronizing country dates for entry', index, ':', {
+                    changedSelect: changedSelect.name,
+                    fromSelectValue: fromSelect.value,
+                    toSelectValue: toSelect.value
+                });
+                
+                if (changedSelect === fromSelect) {
+                    toSelect.value = fromSelect.value;
+                    console.log('Updated "to" select to:', toSelect.value);
+                } else {
+                    fromSelect.value = toSelect.value;
+                    console.log('Updated "from" select to:', fromSelect.value);
+                }
+                
+                // Always update both UI states after synchronization
+                const fromDateInput = entry.querySelector(`input[name="countries[${index}][from]"]`);
+                const fromMonthYearGroup = entry.querySelector(`#country-from-month-year-group-${index}`);
+                const toDateInput = entry.querySelector(`input[name="countries[${index}][to]"]`);
+                const toMonthYearGroup = entry.querySelector(`#country-to-month-year-group-${index}`);
+                
+                if (fromSelect.value === 'exact') {
+                    fromDateInput.classList.remove('hidden');
+                    fromMonthYearGroup.classList.add('hidden');
+                    toDateInput.classList.remove('hidden');
+                    toMonthYearGroup.classList.add('hidden');
+                } else {
+                    fromDateInput.classList.add('hidden');
+                    fromMonthYearGroup.classList.remove('hidden');
+                    toDateInput.classList.add('hidden');
+                    toMonthYearGroup.classList.remove('hidden');
+                }
+            }
+
+            // Add event listeners for initial country date type selects
+            const initialCountryFromTypeSelect = document.querySelector('select[name="countries[0][from_type]"]');
+            const initialCountryToTypeSelect = document.querySelector('select[name="countries[0][to_type]"]');
+            const initialCountryEntry = document.querySelector('.country-entry[data-index="0"]');
+            
+            if (initialCountryFromTypeSelect && initialCountryEntry) {
+                initialCountryFromTypeSelect.removeEventListener('change', function() {
+                    synchronizeCountryDateTypes(initialCountryEntry, this);
+                });
+                initialCountryFromTypeSelect.addEventListener('change', function() {
+                    synchronizeCountryDateTypes(initialCountryEntry, this);
+                });
+            }
+            
+            if (initialCountryToTypeSelect && initialCountryEntry) {
+                initialCountryToTypeSelect.removeEventListener('change', function() {
+                    synchronizeCountryDateTypes(initialCountryEntry, this);
+                });
+                initialCountryToTypeSelect.addEventListener('change', function() {
+                    synchronizeCountryDateTypes(initialCountryEntry, this);
+                });
+            }
+
+            const countriesContainer = document.getElementById('countries');
+            const addCountryBtn = document.getElementById('add-country');
+
+            if (addCountryBtn && countriesContainer) {
+                addCountryBtn.removeEventListener('click', addCountryHandler);
+                addCountryBtn.addEventListener('click', addCountryHandler);
+                countriesContainer.removeEventListener('click', removeCountryHandler);
+                countriesContainer.addEventListener('click', removeCountryHandler);
+            }
+
+            function addCountryHandler() {
+                const entries = countriesContainer.querySelectorAll('.country-entry');
+                const idx = entries.length;
+                const countryEntry = document.createElement('div');
+                countryEntry.className = 'country-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                countryEntry.setAttribute('data-index', idx);
+                countryEntry.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Visit (From)</label>
+                            <div class="flex space-x-2">
+                                <select name="countries[${idx}][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="countries[${idx}][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="country-from-month-year-group-${idx}">
+                                    <select name="countries[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="countries[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Visit (To)</label>
+                            <div class="flex space-x-2">
+                                <select name="countries[${idx}][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="exact">Exact Date</option>
+                                    <option value="month_year">Month/Year</option>
+                                </select>
+                                <input type="date" name="countries[${idx}][to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <div class="w-2/3 flex space-x-2 hidden" id="country-to-month-year-group-${idx}">
+                                    <select name="countries[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                        <option value="">Month</option>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <input type="number" name="countries[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Country Visited</label>
+                            <input type="text" name="countries[${idx}][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter country visited">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Purpose of Visit</label>
+                            <input type="text" name="countries[${idx}][purpose]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter purpose of visit">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Address Abroad</label>
+                            <input type="text" name="countries[${idx}][address_abroad]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter address abroad">
+                        </div>
+                    </div>
+                    <button type="button" class="remove-country absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
+                `;
+                countriesContainer.appendChild(countryEntry);
+
+                // Add event listeners for the new country date type selects
+                const newCountryFromTypeSelect = countryEntry.querySelector(`select[name="countries[${idx}][from_type]"]`);
+                const newCountryToTypeSelect = countryEntry.querySelector(`select[name="countries[${idx}][to_type]"]`);
+                
+                newCountryFromTypeSelect.addEventListener('change', function() {
+                    synchronizeCountryDateTypes(countryEntry, this);
+                });
+                
+                newCountryToTypeSelect.addEventListener('change', function() {
+                    synchronizeCountryDateTypes(countryEntry, this);
+                });
+            }
+
+            function removeCountryHandler(e) {
+                if (e.target.closest('.remove-country')) {
+                    const entries = countriesContainer.querySelectorAll('.country-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.country-entry').remove();
+                    }
+                }
+            }
+        };
+
+        // Global function for Credit Reputation initialization
+        window.initializeCreditReputation = function() {
+            // This section uses Alpine.js for dynamic functionality
+            // The Alpine.js component 'creditReputationForm' handles all the dynamic behavior
+            // including adding/removing income sources and bank accounts
+            console.log('Credit Reputation section initialized');
+        };
+
+        // Global function for Miscellaneous initialization
+        window.initializeMiscellaneous = function() {
+            const addLanguageBtn = document.getElementById('add-language');
+            const languagesContainer = document.getElementById('languages-container');
+            const finishBtn = document.getElementById('finishBtn');
+            const form = finishBtn ? finishBtn.closest('form') : null;
+            const modal = document.getElementById('redirectModal');
+            const secondsSpan = document.getElementById('redirectSeconds');
+            let submitted = false;
+
+            // Add language row functionality
+            if (addLanguageBtn && languagesContainer) {
+                addLanguageBtn.removeEventListener('click', addLanguageHandler);
+                addLanguageBtn.addEventListener('click', addLanguageHandler);
+            }
+
+            // Remove language row functionality
+            if (languagesContainer) {
+                languagesContainer.removeEventListener('click', removeLanguageHandler);
+                languagesContainer.addEventListener('click', removeLanguageHandler);
+            }
+
+            // Finish button functionality
+            if (finishBtn) {
+                finishBtn.removeEventListener('click', finishHandler);
+                finishBtn.addEventListener('click', finishHandler);
+            }
+
+            function addLanguageHandler(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const entries = languagesContainer.querySelectorAll('.language-entry');
+                const idx = entries.length;
+                const newRow = document.createElement('div');
+                newRow.className = 'language-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+                newRow.setAttribute('data-index', idx);
+                newRow.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
+                            <input type="text" name="languages[${idx}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
+                            <select name="languages[${idx}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <option value="">Select</option>
+                                <option value="FLUENT">FLUENT</option>
+                                <option value="FAIR">FAIR</option>
+                                <option value="POOR">POOR</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
+                            <select name="languages[${idx}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <option value="">Select</option>
+                                <option value="FLUENT">FLUENT</option>
+                                <option value="FAIR">FAIR</option>
+                                <option value="POOR">POOR</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
+                            <select name="languages[${idx}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <option value="">Select</option>
+                                <option value="FLUENT">FLUENT</option>
+                                <option value="FAIR">FAIR</option>
+                                <option value="POOR">POOR</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                        <i class="fas fa-times-circle"></i>
+                    </button>
+                `;
+                languagesContainer.appendChild(newRow);
+            }
+
+            function removeLanguageHandler(e) {
+                if (e.target.closest('.remove-language')) {
+                    const entries = languagesContainer.querySelectorAll('.language-entry');
+                    if (entries.length > 1) {
+                        e.target.closest('.language-entry').remove();
+                    }
+                }
+            }
+
+            function finishHandler(e) {
+                if (submitted) return; // Prevent double submission
+                submitted = true;
+                e.preventDefault();
+                finishBtn.disabled = true;
+
+                // Show modal and start timer
+                if (modal) {
+                    modal.style.display = 'flex';
+                    let seconds = 5;
+                    if (secondsSpan) secondsSpan.textContent = seconds;
+                    let countdown = setInterval(() => {
+                        seconds--;
+                        if (secondsSpan) secondsSpan.textContent = seconds;
+                        if (seconds <= 0) {
+                            clearInterval(countdown);
+                            if (form) form.submit(); // Submit the form as normal
+                        }
+                    }, 1000);
+                } else if (form) {
+                    form.submit();
+                }
+            }
+
+            console.log('Miscellaneous section initialized');
+        };
+
+        // Global function for Personal Details initialization
+        window.initializePersonalDetails = function() {
+            loadRegions();
+            setupAddressEventListeners();
+            console.log('Personal Details section initialized');
+        };
+
+        // Philippines Address API Integration
+        async function loadRegions() {
+            try {
+                const response = await fetch('https://psgc.gitlab.io/api/regions/');
+                const regions = await response.json();
+                
+                const homeRegionSelect = document.getElementById('home_region');
+                const businessRegionSelect = document.getElementById('business_region');
+                
+                if (homeRegionSelect && businessRegionSelect) {
+                    // Clear existing options except the first one
+                    homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                    businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                    
+                    regions.forEach(region => {
+                        const homeOption = new Option(region.name, region.code);
+                        const businessOption = new Option(region.name, region.code);
+                        homeRegionSelect.add(homeOption);
+                        businessRegionSelect.add(businessOption);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading regions:', error);
+                // Fallback: Add common regions manually
+                const commonRegions = [
+                    'National Capital Region (NCR)',
+                    'Cordillera Administrative Region (CAR)',
+                    'Ilocos Region (Region I)',
+                    'Cagayan Valley (Region II)',
+                    'Central Luzon (Region III)',
+                    'CALABARZON (Region IV-A)',
+                    'MIMAROPA (Region IV-B)',
+                    'Bicol Region (Region V)',
+                    'Western Visayas (Region VI)',
+                    'Central Visayas (Region VII)',
+                    'Eastern Visayas (Region VIII)',
+                    'Zamboanga Peninsula (Region IX)',
+                    'Northern Mindanao (Region X)',
+                    'Davao Region (Region XI)',
+                    'SOCCSKSARGEN (Region XII)',
+                    'Caraga (Region XIII)',
+                    'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)'
+                ];
+                
+                const homeRegionSelect = document.getElementById('home_region');
+                const businessRegionSelect = document.getElementById('business_region');
+                
+                if (homeRegionSelect && businessRegionSelect) {
+                    // Clear existing options except the first one
+                    homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                    businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                    
+                    commonRegions.forEach(region => {
+                        const homeOption = new Option(region, region);
+                        const businessOption = new Option(region, region);
+                        homeRegionSelect.add(homeOption);
+                        businessRegionSelect.add(businessOption);
+                    });
+                }
+            }
+        }
+
+        async function loadProvinces(type) {
+            const regionSelect = document.getElementById(`${type}_region`);
+            const provinceSelect = document.getElementById(`${type}_province`);
+            const citySelect = document.getElementById(`${type}_city`);
+            const barangaySelect = document.getElementById(`${type}_barangay`);
+            
+            if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect) return;
+            
+            // Reset dependent dropdowns
+            provinceSelect.innerHTML = '<option value="">Select Province</option>';
+            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+            
+            if (!regionSelect.value) return;
+            
+            try {
+                const response = await fetch(`https://psgc.gitlab.io/api/regions/${regionSelect.value}/provinces/`);
+                const provinces = await response.json();
+                
+                provinces.forEach(province => {
+                    const option = new Option(province.name, province.code);
+                    provinceSelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error loading provinces:', error);
+                // Fallback: Add common provinces for selected region
+                const commonProvinces = getCommonProvinces(regionSelect.value);
+                commonProvinces.forEach(province => {
+                    const option = new Option(province, province);
+                    provinceSelect.add(option);
+                });
+            }
+            
+            updateCompleteAddress(type);
+        }
+
+        async function loadCities(type) {
+            const provinceSelect = document.getElementById(`${type}_province`);
+            const citySelect = document.getElementById(`${type}_city`);
+            const barangaySelect = document.getElementById(`${type}_barangay`);
+            
+            if (!provinceSelect || !citySelect || !barangaySelect) return;
+            
+            // Reset dependent dropdowns
+            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+            
+            if (!provinceSelect.value) return;
+            
+            try {
+                const response = await fetch(`https://psgc.gitlab.io/api/provinces/${provinceSelect.value}/cities-municipalities/`);
+                const cities = await response.json();
+                
+                cities.forEach(city => {
+                    const option = new Option(city.name, city.code);
+                    citySelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error loading cities:', error);
+                // Fallback: Add common cities
+                const commonCities = ['City/Municipality 1', 'City/Municipality 2', 'City/Municipality 3'];
+                commonCities.forEach(city => {
+                    const option = new Option(city, city);
+                    citySelect.add(option);
+                });
+            }
+            
+            updateCompleteAddress(type);
+        }
+
+        async function loadBarangays(type) {
+            const citySelect = document.getElementById(`${type}_city`);
+            const barangaySelect = document.getElementById(`${type}_barangay`);
+            
+            if (!citySelect || !barangaySelect) return;
+            
+            // Reset barangay dropdown
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+            
+            if (!citySelect.value) return;
+            
+            try {
+                const response = await fetch(`https://psgc.gitlab.io/api/cities-municipalities/${citySelect.value}/barangays/`);
+                const barangays = await response.json();
+                
+                barangays.forEach(barangay => {
+                    const option = new Option(barangay.name, barangay.code);
+                    barangaySelect.add(option);
+                });
+            } catch (error) {
+                console.error('Error loading barangays:', error);
+                // Fallback: Add common barangays
+                const commonBarangays = ['Barangay 1', 'Barangay 2', 'Barangay 3', 'Barangay 4', 'Barangay 5'];
+                commonBarangays.forEach(barangay => {
+                    const option = new Option(barangay, barangay);
+                    barangaySelect.add(option);
+                });
+            }
+            
+            updateCompleteAddress(type);
+        }
+
+        function updateCompleteAddress(type) {
+            const regionSelect = document.getElementById(`${type}_region`);
+            const provinceSelect = document.getElementById(`${type}_province`);
+            const citySelect = document.getElementById(`${type}_city`);
+            const barangaySelect = document.getElementById(`${type}_barangay`);
+            const streetInput = document.getElementById(`${type}_street`);
+            const displayElement = document.getElementById(`${type}_complete_address`);
+            const inputElement = document.getElementById(`${type}_complete_address_input`);
+
+            if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect || !streetInput || !displayElement || !inputElement) return;
+
+            const street = streetInput.value;
+
+            // Use the selected option's text (name), not value (code)
+            const region = regionSelect && regionSelect.selectedIndex > 0 ? regionSelect.options[regionSelect.selectedIndex].text : '';
+            const province = provinceSelect && provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '';
+            const city = citySelect && citySelect.selectedIndex > 0 ? citySelect.options[citySelect.selectedIndex].text : '';
+            const barangay = barangaySelect && barangaySelect.selectedIndex > 0 ? barangaySelect.options[barangaySelect.selectedIndex].text : '';
+
+            let completeAddress = '';
+            if (street) completeAddress += street + ', ';
+            if (barangay) completeAddress += barangay + ', ';
+            if (city) completeAddress += city + ', ';
+            if (province) completeAddress += province + ', ';
+            if (region) completeAddress += region;
+
+            if (completeAddress.endsWith(', ')) {
+                completeAddress = completeAddress.slice(0, -2);
+            }
+
+            if (completeAddress) {
+                displayElement.textContent = completeAddress;
+                inputElement.value = completeAddress;
+            } else {
+                displayElement.textContent = 'Address will be displayed here...';
+                inputElement.value = '';
+            }
+        }
+
+        // Helper function for common provinces (fallback)
+        function getCommonProvinces(region) {
+            const provinceMap = {
+                'National Capital Region (NCR)': ['Metro Manila'],
+                'Cordillera Administrative Region (CAR)': ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'],
+                'Ilocos Region (Region I)': ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan'],
+                'Cagayan Valley (Region II)': ['Batanes', 'Cagayan', 'Isabela', 'Nueva Vizcaya', 'Quirino'],
+                'Central Luzon (Region III)': ['Aurora', 'Bataan', 'Bulacan', 'Nueva Ecija', 'Pampanga', 'Tarlac', 'Zambales'],
+                'CALABARZON (Region IV-A)': ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal'],
+                'MIMAROPA (Region IV-B)': ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon'],
+                'Bicol Region (Region V)': ['Albay', 'Camarines Norte', 'Camarines Sur', 'Catanduanes', 'Masbate', 'Sorsogon'],
+                'Western Visayas (Region VI)': ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'],
+                'Central Visayas (Region VII)': ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor'],
+                'Eastern Visayas (Region VIII)': ['Biliran', 'Eastern Samar', 'Leyte', 'Northern Samar', 'Samar', 'Southern Leyte'],
+                'Zamboanga Peninsula (Region IX)': ['Zamboanga del Norte', 'Zamboanga del Sur', 'Zamboanga Sibugay'],
+                'Northern Mindanao (Region X)': ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Occidental', 'Misamis Oriental'],
+                'Davao Region (Region XI)': ['Compostela Valley', 'Davao del Norte', 'Davao del Sur', 'Davao Occidental', 'Davao Oriental'],
+                'SOCCSKSARGEN (Region XII)': ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat'],
+                'Caraga (Region XIII)': ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'],
+                'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)': ['Basilan', 'Lanao del Sur', 'Maguindanao', 'Sulu', 'Tawi-Tawi']
+            };
+            
+            return provinceMap[region] || ['Province 1', 'Province 2', 'Province 3'];
+        }
+
+        // Setup event listeners for address functionality
+        function setupAddressEventListeners() {
+            ['home', 'business'].forEach(type => {
+                const streetInput = document.getElementById(`${type}_street`);
+                if (streetInput) {
+                    // Remove existing listeners to prevent duplicates
+                    streetInput.removeEventListener('input', () => updateCompleteAddress(type));
+                    streetInput.addEventListener('input', () => updateCompleteAddress(type));
+                }
+                
+                const barangaySelect = document.getElementById(`${type}_barangay`);
+                if (barangaySelect) {
+                    // Remove existing listeners to prevent duplicates
+                    barangaySelect.removeEventListener('change', () => updateCompleteAddress(type));
+                    barangaySelect.addEventListener('change', () => updateCompleteAddress(type));
+                }
+            });
+        }
+
+        window.initializePersonalCharacteristics = function() {
+            // No dynamic JS needed for personal characteristics
+        };
+
+        window.initializeFamilyBackground = function() {
+            const siblingsContainer = document.getElementById('siblings-container');
+            
+            // Add event listener for removing siblings
+            if (siblingsContainer) {
+                siblingsContainer.removeEventListener('click', removeSiblingHandler);
+                siblingsContainer.addEventListener('click', removeSiblingHandler);
+            }
+
+            // Load existing siblings if any, or add one default entry
+            loadExistingSiblings();
+
+            console.log('Family Background section initialized');
+        };
+
+        // Global function to add sibling (called from the form)
+        window.addSibling = function() {
+            const siblingsContainer = document.getElementById('siblings-container');
+            if (!siblingsContainer) return;
+
+            const entries = siblingsContainer.querySelectorAll('.sibling-entry');
+            const idx = entries.length;
+            
+            const siblingEntry = document.createElement('div');
+            siblingEntry.className = 'sibling-entry bg-gray-50 p-4 border border-gray-200 rounded-lg relative';
+            siblingEntry.setAttribute('data-index', idx);
+            siblingEntry.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input type="text" name="siblings[${idx}][first_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
+                        <input type="text" name="siblings[${idx}][middle_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter middle name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input type="text" name="siblings[${idx}][last_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter last name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        <input type="date" name="siblings[${idx}][date_of_birth]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
+                        <input type="text" name="siblings[${idx}][citizenship]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship (if any)</label>
+                        <input type="text" name="siblings[${idx}][dual_citizenship]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter dual citizenship">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
+                        <input type="text" name="siblings[${idx}][complete_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
+                        <input type="text" name="siblings[${idx}][occupation]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter occupation">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
+                        <input type="text" name="siblings[${idx}][employer]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Employer Address</label>
+                        <input type="text" name="siblings[${idx}][employer_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer address">
+                    </div>
+                </div>
+                <button type="button" class="remove-sibling absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            `;
+            siblingsContainer.appendChild(siblingEntry);
+        };
+
+        function removeSiblingHandler(e) {
+            if (e.target.closest('.remove-sibling')) {
+                const entries = document.querySelectorAll('.sibling-entry');
+                if (entries.length > 1) {
+                    e.target.closest('.sibling-entry').remove();
+                }
+            }
+        }
+
+        function loadExistingSiblings() {
+            // Always add at least one default sibling entry
+            const siblingsContainer = document.getElementById('siblings-container');
+            if (siblingsContainer) {
+                // If no siblings exist, add one default entry
+                if (siblingsContainer.children.length === 0) {
+                    window.addSibling();
+                }
+            }
+        }
+
+        window.initializeArrestRecord = function() {
+            // No dynamic JS needed for arrest record
+        };
+
+        window.initializeCharacterReferences = function() {
+            // No dynamic JS needed for character references
+        };
+
+        function updatePHTimeHeader() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            };
+            const dateTime = now.toLocaleString('en-US', options);
+            const el = document.getElementById('ph-time-value');
+            if (el) el.textContent = dateTime;
+        }
+        setInterval(updatePHTimeHeader, 1000);
+        updatePHTimeHeader();
     </script>
 </body>
 </html> 

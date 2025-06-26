@@ -16,7 +16,8 @@ class PersonalCharacteristicsController extends Controller
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.personal-characteristics', $data)->render();
+            // For AJAX requests, return the full view with layout so content extraction works properly
+            return view('phs.personal-characteristics', $data);
         }
 
         return view('phs.personal-characteristics', $data);

@@ -21,12 +21,18 @@ class CreditReputationController extends Controller
 
         $commonData = $this->getCommonViewData('credit-reputation');
         
-        return view('phs.credit-reputation', array_merge($commonData, [
+        $viewData = array_merge($commonData, [
             'creditReputation' => $creditReputation,
             'otherIncomes' => $creditReputation->otherIncomes->isEmpty() ? collect([new OtherIncome()]) : $creditReputation->otherIncomes,
             'bankAccounts' => $creditReputation->bankAccounts->isEmpty() ? collect([new BankAccount()]) : $creditReputation->bankAccounts,
             'characterReferences' => $creditReputation->characterReferences->isEmpty() ? collect(array_fill(0, 3, new CharacterReference())) : $creditReputation->characterReferences,
-        ]));
+        ]);
+
+        if (request()->ajax()) {
+            return view('phs.sections.credit-reputation-content', $viewData);
+        }
+
+        return view('phs.credit-reputation', $viewData);
     }
 
     public function store(Request $request)

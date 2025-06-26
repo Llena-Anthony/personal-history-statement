@@ -11,7 +11,14 @@ class EducationalBackgroundController extends Controller
 
     public function create()
     {
-        return view('phs.educational-background', $this->getCommonViewData('educational-background'));
+        $viewData = $this->getCommonViewData('educational-background');
+        
+        // Return partial for AJAX requests, full view for normal requests
+        if (request()->ajax()) {
+            return view('phs.sections.educational-background-content', $viewData);
+        }
+        
+        return view('phs.educational-background', $viewData);
     }
 
     public function index()

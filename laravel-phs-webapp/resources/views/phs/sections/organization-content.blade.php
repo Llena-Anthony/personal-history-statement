@@ -1,8 +1,3 @@
-@extends('layouts.phs-new')
-
-@section('title', 'XIII: Organization')
-
-@section('content')
 <div class="max-w-4xl mx-auto">
     <div class="mb-8">
         <div class="flex items-center space-x-4 mb-4">
@@ -92,52 +87,6 @@
 </div>
 
 <script>
-// Global function that can be called from AJAX navigation
-window.initializeOrganization = function() {
-    // Organization Entries functionality
-    const organizationContainer = document.getElementById('organizations');
-    const addOrganizationBtn = document.getElementById('add-organization');
-    let orgIndex = 1;
-
-    // Function to handle date type change
-    function handleDateTypeChange(selectElement) {
-        const entry = selectElement.closest('.organization-entry');
-        const index = entry.getAttribute('data-index');
-        const exactDateInput = entry.querySelector('input[name$="[exact_date]"]');
-        const monthYearGroup = entry.querySelector(`#month-year-group-${index}`);
-        
-        if (selectElement.value === 'exact') {
-            exactDateInput.classList.remove('hidden');
-            monthYearGroup.classList.add('hidden');
-        } else {
-            exactDateInput.classList.add('hidden');
-            monthYearGroup.classList.remove('hidden');
-        }
-    }
-
-    // Add event listener for initial date type select
-    const initialDateTypeSelect = organizationContainer.querySelector('select[name="organizations[0][date_type]"]');
-    if (initialDateTypeSelect) {
-        // Remove existing event listeners to prevent duplicates
-        initialDateTypeSelect.removeEventListener('change', function() { handleDateTypeChange(this); });
-        initialDateTypeSelect.addEventListener('change', function() {
-            handleDateTypeChange(this);
-        });
-    }
-
-    // Add organization button click handler
-    if (addOrganizationBtn) {
-        // Remove existing event listeners to prevent duplicates
-        addOrganizationBtn.removeEventListener('click', addOrganizationHandler);
-        addOrganizationBtn.addEventListener('click', addOrganizationHandler);
-    }
-
-    // Remove organization entry
-    // Remove existing event listeners to prevent duplicates
-    organizationContainer.removeEventListener('click', removeOrganizationHandler);
-    organizationContainer.addEventListener('click', removeOrganizationHandler);
-};
-
 // Organization addition handler
 function addOrganizationHandler(e) {
     e.preventDefault();
@@ -213,7 +162,7 @@ function removeOrganizationHandler(e) {
     }
 }
 
-// Function to handle date type change (needed for the handler)
+// Function to handle date type change
 function handleDateTypeChange(selectElement) {
     const entry = selectElement.closest('.organization-entry');
     const index = entry.getAttribute('data-index');
@@ -229,13 +178,8 @@ function handleDateTypeChange(selectElement) {
     }
 }
 
-// Initialize on page load (for non-AJAX loads)
-document.addEventListener('DOMContentLoaded', function () {
-    if (document.getElementById('organizations')) {
-        window.initializeOrganization();
-    }
-});
-</script>
-@endsection
-
-@php($currentSection = 'organization') 
+// Call global initialization function for Organization
+if (typeof window.initializeOrganization === 'function') {
+    window.initializeOrganization();
+}
+</script> 

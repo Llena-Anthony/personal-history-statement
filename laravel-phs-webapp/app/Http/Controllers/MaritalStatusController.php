@@ -37,9 +37,11 @@ class MaritalStatusController extends Controller
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.marital-status', $data)->render();
+            // Return only the partial content for AJAX
+            return view('phs.sections.marital-status-content', $data);
         }
 
+        // Return the full view (with layout) for normal requests
         return view('phs.marital-status', $data);
     }
 
