@@ -287,18 +287,7 @@
                             </div>
                         </a>
                         <!-- User Avatar and Name (no dropdown) -->
-                        <div class="flex items-center space-x-2 text-white">
-                            <div class="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center overflow-hidden">
-                                @if(auth()->user()->profile_picture)
-                                    <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
-                                         alt="Profile" 
-                                         class="w-full h-full object-cover">
-                                @else
-                                    <i class="fas fa-user text-[#1B365D] text-sm"></i>
-                                @endif
-                            </div>
-                            <span class="hidden sm:block text-sm font-medium">{{ auth()->user()->name }}</span>
-                        </div>
+                        <!-- Removed user avatar/profile picture and name from header -->
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Client</span>
                             <span class="mx-2">/</span>
