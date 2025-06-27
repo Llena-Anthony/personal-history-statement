@@ -32,9 +32,9 @@
                     </div>
                 </div>
                 
-                <!-- Profile Picture -->
-                <div class="relative">
-                    <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm">
+                <!-- Profile Picture (Direct Link) -->
+                <a href="{{ route('profile.edit') }}" class="relative group focus:outline-none" title="Edit Profile">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
                         @if(auth()->user()->profile_picture)
                             <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
                                  alt="Profile" 
@@ -45,7 +45,7 @@
                     </div>
                     <!-- Decorative ring -->
                     <div class="absolute inset-0 rounded-full border-4 border-[#D4AF37]/30 animate-ping"></div>
-                </div>
+                </a>
             </div>
         </div>
         
