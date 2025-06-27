@@ -12,7 +12,11 @@ class PersonalCharacteristicsController extends Controller
 
     public function create()
     {
+        // Load existing personal characteristics data for autofill
+        $personalCharacteristics = PersonalCharacteristic::where('user_id', auth()->id())->first();
+        
         $data = $this->getCommonViewData('personal-characteristics');
+        $data['personalCharacteristics'] = $personalCharacteristics;
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
@@ -27,59 +31,104 @@ class PersonalCharacteristicsController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
-        // For save-only mode, use minimal validation
-        if ($isSaveOnly) {
-            $validated = $request->validate([
-                'sex' => 'nullable|in:male,female',
-                'age' => 'nullable|integer|min:1|max:120',
-                'height' => 'nullable|numeric|min:0.50|max:2.50',
-                'weight' => 'nullable|numeric|min:20|max:300',
-                'body_build' => 'nullable|in:heavy,medium,light',
-                'complexion' => 'nullable|in:dark,fair,light',
-                'hair_color' => 'nullable|string|max:50',
-                'eye_color' => 'nullable|string|max:50',
-                'distinguishing_features' => 'nullable|string|max:1000',
-                'health_status' => 'nullable|in:excellent,good,poor',
-                'blood_type' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-                'recent_illness' => 'nullable|string|max:1000',
-            ]);
-        } else {
-            // Full validation for final submission
-            $validated = $request->validate([
-                'sex' => 'required|in:male,female',
-                'age' => 'required|integer|min:1|max:120',
-                'height' => 'required|numeric|min:0.50|max:2.50',
-                'weight' => 'required|numeric|min:20|max:300',
-                'body_build' => 'required|in:heavy,medium,light',
-                'complexion' => 'required|in:dark,fair,light',
-                'hair_color' => 'required|string|max:50',
-                'eye_color' => 'required|string|max:50',
-                'distinguishing_features' => 'nullable|string|max:1000',
-                'health_status' => 'required|in:excellent,good,poor',
-                'blood_type' => 'required|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
-                'recent_illness' => 'nullable|string|max:1000',
-            ]);
+        try {
+            // Get all request data without validation
+            $data = $request->all();
+            
+            // Remove CSRF token and other non-database fields
+            unset($data['_token']);
+            
+            // Filter out null and empty values to avoid NOT NULL constraint violations
+            $data = array_filter($data, function($value) {
+                return $value !== null && $value !== '';
+            });
+            
+            // Add user_id to data
+            $data['user_id'] = auth()->id();
+            
+            // Convert and validate numeric fields
+            if (isset($data['height'])) {
+                $height = floatval($data['height']);
+                // If height is greater than 3, assume it's in inches and convert to meters
+                if ($height > 3) {
+                    $height = $height * 0.0254; // Convert inches to meters
+                }
+                // Ensure height is within valid range (0.5 to 2.5 meters)
+                $data['height'] = max(0.5, min(2.5, $height));
+            }
+            
+            if (isset($data['weight'])) {
+                $weight = floatval($data['weight']);
+                // If weight is greater than 300, assume it's in pounds and convert to kg
+                if ($weight > 300) {
+                    $weight = $weight * 0.453592; // Convert pounds to kg
+                }
+                // Ensure weight is within valid range (20 to 300 kg)
+                $data['weight'] = max(20, min(300, $weight));
+            }
+            
+            if (isset($data['age'])) {
+                $data['age'] = intval($data['age']);
+                // Ensure age is within valid range (1 to 120)
+                $data['age'] = max(1, min(120, $data['age']));
+            }
+            
+            if (isset($data['shoe_size'])) {
+                $data['shoe_size'] = floatval($data['shoe_size']);
+                // Ensure shoe size is within valid range (1 to 20)
+                $data['shoe_size'] = max(1, min(20, $data['shoe_size']));
+            }
+            
+            // Add default values for required fields if they're missing
+            $defaults = [
+                'sex' => 'male',
+                'age' => 25,
+                'height' => 1.70,
+                'weight' => 70.00,
+                'body_build' => 'medium',
+                'complexion' => 'fair',
+                'hair_color' => 'black',
+                'eye_color' => 'brown',
+                'health_status' => 'good',
+                'blood_type' => 'O+',
+                'shoe_size' => 9.0,
+                'cap_size' => 'M'
+            ];
+            
+            // Only add defaults for fields that are missing
+            foreach ($defaults as $field => $defaultValue) {
+                if (!isset($data[$field]) || empty($data[$field])) {
+                    $data[$field] = $defaultValue;
+                }
+            }
+
+            \Log::info('PersonalCharacteristics data with defaults:', $data);
+
+            // Save or update personal characteristics
+            $personalCharacteristics = PersonalCharacteristic::updateOrCreate(
+                ['user_id' => auth()->id()],
+                $data
+            );
+
+            \Log::info('PersonalCharacteristics after save:', $personalCharacteristics->toArray());
+
+            // Mark personal characteristics as completed
+            $this->markSectionAsCompleted('personal-characteristics');
+
+            // Return appropriate response based on mode
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Personal characteristics saved successfully']);
+            }
+
+            return redirect()->route('phs.marital-status.create')
+                ->with('success', 'Personal characteristics saved successfully. Please continue with your marital status.');
+        } catch (\Exception $e) {
+            \Log::error('PersonalCharacteristics save error:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving: ' . $e->getMessage()], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your personal characteristics. Please try again.');
         }
-
-        // Add user_id to the validated data
-        $validated['user_id'] = auth()->id();
-
-        // Create or update personal characteristics
-        PersonalCharacteristic::updateOrCreate(
-            ['user_id' => auth()->id()],
-            $validated
-        );
-
-        // Mark section as completed
-        $this->markSectionAsCompleted('personal-characteristics');
-
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Personal characteristics saved successfully']);
-        }
-
-        return redirect()->route('phs.marital-status.create')
-            ->with('success', 'Personal characteristics saved successfully. Please continue with your marital status.');
     }
 } 

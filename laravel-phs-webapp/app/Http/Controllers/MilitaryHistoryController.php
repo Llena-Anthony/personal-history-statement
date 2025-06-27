@@ -106,22 +106,25 @@ class MilitaryHistoryController extends Controller
         try {
             DB::beginTransaction();
 
+            \Log::info('MilitaryHistory validated data:', $validated);
+
             $username = auth()->user()->username;
 
             // Create or update military history
             $militaryHistory = MilitaryHistory::updateOrCreate(
                 ['username' => $username],
                 [
-                    'username' => $username,
-                    'enlistment_month' => $validated['enlistment_month'] ?? null,
-                    'enlistment_year' => $validated['enlistment_year'] ?? null,
+                    'enlistment_month' => $validated['enlistment_month'],
+                    'enlistment_year' => $validated['enlistment_year'],
+                    'commission_source' => $validated['commission_source'] ?? null,
                     'commission_date_from_month' => $validated['commission_date_from_month'] ?? null,
                     'commission_date_from_year' => $validated['commission_date_from_year'] ?? null,
                     'commission_date_to_month' => $validated['commission_date_to_month'] ?? null,
                     'commission_date_to_year' => $validated['commission_date_to_year'] ?? null,
-                    'source_of_commision' => $validated['commission_source'] ?? null,
                 ]
             );
+
+            \Log::info('MilitaryHistory after save:', $militaryHistory->toArray());
 
             // Handle assignments
             if (isset($validated['assignments'])) {
@@ -152,12 +155,13 @@ class MilitaryHistoryController extends Controller
                     if (!empty($schoolData['school'])) {
                         $school = MilitarySchool::create([
                             'username' => $username,
+                            'school' => $schoolData['school'],
+                            'location' => $schoolData['location'] ?? null,
                             'date_attended_from_month' => $schoolData['date_attended_from_month'] ?? null,
                             'date_attended_from_year' => $schoolData['date_attended_from_year'] ?? null,
                             'date_attended_to_month' => $schoolData['date_attended_to_month'] ?? null,
                             'date_attended_to_year' => $schoolData['date_attended_to_year'] ?? null,
-                            'school_location' => $schoolData['location'] ?? null,
-                            'nature_of_training' => $schoolData['nature_training'] ?? null,
+                            'nature_training' => $schoolData['nature_training'] ?? null,
                             'rating' => $schoolData['rating'] ?? null,
                         ]);
                     }
@@ -188,6 +192,12 @@ class MilitaryHistoryController extends Controller
                 }
             }
 
+            \Log::info('MilitaryHistory related data after save:', [
+                'assignments' => MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get()->toArray(),
+                'schools' => MilitarySchool::where('username', $username)->get()->toArray(),
+                'awards' => MilitaryAward::whereIn('history_id', MilitarySchool::where('username', $username)->pluck('history_id'))->get()->toArray(),
+            ]);
+
             // Mark military history as completed
             $this->markSectionAsCompleted('military-history');
 
@@ -200,13 +210,15 @@ class MilitaryHistoryController extends Controller
 
             return redirect()->route('phs.places-of-residence.create')
                 ->with('success', 'Military history saved successfully. Please continue with your places of residence.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
         } catch (\Exception $e) {
-            DB::rollBack();
-            
-            if ($isSaveOnly) {
+            if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }
-            
             return back()->with('error', 'An error occurred while saving your military history information. Please try again.');
         }
     }

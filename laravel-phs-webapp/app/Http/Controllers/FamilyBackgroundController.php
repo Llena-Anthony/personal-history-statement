@@ -23,6 +23,15 @@ class FamilyBackgroundController extends Controller
         
         $data = $this->getCommonViewData($currentSection);
 
+        // Load existing family background data for autofill
+        $familyBackground = FamilyBackground::where('user_id', auth()->id())->first();
+        if ($familyBackground) {
+            $data['familyBackground'] = $familyBackground;
+            
+            // Load related data
+            $data['siblings'] = $familyBackground->siblings()->with('nameDetails')->get();
+        }
+
         // Check if it's an AJAX request
         if (request()->ajax()) {
             return view('phs.sections.family-background-content', $data);
@@ -305,10 +314,12 @@ class FamilyBackgroundController extends Controller
             $fbData['father_in_law_name_id'] = $fatherInLawName ? $fatherInLawName->name_id : null;
             $fbData['mother_in_law_name_id'] = $motherInLawName ? $motherInLawName->name_id : null;
             $fbData['user_id'] = auth()->id();
+            \Log::info('FamilyBackground validated data:', $fbData);
             $familyBackground = FamilyBackground::updateOrCreate(
                 ['user_id' => auth()->id()],
                 $fbData
             );
+            \Log::info('FamilyBackground before save:', ['user_id' => auth()->id(), 'data' => $fbData]);
             // Save siblings (delete old, create new)
             if (isset($validated['siblings'])) {
                 $familyBackground->siblings()->delete();
@@ -332,6 +343,8 @@ class FamilyBackgroundController extends Controller
                     }
                 }
             }
+            \Log::info('Siblings after save:', $familyBackground->siblings()->get()->toArray());
+            \Log::info('FamilyBackground after save:', $familyBackground->toArray());
             $this->markSectionAsCompleted('family-background');
             $this->markSectionAsCompleted('family-history');
             if ($isSaveOnly) {
@@ -339,11 +352,16 @@ class FamilyBackgroundController extends Controller
             }
             return redirect()->route('phs.educational-background')
                 ->with('success', 'Family background and history saved successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
         } catch (\Exception $e) {
-            if ($isSaveOnly) {
+            if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }
-            return back()->with('error', 'An error occurred while saving your family information. Please try again.');
+            return back()->with('error', 'An error occurred while saving your family background. Please try again.');
         }
     }
 

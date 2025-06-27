@@ -27,6 +27,7 @@ use App\Http\Controllers\CharacterReputationController;
 use App\Http\Controllers\ArrestRecordController;
 use App\Models\AddressDetails;
 use App\Http\Controllers\CredentialController;
+use App\Http\Controllers\PHSReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,118 +126,144 @@ Route::middleware('auth')->group(function () {
 
     // PHS Routes - Organization
     Route::get('/phs/organization', function() { 
+        // Load existing organization data for autofill
+        $organizations = Organization::with(['membershipDetails' => function($query) {
+            $query->where('username', Auth::user()->username);
+        }])->get();
+        
+        $viewData = [
+            'organizations' => $organizations
+        ];
+        
         if (request()->ajax()) {
-            return view('phs.sections.organization-content');
+            return view('phs.sections.organization-content', $viewData);
         }
-        return view('phs.organization'); 
+        return view('phs.organization', $viewData); 
     })->name('phs.organization');
 
     Route::post('/phs/organization', function(Request $request) { 
-        // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
-        // For save-only mode, use minimal validation
-        if ($isSaveOnly) {
-            $validated = $request->validate([
-                'organizations.*.name' => 'nullable|string|max:255',
-                'organizations.*.address' => 'nullable|string|max:500',
-                'organizations.*.month' => 'nullable|string|max:2',
-                'organizations.*.year' => 'nullable|integer|min:1900|max:2030',
-                'organizations.*.position' => 'nullable|string|max:255',
-            ]);
-        } else {
-            // Full validation for final submission
-            $validated = $request->validate([
-                'organizations.*.name' => 'required|string|max:255',
-                'organizations.*.address' => 'required|string|max:500',
-                'organizations.*.month' => 'nullable|string|max:2',
-                'organizations.*.year' => 'nullable|integer|min:1900|max:2030',
-                'organizations.*.position' => 'required|string|max:255',
-            ]);
-        }
+        try {
+            // Check if this is a save-only request (for dynamic navigation)
+            if ($isSaveOnly) {
+                $validated = $request->validate([
+                    'organizations.*.name' => 'nullable|string|max:255',
+                    'organizations.*.address' => 'nullable|string|max:500',
+                    'organizations.*.month' => 'nullable|string|max:2',
+                    'organizations.*.year' => 'nullable|integer|min:1900|max:2030',
+                    'organizations.*.position' => 'nullable|string|max:255',
+                ]);
+            } else {
+                // Full validation for final submission
+                $validated = $request->validate([
+                    'organizations.*.name' => 'required|string|max:255',
+                    'organizations.*.address' => 'required|string|max:500',
+                    'organizations.*.month' => 'nullable|string|max:2',
+                    'organizations.*.year' => 'nullable|integer|min:1900|max:2030',
+                    'organizations.*.position' => 'required|string|max:255',
+                ]);
+            }
 
-        // Additional validation for date fields based on month/year
-        if (isset($validated['organizations'])) {
-            foreach ($validated['organizations'] as $index => $organization) {
-                if (!empty($organization['month']) && empty($organization['year'])) {
-                    if (!$isSaveOnly) {
-                        return back()->withErrors(["organizations.{$index}.year" => 'Year is required when month is provided.']);
-                    }
-                } elseif (empty($organization['month']) && !empty($organization['year'])) {
-                    if (!$isSaveOnly) {
-                        return back()->withErrors(["organizations.{$index}.month" => 'Month is required when year is provided.']);
+            \Log::info('Organization validated data:', $validated);
+
+            // Additional validation for date fields based on month/year
+            if (isset($validated['organizations'])) {
+                foreach ($validated['organizations'] as $index => $organization) {
+                    if (!empty($organization['month']) && empty($organization['year'])) {
+                        if (!$isSaveOnly) {
+                            return back()->withErrors(["organizations.{$index}.year" => 'Year is required when month is provided.']);
+                        }
+                    } elseif (empty($organization['month']) && !empty($organization['year'])) {
+                        if (!$isSaveOnly) {
+                            return back()->withErrors(["organizations.{$index}.month" => 'Month is required when year is provided.']);
+                        }
                     }
                 }
             }
-        }
 
-        // Save organization data to database
-        if (isset($validated['organizations'])) {
-            foreach ($validated['organizations'] as $organization) {
-                if (!empty($organization['name'])) {
-                    // Create or update address details if address is provided
-                    $addressId = null;
-                    if (!empty($organization['address'])) {
-                        $address = AddressDetails::updateOrCreate(
+            // Save organization data to database
+            if (isset($validated['organizations'])) {
+                foreach ($validated['organizations'] as $organization) {
+                    if (!empty($organization['name'])) {
+                        // Create or update address details if address is provided
+                        $addressId = null;
+                        if (!empty($organization['address'])) {
+                            $address = AddressDetails::updateOrCreate(
+                                [
+                                    'street' => $organization['address'],
+                                    'country' => 'Philippines' // Default country
+                                ],
+                                [
+                                    'barangay' => '',
+                                    'municipality' => '',
+                                    'province' => '',
+                                    'city' => '',
+                                    'zip_code' => ''
+                                ]
+                            );
+                            $addressId = $address->addr_id;
+                        }
+
+                        // Create or update organization
+                        $org = Organization::updateOrCreate(
                             [
-                                'street' => $organization['address'],
-                                'country' => 'Philippines' // Default country
+                                'org_name' => $organization['name']
                             ],
                             [
-                                'barangay' => '',
-                                'municipality' => '',
-                                'province' => '',
-                                'city' => '',
-                                'zip_code' => ''
+                                'org_type' => 'membership', // Default type
+                                'org_address' => $addressId
                             ]
                         );
-                        $addressId = $address->addr_id;
-                    }
 
-                    // Create or update organization
-                    $org = Organization::updateOrCreate(
-                        [
-                            'org_name' => $organization['name']
-                        ],
-                        [
-                            'org_type' => 'membership', // Default type
-                            'org_address' => $addressId
-                        ]
-                    );
-
-                    // Create or update membership details
-                    $membershipData = [
-                        'username' => Auth::user()->username,
-                        'org_id' => $org->org_id,
-                        'membership_type' => 'member',
-                        'position_held' => $organization['position'] ?? null,
-                    ];
-
-                    // Handle date of membership using month/year
-                    if (!empty($organization['month']) && !empty($organization['year'])) {
-                        $membershipData['date_joined'] = $organization['year'] . '-' . $organization['month'] . '-01';
-                    }
-
-                    MembershipDetails::updateOrCreate(
-                        [
+                        // Create or update membership details
+                        $membershipData = [
                             'username' => Auth::user()->username,
-                            'org_id' => $org->org_id
-                        ],
-                        $membershipData
-                    );
+                            'org_id' => $org->org_id,
+                            'membership_type' => 'member',
+                            'position_held' => $organization['position'] ?? null,
+                        ];
+
+                        // Handle date of membership using month/year
+                        if (!empty($organization['month']) && !empty($organization['year'])) {
+                            $membershipData['date_joined'] = $organization['year'] . '-' . $organization['month'] . '-01';
+                        }
+
+                        MembershipDetails::updateOrCreate(
+                            [
+                                'username' => Auth::user()->username,
+                                'org_id' => $org->org_id
+                            ],
+                            $membershipData
+                        );
+                    }
                 }
             }
-        }
 
-        // Mark organization section as completed
-        session()->put('phs_sections.organization', 'completed');
-        
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
+            \Log::info('Organization after save:', [
+                'organizations' => Organization::all()->toArray(),
+                'membership_details' => MembershipDetails::where('username', Auth::user()->username)->get()->toArray(),
+            ]);
+
+            // Mark organization section as completed
+            session()->put('phs_sections.organization', 'completed');
+            
+            // Return appropriate response based on mode
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
+            }
+            
+            return redirect()->route('phs.miscellaneous')->with('success', 'Organization information saved successfully!'); 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your organization information. Please try again.');
         }
-        
-        return redirect()->route('phs.miscellaneous')->with('success', 'Organization information saved successfully!'); 
     })->name('phs.organization.store');
 
     // PHS Routes - Character and Reputation
@@ -266,67 +293,81 @@ Route::middleware('auth')->group(function () {
     })->name('phs.miscellaneous');
 
     Route::post('/phs/miscellaneous', function(Request $request) {
-        // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
-        // For save-only mode, use minimal validation
-        if ($isSaveOnly) {
-            $validated = $request->validate([
-                'hobbies_sports_pastimes' => 'nullable|string',
-                'languages' => 'nullable|array',
-                'languages.*.language' => 'nullable|string|max:255',
-                'languages.*.speak' => 'nullable|in:FLUENT,FAIR,POOR',
-                'languages.*.read' => 'nullable|in:FLUENT,FAIR,POOR',
-                'languages.*.write' => 'nullable|in:FLUENT,FAIR,POOR',
-                'lie_detection_test' => 'nullable|in:yes,no',
-            ]);
-        } else {
-            // Full validation for final submission
-            $validated = $request->validate([
-                'hobbies_sports_pastimes' => 'required|string',
-                'languages' => 'nullable|array',
-                'languages.*.language' => 'nullable|string|max:255',
-                'languages.*.speak' => 'nullable|in:FLUENT,FAIR,POOR',
-                'languages.*.read' => 'nullable|in:FLUENT,FAIR,POOR',
-                'languages.*.write' => 'nullable|in:FLUENT,FAIR,POOR',
-                'lie_detection_test' => 'required|in:yes,no',
-            ]);
-        }
-
-        // Process languages data
-        $languagesData = '';
-        if (isset($validated['languages'])) {
-            $languagesArray = [];
-            foreach ($validated['languages'] as $language) {
-                if (!empty($language['language'])) {
-                    $languagesArray[] = [
-                        'language' => $language['language'],
-                        'speak' => $language['speak'] ?? '',
-                        'read' => $language['read'] ?? '',
-                        'write' => $language['write'] ?? ''
-                    ];
-                }
+        try {
+            // Check if this is a save-only request (for dynamic navigation)
+            if ($isSaveOnly) {
+                $validated = $request->validate([
+                    'hobbies_sports_pastimes' => 'nullable|string',
+                    'languages' => 'nullable|array',
+                    'languages.*.language' => 'nullable|string|max:255',
+                    'languages.*.speak' => 'nullable|in:FLUENT,FAIR,POOR',
+                    'languages.*.read' => 'nullable|in:FLUENT,FAIR,POOR',
+                    'languages.*.write' => 'nullable|in:FLUENT,FAIR,POOR',
+                    'lie_detection_test' => 'nullable|in:yes,no',
+                ]);
+            } else {
+                // Full validation for final submission
+                $validated = $request->validate([
+                    'hobbies_sports_pastimes' => 'required|string',
+                    'languages' => 'nullable|array',
+                    'languages.*.language' => 'nullable|string|max:255',
+                    'languages.*.speak' => 'nullable|in:FLUENT,FAIR,POOR',
+                    'languages.*.read' => 'nullable|in:FLUENT,FAIR,POOR',
+                    'languages.*.write' => 'nullable|in:FLUENT,FAIR,POOR',
+                    'lie_detection_test' => 'required|in:yes,no',
+                ]);
             }
-            $languagesData = json_encode($languagesArray);
-        }
 
-        Miscellaneous::updateOrCreate(
-            ['username' => Auth::user()->username, 'misc_type' => 'general-miscellaneous'],
-            [
-                'hobbies_sports_pastimes' => $validated['hobbies_sports_pastimes'] ?? '',
-                'languages_dialects' => $languagesData,
-                'lie_detection_test' => $validated['lie_detection_test'] ?? null,
-            ]
-        );
+            \Log::info('Miscellaneous validated data:', $validated);
 
-        session()->put('phs_sections.miscellaneous', 'completed');
-        
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
+            // Process languages data
+            $languagesData = '';
+            if (isset($validated['languages'])) {
+                $languagesArray = [];
+                foreach ($validated['languages'] as $language) {
+                    if (!empty($language['language'])) {
+                        $languagesArray[] = [
+                            'language' => $language['language'],
+                            'speak' => $language['speak'] ?? '',
+                            'read' => $language['read'] ?? '',
+                            'write' => $language['write'] ?? ''
+                        ];
+                    }
+                }
+                $languagesData = json_encode($languagesArray);
+            }
+
+            $miscellaneous = Miscellaneous::updateOrCreate(
+                ['username' => Auth::user()->username, 'misc_type' => 'general-miscellaneous'],
+                [
+                    'hobbies_sports_pastimes' => $validated['hobbies_sports_pastimes'] ?? '',
+                    'languages_dialects' => $languagesData,
+                    'lie_detection_test' => $validated['lie_detection_test'] ?? null,
+                ]
+            );
+
+            \Log::info('Miscellaneous after save:', $miscellaneous->toArray());
+
+            session()->put('phs_sections.miscellaneous', 'completed');
+            
+            // Return appropriate response based on mode
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
+            }
+            
+            return redirect()->route('phs.review')->with('success', 'Miscellaneous information saved successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your miscellaneous information. Please try again.');
         }
-        
-        return redirect()->route('client.dashboard')->with('success', 'Miscellaneous information saved successfully!');
     })->name('phs.miscellaneous.store');
 
     // Dashboard Route
@@ -334,6 +375,15 @@ Route::middleware('auth')->group(function () {
 
     // PHS Routes - Send Credentials
     Route::post('/phs/send-credentials/{user}', [CredentialController::class, 'sendEmail'])->name('phs.send-credentials');
+
+    // PHS Routes - Test Autofill
+    Route::get('/phs/test-autofill', function() {
+        return view('phs.test-autofill');
+    })->name('phs.test-autofill');
+
+    // PHS Review Routes
+    Route::get('/phs/review', [PHSReviewController::class, 'review'])->name('phs.review');
+    Route::post('/phs/review/finalize', [PHSReviewController::class, 'finalize'])->name('phs.review.finalize');
 });
 
 // Admin Routes

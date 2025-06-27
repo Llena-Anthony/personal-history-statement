@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
+use App\Models\ForeignVisit;
 
 class ForeignCountriesController extends Controller
 {
@@ -11,7 +12,11 @@ class ForeignCountriesController extends Controller
 
     public function create()
     {
+        // Load existing foreign visits data for autofill
+        $foreignVisits = ForeignVisit::where('username', auth()->user()->username)->get();
+        
         $data = $this->getCommonViewData('foreign-countries');
+        $data['foreignVisits'] = $foreignVisits;
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
@@ -48,15 +53,51 @@ class ForeignCountriesController extends Controller
             ]);
         }
 
-        // Mark foreign countries as completed
-        $this->markSectionAsCompleted('foreign-countries');
+        try {
+            \Log::info('ForeignCountries validated data:', $validated);
 
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Foreign countries visited saved successfully']);
+            // Clear existing foreign visits for this user
+            ForeignVisit::where('username', auth()->user()->username)->delete();
+
+            // Save new foreign visits
+            if (isset($validated['countries'])) {
+                foreach ($validated['countries'] as $country) {
+                    if (!empty($country['name'])) {
+                        ForeignVisit::create([
+                            'username' => auth()->user()->username,
+                            'country_name' => $country['name'],
+                            'purpose' => $country['purpose'] ?? null,
+                            'from_month' => $country['from_month'] ?? null,
+                            'from_year' => $country['from_year'] ?? null,
+                            'to_month' => $country['to_month'] ?? null,
+                            'to_year' => $country['to_year'] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            \Log::info('ForeignVisits after save:', ForeignVisit::where('username', auth()->user()->username)->get()->toArray());
+
+            // Mark foreign countries as completed
+            $this->markSectionAsCompleted('foreign-countries');
+
+            // Return appropriate response based on mode
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Foreign countries visited saved successfully']);
+            }
+
+            return redirect()->route('phs.credit-reputation')
+                ->with('success', 'Foreign countries visited saved successfully. Please continue with your credit reputation.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your foreign countries visited. Please try again.');
         }
-
-        return redirect()->route('phs.credit-reputation')
-            ->with('success', 'Foreign countries visited saved successfully. Please continue with your credit reputation.');
     }
 } 

@@ -906,11 +906,22 @@
         async function saveCurrentSectionData(sectionId) {
             const form = document.querySelector('form');
             if (!form) {
-                return;
+                return true; // allow navigation if no form
             }
 
+            // Ensure address name hidden fields are set before AJAX save
+            if (window.setAddressNameHiddenFields) {
+                setAddressNameHiddenFields('home');
+                setAddressNameHiddenFields('business');
+            }
+
+            // Clear previous error messages
+            document.querySelectorAll('.phs-field-error').forEach(el => el.remove());
+            document.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
+
             const formData = new FormData(form);
-            
+            let saveSuccess = false;
+            let errorMsg = '';
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
@@ -922,11 +933,44 @@
                 });
 
                 if (response.ok) {
-                    // Mark section as visited
-                    window.phsNavigationInstance.markSectionAsVisited(sectionId);
+                    const data = await response.json();
+                    if (data.success) {
+                        // Mark section as visited
+                        window.phsNavigationInstance.markSectionAsVisited(sectionId);
+                        saveSuccess = true;
+                    } else {
+                        errorMsg = data.message || 'Save failed.';
+                    }
+                } else if (response.status === 422) {
+                    // Validation error
+                    const data = await response.json();
+                    if (data.errors) {
+                        for (const [field, messages] of Object.entries(data.errors)) {
+                            // Try to find the input/select/textarea by name
+                            const fieldName = field.replace(/\./g, '[') + (field.includes('.') ? ']' : '');
+                            const input = form.querySelector(`[name='${fieldName}']`);
+                            if (input) {
+                                input.classList.add('border-red-500');
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'phs-field-error text-red-500 text-xs mt-1';
+                                errorDiv.innerText = messages[0];
+                                input.parentNode.appendChild(errorDiv);
+                            }
+                        }
+                        errorMsg = 'Please correct the highlighted errors.';
+                    } else {
+                        errorMsg = 'Validation failed.';
+                    }
+                } else {
+                    errorMsg = 'Server error: ' + response.status;
                 }
             } catch (error) {
+                errorMsg = 'An error occurred while saving.';
             }
+            if (!saveSuccess) {
+                alert(errorMsg || 'Failed to save. Please check your input.');
+            }
+            return saveSuccess;
         }
 
         function phsNavigation(initialSection) {
@@ -2862,6 +2906,26 @@
         }
         setInterval(updatePHTimeHeader, 1000);
         updatePHTimeHeader();
+
+        // Update navigation logic to always fetch the latest form HTML from the server
+        window.navigateToSection = async function(sectionRoute) {
+            try {
+                const response = await fetch(sectionRoute, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!response.ok) throw new Error('Failed to load section');
+                const html = await response.text();
+                // Replace the form container's innerHTML with the new HTML
+                const container = document.querySelector('#phs-section-container');
+                if (container) {
+                    container.innerHTML = html;
+                    window.initializePersonalDetails && window.initializePersonalDetails();
+                } else {
+                    // fallback: reload page if container not found
+                    window.location.href = sectionRoute;
+                }
+            } catch (e) {
+                alert('Error loading section: ' + e.message);
+            }
+        };
     </script>
 </body>
 </html> 

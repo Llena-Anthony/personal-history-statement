@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
+use App\Models\ResidenceHistory;
 
 class PlacesOfResidenceController extends Controller
 {
@@ -11,7 +12,11 @@ class PlacesOfResidenceController extends Controller
 
     public function create()
     {
+        // Load existing residence history data for autofill
+        $residenceHistory = ResidenceHistory::where('username', auth()->user()->username)->get();
+        
         $data = $this->getCommonViewData('places-of-residence');
+        $data['residenceHistory'] = $residenceHistory;
 
         // Return partial for AJAX requests, full view for normal requests
         if (request()->ajax()) {
@@ -42,15 +47,44 @@ class PlacesOfResidenceController extends Controller
             ]);
         }
 
-        // Mark places of residence as completed
-        $this->markSectionAsCompleted('places-of-residence');
+        try {
+            // Mark places of residence as completed
+            $this->markSectionAsCompleted('places-of-residence');
 
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Places of residence saved successfully']);
+            // Log validated data
+            \Log::info('PlacesOfResidence validated data:', $validated);
+
+            // Return appropriate response based on mode
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Places of residence saved successfully']);
+            }
+
+            // Save residences
+            foreach ($validated['residences'] as $residence) {
+                ResidenceHistory::updateOrCreate(
+                    ['username' => auth()->user()->username, 'address' => $residence['address']],
+                    [
+                        'from_date' => $residence['from_date'],
+                        'to_date' => $residence['to_date'],
+                    ]
+                );
+            }
+
+            // Log residences after saving
+            \Log::info('ResidenceHistory after save:', ResidenceHistory::where('username', auth()->user()->username)->get()->toArray());
+
+            return redirect()->route('phs.employment-history.create')
+                ->with('success', 'Places of residence saved successfully. Please continue with your employment history.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your places of residence. Please try again.');
         }
-
-        return redirect()->route('phs.employment-history.create')
-            ->with('success', 'Places of residence saved successfully. Please continue with your employment history.');
     }
 } 

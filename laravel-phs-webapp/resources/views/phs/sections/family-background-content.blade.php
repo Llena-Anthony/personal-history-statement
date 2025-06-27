@@ -73,7 +73,7 @@
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="father_complete_address" value="{{ old('father_complete_address') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="father_complete_address" value="{{ old('father_complete_address', $familyBackground->father_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
@@ -200,7 +200,7 @@
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="mother_complete_address" value="{{ old('mother_complete_address') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="mother_complete_address" value="{{ old('mother_complete_address', $familyBackground->mother_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
@@ -323,7 +323,7 @@
                     <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                        <input type="text" name="siblings[0][complete_address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                        <input type="text" name="siblings[0][complete_address]" value="{{ old('siblings.' . $loop->index . '.complete_address', $sibling->complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
                     </div>
                     <!-- Citizenship -->
                     <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
@@ -380,13 +380,13 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employer Address</label>
-                                <input type="text" name="siblings[__INDEX__][employer_address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer address">
+                                <input type="text" name="siblings[__INDEX__][employer_address]" value="{{ old('siblings.' . $loop->index . '.employer_address', $sibling->employer_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer address">
                             </div>
                         </div>
                         <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                            <input type="text" name="siblings[__INDEX__][complete_address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                            <input type="text" name="siblings[__INDEX__][complete_address]" value="{{ old('siblings.' . $loop->index . '.complete_address', $sibling->complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
                         </div>
                         <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -470,7 +470,7 @@
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="step_parent_guardian_complete_address" value="{{ old('step_parent_guardian_complete_address') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="step_parent_guardian_complete_address" value="{{ old('step_parent_guardian_complete_address', $familyBackground->step_parent_guardian_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
@@ -597,7 +597,7 @@
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="father_in_law_complete_address" value="{{ old('father_in_law_complete_address') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="father_in_law_complete_address" value="{{ old('father_in_law_complete_address', $familyBackground->father_in_law_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
@@ -724,7 +724,7 @@
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="mother_in_law_complete_address" value="{{ old('mother_in_law_complete_address') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="mother_in_law_complete_address" value="{{ old('mother_in_law_complete_address', $familyBackground->mother_in_law_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>

@@ -150,6 +150,7 @@ class AdminUserController extends Controller
         }
 
         $userData = session('user_data');
+        $sessionUserData = $userData; // Save original session data for later use
         Log::info('User data from session', ['userData' => $userData]);
         
         try {
@@ -165,18 +166,18 @@ class AdminUserController extends Controller
             $userData = [
                 'username' => $validated['username'],
                 'name' => trim(
-                    ucwords(strtolower($userData['first_name'])) . ' ' .
-                    ($userData['middle_name'] ? ucwords(strtolower($userData['middle_name'])) . ' ' : '') .
-                    ucwords(strtolower($userData['last_name']))
+                    ucwords(strtolower($sessionUserData['first_name'])) . ' ' .
+                    ($sessionUserData['middle_name'] ? ucwords(strtolower($sessionUserData['middle_name'])) . ' ' : '') .
+                    ucwords(strtolower($sessionUserData['last_name']))
                 ),
-                'email' => $userData['email'],
+                'email' => $sessionUserData['email'],
                 'password' => Hash::make($validated['password']),
-                'usertype' => $userData['user_type'],
-                'organic_role' => $userData['organic_group'],
+                'usertype' => $sessionUserData['user_type'],
+                'organic_role' => $sessionUserData['organic_group'],
                 'branch' => 'PMA',
                 'created_by' => auth()->user()->username,
                 'is_active' => true,
-                'is_admin' => $userData['user_type'] === 'admin',
+                'is_admin' => $sessionUserData['user_type'] === 'admin',
             ];
 
             Log::info('Attempting to create user with data', ['userData' => $userData]);
@@ -188,6 +189,65 @@ class AdminUserController extends Controller
             }
 
             Log::info('User created successfully', ['user' => $user->toArray()]);
+
+            // Create NameDetails record first
+            $nameDetailsId = DB::table('name_details')->insertGetId([
+                'last_name' => $sessionUserData['last_name'],
+                'first_name' => $sessionUserData['first_name'],
+                'middle_name' => $sessionUserData['middle_name'],
+                'nickname' => null,
+                'name_extension' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Create AddressDetails record (default empty address)
+            $addressDetailsId = DB::table('address_details')->insertGetId([
+                'street' => 'Not specified',
+                'barangay' => 'Not specified',
+                'municipality' => 'Not specified',
+                'province' => 'Not specified',
+                'city' => 'Not specified',
+                'country' => 'Philippines',
+                'zip_code' => 'Not specified',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Create BirthDetails record (default empty birth details)
+            $birthDetailsId = DB::table('birth_details')->insertGetId([
+                'b_date' => 1, // Default to January 1st
+                'b_month' => 1,
+                'b_year' => 1900, // Default year
+                'b_place' => $addressDetailsId, // Reference to address details
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Create UserDetails record last (after all referenced records exist)
+            DB::table('user_details')->insert([
+                'username' => $validated['username'],
+                'name' => $nameDetailsId,
+                'profile_pic' => null,
+                'home_addr' => $addressDetailsId,
+                'birth' => $birthDetailsId,
+                'nationality' => 'Filipino', // Default nationality
+                'tin' => null,
+                'religion' => null,
+                'mobile_num' => null,
+                'email_addr' => $sessionUserData['email'],
+                'passport_num' => null,
+                'passport_exp' => null,
+                'change_in_name' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            Log::info('User details created successfully', [
+                'name_details_id' => $nameDetailsId,
+                'address_details_id' => $addressDetailsId,
+                'birth_details_id' => $birthDetailsId
+            ]);
 
             DB::commit();
 
@@ -228,6 +288,24 @@ class AdminUserController extends Controller
             
             return redirect()->route('admin.users.confirm')
                 ->with('error', 'Please check the form for errors: ' . collect($e->errors())->first()[0])
+                ->withInput();
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Log::error('Database error during user creation', [
+                'error' => $e->getMessage(),
+                'sql' => $e->getSql(),
+                'bindings' => $e->getBindings(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'error' => 'Database error occurred while creating the user: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->route('admin.users.confirm')
+                ->with('error', 'Database error occurred while creating the user: ' . $e->getMessage())
                 ->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
