@@ -75,7 +75,7 @@
                 <div class="font-bold"><span class="mr-[0.5in]">I.</span><span>PERSONAL DETAIL</span></div>
 
                 {{-- Signature --}}
-                <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold transform-rotate-90 origin-top-left">
+                <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold rotate-[90deg] origin-top-left">
                     (Signature of Applicant)
                 </div>
 
