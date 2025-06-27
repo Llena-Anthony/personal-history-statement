@@ -24,9 +24,9 @@
             <dt class="font-medium text-gray-600">Action</dt>
             <dd class="text-gray-900"><i class="{{ $activityLog->action_icon }} text-[#1B365D] mr-2"></i>{{ ucfirst(str_replace('_', ' ', $activityLog->action)) }}</dd>
         </div>
-        <div class="py-3 flex justify-between">
-            <dt class="font-medium text-gray-600">Description</dt>
-            <dd class="text-gray-900">{{ $activityLog->description }}</dd>
+        <div class="py-3">
+            <dt class="font-medium text-gray-600 mb-2">Description</dt>
+            <dd class="text-gray-900 break-words leading-relaxed">{{ $activityLog->description }}</dd>
         </div>
         <div class="py-3 flex justify-between">
             <dt class="font-medium text-gray-600">Status</dt>

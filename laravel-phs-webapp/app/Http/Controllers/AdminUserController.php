@@ -189,6 +189,20 @@ class AdminUserController extends Controller
 
             Log::info('User created successfully', ['user' => $user->toArray()]);
 
+            // Log the user creation activity with detailed information
+            $userInfo = $user->name . ' (' . $user->username . ')';
+            $userDetails = 'Type: ' . ucfirst($user->usertype) . ' | Organic Group: ' . ucfirst($user->organic_role);
+            $description = "Created new user: {$userInfo} | {$userDetails}";
+            
+            \App\Models\ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'create',
+                'description' => $description,
+                'status' => 'success',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
             DB::commit();
 
             // Clear the session data
@@ -260,12 +274,45 @@ class AdminUserController extends Controller
             'is_active' => ['required', 'boolean'],
         ]);
 
+        // Store original values for comparison
+        $originalValues = [
+            'usertype' => $user->usertype,
+            'is_active' => $user->is_active,
+        ];
+
         try {
             $user->update([
                 'usertype' => $validated['usertype'],
                 'is_active' => $validated['is_active'],
                 'is_admin' => $validated['usertype'] === 'admin',
             ]);
+
+            // Manually log the activity with more context
+            $changes = [];
+            if ($originalValues['usertype'] !== $validated['usertype']) {
+                $changes[] = "User Type: " . ucfirst($originalValues['usertype']) . " → " . ucfirst($validated['usertype']);
+            }
+            if ($originalValues['is_active'] !== $validated['is_active']) {
+                $oldStatus = $originalValues['is_active'] ? 'Active' : 'Inactive';
+                $newStatus = $validated['is_active'] ? 'Active' : 'Inactive';
+                $changes[] = "Status: {$oldStatus} → {$newStatus}";
+            }
+
+            // Only log if there are actual changes
+            if (!empty($changes)) {
+                $userInfo = $user->name . ' (' . $user->username . ')';
+                $changesList = implode(' | ', $changes);
+                $description = "Updated user: {$userInfo} | Changes: {$changesList}";
+                
+                \App\Models\ActivityLog::create([
+                    'user_id' => auth()->id(),
+                    'action' => 'update',
+                    'description' => $description,
+                    'status' => 'success',
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ]);
+            }
 
             return redirect()->route('admin.users.index')
                 ->with('success', 'User updated successfully.');

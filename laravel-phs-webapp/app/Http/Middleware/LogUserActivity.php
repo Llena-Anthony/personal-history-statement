@@ -74,14 +74,11 @@ class LogUserActivity
             }
         }
 
-        // Admin activities
+        // Admin activities - skip user updates as they're handled manually
         if (str_starts_with($path, 'admin')) {
             if (str_contains($path, 'users')) {
-                if ($method === 'POST') {
-                    return 'Created new user';
-                } elseif ($method === 'PUT') {
-                    return 'Updated user';
-                } elseif ($method === 'DELETE') {
+                // Skip user creation and updates as they're handled manually in AdminUserController
+                if ($method === 'DELETE') {
                     return 'Deleted user';
                 }
             }
@@ -137,14 +134,11 @@ class LogUserActivity
                 return 'delete';
             }
         }
-        // Admin activities
+        // Admin activities - skip user updates as they're handled manually
         if (str_starts_with($path, 'admin')) {
             if (str_contains($path, 'users')) {
-                if ($method === 'POST') {
-                    return 'create';
-                } elseif ($method === 'PUT') {
-                    return 'update';
-                } elseif ($method === 'DELETE') {
+                // Skip user creation and updates as they're handled manually in AdminUserController
+                if ($method === 'DELETE') {
                     return 'delete';
                 }
             }
