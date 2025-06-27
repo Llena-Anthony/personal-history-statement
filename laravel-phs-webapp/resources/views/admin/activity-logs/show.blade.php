@@ -51,9 +51,10 @@
         <div class="py-3 flex justify-between">
             <dt class="font-medium text-gray-600">Date & Time</dt>
             <dd class="text-gray-900">
-                <span class="time-ago" data-timestamp="{{ $activityLog->created_at->toIso8601String() }}">
-                    {{ $activityLog->created_at->diffForHumans() }}
-                </span>
+                <div>
+                    <div class="font-medium">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('F d, Y') }}</div>
+                    <div class="text-sm text-gray-600">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('h:i:s A') }}</div>
+                </div>
             </dd>
         </div>
     </dl>

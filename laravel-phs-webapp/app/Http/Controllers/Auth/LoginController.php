@@ -90,6 +90,18 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        // Log logout activity before logging out
+        if (Auth::check()) {
+            \App\Models\ActivityLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'logout',
+                'description' => 'User logged out',
+                'status' => 'success',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

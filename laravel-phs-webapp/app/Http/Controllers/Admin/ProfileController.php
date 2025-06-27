@@ -42,7 +42,12 @@ class ProfileController extends Controller
         ]);
 
         try {
+            $changes = [];
+
             // Update only editable fields
+            if ($user->username !== $request->username) {
+                $changes[] = 'Username updated from ' . $user->username . ' to ' . $request->username;
+            }
             $user->username = $request->username;
 
             // Handle password change
@@ -51,7 +56,20 @@ class ProfileController extends Controller
                     return back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
                 }
                 $user->password = Hash::make($request->new_password);
+                $changes[] = 'Password changed';
                 $user->save();
+
+                // Log profile update activity before logout
+                if (!empty($changes)) {
+                    \App\Models\ActivityLog::create([
+                        'user_id' => $user->id,
+                        'action' => 'update',
+                        'description' => 'Admin profile updated: ' . implode(', ', $changes),
+                        'status' => 'success',
+                        'ip_address' => $request->ip(),
+                        'user_agent' => $request->userAgent()
+                    ]);
+                }
 
                 Auth::logout();
                 $request->session()->invalidate();
@@ -76,9 +94,22 @@ class ProfileController extends Controller
                 );
                 
                 $user->profile_picture = $path;
+                $changes[] = 'Profile picture updated';
             }
 
             $user->save();
+
+            // Log profile update activity
+            if (!empty($changes)) {
+                \App\Models\ActivityLog::create([
+                    'user_id' => $user->id,
+                    'action' => 'update',
+                    'description' => 'Admin profile updated: ' . implode(', ', $changes),
+                    'status' => 'success',
+                    'ip_address' => $request->ip(),
+                    'user_agent' => $request->userAgent()
+                ]);
+            }
 
             Log::info('Profile updated successfully', ['user_id' => $user->id]);
 

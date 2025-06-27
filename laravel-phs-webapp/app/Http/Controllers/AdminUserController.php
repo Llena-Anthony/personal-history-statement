@@ -405,4 +405,124 @@ class AdminUserController extends Controller
                 ->withInput();
         }
     }
+
+    public function show(User $user)
+    {
+        if (request()->ajax()) {
+            $html = view('admin.users.show', compact('user'))->render();
+            return response()->json(['html' => $html]);
+        }
+        
+        return view('admin.users.show', compact('user'));
+    }
+
+    public function toggleStatus(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'is_active' => ['required', 'boolean'],
+        ]);
+
+        try {
+            $oldStatus = $user->is_active ? 'Active' : 'Disabled';
+            $newStatus = $validated['is_active'] ? 'Active' : 'Disabled';
+            
+            $user->update(['is_active' => $validated['is_active']]);
+
+            // Log the status change
+            $userInfo = $user->name . ' (' . $user->username . ')';
+            $description = "Changed user status: {$userInfo} | Status: {$oldStatus} → {$newStatus}";
+            
+            \App\Models\ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'update',
+                'description' => $description,
+                'status' => 'success',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => "User status updated to {$newStatus} successfully."
+            ]);
+        } catch (\Exception $e) {
+            Log::error('User status toggle failed', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating user status.'
+            ], 500);
+        }
+    }
+
+    public function export(Request $request)
+    {
+        $query = User::query();
+
+        // Apply filters if any
+        $filters = $request->all();
+        if (isset($filters['status'])) {
+            $status = strtolower(trim($filters['status']));
+            if ($status === 'active') {
+                $filters['status'] = 1;
+            } elseif ($status === 'disabled') {
+                $filters['status'] = 0;
+            } else {
+                unset($filters['status']);
+            }
+        }
+
+        // Apply filters using the Searchable trait
+        $query->applyFilters($filters);
+
+        // Handle specific user selection
+        if ($request->has('users')) {
+            $userIds = explode(',', $request->get('users'));
+            $query->whereIn('id', $userIds);
+        }
+
+        $users = $query->orderBy('created_at', 'desc')->get();
+
+        $filename = 'users_export_' . now()->format('Y-m-d_H-i-s') . '.csv';
+        
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($users) {
+            $file = fopen('php://output', 'w');
+            
+            // CSV Headers
+            fputcsv($file, [
+                'ID', 'Name', 'Username', 'Email', 'User Type', 'Organic Group', 
+                'Branch', 'Status', 'Created By', 'Created At', 'Last Login'
+            ]);
+
+            // CSV Data
+            foreach ($users as $user) {
+                fputcsv($file, [
+                    $user->id,
+                    $user->name,
+                    $user->username,
+                    $user->email,
+                    ucfirst($user->usertype),
+                    ucfirst($user->organic_role),
+                    $user->branch,
+                    $user->is_active ? 'Active' : 'Disabled',
+                    $user->created_by,
+                    $user->created_at->format('Y-m-d H:i:s'),
+                    $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'Never'
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 } 
