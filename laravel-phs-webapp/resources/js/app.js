@@ -7,7 +7,6 @@ dayjs.extend(relativeTime);
 
 // Add any custom JavaScript here
 document.addEventListener('DOMContentLoaded', () => {
-    alert('JS loaded!');
     // Initialize any JavaScript components here
     console.log('PHS Online System initialized');
 

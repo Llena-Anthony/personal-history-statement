@@ -14,10 +14,14 @@
                     <h1 class="text-3xl font-bold mb-2">Welcome back, {{ auth()->user()->name }}!</h1>
                     <p class="text-[#D4AF37] text-lg">Complete your Personal History Statement and Personal Data Sheet</p>
                 </div>
-                <div class="hidden md:block">
-                    <div class="w-20 h-20 bg-[#D4AF37] rounded-full flex items-center justify-center">
-                        <i class="fas fa-user-shield text-[#1B365D] text-3xl"></i>
-                    </div>
+                <div class="w-20 h-20 bg-[#D4AF37] rounded-full flex items-center justify-center overflow-hidden ml-8 shadow-lg border-4 border-white">
+                    @if(auth()->user()->profile_picture)
+                        <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
+                             alt="Profile" 
+                             class="w-full h-full object-cover rounded-full">
+                    @else
+                        <i class="fas fa-user text-[#1B365D] text-4xl"></i>
+                    @endif
                 </div>
             </div>
         </div>
