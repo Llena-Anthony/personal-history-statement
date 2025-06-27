@@ -275,8 +275,7 @@
                 </div>
                 <h3 class="text-2xl font-semibold text-[#1B365D]">Brothers and Sisters</h3>
             </div>
-            <div id="siblings-container" class="space-y-4">
-                <!-- Initial sibling entry (default, not removable) -->
+            <div id="siblings-container">
                 <div class="sibling-entry p-4 border border-gray-200 rounded-lg relative">
                     <!-- Name Details -->
                     <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-id-card mr-2 text-[#D4AF37]"></i>Name Details</h4>
@@ -343,7 +342,6 @@
                         <i class="fas fa-times-circle"></i>
                     </button>
                 </div>
-                <!-- Sibling template for JS cloning -->
                 <template id="sibling-template">
                     <div class="sibling-entry p-4 border border-gray-200 rounded-lg relative">
                         <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-id-card mr-2 text-[#D4AF37]"></i>Name Details</h4>
@@ -401,14 +399,15 @@
                                 <input type="text" name="siblings[__INDEX__][dual_citizenship]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
                             </div>
                         </div>
-                        <button type="button" class="remove-sibling absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors hidden">
+                        <!-- Remove button for all siblings (visibility controlled by JS) -->
+                        <button type="button" class="remove-sibling absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
                             <i class="fas fa-times-circle"></i>
                         </button>
                     </div>
                 </template>
             </div>
-            <button type="button" id="add-sibling" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
-                <i class="fas fa-plus mr-1"></i> Add Another Sibling
+            <button type="button" onclick="window.addSibling()" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium flex items-center">
+                <i class="fas fa-plus mr-1"></i> Add Sibling
             </button>
         </div>
         <!-- Step Parent or Guardian -->
@@ -812,52 +811,6 @@
     </script>
 @endif 
 
-<script>
-function toggleCitizenshipFields(prefix) {
-    const type = document.getElementById(prefix + '_citizenship_type').value;
-    document.getElementById(prefix + '_citizenship_single').classList.add('hidden');
-    document.getElementById(prefix + '_citizenship_dual').classList.add('hidden');
-    document.getElementById(prefix + '_citizenship_naturalized').classList.add('hidden');
-    if (type === 'Single') {
-        document.getElementById(prefix + '_citizenship_single').classList.remove('hidden');
-    } else if (type === 'Dual') {
-        document.getElementById(prefix + '_citizenship_dual').classList.remove('hidden');
-    } else if (type === 'Naturalized') {
-        document.getElementById(prefix + '_citizenship_naturalized').classList.remove('hidden');
-    }
-}
-document.addEventListener('DOMContentLoaded', function() {
-    ['father','mother','step_parent_guardian','father_in_law','mother_in_law'].forEach(function(prefix) {
-        if(document.getElementById(prefix + '_citizenship_type')) {
-            toggleCitizenshipFields(prefix);
-            document.getElementById(prefix + '_citizenship_type').addEventListener('change', function() {
-                toggleCitizenshipFields(prefix);
-            });
-        }
-    });
-
-    // Sibling dynamic add/remove logic
-    const siblingsContainer = document.getElementById('siblings-container');
-    const siblingTemplate = document.getElementById('sibling-template');
-    let siblingIndex = 1;
-    document.getElementById('add-sibling').addEventListener('click', function() {
-        const clone = document.importNode(siblingTemplate.content, true);
-        const html = clone.firstElementChild.outerHTML.replace(/__INDEX__/g, siblingIndex);
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        const siblingEntry = tempDiv.firstElementChild;
-        siblingEntry.querySelector('.remove-sibling').classList.remove('hidden');
-        siblingEntry.querySelector('.remove-sibling').addEventListener('click', function() {
-            siblingEntry.remove();
-        });
-        siblingsContainer.appendChild(siblingEntry);
-        siblingIndex++;
-    });
-    // Remove button for initial sibling (should stay hidden)
-    const initialRemoveBtn = siblingsContainer.querySelector('.sibling-entry .remove-sibling');
-    if(initialRemoveBtn) initialRemoveBtn.classList.add('hidden');
-});
-</script>
 <style>
 .hidden { display: none; }
 .citizenship-group.hidden { display: none; }

@@ -2827,95 +2827,55 @@
         };
 
         window.initializeFamilyBackground = function() {
+            console.log('initializeFamilyBackground called');
+            // Event delegation for removing siblings
             const siblingsContainer = document.getElementById('siblings-container');
-            
-            // Add event listener for removing siblings
             if (siblingsContainer) {
-                siblingsContainer.removeEventListener('click', removeSiblingHandler);
-                siblingsContainer.addEventListener('click', removeSiblingHandler);
+                siblingsContainer.addEventListener('click', function(e) {
+                    const btn = e.target.closest('.remove-sibling');
+                    if (btn) {
+                        const entry = btn.closest('.sibling-entry');
+                        if (entry) entry.remove();
+                        if (typeof updateSiblingRemoveButtons === 'function') updateSiblingRemoveButtons();
+                    }
+                });
             }
-
-            // Load existing siblings if any, or add one default entry
-            loadExistingSiblings();
-
+            if (typeof loadExistingSiblings === 'function') loadExistingSiblings();
+            if (typeof updateSiblingRemoveButtons === 'function') updateSiblingRemoveButtons();
             console.log('Family Background section initialized');
         };
 
         // Global function to add sibling (called from the form)
         window.addSibling = function() {
             const siblingsContainer = document.getElementById('siblings-container');
-            if (!siblingsContainer) return;
+            const template = document.getElementById('sibling-template');
+            if (!siblingsContainer || !template) return;
 
             const entries = siblingsContainer.querySelectorAll('.sibling-entry');
             const idx = entries.length;
-            
-            const siblingEntry = document.createElement('div');
-            siblingEntry.className = 'sibling-entry bg-gray-50 p-4 border border-gray-200 rounded-lg relative';
-            siblingEntry.setAttribute('data-index', idx);
-            siblingEntry.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                        <input type="text" name="siblings[${idx}][first_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                        <input type="text" name="siblings[${idx}][middle_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter middle name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                        <input type="text" name="siblings[${idx}][last_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter last name">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                        <input type="date" name="siblings[${idx}][date_of_birth]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                        <input type="text" name="siblings[${idx}][citizenship]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship (if any)</label>
-                        <input type="text" name="siblings[${idx}][dual_citizenship]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter dual citizenship">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                        <input type="text" name="siblings[${idx}][complete_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                        <input type="text" name="siblings[${idx}][occupation]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter occupation">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
-                        <input type="text" name="siblings[${idx}][employer]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Employer Address</label>
-                        <input type="text" name="siblings[${idx}][employer_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer address">
-                    </div>
-                </div>
-                <button type="button" class="remove-sibling absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
-                    <i class="fas fa-times-circle"></i>
-                </button>
-            `;
+
+            // Clone the template and replace __INDEX__ with the correct index
+            const clone = template.content.cloneNode(true);
+            const html = clone.firstElementChild ? clone.firstElementChild.outerHTML : template.innerHTML;
+            const replaced = html.replace(/__INDEX__/g, idx);
+            // Create a wrapper div to parse the HTML string
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = replaced;
+            const siblingEntry = wrapper.firstElementChild;
+
+            // Show remove button for all but the first sibling
+            if (idx > 0) {
+                const removeBtn = siblingEntry.querySelector('.remove-sibling');
+                if (removeBtn) removeBtn.classList.remove('hidden');
+            }
+
             siblingsContainer.appendChild(siblingEntry);
         };
 
-        function removeSiblingHandler(e) {
-            if (e.target.closest('.remove-sibling')) {
-                const entries = document.querySelectorAll('.sibling-entry');
-                if (entries.length > 1) {
-                    e.target.closest('.sibling-entry').remove();
-                }
-            }
-        }
-
         function loadExistingSiblings() {
-            // Always add at least one default sibling entry
+            // Always add at least one default sibling entry using the template
             const siblingsContainer = document.getElementById('siblings-container');
             if (siblingsContainer) {
-                // If no siblings exist, add one default entry
                 if (siblingsContainer.children.length === 0) {
                     window.addSibling();
                 }
