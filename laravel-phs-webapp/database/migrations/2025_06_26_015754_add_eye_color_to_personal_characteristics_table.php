@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('personal_characteristics', function (Blueprint $table) {
-            $table->enum('eye_color', ['black', 'brown', 'blue', 'green', 'gray', 'hazel', 'other'])->after('hair_color');
+            if (!Schema::hasColumn('personal_characteristics', 'eye_color')) {
+                $table->enum('eye_color', ['black', 'brown', 'blue', 'green', 'gray', 'hazel', 'other'])->after('hair_color');
+            }
         });
     }
 

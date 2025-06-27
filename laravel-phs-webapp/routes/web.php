@@ -140,8 +140,6 @@ Route::middleware('auth')->group(function () {
             $validated = $request->validate([
                 'organizations.*.name' => 'nullable|string|max:255',
                 'organizations.*.address' => 'nullable|string|max:500',
-                'organizations.*.date_type' => 'nullable|in:exact,month_year',
-                'organizations.*.exact_date' => 'nullable|date',
                 'organizations.*.month' => 'nullable|string|max:2',
                 'organizations.*.year' => 'nullable|integer|min:1900|max:2030',
                 'organizations.*.position' => 'nullable|string|max:255',
@@ -151,26 +149,22 @@ Route::middleware('auth')->group(function () {
             $validated = $request->validate([
                 'organizations.*.name' => 'required|string|max:255',
                 'organizations.*.address' => 'required|string|max:500',
-                'organizations.*.date_type' => 'required|in:exact,month_year',
-                'organizations.*.exact_date' => 'nullable|date',
                 'organizations.*.month' => 'nullable|string|max:2',
                 'organizations.*.year' => 'nullable|integer|min:1900|max:2030',
                 'organizations.*.position' => 'required|string|max:255',
             ]);
         }
 
-        // Additional validation for date fields based on date_type
+        // Additional validation for date fields based on month/year
         if (isset($validated['organizations'])) {
             foreach ($validated['organizations'] as $index => $organization) {
-                if (isset($organization['date_type'])) {
-                    if ($organization['date_type'] === 'exact' && empty($organization['exact_date'])) {
-                        if (!$isSaveOnly) {
-                            return back()->withErrors(["organizations.{$index}.exact_date" => 'Exact date is required when date type is exact.']);
-                        }
-                    } elseif ($organization['date_type'] === 'month_year' && (empty($organization['month']) || empty($organization['year']))) {
-                        if (!$isSaveOnly) {
-                            return back()->withErrors(["organizations.{$index}.month" => 'Month and year are required when date type is month/year.']);
-                        }
+                if (!empty($organization['month']) && empty($organization['year'])) {
+                    if (!$isSaveOnly) {
+                        return back()->withErrors(["organizations.{$index}.year" => 'Year is required when month is provided.']);
+                    }
+                } elseif (empty($organization['month']) && !empty($organization['year'])) {
+                    if (!$isSaveOnly) {
+                        return back()->withErrors(["organizations.{$index}.month" => 'Month is required when year is provided.']);
                     }
                 }
             }
@@ -218,13 +212,9 @@ Route::middleware('auth')->group(function () {
                         'position_held' => $organization['position'] ?? null,
                     ];
 
-                    // Handle date of membership
-                    if (isset($organization['date_type'])) {
-                        if ($organization['date_type'] === 'exact' && !empty($organization['exact_date'])) {
-                            $membershipData['date_joined'] = $organization['exact_date'];
-                        } elseif ($organization['date_type'] === 'month_year' && !empty($organization['month']) && !empty($organization['year'])) {
-                            $membershipData['date_joined'] = $organization['year'] . '-' . $organization['month'] . '-01';
-                        }
+                    // Handle date of membership using month/year
+                    if (!empty($organization['month']) && !empty($organization['year'])) {
+                        $membershipData['date_joined'] = $organization['year'] . '-' . $organization['month'] . '-01';
                     }
 
                     MembershipDetails::updateOrCreate(

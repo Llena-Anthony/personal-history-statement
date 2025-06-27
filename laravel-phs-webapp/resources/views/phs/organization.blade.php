@@ -42,29 +42,22 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
                             <div class="flex space-x-2">
-                                <select name="organizations[0][date_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="organizations[0][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="organizations[0][exact_date]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="month-year-group-0">
-                                    <select name="organizations[0][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="organizations[0][year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="organizations[0][year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
@@ -97,33 +90,6 @@ window.initializeOrganization = function() {
     // Organization Entries functionality
     const organizationContainer = document.getElementById('organizations');
     const addOrganizationBtn = document.getElementById('add-organization');
-    let orgIndex = 1;
-
-    // Function to handle date type change
-    function handleDateTypeChange(selectElement) {
-        const entry = selectElement.closest('.organization-entry');
-        const index = entry.getAttribute('data-index');
-        const exactDateInput = entry.querySelector('input[name$="[exact_date]"]');
-        const monthYearGroup = entry.querySelector(`#month-year-group-${index}`);
-        
-        if (selectElement.value === 'exact') {
-            exactDateInput.classList.remove('hidden');
-            monthYearGroup.classList.add('hidden');
-        } else {
-            exactDateInput.classList.add('hidden');
-            monthYearGroup.classList.remove('hidden');
-        }
-    }
-
-    // Add event listener for initial date type select
-    const initialDateTypeSelect = organizationContainer.querySelector('select[name="organizations[0][date_type]"]');
-    if (initialDateTypeSelect) {
-        // Remove existing event listeners to prevent duplicates
-        initialDateTypeSelect.removeEventListener('change', function() { handleDateTypeChange(this); });
-        initialDateTypeSelect.addEventListener('change', function() {
-            handleDateTypeChange(this);
-        });
-    }
 
     // Add organization button click handler
     if (addOrganizationBtn) {
@@ -161,29 +127,22 @@ function addOrganizationHandler(e) {
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
                 <div class="flex space-x-2">
-                    <select name="organizations[${orgIndex}][date_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                        <option value="exact">Exact Date</option>
-                        <option value="month_year">Month/Year</option>
+                    <select name="organizations[${orgIndex}][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        <option value="">Month</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
                     </select>
-                    <input type="date" name="organizations[${orgIndex}][exact_date]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                    <div class="w-2/3 flex space-x-2 hidden" id="month-year-group-${orgIndex}">
-                        <select name="organizations[${orgIndex}][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                            <option value="">Month</option>
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                        <input type="number" name="organizations[${orgIndex}][year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                    </div>
+                    <input type="number" name="organizations[${orgIndex}][year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                 </div>
             </div>
             <div>
@@ -194,12 +153,6 @@ function addOrganizationHandler(e) {
         <button type="button" class="remove-organization absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
     `;
     organizationContainer.appendChild(organizationEntry);
-
-    // Add event listener for the new date type select
-    const newDateTypeSelect = organizationEntry.querySelector(`select[name="organizations[${orgIndex}][date_type]"]`);
-    newDateTypeSelect.addEventListener('change', function() {
-        handleDateTypeChange(this);
-    });
 }
 
 // Organization removal handler
@@ -210,22 +163,6 @@ function removeOrganizationHandler(e) {
         if (entries.length > 1) {
             e.target.closest('.organization-entry').remove();
         }
-    }
-}
-
-// Function to handle date type change (needed for the handler)
-function handleDateTypeChange(selectElement) {
-    const entry = selectElement.closest('.organization-entry');
-    const index = entry.getAttribute('data-index');
-    const exactDateInput = entry.querySelector('input[name$="[exact_date]"]');
-    const monthYearGroup = entry.querySelector(`#month-year-group-${index}`);
-    
-    if (selectElement.value === 'exact') {
-        exactDateInput.classList.remove('hidden');
-        monthYearGroup.classList.add('hidden');
-    } else {
-        exactDateInput.classList.add('hidden');
-        monthYearGroup.classList.remove('hidden');
     }
 }
 

@@ -31,14 +31,20 @@ class ForeignCountriesController extends Controller
             $validated = $request->validate([
                 'countries.*.name' => 'nullable|string|max:255',
                 'countries.*.purpose' => 'nullable|string|max:255',
-                'countries.*.date' => 'nullable|date',
+                'countries.*.from_month' => 'nullable|string|max:2',
+                'countries.*.from_year' => 'nullable|integer|min:1900|max:2030',
+                'countries.*.to_month' => 'nullable|string|max:2',
+                'countries.*.to_year' => 'nullable|integer|min:1900|max:2030',
             ]);
         } else {
             // Full validation for final submission
             $validated = $request->validate([
                 'countries.*.name' => 'nullable|string|max:255',
                 'countries.*.purpose' => 'nullable|string|max:255',
-                'countries.*.date' => 'nullable|date',
+                'countries.*.from_month' => 'nullable|string|max:2',
+                'countries.*.from_year' => 'nullable|integer|min:1900|max:2030',
+                'countries.*.to_month' => 'nullable|string|max:2',
+                'countries.*.to_year' => 'nullable|integer|min:1900|max:2030',
             ]);
         }
 
