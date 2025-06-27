@@ -46,17 +46,14 @@ class PersonalCharacteristicsController extends Controller
             // Add user_id to data
             $data['user_id'] = auth()->id();
             
-            // Convert and validate numeric fields
+            // Simple check for height to fit database decimal(3,2) constraint
             if (isset($data['height'])) {
                 $height = floatval($data['height']);
-                // If height is greater than 3, assume it's in inches and convert to meters
-                if ($height > 3) {
-                    $height = $height * 0.0254; // Convert inches to meters
-                }
-                // Ensure height is within valid range (0.5 to 2.5 meters)
-                $data['height'] = max(0.5, min(2.5, $height));
+                // Limit height to 9.99 to fit decimal(3,2) constraint
+                $data['height'] = min(9.99, $height);
             }
             
+            // Convert and validate numeric fields (except height - save as provided)
             if (isset($data['weight'])) {
                 $weight = floatval($data['weight']);
                 // If weight is greater than 300, assume it's in pounds and convert to kg
