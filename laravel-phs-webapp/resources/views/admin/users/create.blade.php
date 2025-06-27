@@ -40,13 +40,6 @@
     </div>
     @endif
 
-    @if(session('success'))
-    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-6 flex items-center animate-fade-in" role="alert">
-        <i class="fas fa-check-circle mr-3 text-green-500"></i>
-        <span class="font-medium">{{ session('success') }}</span>
-    </div>
-    @endif
-
     <!-- Enhanced Form -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
@@ -227,28 +220,23 @@
             </div>
 
             <!-- Form Actions -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-6 border-t border-gray-200">
-                <div class="flex items-center gap-3">
-                    <button type="submit" 
-                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                            id="submitBtn">
-                        <i class="fas fa-user-plus mr-2"></i>
-                        Create User
-                    </button>
-                    
-                    <button type="reset" 
-                            class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 shadow-sm"
-                            onclick="confirmReset()">
-                        <i class="fas fa-undo mr-2"></i>
-                        Reset Form
-                    </button>
-                </div>
-                
+            <div class="flex items-center gap-3 justify-end w-full">
                 <a href="{{ route('admin.users.index') }}" 
-                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200">
+                   id="cancelBtn"
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none"
+                   tabindex="-1"
+                   aria-disabled="true"
+                   style="pointer-events: none; opacity: 0.5;"
+                >
                     <i class="fas fa-times mr-2"></i>
                     Cancel
                 </a>
+                <button type="submit" 
+                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                        id="submitBtn">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create User
+                </button>
             </div>
         </form>
     </div>
@@ -260,6 +248,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('create-user-form');
     const submitBtn = document.getElementById('submitBtn');
     const inputs = form.querySelectorAll('input, select');
+    const cancelBtn = document.getElementById('cancelBtn');
+    let formChanged = false;
     
     // Real-time validation
     inputs.forEach(input => {
@@ -283,6 +273,38 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create User';
         }, 5000);
+    });
+
+    // Enable Cancel button when any input/select changes
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if (!formChanged) {
+                formChanged = true;
+                cancelBtn.removeAttribute('aria-disabled');
+                cancelBtn.removeAttribute('tabindex');
+                cancelBtn.style.pointerEvents = '';
+                cancelBtn.style.opacity = '';
+            }
+        });
+    });
+
+    // Cancel button resets form and disables itself
+    cancelBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        form.reset();
+        // Remove all error styling and messages
+        inputs.forEach(input => {
+            input.classList.remove('border-red-300', 'focus:ring-red-200');
+            input.classList.add('border-gray-300', 'focus:ring-[#1B365D]');
+        });
+        const errorMessages = document.querySelectorAll('#create-user-form .text-red-600');
+        errorMessages.forEach(error => error.remove());
+        // Disable Cancel button again
+        formChanged = false;
+        cancelBtn.setAttribute('aria-disabled', 'true');
+        cancelBtn.setAttribute('tabindex', '-1');
+        cancelBtn.style.pointerEvents = 'none';
+        cancelBtn.style.opacity = '0.5';
     });
 });
 
@@ -402,8 +424,8 @@ function showToast(message, type = 'info') {
         toast.classList.add('translate-x-full');
         setTimeout(() => {
             document.body.removeChild(toast);
-        }, 300);
-    }, 3000);
+        }, 5000);
+    }, 5000);
 }
 
 // Auto-capitalize name fields
@@ -463,6 +485,9 @@ select {
     background-repeat: no-repeat;
     background-size: 1.5em 1.5em;
     padding-right: 2.5rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 /* Loading animation */

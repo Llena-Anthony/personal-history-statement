@@ -33,6 +33,20 @@
         </div>
     </div>
 
+    <!-- Success Message for User Update -->
+    @if (session('success'))
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4 fade-in mb-4">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Enhanced Search Bar with Filter Dropdowns -->
     <x-admin.search-bar 
         :route="route('admin.users.index')"
@@ -52,20 +66,6 @@
     />
 
     <!-- Success Messages with Enhanced Styling -->
-    @if(session('success'))
-    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 animate-fade-in">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <i class="fas fa-check-circle text-green-500 text-xl"></i>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-green-800">Success!</h3>
-                <div class="mt-1 text-sm text-green-700">{{ session('success') }}</div>
-            </div>
-        </div>
-    </div>
-    @endif
-
     @if(session('generated_credentials'))
     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 animate-fade-in">
         <div class="flex items-start">
@@ -484,6 +484,18 @@ function exportUsers() {
 document.getElementById('userDetailsModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeUserDetailsModal();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const successAlert = document.querySelector('.fade-in.bg-green-50');
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+            setTimeout(() => {
+                successAlert.style.display = 'none';
+            }, 500);
+        }, 3000);
     }
 });
 </script>
