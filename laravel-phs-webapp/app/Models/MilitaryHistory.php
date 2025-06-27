@@ -24,11 +24,6 @@ class MilitaryHistory extends Model
         'military_assign',
     ];
 
-    protected $casts = [
-        'start_date_of_commision' => 'date',
-        'end_date_of_commision' => 'date',
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class, 'username', 'username');

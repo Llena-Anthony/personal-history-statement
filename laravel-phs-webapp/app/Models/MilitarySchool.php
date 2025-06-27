@@ -20,6 +20,11 @@ class MilitarySchool extends Model
         'date_attended_from_year',
         'date_attended_to_month',
         'date_attended_to_year',
+        'date_attended',
+        'exact_date_attended',
+        'date_attended_type',
+        'date_attended_month',
+        'date_attended_year',
         'nature_of_training',
         'rating',
     ];

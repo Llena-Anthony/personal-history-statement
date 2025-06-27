@@ -35,28 +35,34 @@
     <!-- Reports Table -->
     <div class="bg-white rounded-xl shadow-sm overflow-hidden scale-in">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="w-full table-fixed divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                        <th class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                        <th class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($data as $log)
                     <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ $log->user->name ?? 'N/A' }}</div>
-                            <div class="text-xs text-gray-500">{{ $log->user->email ?? 'N/A' }}</div>
+                        <td class="px-6 py-4">
+                            <div class="min-w-0 flex-1">
+                                <div class="text-sm font-medium text-gray-900 truncate" title="{{ $log->user->name ?? 'N/A' }}">{{ $log->user->name ?? 'N/A' }}</div>
+                                <div class="text-xs text-gray-500 truncate" title="{{ $log->user->email ?? 'N/A' }}">{{ $log->user->email ?? 'N/A' }}</div>
+                            </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($log->user->usertype ?? 'N/A') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($log->action) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $log->description }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-6 py-4 text-sm text-gray-900 truncate" title="{{ ucfirst($log->user->usertype ?? 'N/A') }}">{{ ucfirst($log->user->usertype ?? 'N/A') }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900 truncate" title="{{ ucfirst($log->action) }}">{{ ucfirst($log->action) }}</td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900 break-words" title="{{ $log->description }}">
+                                {{ $log->description }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                 @if($log->status === 'success') bg-green-100 text-green-800
                                 @elseif($log->status === 'warning') bg-yellow-100 text-yellow-800
@@ -65,13 +71,13 @@
                                 {{ ucfirst($log->status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 text-sm text-gray-500">
                             {{ $log->created_at->format('M d, Y h:i A') }}
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        <td colspan="6" class="px-6 py-4 text-sm text-gray-500 text-center">
                             No records found.
                         </td>
                     </tr>

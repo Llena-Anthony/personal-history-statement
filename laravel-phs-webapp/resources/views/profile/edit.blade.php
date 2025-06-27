@@ -79,36 +79,83 @@
                                 <i class="fas fa-upload mr-2 text-[#1B365D]"></i>
                                 Upload New Picture
                             </label>
-                            <!-- Drag and Drop Area -->
-                            <div 
-                                id="drop-area"
-                                class="flex flex-col items-center justify-center border-2 border-dashed border-[#D4AF37] rounded-xl p-6 mb-4 cursor-pointer bg-yellow-50 hover:bg-yellow-100 transition"
-                                onclick="document.getElementById('profile_picture').click();"
-                                ondragover="event.preventDefault(); this.classList.add('bg-yellow-100');"
-                                ondragleave="this.classList.remove('bg-yellow-100');"
-                                ondrop="handleDrop(event);"
-                            >
-                                <i class="fas fa-cloud-upload-alt text-3xl text-[#D4AF37] mb-2"></i>
-                                <span class="font-medium text-[#D4AF37]">Drag your file here or click to choose</span>
-                                <span class="text-xs text-gray-500 mt-1">Supported formats: JPG, PNG, GIF (Max: 2MB)</span>
-                                <input 
-                                    type="file" 
-                                    id="profile_picture" 
-                                    name="profile_picture" 
-                                    class="hidden"
-                                    accept="image/*"
-                                    onchange="previewImage(this); showFileName(this);"
-                                >
-                                <span id="file-name" class="text-xs text-gray-700 mt-2"></span>
+                            
+                            <!-- Drag & Drop Upload Area -->
+                            <div id="drag-drop-area" 
+                                 class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#1B365D] hover:bg-blue-50 transition-all duration-300 cursor-pointer group">
+                                <div id="drag-drop-content">
+                                    <div class="w-16 h-16 bg-[#1B365D] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2B4B7D] transition-colors duration-300">
+                                        <i class="fas fa-cloud-upload-alt text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Drag & Drop your image here</h3>
+                                    <p class="text-gray-500 mb-4">or click to browse files</p>
+                                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-400">
+                                        <i class="fas fa-image"></i>
+                                        <span>JPG, PNG, GIF (Max: 2MB)</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Loading State -->
+                                <div id="upload-loading" class="hidden">
+                                    <div class="w-16 h-16 bg-[#1B365D] rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Uploading...</h3>
+                                    <p class="text-gray-500">Please wait while we process your image</p>
+                                </div>
+                                
+                                <!-- Success State -->
+                                <div id="upload-success" class="hidden">
+                                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-check text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Upload Successful!</h3>
+                                    <p class="text-gray-500">Your profile picture has been updated</p>
+                                </div>
+                                
+                                <!-- Error State -->
+                                <div id="upload-error" class="hidden">
+                                    <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Upload Failed</h3>
+                                    <p id="error-message" class="text-gray-500">Please try again</p>
+                                </div>
+                                
+                                <input type="file" 
+                                       name="profile_picture" 
+                                       id="profile_picture"
+                                       accept="image/*"
+                                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                       onchange="handleFileSelect(this)">
                             </div>
-                            <!-- End Drag and Drop Area -->
-                            <div class="flex items-center space-x-4">
-                                <!-- Remove old input, now handled above -->
+                            
+                            <!-- Upload Button (shown when file is selected) -->
+                            <div id="upload-button-container" class="hidden mt-4">
                                 <button type="submit" 
-                                        class="inline-flex items-center px-4 py-2 bg-[#1B365D] text-white text-sm font-medium rounded-xl hover:bg-[#2B4B7D] transition-colors duration-200">
+                                        id="upload-button"
+                                        class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white text-sm font-medium rounded-xl hover:bg-[#2B4B7D] transition-colors duration-200 w-full justify-center">
                                     <i class="fas fa-save mr-2"></i>
-                                    Upload
+                                    Upload Profile Picture
                                 </button>
+                            </div>
+                            
+                            <!-- File Info -->
+                            <div id="file-info" class="hidden mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-image text-blue-600"></i>
+                                        <div>
+                                            <p id="file-name" class="text-sm font-medium text-gray-900"></p>
+                                            <p id="file-size" class="text-xs text-gray-500"></p>
+                                        </div>
+                                    </div>
+                                    <button type="button" 
+                                            onclick="removeSelectedFile()"
+                                            class="text-red-500 hover:text-red-700 transition-colors duration-200">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -353,6 +400,187 @@
 </div>
 
 <script>
+// Drag and Drop functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const dragDropArea = document.getElementById('drag-drop-area');
+    const fileInput = document.getElementById('profile_picture');
+    const dragDropContent = document.getElementById('drag-drop-content');
+    const uploadButtonContainer = document.getElementById('upload-button-container');
+    const fileInfo = document.getElementById('file-info');
+    const fileName = document.getElementById('file-name');
+    const fileSize = document.getElementById('file-size');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dragDropArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    // Highlight drop area when item is dragged over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dragDropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dragDropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    // Handle dropped files
+    dragDropArea.addEventListener('drop', handleDrop, false);
+
+    // Handle file input change
+    fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function highlight(e) {
+        dragDropArea.classList.add('border-[#1B365D]', 'bg-blue-50');
+    }
+
+    function unhighlight(e) {
+        dragDropArea.classList.remove('border-[#1B365D]', 'bg-blue-50');
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+
+    function handleFiles(files) {
+        if (files.length > 0) {
+            const file = files[0];
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                showError('Please select an image file (JPG, PNG, GIF)');
+                return;
+            }
+
+            // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+            if (file.size > 2 * 1024 * 1024) {
+                showError('File size must be less than 2MB');
+                return;
+            }
+
+            // Set the file input
+            fileInput.files = files;
+            
+            // Show file info
+            showFileInfo(file);
+            
+            // Show preview
+            showImagePreview(file);
+            
+            // Show upload button
+            uploadButtonContainer.classList.remove('hidden');
+        }
+    }
+
+    function showFileInfo(file) {
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        fileInfo.classList.remove('hidden');
+    }
+
+    function showImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            imagePreview.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showError(message) {
+        const errorDiv = document.getElementById('upload-error');
+        const errorMessage = document.getElementById('error-message');
+        const dragDropContent = document.getElementById('drag-drop-content');
+        
+        errorMessage.textContent = message;
+        dragDropContent.classList.add('hidden');
+        errorDiv.classList.remove('hidden');
+        
+        // Hide error after 3 seconds
+        setTimeout(() => {
+            errorDiv.classList.add('hidden');
+            dragDropContent.classList.remove('hidden');
+        }, 3000);
+    }
+});
+
+// Handle file selection from input
+function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file (JPG, PNG, GIF)');
+            return;
+        }
+
+        // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('File size must be less than 2MB');
+            return;
+        }
+
+        // Show file info
+        document.getElementById('file-name').textContent = file.name;
+        document.getElementById('file-size').textContent = formatFileSize(file.size);
+        document.getElementById('file-info').classList.remove('hidden');
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview-img').src = e.target.result;
+            document.getElementById('image-preview').classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+        
+        // Show upload button
+        document.getElementById('upload-button-container').classList.remove('hidden');
+    }
+}
+
+// Remove selected file
+function removeSelectedFile() {
+    document.getElementById('profile_picture').value = '';
+    document.getElementById('file-info').classList.add('hidden');
+    document.getElementById('image-preview').classList.add('hidden');
+    document.getElementById('upload-button-container').classList.add('hidden');
+}
+
+// Format file size helper
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Legacy function for backward compatibility
+function previewImage(input) {
+    handleFileSelect(input);
+}
+
 function togglePasswordVisibility(inputId, toggleId) {
     const input = document.getElementById(inputId);
     const toggle = document.getElementById(toggleId);
@@ -365,43 +593,6 @@ function togglePasswordVisibility(inputId, toggleId) {
         input.type = 'password';
         toggle.classList.remove('fa-eye-slash');
         toggle.classList.add('fa-eye');
-    }
-}
-
-function handleDrop(event) {
-    event.preventDefault();
-    event.currentTarget.classList.remove('bg-yellow-100');
-    const files = event.dataTransfer.files;
-    if (files.length > 0) {
-        const input = document.getElementById('profile_picture');
-        input.files = files;
-        showFileName(input);
-        previewImage(input);
-    }
-}
-
-function showFileName(input) {
-    const fileNameSpan = document.getElementById('file-name');
-    if (input.files && input.files.length > 0) {
-        fileNameSpan.textContent = input.files[0].name;
-    } else {
-        fileNameSpan.textContent = '';
-    }
-}
-
-function previewImage(input) {
-    const preview = document.getElementById('image-preview');
-    const img = document.getElementById('preview-img');
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            img.src = e.target.result;
-            preview.classList.remove('hidden');
-        }
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        img.src = '';
-        preview.classList.add('hidden');
     }
 }
 

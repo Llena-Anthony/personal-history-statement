@@ -266,6 +266,11 @@
             box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
         }
         
+        .profile-container a {
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
         .profile-container .user-info {
             flex-grow: 1;
             position: relative;
@@ -689,7 +694,9 @@
             <aside class="sidebar text-white flex flex-col">
             <!-- Profile Section -->
             <div class="profile-container">
-                    <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
+                    <a href="{{ route('admin.profile.edit') }}" class="block">
+                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
+                    </a>
                 <div class="user-info">
                         <a href="{{ route('admin.profile.edit') }}" 
                            class="user-name"

@@ -8,7 +8,7 @@
 <div class="max-w-4xl mx-auto">
     <!-- Success Message -->
     @if(session('success'))
-        <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center animate-fade-in">
+        <div id="successMessage" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center animate-fade-in">
             <i class="fas fa-check-circle mr-2"></i>
             {{ session('success') }}
         </div>
@@ -40,42 +40,70 @@
             @csrf
             @method('PUT')
 
+            <!-- Instruction -->
+            <div class="mb-4 flex items-center gap-2">
+                <i class="fas fa-info-circle text-blue-500 text-xs"></i>
+                <span class="text-gray-500 text-xs font-semibold">Only username and password can be edited. Other fields are read-only.</span>
+            </div>
+            <div class="border-b border-gray-200 mb-4"></div>
+
+            <!-- Profile Photo Upload Section -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center">
+                    <i class="fas fa-camera mr-2 text-[#D4AF37]"></i>
+                    Profile Photo
+                </h3>
+                
+                <!-- Photo Requirements -->
+                <div class="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-blue-500 mt-0.5 mr-3"></i>
+                        <div>
+                            <h4 class="text-sm font-semibold text-blue-800 mb-1">Photo Requirements</h4>
+                            <ul class="text-xs text-blue-700 space-y-1">
+                                <li>• Must be a formal 2x2 ID photo</li>
+                                <li>• Professional appearance with proper attire</li>
+                                <li>• Clear, high-quality image</li>
+                                <li>• Neutral background</li>
+                                <li>• File formats: JPEG, PNG, JPG, GIF (Max: 2MB)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col space-y-4">
+                    <div class="relative">
+                        <input type="file" 
+                               name="profile_photo" 
+                               id="profile_photo" 
+                               accept="image/*"
+                               class="hidden"
+                               onchange="previewImage(this)">
+                        <label for="profile_photo" 
+                               class="cursor-pointer bg-gray-50 hover:bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 block">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                            <p class="text-sm text-gray-600 font-medium">Click to upload formal 2x2 ID photo</p>
+                            <p class="text-xs text-gray-500 mt-1">JPEG, PNG, JPG, GIF up to 2MB</p>
+                        </label>
+                    </div>
+                    <div id="image-preview" class="hidden">
+                        <div class="flex items-center space-x-3">
+                            <img id="preview" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Preview</p>
+                                <p class="text-xs text-gray-500">Your new profile photo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('profile_photo')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Left Column -->
                 <div class="space-y-6">
-                    <!-- Profile Photo Upload -->
-                    <div class="space-y-3">
-                        <label class="block text-sm font-medium text-gray-700">Profile Photo</label>
-                        <div class="flex flex-col space-y-4">
-                            <div class="relative">
-                                <input type="file" 
-                                       name="profile_photo" 
-                                       id="profile_photo" 
-                                       accept="image/*"
-                                       class="hidden"
-                                       onchange="previewImage(this)">
-                                <label for="profile_photo" 
-                                       class="cursor-pointer bg-gray-50 hover:bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 block">
-                                    <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
-                                    <p class="text-sm text-gray-600 font-medium">Click to upload photo</p>
-                                    <p class="text-xs text-gray-500 mt-1">JPEG, PNG, JPG, GIF up to 2MB</p>
-                                </label>
-                            </div>
-                            <div id="image-preview" class="hidden">
-                                <div class="flex items-center space-x-3">
-                                    <img id="preview" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md">
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-700">Preview</p>
-                                        <p class="text-xs text-gray-500">Your new profile photo</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @error('profile_photo')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Basic Information -->
                     <div class="space-y-4">
                         <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 flex items-center">
@@ -84,36 +112,49 @@
                         </h3>
                         
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                            <input type="text" 
-                                   name="name" 
-                                   id="name" 
-                                   value="{{ old('name', $user->name) }}"
-                                   class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
+                            <label for="name" class="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
+                            <div class="relative">
+                                <input type="text" 
+                                       name="name" 
+                                       id="name" 
+                                       value="{{ old('name', $user->name) }}"
+                                       disabled
+                                       class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
+                                <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
                             @error('name')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                            <label for="username" class="block text-xs font-semibold text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
                             <input type="text" 
                                    name="username" 
                                    id="username" 
                                    value="{{ old('username', $user->username) }}"
-                                   class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
+                                   placeholder="Enter your username"
+                                   class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5">
                             @error('username')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                            <input type="email" 
-                                   name="email" 
-                                   id="email" 
-                                   value="{{ old('email', $user->email) }}"
-                                   class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
+                            <label for="email" class="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+                            <div class="relative">
+                                <input type="email" 
+                                       name="email" 
+                                       id="email" 
+                                       value="{{ old('email', $user->email) }}"
+                                       disabled
+                                       class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
+                                <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
                             @error('email')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -123,44 +164,6 @@
 
                 <!-- Right Column -->
                 <div class="space-y-6">
-                    <!-- Additional Information -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 flex items-center">
-                            <i class="fas fa-info-circle mr-2 text-[#D4AF37]"></i>
-                            Additional Information
-                        </h3>
-                        
-                        <div>
-                            <label for="organic_role" class="block text-sm font-medium text-gray-700">Organic Role</label>
-                            <select name="organic_role" 
-                                    id="organic_role" 
-                                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors"
-                                    onchange="toggleBranchField()">
-                                <option value="">Select Organic Role</option>
-                                <option value="civilian" {{ old('organic_role', $user->organic_role) == 'civilian' ? 'selected' : '' }}>Civilian</option>
-                                <option value="enlisted" {{ old('organic_role', $user->organic_role) == 'enlisted' ? 'selected' : '' }}>Enlisted</option>
-                                <option value="officer" {{ old('organic_role', $user->organic_role) == 'officer' ? 'selected' : '' }}>Officer</option>
-                            </select>
-                            @error('organic_role')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div id="branch-field" class="{{ old('organic_role', $user->organic_role) == 'civilian' ? 'hidden' : '' }}">
-                            <label for="branch" class="block text-sm font-medium text-gray-700">Branch</label>
-                            <select name="branch" 
-                                    id="branch" 
-                                    class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
-                                <option value="ARMY" {{ old('branch', $user->branch) == 'ARMY' ? 'selected' : '' }}>ARMY</option>
-                                <option value="NAVY" {{ old('branch', $user->branch) == 'NAVY' ? 'selected' : '' }}>NAVY</option>
-                                <option value="AIRFORCE" {{ old('branch', $user->branch) == 'AIRFORCE' ? 'selected' : '' }}>AIRFORCE</option>
-                            </select>
-                            @error('branch')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
                     <!-- Password Change -->
                     <div class="space-y-4">
                         <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 flex items-center">
@@ -173,33 +176,60 @@
                         </p>
                         
                         <div>
-                            <label for="current_password" class="block text-sm font-medium text-gray-700">Current Password</label>
-                            <input type="password" 
-                                   name="current_password" 
-                                   id="current_password"
-                                   class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
+                            <label for="current_password" class="block text-xs font-semibold text-gray-700 mb-1">Current Password</label>
+                            <div class="relative">
+                                <input type="password" 
+                                       name="current_password" 
+                                       id="current_password"
+                                       placeholder="Enter your current password"
+                                       class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5 pr-10">
+                                <button type="button" 
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                        onclick="togglePasswordVisibility('current_password')">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                            </div>
                             @error('current_password')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="new_password" class="block text-sm font-medium text-gray-700">New Password</label>
-                            <input type="password" 
-                                   name="new_password" 
-                                   id="new_password"
-                                   class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
+                            <label for="new_password" class="block text-xs font-semibold text-gray-700 mb-1">New Password</label>
+                            <div class="relative">
+                                <input type="password" 
+                                       name="new_password" 
+                                       id="new_password"
+                                       placeholder="Enter your new password (min. 8 characters)"
+                                       class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5 pr-10">
+                                <button type="button" 
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                        onclick="togglePasswordVisibility('new_password')">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                            </div>
                             @error('new_password')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
-                            <input type="password" 
-                                   name="new_password_confirmation" 
-                                   id="new_password_confirmation"
-                                   class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#D4AF37] focus:ring-[#D4AF37] transition-colors">
+                            <label for="new_password_confirmation" class="block text-xs font-semibold text-gray-700 mb-1">Confirm New Password</label>
+                            <div class="relative">
+                                <input type="password" 
+                                       name="new_password_confirmation" 
+                                       id="new_password_confirmation"
+                                       placeholder="Confirm your new password"
+                                       class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5 pr-10">
+                                <button type="button" 
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                        onclick="togglePasswordVisibility('new_password_confirmation')">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                            </div>
+                            @error('new_password_confirmation')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -207,11 +237,11 @@
 
             <!-- Form Actions -->
             <div class="flex justify-end space-x-4 pt-8 border-t border-gray-200 mt-8">
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                <button type="button" id="cancelBtn" disabled
+                        class="px-6 py-2.5 border border-gray-300 text-gray-400 rounded-lg transition-colors cursor-not-allowed">
                     <i class="fas fa-times mr-2"></i>
                     Cancel
-                </a>
+                </button>
                 <button type="button" id="saveChangesBtn" disabled
                         class="px-6 py-2.5 bg-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-all duration-200 shadow-md flex items-center justify-center cursor-not-allowed">
                     <i class="fas fa-save mr-2"></i>
@@ -267,16 +297,21 @@ function previewImage(input) {
     }
 }
 
-function toggleBranchField() {
-    const organicRole = document.getElementById('organic_role').value;
-    const branchField = document.getElementById('branch-field');
+function togglePasswordVisibility(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const toggleButton = passwordField.nextElementSibling;
+    const eyeIcon = toggleButton.querySelector('i');
     
-    if (organicRole === 'civilian') {
-        branchField.classList.add('hidden');
-        // Clear branch value when hidden
-        document.getElementById('branch').value = '';
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+        toggleButton.setAttribute('title', 'Hide password');
     } else {
-        branchField.classList.remove('hidden');
+        passwordField.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+        toggleButton.setAttribute('title', 'Show password');
     }
 }
 
@@ -294,47 +329,75 @@ function confirmProfileUpdate() {
 function checkFormChanges() {
     const form = document.getElementById('admin-profile-form');
     const saveBtn = document.getElementById('saveChangesBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
     let hasChanges = false;
     
-    // Check text inputs, selects, and textareas
-    const formInputs = form.querySelectorAll('input[type="text"], input[type="email"], select, textarea');
-    formInputs.forEach(input => {
-        const currentValue = input.value;
-        const originalValue = originalFormData[input.name] || '';
+    // Only check editable fields: username and password fields
+    const usernameField = form.querySelector('input[name="username"]');
+    const passwordFields = form.querySelectorAll('input[type="password"]');
+    
+    // Check username field
+    if (usernameField) {
+        const currentValue = usernameField.value;
+        const originalValue = originalFormData['username'] || '';
         
         if (currentValue !== originalValue) {
             hasChanges = true;
         }
-    });
+    }
     
-    // Check file input
+    // Check file input (profile photo)
     const fileInput = form.querySelector('input[type="file"]');
     if (fileInput && fileInput.files.length > 0) {
         hasChanges = true;
     }
     
     // Check password fields (if any are filled)
-    const passwordFields = form.querySelectorAll('input[type="password"]');
     passwordFields.forEach(field => {
         if (field.value.trim() !== '') {
             hasChanges = true;
         }
     });
     
-    // Enable/disable save button
+    // Enable/disable both buttons
     if (hasChanges) {
+        // Enable Save button
         saveBtn.disabled = false;
         saveBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
         saveBtn.classList.add('bg-[#D4AF37]', 'hover:bg-[#B38F2A]', 'focus:ring-[#D4AF37]');
+        
+        // Enable Cancel button
+        cancelBtn.disabled = false;
+        cancelBtn.classList.remove('text-gray-400', 'cursor-not-allowed');
+        cancelBtn.classList.add('text-gray-700', 'hover:bg-gray-50');
     } else {
+        // Disable Save button
         saveBtn.disabled = true;
         saveBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
         saveBtn.classList.remove('bg-[#D4AF37]', 'hover:bg-[#B38F2A]', 'focus:ring-[#D4AF37]');
+        
+        // Disable Cancel button
+        cancelBtn.disabled = true;
+        cancelBtn.classList.add('text-gray-400', 'cursor-not-allowed');
+        cancelBtn.classList.remove('text-gray-700', 'hover:bg-gray-50');
     }
 }
 
 // Show image preview if there's already an image
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-hide success message after 5 seconds
+    const successMessage = document.getElementById('successMessage');
+    if (successMessage) {
+        setTimeout(() => {
+            successMessage.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            successMessage.style.opacity = '0';
+            successMessage.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                successMessage.remove();
+            }, 500);
+        }, 5000);
+    }
+    
     const currentImage = document.querySelector('.profile-container img');
     if (currentImage && currentImage.src !== '{{ asset("images/default-avatar.svg") }}') {
         const preview = document.getElementById('preview');
@@ -343,19 +406,19 @@ document.addEventListener('DOMContentLoaded', function() {
         previewContainer.classList.remove('hidden');
     }
     
-    // Initialize branch field visibility on page load
-    toggleBranchField();
-    
-    // Store original form values
+    // Store original form values for editable fields only
     const form = document.getElementById('admin-profile-form');
-    const formInputs = form.querySelectorAll('input[type="text"], input[type="email"], select, textarea');
-    formInputs.forEach(input => {
-        originalFormData[input.name] = input.value;
-    });
+    const usernameField = form.querySelector('input[name="username"]');
     
-    // Add event listeners for form changes
-    form.addEventListener('input', checkFormChanges);
-    form.addEventListener('change', checkFormChanges);
+    if (usernameField) {
+        originalFormData['username'] = usernameField.value;
+    }
+    
+    // Add event listeners for editable fields only
+    if (usernameField) {
+        usernameField.addEventListener('input', checkFormChanges);
+        usernameField.addEventListener('change', checkFormChanges);
+    }
     
     // Add event listener for file input
     const fileInput = form.querySelector('input[type="file"]');
@@ -372,7 +435,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Confirmation button logic
     const saveBtn = document.getElementById('saveChangesBtn');
     const confirmBtn = document.getElementById('confirmSaveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
     let confirmTimeout;
+    
     if (saveBtn && confirmBtn) {
         saveBtn.addEventListener('click', function() {
             if (!saveBtn.disabled) {
@@ -389,6 +454,43 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(confirmTimeout);
         });
     }
+    
+    // Cancel button functionality
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            if (!cancelBtn.disabled) {
+                // Reset form to original values
+                const usernameField = form.querySelector('input[name="username"]');
+                if (usernameField) {
+                    usernameField.value = originalFormData['username'] || '';
+                }
+                
+                // Clear password fields
+                const passwordFields = form.querySelectorAll('input[type="password"]');
+                passwordFields.forEach(field => {
+                    field.value = '';
+                });
+                
+                // Clear file input
+                const fileInput = form.querySelector('input[type="file"]');
+                if (fileInput) {
+                    fileInput.value = '';
+                }
+                
+                // Hide image preview
+                const previewContainer = document.getElementById('image-preview');
+                if (previewContainer) {
+                    previewContainer.classList.add('hidden');
+                }
+                
+                // Check form changes to update button states
+                checkFormChanges();
+            }
+        });
+    }
+    
+    // Initialize form state
+    checkFormChanges();
 });
 </script>
 @endsection 
