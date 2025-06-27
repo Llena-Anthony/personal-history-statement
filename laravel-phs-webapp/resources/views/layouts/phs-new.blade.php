@@ -906,11 +906,22 @@
         async function saveCurrentSectionData(sectionId) {
             const form = document.querySelector('form');
             if (!form) {
-                return;
+                return true; // allow navigation if no form
             }
 
+            // Ensure address name hidden fields are set before AJAX save
+            if (window.setAddressNameHiddenFields) {
+                setAddressNameHiddenFields('home');
+                setAddressNameHiddenFields('business');
+            }
+
+            // Clear previous error messages
+            document.querySelectorAll('.phs-field-error').forEach(el => el.remove());
+            document.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
+
             const formData = new FormData(form);
-            
+            let saveSuccess = false;
+            let errorMsg = '';
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
@@ -922,11 +933,44 @@
                 });
 
                 if (response.ok) {
-                    // Mark section as visited
-                    window.phsNavigationInstance.markSectionAsVisited(sectionId);
+                    const data = await response.json();
+                    if (data.success) {
+                        // Mark section as visited
+                        window.phsNavigationInstance.markSectionAsVisited(sectionId);
+                        saveSuccess = true;
+                    } else {
+                        errorMsg = data.message || 'Save failed.';
+                    }
+                } else if (response.status === 422) {
+                    // Validation error
+                    const data = await response.json();
+                    if (data.errors) {
+                        for (const [field, messages] of Object.entries(data.errors)) {
+                            // Try to find the input/select/textarea by name
+                            const fieldName = field.replace(/\./g, '[') + (field.includes('.') ? ']' : '');
+                            const input = form.querySelector(`[name='${fieldName}']`);
+                            if (input) {
+                                input.classList.add('border-red-500');
+                                const errorDiv = document.createElement('div');
+                                errorDiv.className = 'phs-field-error text-red-500 text-xs mt-1';
+                                errorDiv.innerText = messages[0];
+                                input.parentNode.appendChild(errorDiv);
+                            }
+                        }
+                        errorMsg = 'Please correct the highlighted errors.';
+                    } else {
+                        errorMsg = 'Validation failed.';
+                    }
+                } else {
+                    errorMsg = 'Server error: ' + response.status;
                 }
             } catch (error) {
+                errorMsg = 'An error occurred while saving.';
             }
+            if (!saveSuccess) {
+                alert(errorMsg || 'Failed to save. Please check your input.');
+            }
+            return saveSuccess;
         }
 
         function phsNavigation(initialSection) {
@@ -1669,23 +1713,9 @@
 
             // Initialize date type synchronization for existing elements
             const enlistmentDateType = document.querySelector('select[name="enlistment_date_type"]');
-            const commissionDateFromType = document.querySelector('select[name="commission_date_from_type"]');
-            const commissionDateToType = document.querySelector('select[name="commission_date_to_type"]');
 
             if (enlistmentDateType) {
                 enlistmentDateType.addEventListener('change', function() {
-                    synchronizeDateTypes(this.closest('.flex.space-x-2'), this);
-                });
-            }
-
-            if (commissionDateFromType) {
-                commissionDateFromType.addEventListener('change', function() {
-                    synchronizeDateTypes(this.closest('.flex.space-x-2'), this);
-                });
-            }
-
-            if (commissionDateToType) {
-                commissionDateToType.addEventListener('change', function() {
                     synchronizeDateTypes(this.closest('.flex.space-x-2'), this);
                 });
             }
@@ -1748,57 +1778,43 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
                             <div class="flex space-x-2">
-                                <select name="assignments[${idx}][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="assignments[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="assignments[${idx}][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="assignment-from-month-year-group-${idx}">
-                                    <select name="assignments[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="assignments[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="assignments[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
                             <div class="flex space-x-2">
-                                <select name="assignments[${idx}][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="assignments[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="assignments[${idx}][to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="assignment-to-month-year-group-${idx}">
-                                    <select name="assignments[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="assignments[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="assignments[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
@@ -1813,18 +1829,6 @@
                     <button type="button" class="remove-assignment absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
                 `;
                 assignmentsContainer.appendChild(assignmentEntry);
-
-                // Add event listeners for the new assignment date type selects
-                const newAssignmentFromTypeSelect = assignmentEntry.querySelector(`select[name="assignments[${idx}][from_type]"]`);
-                const newAssignmentToTypeSelect = assignmentEntry.querySelector(`select[name="assignments[${idx}][to_type]"]`);
-                
-                newAssignmentFromTypeSelect.addEventListener('change', function() {
-                    synchronizeAssignmentDateTypes(assignmentEntry, this);
-                });
-                
-                newAssignmentToTypeSelect.addEventListener('change', function() {
-                    synchronizeAssignmentDateTypes(assignmentEntry, this);
-                });
             }
 
             function removeAssignmentHandler(e) {
@@ -1866,34 +1870,42 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Attendance (From)</label>
                             <div class="flex space-x-2">
-                                <select name="schools[${idx}][date_attended_from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="schools[${idx}][date_attended_from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="schools[${idx}][date_attended_from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="school-date-from-month-year-group-${idx}">
-                                    <select name="schools[${idx}][date_attended_from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="schools[${idx}][date_attended_from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="schools[${idx}][date_attended_from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Attendance (To)</label>
                             <div class="flex space-x-2">
+                                <select name="schools[${idx}][date_attended_to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
                                 <select name="schools[${idx}][date_attended_to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="exact">Exact Date</option>
                                     <option value="month_year">Month/Year</option>
@@ -2143,57 +2155,43 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
                             <div class="flex space-x-2">
-                                <select name="employment[${idx}][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="employment[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="employment[${idx}][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="employment-from-month-year-group-${idx}">
-                                    <select name="employment[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="employment[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="employment[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
                             <div class="flex space-x-2">
-                                <select name="employment[${idx}][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="employment[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="employment[${idx}][to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="employment-to-month-year-group-${idx}">
-                                    <select name="employment[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="employment[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="employment[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
@@ -2216,18 +2214,6 @@
                     <button type="button" class="remove-employment absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
                 `;
                 employmentContainer.appendChild(employmentEntry);
-
-                // Add event listeners for the new employment date type selects
-                const newEmploymentFromTypeSelect = employmentEntry.querySelector(`select[name="employment[${idx}][from_type]"]`);
-                const newEmploymentToTypeSelect = employmentEntry.querySelector(`select[name="employment[${idx}][to_type]"]`);
-                
-                newEmploymentFromTypeSelect.addEventListener('change', function() {
-                    synchronizeEmploymentDateTypes(employmentEntry, this);
-                });
-                
-                newEmploymentToTypeSelect.addEventListener('change', function() {
-                    synchronizeEmploymentDateTypes(employmentEntry, this);
-                });
             }
 
             function removeEmploymentHandler(e) {
@@ -2354,34 +2340,45 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date of Visit (From)</label>
                             <div class="flex space-x-2">
-                                <select name="countries[${idx}][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="countries[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="countries[${idx}][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="country-from-month-year-group-${idx}">
-                                    <select name="countries[${idx}][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="countries[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="countries[${idx}][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date of Visit (To)</label>
                             <div class="flex space-x-2">
+                                <select name="countries[${idx}][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                                <input type="number" name="countries[${idx}][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                            </div>
+                        </div>
                                 <select name="countries[${idx}][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="exact">Exact Date</option>
                                     <option value="month_year">Month/Year</option>
@@ -2909,6 +2906,26 @@
         }
         setInterval(updatePHTimeHeader, 1000);
         updatePHTimeHeader();
+
+        // Update navigation logic to always fetch the latest form HTML from the server
+        window.navigateToSection = async function(sectionRoute) {
+            try {
+                const response = await fetch(sectionRoute, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!response.ok) throw new Error('Failed to load section');
+                const html = await response.text();
+                // Replace the form container's innerHTML with the new HTML
+                const container = document.querySelector('#phs-section-container');
+                if (container) {
+                    container.innerHTML = html;
+                    window.initializePersonalDetails && window.initializePersonalDetails();
+                } else {
+                    // fallback: reload page if container not found
+                    window.location.href = sectionRoute;
+                }
+            } catch (e) {
+                alert('Error loading section: ' + e.message);
+            }
+        };
     </script>
 </body>
 </html> 

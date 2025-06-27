@@ -14,26 +14,14 @@ class MilitaryHistory extends Model
 
     protected $fillable = [
         'username',
-        'date_enlisted_afp',
-        'enlistment_date_type',
         'enlistment_month',
         'enlistment_year',
-        'start_date_of_commision',
-        'commission_date_from_type',
         'commission_date_from_month',
         'commission_date_from_year',
-        'end_date_of_commision',
-        'commission_date_to_type',
         'commission_date_to_month',
         'commission_date_to_year',
         'source_of_commision',
         'military_assign',
-    ];
-
-    protected $casts = [
-        'date_enlisted_afp' => 'date',
-        'start_date_of_commision' => 'date',
-        'end_date_of_commision' => 'date',
     ];
 
     public function user()

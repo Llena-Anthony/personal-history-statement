@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - Personal History Statement</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/pma_logo.svg') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -263,6 +264,11 @@
         .profile-container .profile-picture:hover {
             transform: scale(1.1) rotate(5deg);
             box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        
+        .profile-container a {
+            cursor: pointer;
+            text-decoration: none;
         }
         
         .profile-container .user-info {
@@ -688,7 +694,9 @@
             <aside class="sidebar text-white flex flex-col">
             <!-- Profile Section -->
             <div class="profile-container">
-                    <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
+                    <a href="{{ route('admin.profile.edit') }}" class="block">
+                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
+                    </a>
                 <div class="user-info">
                         <a href="{{ route('admin.profile.edit') }}" 
                            class="user-name"

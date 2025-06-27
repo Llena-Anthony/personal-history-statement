@@ -132,6 +132,8 @@ class MaritalStatusController extends Controller
         try {
             DB::beginTransaction();
 
+            \Log::info('MaritalStatus validated data:', $validated);
+
             // Create or find NameDetails for spouse
             $spouseName = NameService::createOrFindName(
                 $validated['spouse_first_name'] ?? null,
@@ -151,31 +153,26 @@ class MaritalStatusController extends Controller
                 $maritalStatus = MaritalStatus::create($maritalData);
             }
 
+            \Log::info('MaritalStatus after save:', $maritalStatus->toArray());
+
+            // Save children
             if (isset($validated['children'])) {
-                $familyBackground = FamilyBackground::firstOrCreate(
-                    ['user_id' => auth()->id()],
-                    ['user_id' => auth()->id()]
-                );
-                $familyBackground->children()->delete();
-                foreach ($validated['children'] as $childData) {
-                    if (!empty($childData['name'])) {
-                        $childNameParts = NameService::parseFullName($childData['name']);
-                        $childName = NameService::createOrFindName(
-                            $childNameParts['first_name'],
-                            $childNameParts['last_name'],
-                            $childNameParts['middle_name']
-                        );
-                        $familyBackground->children()->create([
-                            'name_id' => $childName ? $childName->name_id : null,
-                            'birth_date' => $childData['birth_date'],
-                            'citizenship_address' => $childData['citizenship'] ?? null,
-                            'address' => $childData['address'] ?? null,
-                            'father_name' => $childData['father_name'] ?? null,
-                            'mother_name' => $childData['mother_name'] ?? null,
+                $maritalStatus->children()->delete();
+                foreach ($validated['children'] as $child) {
+                    if (!empty($child['name'])) {
+                        $maritalStatus->children()->create([
+                            'name' => $child['name'],
+                            'birth_date' => $child['birth_date'] ?? null,
+                            'citizenship' => $child['citizenship'] ?? null,
+                            'address' => $child['address'] ?? null,
+                            'father_name' => $child['father_name'] ?? null,
+                            'mother_name' => $child['mother_name'] ?? null,
                         ]);
                     }
                 }
             }
+
+            \Log::info('Children after save:', $maritalStatus->children()->get()->toArray());
 
             // Mark marital status as completed
             $this->markSectionAsCompleted('marital-status');
@@ -187,15 +184,17 @@ class MaritalStatusController extends Controller
                 return response()->json(['success' => true, 'message' => 'Marital status saved successfully']);
             }
 
-            return redirect()->route('phs.family-background.create')
-                ->with('success', 'Marital status saved successfully. Please continue with your family history.');
+            return redirect()->route('phs.educational-background.create')
+                ->with('success', 'Marital status saved successfully. Please continue with your educational background.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
         } catch (\Exception $e) {
-            DB::rollBack();
-            
-            if ($isSaveOnly) {
+            if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }
-            
             return back()->with('error', 'An error occurred while saving your marital status information. Please try again.');
         }
     }

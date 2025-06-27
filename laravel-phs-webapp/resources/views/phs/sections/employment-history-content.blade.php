@@ -27,74 +27,72 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (From)</label>
                             <div class="flex space-x-2">
-                                <select name="employment[0][from_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="employment[0][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="employment[0][from]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="employment-from-month-year-group-0">
-                                    <select name="employment[0][from_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="employment[0][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="employment[0][from_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Inclusive Dates (To)</label>
                             <div class="flex space-x-2">
-                                <select name="employment[0][to_type]" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                    <option value="exact">Exact Date</option>
-                                    <option value="month_year">Month/Year</option>
+                                <select name="employment[0][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                    <option value="">Month</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
                                 </select>
-                                <input type="date" name="employment[0][to]" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                <div class="w-2/3 flex space-x-2 hidden" id="employment-to-month-year-group-0">
-                                    <select name="employment[0][to_month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Month</option>
-                                        <option value="01">January</option>
-                                        <option value="02">February</option>
-                                        <option value="03">March</option>
-                                        <option value="04">April</option>
-                                        <option value="05">May</option>
-                                        <option value="06">June</option>
-                                        <option value="07">July</option>
-                                        <option value="08">August</option>
-                                        <option value="09">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="number" name="employment[0][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                </div>
+                                <input type="number" name="employment[0][to_year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Type of Employment</label>
-                            <input type="text" name="employment[0][type]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employment type">
+                            <input type="text" name="employment[0][type]" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
+                                   placeholder="Enter employment type"
+                                   value="{{ old('employment.0.type', $employmentHistory->employment_type ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name of Employer</label>
-                            <input type="text" name="employment[0][employer_name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer name">
+                            <input type="text" name="employment[0][employer_name]" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
+                                   placeholder="Enter employer name"
+                                   value="{{ old('employment.0.employer_name', $employmentHistory->employer_name ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Address of Employer</label>
-                            <input type="text" name="employment[0][employer_address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter employer address">
+                            <input type="text" name="employment[0][employer_address]" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
+                                   placeholder="Enter employer address"
+                                   value="{{ old('employment.0.employer_address', $employmentHistory->employer_addr ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Leaving</label>
-                            <input type="text" name="employment[0][reason_leaving]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter reason for leaving">
+                            <input type="text" name="employment[0][reason_leaving]" 
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
+                                   placeholder="Enter reason for leaving"
+                                   value="{{ old('employment.0.reason_leaving', $employmentHistory->employment_reason_for_leaving ?? '') }}">
                         </div>
                     </div>
                 </div>
@@ -114,13 +112,16 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Have you been dismissed or forced to resign from a position?</label>
                     <select name="dismissed" id="dismissed-select" class="w-full md:w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                         <option value="">Select an option</option>
-                        <option value="no" {{ old('dismissed') == 'no' ? 'selected' : '' }}>No</option>
-                        <option value="yes" {{ old('dismissed') == 'yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="no" {{ old('dismissed', $employmentHistory->dismissed ?? '') == 'no' ? 'selected' : '' }}>No</option>
+                        <option value="yes" {{ old('dismissed', $employmentHistory->dismissed ?? '') == 'yes' ? 'selected' : '' }}>Yes</option>
                     </select>
                 </div>
-                <div id="dismissed-explanation" class="{{ old('dismissed') == 'yes' ? '' : 'hidden' }}">
+                <div id="dismissed-explanation" class="{{ old('dismissed', $employmentHistory->dismissed ?? '') == 'yes' ? '' : 'hidden' }}">
                     <label for="dismissed_explanation" class="block text-sm font-medium text-gray-700 mb-2">If yes, please explain</label>
-                    <input type="text" name="dismissed_explanation" id="dismissed_explanation" value="{{ old('dismissed_explanation') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Explain the circumstances here...">
+                    <input type="text" name="dismissed_explanation" id="dismissed_explanation" 
+                           value="{{ old('dismissed_explanation', $employmentHistory->dismissed_explanation ?? '') }}" 
+                           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
+                           placeholder="Explain the circumstances here...">
                 </div>
             </div>
         </div>

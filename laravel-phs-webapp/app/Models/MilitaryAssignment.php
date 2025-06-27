@@ -14,12 +14,8 @@ class MilitaryAssignment extends Model
 
     protected $fillable = [
         'assign_id',
-        'date_from',
-        'date_to',
-        'date_from_type',
         'date_from_month',
         'date_from_year',
-        'date_to_type',
         'date_to_month',
         'date_to_year',
         'inclusive_dates',

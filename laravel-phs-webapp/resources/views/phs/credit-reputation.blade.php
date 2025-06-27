@@ -92,29 +92,22 @@
                                 <input type="text" name="assets_liabilities_agency" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter name of agency">
                                 <div>
                                     <div class="flex space-x-2">
-                                        <select name="assets_liabilities_date_type" x-model="assets_liabilities_date_type" class="w-1/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                            <option value="exact">Exact Date</option>
-                                            <option value="month_year">Month/Year</option>
+                                        <select name="assets_liabilities_month" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                            <option value="">Month</option>
+                                            <option value="01">January</option>
+                                            <option value="02">February</option>
+                                            <option value="03">March</option>
+                                            <option value="04">April</option>
+                                            <option value="05">May</option>
+                                            <option value="06">June</option>
+                                            <option value="07">July</option>
+                                            <option value="08">August</option>
+                                            <option value="09">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
                                         </select>
-                                        <input type="date" name="assets_liabilities_date" x-model="assets_liabilities_date" x-show="assets_liabilities_date_type === 'exact'" class="w-2/3 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <div class="w-2/3 flex space-x-2" x-show="assets_liabilities_date_type === 'month_year'">
-                                            <select name="assets_liabilities_month" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                                <option value="">Month</option>
-                                                <option value="01">January</option>
-                                                <option value="02">February</option>
-                                                <option value="03">March</option>
-                                                <option value="04">April</option>
-                                                <option value="05">May</option>
-                                                <option value="06">June</option>
-                                                <option value="07">July</option>
-                                                <option value="08">August</option>
-                                                <option value="09">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
-                                            </select>
-                                            <input type="number" name="assets_liabilities_year" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
-                                        </div>
+                                        <input type="number" name="assets_liabilities_year" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +173,6 @@
             has_loans: '{{ old('has_loans', $creditReputation->has_loans) }}',
             has_filed_assets_liabilities: '{{ old('has_filed_assets_liabilities', $creditReputation->has_filed_assets_liabilities) }}',
             has_filed_itr: '{{ old('has_filed_itr', $creditReputation->has_filed_itr) }}',
-            assets_liabilities_date_type: 'exact',
 
             other_incomes: @json(old('other_incomes', $otherIncomes->map->only(['source']))),
             bank_accounts: @json(old('bank_accounts', $bankAccounts->map->only(['bank_name', 'address']))),

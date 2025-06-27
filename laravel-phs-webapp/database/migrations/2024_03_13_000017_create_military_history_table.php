@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('military_history', function (Blueprint $table) {
             $table->string('username');
-            $table->date('date_enlisted_afp');
             $table->date('start_date_of_commision');
             $table->date('end_date_of_commision')->nullable();
             $table->string('source_of_commision');

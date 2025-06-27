@@ -32,7 +32,8 @@
                             </label>
                             <input type="text" name="elementary[0][school]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school name">
+                                   placeholder="Enter school name"
+                                   value="{{ old('elementary.0.school', $educationalBackground->elementary_school ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -40,7 +41,8 @@
                             </label>
                             <input type="text" name="elementary[0][address]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school address">
+                                   placeholder="Enter school address"
+                                   value="{{ old('elementary.0.address', $educationalBackground->elementary_address ?? '') }}">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -50,7 +52,8 @@
                             </label>
                             <input type="number" name="elementary[0][start]" min="1900" max="2030"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY">
+                                   placeholder="YYYY"
+                                   value="{{ old('elementary.0.start', $educationalBackground->elementary_period_from ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -58,7 +61,8 @@
                             </label>
                             <input type="number" name="elementary[0][graduate]" min="1900" max="2030"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY">
+                                   placeholder="YYYY"
+                                   value="{{ old('elementary.0.graduate', $educationalBackground->elementary_year_graduated ?? '') }}">
                         </div>
                     </div>
                 </div>
@@ -84,7 +88,8 @@
                             </label>
                             <input type="text" name="highschool[0][school]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school name">
+                                   placeholder="Enter school name"
+                                   value="{{ old('highschool.0.school', $educationalBackground->high_school_school ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -92,7 +97,8 @@
                             </label>
                             <input type="text" name="highschool[0][address]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school address">
+                                   placeholder="Enter school address"
+                                   value="{{ old('highschool.0.address', $educationalBackground->high_school_address ?? '') }}">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -102,7 +108,8 @@
                             </label>
                             <input type="number" name="highschool[0][start]" min="1900" max="2030"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY">
+                                   placeholder="YYYY"
+                                   value="{{ old('highschool.0.start', $educationalBackground->high_school_period_from ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -110,7 +117,8 @@
                             </label>
                             <input type="number" name="highschool[0][graduate]" min="1900" max="2030"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY">
+                                   placeholder="YYYY"
+                                   value="{{ old('highschool.0.graduate', $educationalBackground->high_school_year_graduated ?? '') }}">
                         </div>
                     </div>
                 </div>
@@ -136,7 +144,8 @@
                             </label>
                             <input type="text" name="college[0][school]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school name">
+                                   placeholder="Enter school name"
+                                   value="{{ old('college.0.school', $educationalBackground->college_school ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -144,7 +153,8 @@
                             </label>
                             <input type="text" name="college[0][address]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school address">
+                                   placeholder="Enter school address"
+                                   value="{{ old('college.0.address', $educationalBackground->college_address ?? '') }}">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -154,7 +164,8 @@
                             </label>
                             <input type="text" name="college[0][course]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="e.g., Bachelor of Science in Computer Science">
+                                   placeholder="e.g., Bachelor of Science in Computer Science"
+                                   value="{{ old('college.0.course', $educationalBackground->college_degree ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -163,12 +174,12 @@
                             <select name="college[0][year_level]"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                                 <option value="">Select Year Level</option>
-                                <option value="1st Year">1st Year</option>
-                                <option value="2nd Year">2nd Year</option>
-                                <option value="3rd Year">3rd Year</option>
-                                <option value="4th Year">4th Year</option>
-                                <option value="5th Year">5th Year</option>
-                                <option value="Graduated">Graduated</option>
+                                <option value="1st Year" {{ old('college.0.year_level', $educationalBackground->college_highest_level ?? '') == '1st Year' ? 'selected' : '' }}>1st Year</option>
+                                <option value="2nd Year" {{ old('college.0.year_level', $educationalBackground->college_highest_level ?? '') == '2nd Year' ? 'selected' : '' }}>2nd Year</option>
+                                <option value="3rd Year" {{ old('college.0.year_level', $educationalBackground->college_highest_level ?? '') == '3rd Year' ? 'selected' : '' }}>3rd Year</option>
+                                <option value="4th Year" {{ old('college.0.year_level', $educationalBackground->college_highest_level ?? '') == '4th Year' ? 'selected' : '' }}>4th Year</option>
+                                <option value="5th Year" {{ old('college.0.year_level', $educationalBackground->college_highest_level ?? '') == '5th Year' ? 'selected' : '' }}>5th Year</option>
+                                <option value="Graduated" {{ old('college.0.year_level', $educationalBackground->college_highest_level ?? '') == 'Graduated' ? 'selected' : '' }}>Graduated</option>
                             </select>
                         </div>
                     </div>
@@ -179,7 +190,8 @@
                             </label>
                             <input type="number" name="college[0][start]" min="1900" max="2030"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY">
+                                   placeholder="YYYY"
+                                   value="{{ old('college.0.start', $educationalBackground->college_period_from ?? '') }}">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -187,7 +199,8 @@
                             </label>
                             <input type="number" name="college[0][graduate]" min="1900" max="2030"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY">
+                                   placeholder="YYYY"
+                                   value="{{ old('college.0.graduate', $educationalBackground->college_year_graduated ?? '') }}">
                         </div>
                     </div>
                 </div>

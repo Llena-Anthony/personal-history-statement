@@ -9,11 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\ResetPasswordNotification;
 use App\Traits\Searchable;
+use App\Traits\LogsActivity;
 use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Searchable;
+    use HasApiTokens, HasFactory, Notifiable, Searchable, LogsActivity;
 
     /**
      * The attributes that are mass assignable.

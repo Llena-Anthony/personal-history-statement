@@ -57,20 +57,36 @@ class ArrestRecordController extends Controller
         // Add username to validated data
         $validated['username'] = Auth::user()->username;
 
-        // Save or update arrest record
-        ArrestRecord::updateOrCreate(
-            ['username' => Auth::user()->username],
-            $validated
-        );
+        \Log::info('ArrestRecord validated data:', $validated);
 
-        // Mark section as completed
-        session()->put('phs_sections.arrest-record', 'completed');
-        
-        // Return appropriate response based on mode
-        if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Arrest record and conduct information saved successfully']);
+        try {
+            // Save or update arrest record
+            $arrestRecord = ArrestRecord::updateOrCreate(
+                ['username' => Auth::user()->username],
+                $validated
+            );
+
+            \Log::info('ArrestRecord after save:', $arrestRecord->toArray());
+
+            // Mark section as completed
+            session()->put('phs_sections.arrest-record', 'completed');
+            
+            // Return appropriate response based on mode
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Arrest record and conduct information saved successfully']);
+            }
+            
+            return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record and conduct saved successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your arrest record. Please try again.');
         }
-        
-        return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record and conduct saved successfully!');
     }
 }

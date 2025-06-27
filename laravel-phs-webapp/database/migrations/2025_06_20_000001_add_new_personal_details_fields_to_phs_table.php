@@ -20,6 +20,16 @@ return new class extends Migration
             $table->string('nickname')->nullable()->after('change_in_name');
             $table->string('passport_number')->nullable()->after('nickname');
             $table->date('passport_expiry')->nullable()->after('passport_number');
+
+            // Add human-readable address name fields
+            $table->string('home_region_name')->nullable()->after('home_address');
+            $table->string('home_province_name')->nullable()->after('home_region_name');
+            $table->string('home_city_name')->nullable()->after('home_province_name');
+            $table->string('home_barangay_name')->nullable()->after('home_city_name');
+            $table->string('business_region_name')->nullable()->after('business_address');
+            $table->string('business_province_name')->nullable()->after('business_region_name');
+            $table->string('business_city_name')->nullable()->after('business_province_name');
+            $table->string('business_barangay_name')->nullable()->after('business_city_name');
         });
     }
 
@@ -38,6 +48,15 @@ return new class extends Migration
                 'nickname',
                 'passport_number',
                 'passport_expiry',
+                // Drop the new address name fields
+                'home_region_name',
+                'home_province_name',
+                'home_city_name',
+                'home_barangay_name',
+                'business_region_name',
+                'business_province_name',
+                'business_city_name',
+                'business_barangay_name',
             ]);
         });
     }

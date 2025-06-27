@@ -5,28 +5,54 @@
 
 @section('content')
 <div class="space-y-8">
-    <!-- Welcome Section -->
-    <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] rounded-2xl p-8 text-white relative overflow-hidden">
-        <div class="absolute inset-0 bg-black opacity-10"></div>
-        <div class="relative z-10">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mb-2">Welcome back, {{ auth()->user()->name }}!</h1>
-                    <p class="text-[#D4AF37] text-lg">Complete your Personal History Statement and Personal Data Sheet</p>
+    <!-- Welcome Section with PMA Banner Background -->
+    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+        <!-- PMA Banner Background -->
+        <div class="absolute inset-0">
+            <img src="{{ asset('images/pma_banner.jpg') }}" 
+                 alt="PMA Banner" 
+                 class="w-full h-full object-cover">
+            <!-- Dark overlay for better text readability -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#1B365D]/90 via-[#1B365D]/80 to-[#1B365D]/70"></div>
+            <!-- Additional overlay for depth -->
+            <div class="absolute inset-0 bg-black/20"></div>
+        </div>
+        
+        <!-- Content -->
+        <div class="relative z-10 p-8 md:p-12">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex-1 text-white mb-6 md:mb-0">
+                    <div class="mb-4">
+                        <h1 class="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">
+                            Welcome back, {{ auth()->user()->name }}!
+                        </h1>
+                        <p class="text-[#D4AF37] text-lg md:text-xl font-medium drop-shadow-md">
+                            Complete your Personal History Statement and Personal Data Sheet
+                        </p>
+                    </div>
                 </div>
-                <div class="w-20 h-20 bg-[#D4AF37] rounded-full flex items-center justify-center overflow-hidden ml-8 shadow-lg border-4 border-white">
-                    @if(auth()->user()->profile_picture)
-                        <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
-                             alt="Profile" 
-                             class="w-full h-full object-cover rounded-full">
-                    @else
-                        <i class="fas fa-user text-[#1B365D] text-4xl"></i>
-                    @endif
-                </div>
+                
+                <!-- Profile Picture (Direct Link) -->
+                <a href="{{ route('profile.edit') }}" class="relative group focus:outline-none" title="Edit Profile">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
+                        @if(auth()->user()->profile_picture)
+                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
+                                 alt="Profile" 
+                                 class="w-full h-full object-cover rounded-full">
+                        @else
+                            <i class="fas fa-user text-[#1B365D] text-3xl md:text-4xl"></i>
+                        @endif
+                    </div>
+                    <!-- Decorative ring -->
+                    <div class="absolute inset-0 rounded-full border-4 border-[#D4AF37]/30 animate-ping"></div>
+                </a>
             </div>
         </div>
-        <div class="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37] opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
-        <div class="absolute bottom-0 left-0 w-24 h-24 bg-[#D4AF37] opacity-10 rounded-full translate-y-12 -translate-x-12"></div>
+        
+        <!-- Decorative elements -->
+        <div class="absolute top-4 right-4 w-20 h-20 bg-[#D4AF37]/20 rounded-full blur-xl"></div>
+        <div class="absolute bottom-4 left-4 w-16 h-16 bg-[#D4AF37]/20 rounded-full blur-xl"></div>
+        <div class="absolute top-1/2 right-8 w-12 h-12 bg-white/10 rounded-full blur-lg"></div>
     </div>
 
     <!-- Progress Overview -->

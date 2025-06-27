@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('military_history', function (Blueprint $table) {
-            $table->string('enlistment_date_type')->nullable()->after('date_enlisted_afp');
-            $table->string('enlistment_month')->nullable()->after('enlistment_date_type');
-            $table->integer('enlistment_year')->nullable()->after('enlistment_month');
-            $table->string('commission_date_from_type')->nullable()->after('start_date_of_commision');
-            $table->string('commission_date_from_month')->nullable()->after('commission_date_from_type');
-            $table->integer('commission_date_from_year')->nullable()->after('commission_date_from_month');
-            $table->string('commission_date_to_type')->nullable()->after('end_date_of_commision');
-            $table->string('commission_date_to_month')->nullable()->after('commission_date_to_type');
-            $table->integer('commission_date_to_year')->nullable()->after('commission_date_to_month');
+            // Add enlistment date fields (these don't exist yet, so no need to drop)
+            $table->string('enlistment_month')->nullable();
+            $table->integer('enlistment_year')->nullable();
+            
+            // Add commission date type fields
+            $table->string('commission_date_from_type')->nullable();
+            $table->string('commission_date_from_month')->nullable();
+            $table->integer('commission_date_from_year')->nullable();
+            $table->string('commission_date_to_type')->nullable();
+            $table->string('commission_date_to_month')->nullable();
+            $table->integer('commission_date_to_year')->nullable();
         });
     }
 
@@ -31,7 +33,7 @@ return new class extends Migration
     {
         Schema::table('military_history', function (Blueprint $table) {
             $table->dropColumn([
-                'enlistment_date_type', 'enlistment_month', 'enlistment_year',
+                'enlistment_month', 'enlistment_year',
                 'commission_date_from_type', 'commission_date_from_month', 'commission_date_from_year',
                 'commission_date_to_type', 'commission_date_to_month', 'commission_date_to_year'
             ]);

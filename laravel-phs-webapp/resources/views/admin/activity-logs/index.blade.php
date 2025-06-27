@@ -84,100 +84,61 @@
     <!-- Activity Logs Table -->
     <div class="bg-white rounded-xl shadow-sm overflow-hidden scale-in">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="w-full table-fixed divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>User</span>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'user_id', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-gray-400 hover:text-gray-500">
-                                    <i class="fas fa-sort"></i>
-                                </a>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>Action</span>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'action', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-gray-400 hover:text-gray-500">
-                                    <i class="fas fa-sort"></i>
-                                </a>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>Status</span>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'status', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-gray-400 hover:text-gray-500">
-                                    <i class="fas fa-sort"></i>
-                                </a>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            <div class="flex items-center space-x-1">
-                                <span>Time</span>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => request('direction') == 'asc' ? 'desc' : 'asc']) }}" class="text-gray-400 hover:text-gray-500">
-                                    <i class="fas fa-sort"></i>
-                                </a>
-                            </div>
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th scope="col" class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th scope="col" class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
+                        <th scope="col" class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                        <th scope="col" class="w-1/16 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">View</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($activityLogs as $log)
                     <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    <div class="h-10 w-10 rounded-full bg-[#1B365D] flex items-center justify-center text-white">
-                                        {{ strtoupper(substr($log->user->name ?? 'N/A', 0, 1)) }}
-                                    </div>
-                                </div>
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $log->user->name ?? 'N/A' }}</div>
-                                    <div class="text-sm text-gray-500">{{ $log->user->username ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <i class="{{ $log->action_icon }} text-[#1B365D] mr-2"></i>
-                                <span class="text-sm font-medium text-gray-900">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
+                        <td class="px-6 py-4">
+                            <div class="min-w-0">
+                                <div class="text-sm font-medium text-gray-900 truncate" title="{{ $log->user->name ?? 'N/A' }}">{{ $log->user->name ?? 'N/A' }}</div>
+                                <div class="text-sm text-gray-500 truncate" title="{{ $log->user->username ?? 'N/A' }}">{{ $log->user->username ?? 'N/A' }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900 max-w-xs truncate" title="{{ $log->description }}">
-                                {{ $log->description }}
+                            <span class="text-sm font-medium text-gray-900 truncate" title="{{ ucfirst(str_replace('_', ' ', $log->action)) }}">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900 truncate" title="{{ $log->description }}">
+                                {{ $log->summary }}
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                @if($log->status === 'success') bg-green-100 text-green-800
-                                @elseif($log->status === 'warning') bg-yellow-100 text-yellow-800
-                                @else bg-red-100 text-red-800
-                                @endif">
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-900">
                                 {{ ucfirst($log->status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $log->ip_address ?? 'N/A' }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <span class="time-ago" data-timestamp="{{ $log->created_at->toIso8601String() }}">
-                                {{ $log->created_at->diffForHumans() }}
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-500 truncate" title="{{ $log->ip_address ?? 'N/A' }}">
+                                {{ $log->ip_address ?? 'N/A' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-500">
+                                <div class="font-medium">{{ $log->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}</div>
+                                <div class="text-xs">{{ $log->created_at->setTimezone('Asia/Manila')->format('h:i A') }}</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm font-medium">
                             <a href="{{ route('admin.activity-logs.show', $log->id) }}" 
-                               class="text-[#1B365D] hover:text-[#2B4B7D] mr-3">
+                               class="text-[#1B365D] hover:text-[#2B4B7D]">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        <td colspan="7" class="px-6 py-4 text-sm text-gray-500 text-center">
                             No activity logs found.
                         </td>
                     </tr>

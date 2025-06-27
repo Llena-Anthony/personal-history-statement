@@ -43,26 +43,16 @@ class MilitaryHistoryController extends Controller
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
-                'enlistment_date' => 'nullable|date',
-                'enlistment_date_type' => 'nullable|in:exact,month_year',
-                'enlistment_month' => 'nullable|string|max:2',
-                'enlistment_year' => 'nullable|integer|min:1900|max:2030',
+                'enlistment_month' => 'required|string|max:2',
+                'enlistment_year' => 'required|integer|min:1900|max:2030',
                 'commission_source' => 'nullable|string|max:255',
-                'commission_date_from' => 'nullable|date',
-                'commission_date_from_type' => 'nullable|in:exact,month_year',
                 'commission_date_from_month' => 'nullable|string|max:2',
                 'commission_date_from_year' => 'nullable|integer|min:1900|max:2030',
-                'commission_date_to' => 'nullable|date',
-                'commission_date_to_type' => 'nullable|in:exact,month_year',
                 'commission_date_to_month' => 'nullable|string|max:2',
                 'commission_date_to_year' => 'nullable|integer|min:1900|max:2030',
                 'assignments' => 'nullable|array',
-                'assignments.*.from' => 'nullable|date',
-                'assignments.*.from_type' => 'nullable|in:exact,month_year',
                 'assignments.*.from_month' => 'nullable|string|max:2',
                 'assignments.*.from_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments.*.to' => 'nullable|date',
-                'assignments.*.to_type' => 'nullable|in:exact,month_year',
                 'assignments.*.to_month' => 'nullable|string|max:2',
                 'assignments.*.to_year' => 'nullable|integer|min:1900|max:2030',
                 'assignments.*.unit_office' => 'nullable|string|max:255',
@@ -70,10 +60,10 @@ class MilitaryHistoryController extends Controller
                 'schools' => 'nullable|array',
                 'schools.*.school' => 'nullable|string|max:255',
                 'schools.*.location' => 'nullable|string|max:255',
-                'schools.*.date_attended' => 'nullable|date',
-                'schools.*.date_attended_type' => 'nullable|in:exact,month_year',
-                'schools.*.date_attended_month' => 'nullable|string|max:2',
-                'schools.*.date_attended_year' => 'nullable|integer|min:1900|max:2030',
+                'schools.*.date_attended_from_month' => 'nullable|string|max:2',
+                'schools.*.date_attended_from_year' => 'nullable|integer|min:1900|max:2030',
+                'schools.*.date_attended_to_month' => 'nullable|string|max:2',
+                'schools.*.date_attended_to_year' => 'nullable|integer|min:1900|max:2030',
                 'schools.*.nature_training' => 'nullable|string|max:255',
                 'schools.*.rating' => 'nullable|string|max:255',
                 'awards' => 'nullable|array',
@@ -82,26 +72,16 @@ class MilitaryHistoryController extends Controller
         } else {
             // Full validation for final submission
             $validated = $request->validate([
-                'enlistment_date' => 'nullable|date',
-                'enlistment_date_type' => 'nullable|in:exact,month_year',
-                'enlistment_month' => 'nullable|string|max:2',
-                'enlistment_year' => 'nullable|integer|min:1900|max:2030',
+                'enlistment_month' => 'required|string|max:2',
+                'enlistment_year' => 'required|integer|min:1900|max:2030',
                 'commission_source' => 'nullable|string|max:255',
-                'commission_date_from' => 'nullable|date',
-                'commission_date_from_type' => 'nullable|in:exact,month_year',
                 'commission_date_from_month' => 'nullable|string|max:2',
                 'commission_date_from_year' => 'nullable|integer|min:1900|max:2030',
-                'commission_date_to' => 'nullable|date',
-                'commission_date_to_type' => 'nullable|in:exact,month_year',
                 'commission_date_to_month' => 'nullable|string|max:2',
                 'commission_date_to_year' => 'nullable|integer|min:1900|max:2030',
                 'assignments' => 'nullable|array',
-                'assignments.*.from' => 'nullable|date',
-                'assignments.*.from_type' => 'nullable|in:exact,month_year',
                 'assignments.*.from_month' => 'nullable|string|max:2',
                 'assignments.*.from_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments.*.to' => 'nullable|date',
-                'assignments.*.to_type' => 'nullable|in:exact,month_year',
                 'assignments.*.to_month' => 'nullable|string|max:2',
                 'assignments.*.to_year' => 'nullable|integer|min:1900|max:2030',
                 'assignments.*.unit_office' => 'nullable|string|max:255',
@@ -109,10 +89,10 @@ class MilitaryHistoryController extends Controller
                 'schools' => 'nullable|array',
                 'schools.*.school' => 'nullable|string|max:255',
                 'schools.*.location' => 'nullable|string|max:255',
-                'schools.*.date_attended' => 'nullable|date',
-                'schools.*.date_attended_type' => 'nullable|in:exact,month_year',
-                'schools.*.date_attended_month' => 'nullable|string|max:2',
-                'schools.*.date_attended_year' => 'nullable|integer|min:1900|max:2030',
+                'schools.*.date_attended_from_month' => 'nullable|string|max:2',
+                'schools.*.date_attended_from_year' => 'nullable|integer|min:1900|max:2030',
+                'schools.*.date_attended_to_month' => 'nullable|string|max:2',
+                'schools.*.date_attended_to_year' => 'nullable|integer|min:1900|max:2030',
                 'schools.*.nature_training' => 'nullable|string|max:255',
                 'schools.*.rating' => 'nullable|string|max:255',
                 'awards' => 'nullable|array',
@@ -126,28 +106,25 @@ class MilitaryHistoryController extends Controller
         try {
             DB::beginTransaction();
 
+            \Log::info('MilitaryHistory validated data:', $validated);
+
             $username = auth()->user()->username;
 
             // Create or update military history
             $militaryHistory = MilitaryHistory::updateOrCreate(
                 ['username' => $username],
                 [
-                    'username' => $username,
-                    'date_enlisted_afp' => $validated['enlistment_date'] ?? null,
-                    'enlistment_date_type' => $validated['enlistment_date_type'] ?? null,
-                    'enlistment_month' => $validated['enlistment_month'] ?? null,
-                    'enlistment_year' => $validated['enlistment_year'] ?? null,
-                    'start_date_of_commision' => $validated['commission_date_from'] ?? null,
-                    'commission_date_from_type' => $validated['commission_date_from_type'] ?? null,
+                    'enlistment_month' => $validated['enlistment_month'],
+                    'enlistment_year' => $validated['enlistment_year'],
+                    'commission_source' => $validated['commission_source'] ?? null,
                     'commission_date_from_month' => $validated['commission_date_from_month'] ?? null,
                     'commission_date_from_year' => $validated['commission_date_from_year'] ?? null,
-                    'end_date_of_commision' => $validated['commission_date_to'] ?? null,
-                    'commission_date_to_type' => $validated['commission_date_to_type'] ?? null,
                     'commission_date_to_month' => $validated['commission_date_to_month'] ?? null,
                     'commission_date_to_year' => $validated['commission_date_to_year'] ?? null,
-                    'source_of_commision' => $validated['commission_source'] ?? null,
                 ]
             );
+
+            \Log::info('MilitaryHistory after save:', $militaryHistory->toArray());
 
             // Handle assignments
             if (isset($validated['assignments'])) {
@@ -158,12 +135,8 @@ class MilitaryHistoryController extends Controller
                     if (!empty($assignmentData['unit_office'])) {
                         $assignment = MilitaryAssignment::create([
                             'assign_id' => $militaryHistory->military_assign,
-                            'date_from' => $assignmentData['from'] ?? null,
-                            'date_to' => $assignmentData['to'] ?? null,
-                            'date_from_type' => $assignmentData['from_type'] ?? null,
                             'date_from_month' => $assignmentData['from_month'] ?? null,
                             'date_from_year' => $assignmentData['from_year'] ?? null,
-                            'date_to_type' => $assignmentData['to_type'] ?? null,
                             'date_to_month' => $assignmentData['to_month'] ?? null,
                             'date_to_year' => $assignmentData['to_year'] ?? null,
                             'unit_office' => $assignmentData['unit_office'],
@@ -182,12 +155,13 @@ class MilitaryHistoryController extends Controller
                     if (!empty($schoolData['school'])) {
                         $school = MilitarySchool::create([
                             'username' => $username,
-                            'date_attended' => $schoolData['date_attended'] ?? null,
-                            'exact_date_attended' => $schoolData['date_attended'] ?? null,
-                            'date_attended_type' => $schoolData['date_attended_type'] ?? null,
-                            'date_attended_month' => $schoolData['date_attended_month'] ?? null,
-                            'date_attended_year' => $schoolData['date_attended_year'] ?? null,
-                            'nature_of_training' => $schoolData['nature_training'] ?? null,
+                            'school' => $schoolData['school'],
+                            'location' => $schoolData['location'] ?? null,
+                            'date_attended_from_month' => $schoolData['date_attended_from_month'] ?? null,
+                            'date_attended_from_year' => $schoolData['date_attended_from_year'] ?? null,
+                            'date_attended_to_month' => $schoolData['date_attended_to_month'] ?? null,
+                            'date_attended_to_year' => $schoolData['date_attended_to_year'] ?? null,
+                            'nature_training' => $schoolData['nature_training'] ?? null,
                             'rating' => $schoolData['rating'] ?? null,
                         ]);
                     }
@@ -218,6 +192,12 @@ class MilitaryHistoryController extends Controller
                 }
             }
 
+            \Log::info('MilitaryHistory related data after save:', [
+                'assignments' => MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get()->toArray(),
+                'schools' => MilitarySchool::where('username', $username)->get()->toArray(),
+                'awards' => MilitaryAward::whereIn('history_id', MilitarySchool::where('username', $username)->pluck('history_id'))->get()->toArray(),
+            ]);
+
             // Mark military history as completed
             $this->markSectionAsCompleted('military-history');
 
@@ -230,48 +210,23 @@ class MilitaryHistoryController extends Controller
 
             return redirect()->route('phs.places-of-residence.create')
                 ->with('success', 'Military history saved successfully. Please continue with your places of residence.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
         } catch (\Exception $e) {
-            DB::rollBack();
-            
-            if ($isSaveOnly) {
+            if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }
-            
             return back()->with('error', 'An error occurred while saving your military history information. Please try again.');
         }
     }
 
     private function processDateFields(&$validated)
     {
-        // Process enlistment date
-        if (isset($validated['enlistment_date_type'])) {
-            if ($validated['enlistment_date_type'] === 'month_year') {
-                $validated['enlistment_date'] = null;
-            } else {
-                $validated['enlistment_month'] = null;
-                $validated['enlistment_year'] = null;
-            }
-        }
-
-        // Process commission date from
-        if (isset($validated['commission_date_from_type'])) {
-            if ($validated['commission_date_from_type'] === 'month_year') {
-                $validated['commission_date_from'] = null;
-            } else {
-                $validated['commission_date_from_month'] = null;
-                $validated['commission_date_from_year'] = null;
-            }
-        }
-
-        // Process commission date to
-        if (isset($validated['commission_date_to_type'])) {
-            if ($validated['commission_date_to_type'] === 'month_year') {
-                $validated['commission_date_to'] = null;
-            } else {
-                $validated['commission_date_to_month'] = null;
-                $validated['commission_date_to_year'] = null;
-            }
-        }
+        // No enlistment_date_type or enlistment_date to process anymore
+        // No commission date processing needed since we're using simple month/year fields
 
         // Process assignment dates
         if (isset($validated['assignments'])) {

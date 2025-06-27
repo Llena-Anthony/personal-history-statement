@@ -15,7 +15,8 @@ class CreditReputation extends Model
         'has_loans',
         'has_filed_assets_liabilities',
         'assets_liabilities_agency',
-        'assets_liabilities_date',
+        'assets_liabilities_month',
+        'assets_liabilities_year',
         'has_filed_itr',
         'itr_amount',
     ];

@@ -33,13 +33,6 @@
     </div>
     @endif
 
-    @if(session('success'))
-    <div class="bg-green-50 border border-green-200 text-green-800 px-3 py-2 rounded-xl mb-3 flex items-center gap-2 text-sm" role="alert">
-        <i class="fas fa-check-circle"></i>
-        <span>{{ session('success') }}</span>
-    </div>
-    @endif
-
     @if(session('error'))
     <div class="bg-red-50 border border-red-200 text-red-800 px-3 py-2 rounded-xl mb-3 flex items-center gap-2 text-sm" role="alert">
         <i class="fas fa-exclamation-circle"></i>
@@ -85,9 +78,9 @@
                         </div>
                     </div>
                     <div>
-                        <label for="branch" class="block text-xs font-semibold text-gray-700 mb-1">Branch</label>
+                        <label for="organic_role" class="block text-xs font-semibold text-gray-700 mb-1">Organic Group</label>
                         <div class="relative">
-                            <input type="text" name="branch" id="branch" value="{{ old('branch', $user->branch) }}" required disabled
+                            <input type="text" name="organic_role" id="organic_role" value="{{ old('organic_role', $user->organic_role) }}" required disabled
                                 class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
                             <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited."><i class="fas fa-lock"></i></span>
                         </div>
