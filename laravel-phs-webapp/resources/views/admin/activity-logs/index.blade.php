@@ -87,20 +87,20 @@
             <table class="w-full table-fixed divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                         <th scope="col" class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                        <th scope="col" class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th scope="col" class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th scope="col" class="w-1/12 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th scope="col" class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
-                        <th scope="col" class="w-1/8 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                        <th scope="col" class="w-1/12 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">View</th>
+                        <th scope="col" class="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                        <th scope="col" class="w-1/16 px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">View</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($activityLogs as $log)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4">
-                            <div class="min-w-0 flex-1">
+                            <div class="min-w-0">
                                 <div class="text-sm font-medium text-gray-900 truncate" title="{{ $log->user->name ?? 'N/A' }}">{{ $log->user->name ?? 'N/A' }}</div>
                                 <div class="text-sm text-gray-500 truncate" title="{{ $log->user->username ?? 'N/A' }}">{{ $log->user->username ?? 'N/A' }}</div>
                             </div>
@@ -109,26 +109,29 @@
                             <span class="text-sm font-medium text-gray-900 truncate" title="{{ ucfirst(str_replace('_', ' ', $log->action)) }}">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900 break-words" title="{{ $log->description }}">
-                                {{ $log->description }}
+                            <div class="text-sm text-gray-900 truncate" title="{{ $log->description }}">
+                                {{ $log->summary }}
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900">
+                            <span class="text-sm text-gray-900">
                                 {{ ucfirst($log->status) }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-500 truncate" title="{{ $log->ip_address ?? 'N/A' }}">
-                            {{ $log->ip_address ?? 'N/A' }}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-500">
-                            <span class="time-ago" data-timestamp="{{ $log->created_at->toIso8601String() }}">
-                                {{ $log->created_at->diffForHumans() }}
                             </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-sm text-gray-500 truncate" title="{{ $log->ip_address ?? 'N/A' }}">
+                                {{ $log->ip_address ?? 'N/A' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-500">
+                                <div class="font-medium">{{ $log->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}</div>
+                                <div class="text-xs">{{ $log->created_at->setTimezone('Asia/Manila')->format('h:i A') }}</div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
                             <a href="{{ route('admin.activity-logs.show', $log->id) }}" 
-                               class="text-[#1B365D] hover:text-[#2B4B7D] mr-3">
+                               class="text-[#1B365D] hover:text-[#2B4B7D]">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>

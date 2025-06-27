@@ -402,6 +402,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/users/finalize', [AdminUserController::class, 'finalize'])->name('users.finalize');
     Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::get('/users/{user}/details', [AdminUserController::class, 'show'])->name('users.show');
+    Route::post('/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::get('/users/export', [AdminUserController::class, 'export'])->name('users.export');
 
     // PHS Submission Management Routes
     Route::get('print-preview', [App\Http\Controllers\PrintController::class, 'preview'])->name('phs.preview');
