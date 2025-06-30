@@ -33,13 +33,6 @@
     </div>
     @endif
 
-    @if(session('success'))
-    <div class="bg-green-50 border border-green-200 text-green-800 px-3 py-2 rounded-xl mb-3 flex items-center gap-2 text-sm" role="alert">
-        <i class="fas fa-check-circle"></i>
-        <span>{{ session('success') }}</span>
-    </div>
-    @endif
-
     @if(session('error'))
     <div class="bg-red-50 border border-red-200 text-red-800 px-3 py-2 rounded-xl mb-3 flex items-center gap-2 text-sm" role="alert">
         <i class="fas fa-exclamation-circle"></i>
