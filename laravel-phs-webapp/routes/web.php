@@ -28,6 +28,8 @@ use App\Http\Controllers\ArrestRecordController;
 use App\Models\AddressDetails;
 use App\Http\Controllers\CredentialController;
 use App\Http\Controllers\PHSReviewController;
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\MiscellaneousController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,7 +89,9 @@ Route::middleware('auth')->group(function () {
             'user_id' => auth()->id(),
             'description' => 'Admin returned to admin view from PHS management',
             'status' => 'success',
-            'action' => 'return_to_admin'
+            'action' => 'return_to_admin',
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent()
         ]);
 
         return redirect()->route('admin.dashboard')->with('success', 'Returned to admin view.');
@@ -102,8 +106,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
 
     // PHS Routes - Educational Background
-    Route::get('/phs/educational-background', [PHSController::class, 'educationalBackground'])->name('phs.educational-background');
-    Route::post('/phs/educational-background', [PHSController::class, 'storeEducationalBackground'])->name('phs.educational-background.store');
+    Route::get('/phs/educational-background', [EducationalBackgroundController::class, 'create'])->name('phs.educational-background');
+    Route::post('/phs/educational-background', [EducationalBackgroundController::class, 'store'])->name('phs.educational-background.store');
 
     // PHS Routes - Marital Status
     Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
@@ -282,6 +286,8 @@ Route::middleware('auth')->group(function () {
             return back()->with('error', 'An error occurred while saving your organization information. Please try again.');
         }
     })->name('phs.organization.store');
+    Route::get('/phs/organization', [OrganizationController::class, 'create'])->name('phs.organization');
+    Route::post('/phs/organization', [OrganizationController::class, 'store'])->name('phs.organization.store');
 
     // PHS Routes - Character and Reputation
     Route::get('/phs/character-and-reputation', [CharacterReputationController::class, 'create'])->name('phs.character-and-reputation');
@@ -386,6 +392,8 @@ Route::middleware('auth')->group(function () {
             return back()->with('error', 'An error occurred while saving your miscellaneous information. Please try again.');
         }
     })->name('phs.miscellaneous.store');
+    Route::get('/phs/miscellaneous', [MiscellaneousController::class, 'create'])->name('phs.miscellaneous');
+    Route::post('/phs/miscellaneous', [MiscellaneousController::class, 'store'])->name('phs.miscellaneous.store');
 
     // Dashboard Route
     Route::get('/dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
@@ -428,7 +436,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // PHS Submission Management Routes
     Route::get('print-preview', [App\Http\Controllers\PrintController::class, 'preview'])->name('phs.preview');
-    
+
     Route::resource('phs', App\Http\Controllers\Admin\PHSController::class)->names([
         'index' => 'phs.index',
         'show' => 'phs.show',

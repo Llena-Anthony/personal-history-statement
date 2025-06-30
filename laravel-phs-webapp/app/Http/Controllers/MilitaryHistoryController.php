@@ -19,11 +19,11 @@ class MilitaryHistoryController extends Controller
         $data = $this->getCommonViewData('military-history');
 
         // Load existing military history data
-        $militaryHistory = MilitaryHistory::where('username', auth()->user()->username)->first();
+        $militaryHistory = MilitaryHistory::where('user_id', auth()->id())->first();
         if ($militaryHistory) {
             $data['militaryHistory'] = $militaryHistory;
             $data['assignments'] = MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get();
-            $data['schools'] = MilitarySchool::where('username', $militaryHistory->username)->get();
+            $data['schools'] = MilitarySchool::where('user_id', $militaryHistory->user_id)->get();
             $data['awards'] = MilitaryAward::whereIn('history_id', $data['schools']->pluck('history_id'))->get();
         }
 
@@ -108,11 +108,11 @@ class MilitaryHistoryController extends Controller
 
             \Log::info('MilitaryHistory validated data:', $validated);
 
-            $username = auth()->user()->username;
+            $userId = auth()->id();
 
             // Create or update military history
             $militaryHistory = MilitaryHistory::updateOrCreate(
-                ['username' => $username],
+                ['user_id' => $userId],
                 [
                     'enlistment_month' => $validated['enlistment_month'],
                     'enlistment_year' => $validated['enlistment_year'],
@@ -149,12 +149,12 @@ class MilitaryHistoryController extends Controller
             // Handle schools
             if (isset($validated['schools'])) {
                 // Clear existing schools
-                MilitarySchool::where('username', $username)->delete();
+                MilitarySchool::where('user_id', $userId)->delete();
                 
                 foreach ($validated['schools'] as $schoolData) {
                     if (!empty($schoolData['school'])) {
                         $school = MilitarySchool::create([
-                            'username' => $username,
+                            'user_id' => $userId,
                             'school' => $schoolData['school'],
                             'location' => $schoolData['location'] ?? null,
                             'date_attended_from_month' => $schoolData['date_attended_from_month'] ?? null,
@@ -171,15 +171,15 @@ class MilitaryHistoryController extends Controller
             // Handle awards
             if (isset($validated['awards'])) {
                 // Clear existing awards
-                MilitaryAward::whereIn('history_id', MilitarySchool::where('username', $username)->pluck('history_id'))->delete();
+                MilitaryAward::whereIn('history_id', MilitarySchool::where('user_id', $userId)->pluck('history_id'))->delete();
                 
                 foreach ($validated['awards'] as $awardData) {
                     if (!empty($awardData['name'])) {
                         // For simplicity, associate awards with the first school or create a dummy school
-                        $school = MilitarySchool::where('username', $username)->first();
+                        $school = MilitarySchool::where('user_id', $userId)->first();
                         if (!$school) {
                             $school = MilitarySchool::create([
-                                'username' => $username,
+                                'user_id' => $userId,
                                 'date_attended' => null,
                             ]);
                         }
@@ -194,8 +194,8 @@ class MilitaryHistoryController extends Controller
 
             \Log::info('MilitaryHistory related data after save:', [
                 'assignments' => MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get()->toArray(),
-                'schools' => MilitarySchool::where('username', $username)->get()->toArray(),
-                'awards' => MilitaryAward::whereIn('history_id', MilitarySchool::where('username', $username)->pluck('history_id'))->get()->toArray(),
+                'schools' => MilitarySchool::where('user_id', $userId)->get()->toArray(),
+                'awards' => MilitaryAward::whereIn('history_id', MilitarySchool::where('user_id', $userId)->pluck('history_id'))->get()->toArray(),
             ]);
 
             // Mark military history as completed
@@ -221,6 +221,29 @@ class MilitaryHistoryController extends Controller
             }
             return back()->with('error', 'An error occurred while saving your military history information. Please try again.');
         }
+    }
+
+    /**
+     * Get the list of PHS sections for progress calculation.
+     *
+     * @return array
+     */
+    protected function getSections()
+    {
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'personal-characteristics',
+            'marital-status',
+            'family-history',
+            'organization',
+            'miscellaneous',
+        ];
     }
 
     private function processDateFields(&$validated)

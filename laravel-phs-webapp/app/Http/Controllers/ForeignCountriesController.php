@@ -13,7 +13,7 @@ class ForeignCountriesController extends Controller
     public function create()
     {
         // Load existing foreign visits data for autofill
-        $foreignVisits = ForeignVisit::where('username', auth()->user()->username)->get();
+        $foreignVisits = ForeignVisit::where('user_id', auth()->id())->get();
         
         $data = $this->getCommonViewData('foreign-countries');
         $data['foreignVisits'] = $foreignVisits;
@@ -57,14 +57,14 @@ class ForeignCountriesController extends Controller
             \Log::info('ForeignCountries validated data:', $validated);
 
             // Clear existing foreign visits for this user
-            ForeignVisit::where('username', auth()->user()->username)->delete();
+            ForeignVisit::where('user_id', auth()->id())->delete();
 
             // Save new foreign visits
             if (isset($validated['countries'])) {
                 foreach ($validated['countries'] as $country) {
                     if (!empty($country['name'])) {
                         ForeignVisit::create([
-                            'username' => auth()->user()->username,
+                            'user_id' => auth()->id(),
                             'country_name' => $country['name'],
                             'purpose' => $country['purpose'] ?? null,
                             'from_month' => $country['from_month'] ?? null,
@@ -76,7 +76,7 @@ class ForeignCountriesController extends Controller
                 }
             }
 
-            \Log::info('ForeignVisits after save:', ForeignVisit::where('username', auth()->user()->username)->get()->toArray());
+            \Log::info('ForeignVisits after save:', ForeignVisit::where('user_id', auth()->id())->get()->toArray());
 
             // Mark foreign countries as completed
             $this->markSectionAsCompleted('foreign-countries');
@@ -99,5 +99,28 @@ class ForeignCountriesController extends Controller
             }
             return back()->with('error', 'An error occurred while saving your foreign countries visited. Please try again.');
         }
+    }
+
+    /**
+     * Get the list of PHS sections for progress calculation.
+     *
+     * @return array
+     */
+    protected function getSections()
+    {
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'personal-characteristics',
+            'marital-status',
+            'family-history',
+            'organization',
+            'miscellaneous',
+        ];
     }
 } 

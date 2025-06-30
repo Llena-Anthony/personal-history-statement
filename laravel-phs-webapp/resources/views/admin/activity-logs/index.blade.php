@@ -153,8 +153,8 @@
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                                    {{ substr($log->user->name ?? 'N/A', 0, 1) }}
+                                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-base font-bold border border-gray-300 shadow-sm">
+                                    {{ strtoupper(substr($log->user->name ?? ($log->user->username ?? 'N/A'), 0, 1)) }}
                                 </div>
                                 <div class="ml-3">
                                     <div class="text-sm font-medium text-gray-900">{{ $log->user->name ?? 'N/A' }}</div>
@@ -167,7 +167,24 @@
                                 <div class="p-1 rounded bg-[#1B365D]/20 text-[#1B365D] mr-2">
                                     <i class="{{ $log->action_icon }} text-xs"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-900">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
+                                <span class="text-sm font-medium text-gray-900">
+                                    @php
+                                        $actionLabels = [
+                                            'access_own_phs' => 'Access',
+                                            'return_to_admin' => 'Return',
+                                            'login' => 'Login',
+                                            'logout' => 'Logout',
+                                            'create' => 'Create',
+                                            'update' => 'Update',
+                                            'delete' => 'Delete',
+                                            'submit' => 'Submit',
+                                            'enable' => 'Enable',
+                                            'disable' => 'Disable',
+                                            'password_reset' => 'Reset',
+                                        ];
+                                        echo $actionLabels[$log->action] ?? ucfirst(explode('_', $log->action)[0]);
+                                    @endphp
+                                </span>
                             </div>
                         </td>
                         <td class="px-6 py-4">

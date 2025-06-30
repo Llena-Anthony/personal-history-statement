@@ -17,7 +17,7 @@ class CharacterReputationController extends Controller
         $user = Auth::user();
         
         // Get character references for this user
-        $characterReferences = CharacterReference::where('username', $user->username)
+        $characterReferences = CharacterReference::where('user_id', $user->id)
             ->where('ref_relationship', 'character_reference')
             ->get();
             
@@ -27,7 +27,7 @@ class CharacterReputationController extends Controller
         }
         
         // Get neighbors (stored as miscellaneous with type 'neighbor')
-        $neighbors = Miscellaneous::where('username', $user->username)
+        $neighbors = Miscellaneous::where('user_id', $user->id)
             ->where('misc_type', 'neighbor')
             ->get();
             
@@ -68,7 +68,7 @@ class CharacterReputationController extends Controller
             \Log::info('CharacterReputation validated data:', $validated);
 
             // Clear existing character references for this user
-            CharacterReference::where('username', $user->username)
+            CharacterReference::where('user_id', $user->id)
                 ->where('ref_relationship', 'character_reference')
                 ->delete();
 
@@ -77,7 +77,7 @@ class CharacterReputationController extends Controller
                 foreach ($request->character_references as $reference) {
                     if (!empty($reference['name']) || !empty($reference['address'])) {
                         CharacterReference::create([
-                            'username' => $user->username,
+                            'user_id' => $user->id,
                             'ref_name' => $reference['name'] ?? '',
                             'ref_address' => $reference['address'] ?? '',
                             'ref_occupation' => '',
@@ -90,7 +90,7 @@ class CharacterReputationController extends Controller
             }
 
             // Clear existing neighbors
-            Miscellaneous::where('username', $user->username)
+            Miscellaneous::where('user_id', $user->id)
                 ->where('misc_type', 'neighbor')
                 ->delete();
 
@@ -99,7 +99,7 @@ class CharacterReputationController extends Controller
                 foreach ($request->neighbors as $index => $neighbor) {
                     if (!empty($neighbor['name']) || !empty($neighbor['address'])) {
                         Miscellaneous::create([
-                            'username' => $user->username,
+                            'user_id' => $user->id,
                             'misc_type' => 'neighbor',
                             'misc_details' => json_encode([
                                 'name' => $neighbor['name'] ?? '',
@@ -111,10 +111,10 @@ class CharacterReputationController extends Controller
             }
 
             \Log::info('CharacterReputation after save:', [
-                'character_references' => CharacterReference::where('username', $user->username)
+                'character_references' => CharacterReference::where('user_id', $user->id)
                     ->where('ref_relationship', 'character_reference')
                     ->get()->toArray(),
-                'neighbors' => Miscellaneous::where('username', $user->username)
+                'neighbors' => Miscellaneous::where('user_id', $user->id)
                     ->where('misc_type', 'neighbor')
                     ->get()->toArray(),
             ]);

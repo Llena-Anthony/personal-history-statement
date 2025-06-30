@@ -13,7 +13,7 @@ class PlacesOfResidenceController extends Controller
     public function create()
     {
         // Load existing residence history data for autofill
-        $residenceHistory = ResidenceHistory::where('username', auth()->user()->username)->get();
+        $residenceHistory = ResidenceHistory::where('user_id', auth()->id())->get();
         
         $data = $this->getCommonViewData('places-of-residence');
         $data['residenceHistory'] = $residenceHistory;
@@ -62,7 +62,7 @@ class PlacesOfResidenceController extends Controller
             // Save residences
             foreach ($validated['residences'] as $residence) {
                 ResidenceHistory::updateOrCreate(
-                    ['username' => auth()->user()->username, 'address' => $residence['address']],
+                    ['user_id' => auth()->id(), 'address' => $residence['address']],
                     [
                         'from_date' => $residence['from_date'],
                         'to_date' => $residence['to_date'],
@@ -71,7 +71,7 @@ class PlacesOfResidenceController extends Controller
             }
 
             // Log residences after saving
-            \Log::info('ResidenceHistory after save:', ResidenceHistory::where('username', auth()->user()->username)->get()->toArray());
+            \Log::info('ResidenceHistory after save:', ResidenceHistory::where('user_id', auth()->id())->get()->toArray());
 
             return redirect()->route('phs.employment-history.create')
                 ->with('success', 'Places of residence saved successfully. Please continue with your employment history.');
@@ -86,5 +86,28 @@ class PlacesOfResidenceController extends Controller
             }
             return back()->with('error', 'An error occurred while saving your places of residence. Please try again.');
         }
+    }
+
+    /**
+     * Get the list of PHS sections for progress calculation.
+     *
+     * @return array
+     */
+    protected function getSections()
+    {
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'personal-characteristics',
+            'marital-status',
+            'family-history',
+            'organization',
+            'miscellaneous',
+        ];
     }
 } 
