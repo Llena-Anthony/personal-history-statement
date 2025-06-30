@@ -34,4 +34,9 @@ class Child extends Model
     {
         return $this->belongsTo(NameDetails::class, 'name_id');
     }
+
+    public function nameDetails()
+    {
+        return $this->belongsTo(NameDetails::class, 'name_id');
+    }
 } 

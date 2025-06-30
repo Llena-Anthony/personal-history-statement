@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('phs.family-background.store') }}" class="space-y-10">
+    <form method="POST" action="{{ route('phs.family-background.store') }}" autocomplete="off" class="space-y-10">
         @csrf
         <!-- Father's Information -->
         <div class="bg-white shadow-lg rounded-2xl border border-gray-200 p-8 mb-8">
@@ -26,19 +26,19 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                    <input type="text" name="father_first_name" value="{{ old('father_first_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
+                    <input type="text" name="father_first_name" value="{{ old('father_first_name', $fatherName->first_name ?? '') }}" autocomplete="new-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                    <input type="text" name="father_middle_name" value="{{ old('father_middle_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
+                    <input type="text" name="father_middle_name" value="{{ old('father_middle_name', $fatherName->middle_name ?? '') }}" autocomplete="new-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                    <input type="text" name="father_last_name" value="{{ old('father_last_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter last name">
+                    <input type="text" name="father_last_name" value="{{ old('father_last_name', $fatherName->last_name ?? '') }}" autocomplete="new-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter last name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Suffix</label>
-                    <input type="text" name="father_suffix" value="{{ old('father_suffix') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="e.g., Jr., Sr., III">
+                    <input type="text" name="father_suffix" value="{{ old('father_suffix', $familyBackground->father_suffix ?? '') }}" autocomplete="new-password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="e.g., Jr., Sr., III">
                 </div>
             </div>
             <!-- Birth Information -->
@@ -50,95 +50,47 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth</label>
-                    <input type="text" name="father_birth_place" value="{{ old('father_birth_place') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of birth">
+                    <input type="text" name="father_birth_place" value="{{ old('father_birth_place') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of birth">
                 </div>
-            </div>
-            <!-- Employment -->
-            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-briefcase mr-2 text-[#D4AF37]"></i>Employment</h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                    <input type="text" name="father_occupation" value="{{ old('father_occupation') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
+                    <input type="text" name="father_occupation" value="{{ old('father_occupation') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
-                    <input type="text" name="father_employer" value="{{ old('father_employer') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
+                    <input type="text" name="father_employer" value="{{ old('father_employer') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Place of Employment</label>
-                    <input type="text" name="father_place_of_employment" value="{{ old('father_place_of_employment') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of employment">
+                    <input type="text" name="father_place_of_employment" value="{{ old('father_place_of_employment') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of employment">
                 </div>
             </div>
             <!-- Address -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="father_complete_address" value="{{ old('father_complete_address', $familyBackground->father_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="father_complete_address" value="{{ old('father_complete_address', $familyBackground->father_complete_address ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
-            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
-            <div class="mb-2 px-2 py-2 bg-blue-50 rounded text-xs text-blue-800 border border-blue-100">
-                <strong>Instructions:</strong> Select the type of citizenship. If dual, write both citizenships. If naturalized, give date and place where naturalized.
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#D4AF37]"></i>Citizenship</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship Type</label>
-                    <select name="father_citizenship_type" id="father_citizenship_type" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" onchange="toggleCitizenshipFields('father')">
-                        <option value="Single" {{ old('father_citizenship_type') == 'Single' ? 'selected' : '' }}>Single</option>
-                        <option value="Dual" {{ old('father_citizenship_type') == 'Dual' ? 'selected' : '' }}>Dual</option>
-                        <option value="Naturalized" {{ old('father_citizenship_type') == 'Naturalized' ? 'selected' : '' }}>Naturalized</option>
-                    </select>
-                </div>
-                <div id="father_citizenship_single" class="citizenship-group">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                    <input type="text" name="father_citizenship" value="{{ old('father_citizenship') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
-                </div>
-                <div id="father_citizenship_dual" class="citizenship-group hidden md:col-span-2">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship 1</label>
-                            <input type="text" name="father_citizenship_dual_1" value="{{ old('father_citizenship_dual_1') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first citizenship">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship 2</label>
-                            <input type="text" name="father_citizenship_dual_2" value="{{ old('father_citizenship_dual_2') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter second citizenship">
-                        </div>
-                    </div>
-                </div>
-                <div id="father_citizenship_naturalized" class="citizenship-group hidden md:col-span-2">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                            <input type="text" name="father_citizenship_naturalized" value="{{ old('father_citizenship_naturalized') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Naturalization (Month and Year)</label>
-                            <div class="flex space-x-1">
-                                <select name="father_naturalized_month" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                                    <option value="">Month</option>
-                                    <option value="01" {{ old('father_naturalized_month') == '01' ? 'selected' : '' }}>January</option>
-                                    <option value="02" {{ old('father_naturalized_month') == '02' ? 'selected' : '' }}>February</option>
-                                    <option value="03" {{ old('father_naturalized_month') == '03' ? 'selected' : '' }}>March</option>
-                                    <option value="04" {{ old('father_naturalized_month') == '04' ? 'selected' : '' }}>April</option>
-                                    <option value="05" {{ old('father_naturalized_month') == '05' ? 'selected' : '' }}>May</option>
-                                    <option value="06" {{ old('father_naturalized_month') == '06' ? 'selected' : '' }}>June</option>
-                                    <option value="07" {{ old('father_naturalized_month') == '07' ? 'selected' : '' }}>July</option>
-                                    <option value="08" {{ old('father_naturalized_month') == '08' ? 'selected' : '' }}>August</option>
-                                    <option value="09" {{ old('father_naturalized_month') == '09' ? 'selected' : '' }}>September</option>
-                                    <option value="10" {{ old('father_naturalized_month') == '10' ? 'selected' : '' }}>October</option>
-                                    <option value="11" {{ old('father_naturalized_month') == '11' ? 'selected' : '' }}>November</option>
-                                    <option value="12" {{ old('father_naturalized_month') == '12' ? 'selected' : '' }}>December</option>
-                                </select>
-                                <input type="number" name="father_naturalized_year" min="1900" max="2030" value="{{ old('father_naturalized_year') }}" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Year">
-                            </div>
+                    <input type="text" name="father_citizenship" value="{{ old('father_citizenship') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter citizenship">
                 </div>
                 <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2 mt-2">Place of Naturalization</label>
-                            <input type="text" name="father_naturalized_place" value="{{ old('father_naturalized_place') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of naturalization">
-                        </div>
-                    </div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship 1</label>
+                    <input type="text" name="father_citizenship_dual_1" value="{{ old('father_citizenship_dual_1') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship 2</label>
+                    <input type="text" name="father_citizenship_dual_2" value="{{ old('father_citizenship_dual_2') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
                 </div>
             </div>
+            <!-- Remove button for dynamic siblings (hidden for the first entry) -->
+            <button type="button" class="remove-sibling absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors hidden">
+                <i class="fas fa-times-circle"></i>
+            </button>
         </div>
         <!-- Mother's Information -->
         <div class="bg-white shadow-lg rounded-2xl border border-gray-200 p-8 mb-8">
@@ -153,19 +105,19 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                    <input type="text" name="mother_first_name" value="{{ old('mother_first_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
+                    <input type="text" name="mother_first_name" value="{{ old('mother_first_name') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                    <input type="text" name="mother_middle_name" value="{{ old('mother_middle_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
+                    <input type="text" name="mother_middle_name" value="{{ old('mother_middle_name') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                    <input type="text" name="mother_last_name" value="{{ old('mother_last_name') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter last name">
+                    <input type="text" name="mother_last_name" value="{{ old('mother_last_name') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter last name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Suffix</label>
-                    <input type="text" name="mother_suffix" value="{{ old('mother_suffix') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="e.g., Jr., Sr., III">
+                    <input type="text" name="mother_suffix" value="{{ old('mother_suffix') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="e.g., Jr., Sr., III">
                 </div>
             </div>
             <!-- Birth Information -->
@@ -177,7 +129,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth</label>
-                    <input type="text" name="mother_birth_place" value="{{ old('mother_birth_place') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of birth">
+                    <input type="text" name="mother_birth_place" value="{{ old('mother_birth_place') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of birth">
                 </div>
             </div>
             <!-- Employment -->
@@ -185,22 +137,22 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                    <input type="text" name="mother_occupation" value="{{ old('mother_occupation') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
+                    <input type="text" name="mother_occupation" value="{{ old('mother_occupation') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
-                    <input type="text" name="mother_employer" value="{{ old('mother_employer') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
+                    <input type="text" name="mother_employer" value="{{ old('mother_employer') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Place of Employment</label>
-                    <input type="text" name="mother_place_of_employment" value="{{ old('mother_place_of_employment') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of employment">
+                    <input type="text" name="mother_place_of_employment" value="{{ old('mother_place_of_employment') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of employment">
                 </div>
             </div>
             <!-- Address -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                <input type="text" name="mother_complete_address" value="{{ old('mother_complete_address', $familyBackground->mother_complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                <input type="text" name="mother_complete_address" value="{{ old('mother_complete_address', $familyBackground->mother_complete_address ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
             </div>
             <!-- Citizenship -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
@@ -218,17 +170,17 @@
                 </div>
                 <div id="mother_citizenship_single" class="citizenship-group">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                    <input type="text" name="mother_citizenship" value="{{ old('mother_citizenship') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
+                    <input type="text" name="mother_citizenship" value="{{ old('mother_citizenship') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
                 </div>
                 <div id="mother_citizenship_dual" class="citizenship-group hidden md:col-span-2">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship 1</label>
-                            <input type="text" name="mother_citizenship_dual_1" value="{{ old('mother_citizenship_dual_1') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first citizenship">
+                            <input type="text" name="mother_citizenship_dual_1" value="{{ old('mother_citizenship_dual_1') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter first citizenship">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship 2</label>
-                            <input type="text" name="mother_citizenship_dual_2" value="{{ old('mother_citizenship_dual_2') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter second citizenship">
+                            <input type="text" name="mother_citizenship_dual_2" value="{{ old('mother_citizenship_dual_2') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter second citizenship">
                         </div>
                     </div>
                 </div>
@@ -236,7 +188,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                            <input type="text" name="mother_citizenship_naturalized" value="{{ old('mother_citizenship_naturalized') }}" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
+                            <input type="text" name="mother_citizenship_naturalized" value="{{ old('mother_citizenship_naturalized') }}" autocomplete="off" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter citizenship">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Naturalization (Month and Year)</label>
@@ -261,7 +213,7 @@
                 </div>
                 <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2 mt-2">Place of Naturalization</label>
-                            <input type="text" name="mother_naturalized_place" value="{{ old('mother_naturalized_place') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of naturalization">
+                            <input type="text" name="mother_naturalized_place" value="{{ old('mother_naturalized_place') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of naturalization">
                         </div>
                     </div>
                 </div>
@@ -282,15 +234,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                            <input type="text" name="siblings[0][first_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
+                            <input type="text" name="siblings[0][first_name]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                            <input type="text" name="siblings[0][middle_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
+                            <input type="text" name="siblings[0][middle_name]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                            <input type="text" name="siblings[0][last_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus-border-[#1B365D] transition-colors" placeholder="Enter last name">
+                            <input type="text" name="siblings[0][last_name]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus-border-[#1B365D] transition-colors" placeholder="Enter last name">
                         </div>
                         <div></div>
                     </div>
@@ -308,33 +260,33 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                            <input type="text" name="siblings[0][occupation]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
+                            <input type="text" name="siblings[0][occupation]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
-                            <input type="text" name="siblings[0][employer]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
+                            <input type="text" name="siblings[0][employer]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Employer Address</label>
-                            <input type="text" name="siblings[0][employer_address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer address">
+                            <input type="text" name="siblings[0][employer_address]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer address">
                         </div>
                     </div>
                     <!-- Address -->
                     <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                        <input type="text" name="siblings[0][complete_address]" value="{{ old('siblings.' . $loop->index . '.complete_address', $sibling->complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                        <input type="text" name="siblings[0][complete_address]" autocomplete="off" value="{{ old('siblings.0.complete_address', $sibling->complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
                     </div>
                     <!-- Citizenship -->
                     <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                            <input type="text" name="siblings[0][citizenship]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter citizenship">
+                            <input type="text" name="siblings[0][citizenship]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter citizenship">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship (if any)</label>
-                            <input type="text" name="siblings[0][dual_citizenship]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
+                            <input type="text" name="siblings[0][dual_citizenship]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
                         </div>
                     </div>
                     <!-- Remove button for dynamic siblings (hidden for the first entry) -->
@@ -348,15 +300,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
-                                <input type="text" name="siblings[__INDEX__][first_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
+                                <input type="text" name="siblings[__INDEX__][first_name]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter first name">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                                <input type="text" name="siblings[__INDEX__][middle_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
+                                <input type="text" name="siblings[__INDEX__][middle_name]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter middle name">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
-                                <input type="text" name="siblings[__INDEX__][last_name]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus-border-[#1B365D] transition-colors" placeholder="Enter last name">
+                                <input type="text" name="siblings[__INDEX__][last_name]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus-border-[#1B365D] transition-colors" placeholder="Enter last name">
                             </div>
                             <div></div>
                         </div>
@@ -372,31 +324,31 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
-                                <input type="text" name="siblings[__INDEX__][occupation]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
+                                <input type="text" name="siblings[__INDEX__][occupation]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
-                                <input type="text" name="siblings[__INDEX__][employer]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
+                                <input type="text" name="siblings[__INDEX__][employer]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Employer Address</label>
-                                <input type="text" name="siblings[__INDEX__][employer_address]" value="{{ old('siblings.' . $loop->index . '.employer_address', $sibling->employer_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer address">
+                                <input type="text" name="siblings[__INDEX__][employer_address]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer address">
                             </div>
                         </div>
                         <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Complete Address</label>
-                            <input type="text" name="siblings[__INDEX__][complete_address]" value="{{ old('siblings.' . $loop->index . '.complete_address', $sibling->complete_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
+                            <input type="text" name="siblings[__INDEX__][complete_address]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter complete address">
                         </div>
                         <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-passport mr-2 text-[#1B365D]"></i>Citizenship</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                                <input type="text" name="siblings[__INDEX__][citizenship]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter citizenship">
+                                <input type="text" name="siblings[__INDEX__][citizenship]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter citizenship">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Dual Citizenship (if any)</label>
-                                <input type="text" name="siblings[__INDEX__][dual_citizenship]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
+                                <input type="text" name="siblings[__INDEX__][dual_citizenship]" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter dual citizenship">
                             </div>
                         </div>
                         <!-- Remove button for all siblings (visibility controlled by JS) -->

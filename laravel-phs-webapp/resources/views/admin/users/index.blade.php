@@ -21,7 +21,7 @@
             <div class="text-right bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                 <div class="text-sm text-gray-500 font-medium">Total Users</div>
                 <div class="text-3xl font-bold text-[#1B365D]">{{ $users->total() }}</div>
-                <div class="text-xs text-green-600 mt-1">
+                <div class="text-xs text-[#D4AF37] mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>
                     {{ $users->where('created_at', '>=', now()->subDays(30))->count() }} this month
                 </div>
@@ -67,34 +67,34 @@
 
     <!-- Success Messages with Enhanced Styling -->
     @if(session('generated_credentials'))
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 animate-fade-in">
+    <div class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10 border border-[#1B365D]/20 rounded-xl p-4 animate-fade-in">
         <div class="flex items-start">
             <div class="flex-shrink-0">
-                <i class="fas fa-key text-blue-500 text-xl mt-1"></i>
+                <i class="fas fa-key text-[#1B365D] text-xl mt-1"></i>
             </div>
             <div class="ml-3 flex-1">
-                <h3 class="text-sm font-medium text-blue-800">Credentials Generated</h3>
+                <h3 class="text-sm font-medium text-[#1B365D]">Credentials Generated</h3>
                     <div class="mt-2 space-y-2">
-                    <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-blue-200">
+                    <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-[#1B365D]/20">
                         <div>
                             <span class="text-xs font-medium text-gray-500">Username:</span>
                             <span class="text-sm font-mono text-gray-900 ml-2">{{ session('generated_credentials')['username'] }}</span>
                         </div>
-                        <button onclick="copyToClipboard('{{ session('generated_credentials')['username'] }}')" class="text-blue-600 hover:text-blue-800 p-1 rounded">
+                        <button onclick="copyToClipboard('{{ session('generated_credentials')['username'] }}')" class="text-[#1B365D] hover:text-[#2B4B7D] p-1 rounded">
                                 <i class="fas fa-copy"></i>
                             </button>
                     </div>
-                    <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-blue-200">
+                    <div class="flex items-center justify-between bg-white p-3 rounded-lg border border-[#1B365D]/20">
                         <div>
                             <span class="text-xs font-medium text-gray-500">Password:</span>
                             <span class="text-sm font-mono text-gray-900 ml-2">{{ session('generated_credentials')['password'] }}</span>
                         </div>
-                        <button onclick="copyToClipboard('{{ session('generated_credentials')['password'] }}')" class="text-blue-600 hover:text-blue-800 p-1 rounded">
+                        <button onclick="copyToClipboard('{{ session('generated_credentials')['password'] }}')" class="text-[#1B365D] hover:text-[#2B4B7D] p-1 rounded">
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
                     </div>
-                <div class="mt-3 text-xs text-blue-600">
+                <div class="mt-3 text-xs text-[#1B365D]">
                     <i class="fas fa-info-circle mr-1"></i>
                     These credentials have been sent to the user's email address.
                 </div>
@@ -105,17 +105,17 @@
 
     <!-- Enhanced Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl shadow-sm p-6 border border-green-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-user-check text-green-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#1B365D]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-check text-[#1B365D] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Active Users</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $users->where('is_active', true)->count() }}</p>
-                    <p class="text-xs text-green-600 mt-1">
+                    <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-arrow-up mr-1"></i>
                         {{ number_format(($users->where('is_active', true)->count() / max($users->count(), 1)) * 100, 1) }}% of total
                     </p>
@@ -123,17 +123,17 @@
             </div>
         </div>
         
-        <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl shadow-sm p-6 border border-red-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#D4AF37]/10 to-[#B38F2A]/10 rounded-xl shadow-sm p-6 border border-[#D4AF37]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-user-times text-red-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-times text-[#D4AF37] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Disabled Users</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $users->where('is_active', false)->count() }}</p>
-                    <p class="text-xs text-red-600 mt-1">
+                    <p class="text-xs text-[#D4AF37] mt-1">
                         <i class="fas fa-arrow-down mr-1"></i>
                         {{ number_format(($users->where('is_active', false)->count() / max($users->count(), 1)) * 100, 1) }}% of total
                     </p>
@@ -141,17 +141,17 @@
             </div>
         </div>
         
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-sm p-6 border border-blue-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-user-shield text-blue-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#1B365D]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-shield text-[#1B365D] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Administrators</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $users->where('usertype', 'admin')->count() }}</p>
-                    <p class="text-xs text-blue-600 mt-1">
+                    <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-shield-alt mr-1"></i>
                         System access
                     </p>
@@ -159,17 +159,17 @@
             </div>
         </div>
         
-        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-sm p-6 border border-yellow-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#D4AF37]/10 to-[#B38F2A]/10 rounded-xl shadow-sm p-6 border border-[#D4AF37]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-users text-yellow-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-users text-[#D4AF37] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Personnels</p>
                     <p class="text-2xl font-bold text-gray-900">{{ $users->where('usertype', 'personnel')->count() }}</p>
-                    <p class="text-xs text-yellow-600 mt-1">
+                    <p class="text-xs text-[#D4AF37] mt-1">
                         <i class="fas fa-user-tie mr-1"></i>
                         Total personnel
                     </p>
@@ -204,15 +204,15 @@
     <div class="bg-white rounded-xl shadow-sm overflow-hidden animate-scale-in border border-gray-200">
         <div class="overflow-x-auto">
             <table class="w-full divide-y divide-gray-200">
-                <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                <thead class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D]">
                     <tr>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                             <span>User</span>
                         </th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User Type</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Organic Group</th>
-                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Contact</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">User Type</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Organic Group</th>
+                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -233,7 +233,7 @@
                                         <div class="text-sm font-semibold text-gray-900">{{ $user->name }}</div>
                                         <div class="text-sm text-gray-500 font-mono">{{ '@' . $user->username }}</div>
                                         @if($user->is_admin)
-                                        <div class="text-xs text-purple-600 font-medium mt-1">
+                                        <div class="text-xs text-[#1B365D] font-medium mt-1">
                                             <i class="fas fa-crown mr-1"></i>Admin Access
                                         </div>
                                         @endif
@@ -250,21 +250,21 @@
                         </td>
                         <td class="px-6 py-4">
                             <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full 
-                                {{ $user->usertype === 'admin' ? 'bg-purple-100 text-purple-800 border border-purple-200' : 
-                                   ($user->usertype === 'personnel' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-green-100 text-green-800 border-green-200') }}">
+                                {{ $user->usertype === 'admin' ? 'bg-[#1B365D]/20 text-[#1B365D] border border-[#1B365D]/30' : 
+                                   ($user->usertype === 'personnel' ? 'bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30' : 'bg-[#1B365D]/20 text-[#1B365D] border-[#1B365D]/30') }}">
                                 <i class="fas {{ $user->usertype === 'admin' ? 'fa-user-shield' : ($user->usertype === 'personnel' ? 'fa-user-tie' : 'fa-user') }} mr-1"></i>
                                 <span class="align-middle">{{ ucfirst($user->usertype) }}</span>
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 border border-gray-200">
+                            <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30">
                                 <span class="align-middle">{{ ucfirst($user->organic_role) }}</span>
                             </span>
                         </td>
                         <td class="px-6 py-4 text-center">
                             <div class="flex items-center justify-center gap-1">
                                 <a href="{{ route('admin.users.edit', $user) }}" 
-                                   class="text-[#1B365D] hover:text-[#2B4B7D] p-2 rounded-lg hover:bg-blue-50 transition-all duration-200 group-hover:bg-blue-50" 
+                                   class="text-[#1B365D] hover:text-[#2B4B7D] p-2 rounded-lg hover:bg-[#1B365D]/10 transition-all duration-200 group-hover:bg-[#1B365D]/10" 
                                    title="Edit User">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -275,8 +275,8 @@
                     <tr>
                         <td colspan="5" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center">
-                                <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fas fa-users text-gray-400 text-3xl"></i>
+                                <div class="w-20 h-20 bg-[#1B365D]/10 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-users text-[#1B365D] text-3xl"></i>
                                 </div>
                                 <h3 class="text-lg font-medium text-gray-900 mb-2">No users found</h3>
                                 <p class="text-gray-500 mb-4 max-w-md">Get started by creating your first user account. You can add administrators, personnel, and client users.</p>
@@ -293,7 +293,7 @@
         </div>
         
         @if($users->hasPages())
-        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <div class="px-6 py-4 border-t border-gray-200 bg-[#1B365D]/5">
             {{ $users->links() }}
         </div>
         @endif
@@ -303,13 +303,13 @@
 <!-- Enhanced User Details Modal -->
 <div id="userDetailsModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50 p-4">
     <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full mx-auto max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-[#1B365D] to-[#2B4B7D]">
             <div class="flex items-center justify-between">
-                <h3 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                    <i class="fas fa-user-circle text-[#1B365D]"></i>
+                <h3 class="text-xl font-semibold text-white flex items-center gap-2">
+                    <i class="fas fa-user-circle text-[#D4AF37]"></i>
                     User Details
                 </h3>
-                <button onclick="closeUserDetailsModal()" class="text-gray-400 hover:text-gray-600 p-2 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                <button onclick="closeUserDetailsModal()" class="text-white/80 hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-200">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -326,15 +326,15 @@ function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
         const button = event.currentTarget;
         const originalIcon = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-check text-green-600"></i>';
-        button.classList.add('text-green-600');
+        button.innerHTML = '<i class="fas fa-check text-[#1B365D]"></i>';
+        button.classList.add('text-[#1B365D]');
         
         // Show toast notification
         showToast('Copied to clipboard!', 'success');
         
         setTimeout(() => {
             button.innerHTML = originalIcon;
-            button.classList.remove('text-green-600');
+            button.classList.remove('text-[#1B365D]');
         }, 2000);
     }).catch(() => {
         showToast('Failed to copy to clipboard', 'error');
@@ -345,8 +345,8 @@ function copyToClipboard(text) {
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full ${
-        type === 'success' ? 'bg-green-500' : 
-        type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+        type === 'success' ? 'bg-[#1B365D]' : 
+        type === 'error' ? 'bg-[#D4AF37]' : 'bg-[#1B365D]'
     }`;
     toast.textContent = message;
     
@@ -397,15 +397,11 @@ function viewUserDetails(userId) {
         .catch(error => {
             content.innerHTML = `
                 <div class="text-center py-12">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                    <div class="w-16 h-16 bg-[#D4AF37]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-exclamation-triangle text-[#D4AF37] text-2xl"></i>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to load user details</h3>
-                    <p class="text-gray-500">Please try again later.</p>
-                    <button onclick="viewUserDetails(${userId})" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-[#1B365D] hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200">
-                        <i class="fas fa-redo mr-2"></i>
-                        Retry
-                    </button>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Error Loading Details</h3>
+                    <p class="text-gray-500">Failed to load user details. Please try again.</p>
                 </div>
             `;
         });
@@ -497,6 +493,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         }, 3000);
     }
+
+    // Add smooth scrolling to pagination
+    const paginationLinks = document.querySelectorAll('.pagination a');
+    paginationLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            if (href && href !== '#') {
+                window.location.href = href;
+            }
+        });
+    });
 });
 </script>
 

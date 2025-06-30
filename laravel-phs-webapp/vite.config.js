@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/print-prev.css',
+                'resources/js/activity-logs.js',
             ],
             refresh: true,
         }),

@@ -61,7 +61,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-                    <p class="text-gray-900">{{ $phs->date_of_birth ? $phs->date_of_birth->format('F j, Y') : 'Not provided' }}</p>
+                    <p class="text-gray-900">{{ ($phs && $phs->date_of_birth) ? $phs->date_of_birth->format('F j, Y') : 'Not provided' }}</p>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth</label>
