@@ -944,10 +944,26 @@
         const provinceSelect = document.getElementById(`${type}_province`);
         const citySelect = document.getElementById(`${type}_city`);
         const barangaySelect = document.getElementById(`${type}_barangay`);
-        document.getElementById(`${type}_region_name`).value = regionSelect && regionSelect.selectedIndex > 0 ? regionSelect.options[regionSelect.selectedIndex].text : '';
-        document.getElementById(`${type}_province_name`).value = provinceSelect && provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '';
-        document.getElementById(`${type}_city_name`).value = citySelect && citySelect.selectedIndex > 0 ? citySelect.options[citySelect.selectedIndex].text : '';
-        document.getElementById(`${type}_barangay_name`).value = barangaySelect && barangaySelect.selectedIndex > 0 ? barangaySelect.options[barangaySelect.selectedIndex].text : '';
+        
+        // Get hidden input elements with null checking
+        const regionNameInput = document.getElementById(`${type}_region_name`);
+        const provinceNameInput = document.getElementById(`${type}_province_name`);
+        const cityNameInput = document.getElementById(`${type}_city_name`);
+        const barangayNameInput = document.getElementById(`${type}_barangay_name`);
+        
+        // Set values only if elements exist
+        if (regionNameInput) {
+            regionNameInput.value = regionSelect && regionSelect.selectedIndex > 0 ? regionSelect.options[regionSelect.selectedIndex].text : '';
+        }
+        if (provinceNameInput) {
+            provinceNameInput.value = provinceSelect && provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '';
+        }
+        if (cityNameInput) {
+            cityNameInput.value = citySelect && citySelect.selectedIndex > 0 ? citySelect.options[citySelect.selectedIndex].text : '';
+        }
+        if (barangayNameInput) {
+            barangayNameInput.value = barangaySelect && barangaySelect.selectedIndex > 0 ? barangaySelect.options[barangaySelect.selectedIndex].text : '';
+        }
     }
 
     // On form submit, set hidden fields for both home and business

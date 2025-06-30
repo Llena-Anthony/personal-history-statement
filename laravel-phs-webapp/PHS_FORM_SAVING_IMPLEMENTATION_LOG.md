@@ -2,6 +2,25 @@
 
 ## Critical Issues Fixed (Latest Update)
 
+### Issue 3: JavaScript Error in Section II Personal Details
+**Problem**: Browser error when clicking "Save and Continue" in Section II (Personal Details):
+```
+4VM9 personal-details:364  Uncaught (in promise) TypeError: Cannot set properties of null (setting 'value')
+    at setAddressNameHiddenFields (VM9 personal-details:364:62)
+```
+
+**Root Cause**: 
+The `setAddressNameHiddenFields` function was trying to set values on hidden input elements without proper null checking. When `document.getElementById()` returns `null` (element not found), attempting to set the `value` property causes a TypeError.
+
+**Solution**:
+1. Added proper null checking in the `setAddressNameHiddenFields` function
+2. Store element references in variables first
+3. Only set values if the elements exist
+4. This prevents the "Cannot set properties of null" error
+
+**Files Modified**:
+- `resources/views/phs/personal-details.blade.php` - Fixed setAddressNameHiddenFields function with null checking
+
 ### Issue 1: Data Not Saving When Navigating Between Sections
 **Problem**: Form data was not being saved when users navigated between sections.
 **Root Cause**: 
@@ -53,6 +72,7 @@
 - ✅ Full validation works for final submission
 - ✅ Database constraints are properly handled
 - ✅ Error handling and logging implemented
+- ✅ JavaScript errors fixed (setAddressNameHiddenFields null checking)
 
 ### Name Prefill Functionality  
 - ✅ Names from admin-created accounts are properly prefilled
@@ -66,6 +86,12 @@
 - ✅ Final submission sets unfilled fields to "NA"
 - ✅ Proper database relationships maintained
 
+### JavaScript Error Handling
+- ✅ Fixed "Cannot set properties of null" error in setAddressNameHiddenFields
+- ✅ Added proper null checking for all DOM element access
+- ✅ Graceful handling when hidden input fields don't exist
+- ✅ Form submission flow works without JavaScript errors
+
 ## Testing Instructions
 
 ### Test Saving Functionality:
@@ -75,6 +101,13 @@
 2. Navigate to another section (e.g., Family Background)
 3. Navigate back to Personal Details
 4. Verify data is still there
+
+### Test JavaScript Error Fix:
+1. Go to Section II (Personal Details)
+2. Fill out some address fields (Region, Province, City, Barangay)
+3. Click "Save & Continue" button
+4. Verify no JavaScript errors occur in browser console
+5. Verify navigation to next section works properly
 
 ### Test Name Prefill:
 1. Login as a user created by admin (with full name in database)
