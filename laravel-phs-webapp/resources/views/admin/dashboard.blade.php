@@ -9,29 +9,33 @@
     <!-- Enhanced Header with Welcome Message -->
     <div class="relative overflow-hidden rounded-2xl shadow-xl">
         <!-- Background Image -->
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/pmabg1.png') }}');">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat welcome-banner-bg" style="background-image: url('{{ asset('images/pmabg1.png') }}');">
             <div class="absolute inset-0 bg-gradient-to-r from-[#1B365D]/90 to-[#2B4B7D]/80"></div>
         </div>
         
         <!-- Welcome Content -->
-        <div class="relative p-8 text-white">
+        <div class="relative p-8 text-white z-10 welcome-banner-content">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold mb-2">Welcome back, {{ auth()->user()->name }}! 👋</h1>
-                    <p class="text-white/80 text-lg">Here's what's happening with your system today</p>
-                    <div class="flex items-center mt-4 space-x-6 text-sm">
+                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, {{ auth()->user()->name ?? 'Administrator' }}! 👋</h1>
+                    <p class="text-white/80 text-lg welcome-banner-subtitle">Here's what's happening with your system today</p>
+                    <div class="flex items-center mt-4 space-x-6 text-sm welcome-banner-stats">
                         <div class="flex items-center">
                             <i class="fas fa-clock mr-2 text-[#D4AF37]"></i>
-                            <span id="current-time"></span>
+                            <span id="current-time" class="loading">Loading...</span>
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-users mr-2 text-[#D4AF37]"></i>
-                            <span>{{ $totalUsers }} total users</span>
+                            <span>{{ $totalUsers ?? 0 }} total users</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-calendar mr-2 text-[#D4AF37]"></i>
+                            <span id="current-date" class="loading">Loading...</span>
                         </div>
                     </div>
                 </div>
                 <div class="hidden lg:block">
-                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+                    <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
                         <i class="fas fa-chart-line text-4xl text-[#D4AF37]"></i>
                     </div>
                 </div>
@@ -457,33 +461,225 @@
 </div>
 
 <style>
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+/* Welcome Banner Styles */
+.welcome-banner-bg {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+    min-height: 200px;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+.welcome-banner-bg.fallback {
+    background-image: linear-gradient(135deg, #1B365D 0%, #2B4B7D 100%) !important;
+}
+
+/* Ensure proper text contrast */
+.text-white\/80 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Loading animation for time/date */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .welcome-banner-bg {
+        background-position: center center;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .welcome-banner-content {
+        padding: 1rem !important;
     }
+    
+    .welcome-banner-title {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+    
+    .welcome-banner-stats {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-banner-title {
+        font-size: 1.25rem !important;
+    }
+    
+    .welcome-banner-subtitle {
+        font-size: 0.875rem !important;
+    }
+}
+
+/* Enhanced animations */
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in {
+    animation: slideIn 0.6s ease-out;
 }
 
 .scale-in {
-    animation: fadeInUp 0.6s ease-out;
+    animation: scaleIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes slideIn {
+    from { 
+        transform: translateX(-20px); 
+        opacity: 0; 
+    }
+    to { 
+        transform: translateX(0); 
+        opacity: 1; 
+    }
+}
+
+@keyframes scaleIn {
+    from { 
+        transform: scale(0.95); 
+        opacity: 0; 
+    }
+    to { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+}
+
+/* Fallback styles for older browsers */
+.welcome-banner-bg {
+    background-color: #1B365D;
+}
+
+/* Ensure text is always readable */
+.welcome-banner-content {
+    position: relative;
+    z-index: 10;
+}
+
+.welcome-banner-content h1,
+.welcome-banner-content p,
+.welcome-banner-content span {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 </style>
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Update current time
+    // Welcome Banner Enhancement
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Welcome banner initialization started');
+        
+        // Handle background image error
+        const bgElement = document.querySelector('.welcome-banner-bg');
+        if (bgElement) {
+            console.log('Background element found, setting up image error handling');
+            const bgImage = new Image();
+            bgImage.onerror = function() {
+                console.log('Background image failed to load, using fallback');
+                bgElement.classList.add('fallback');
+            };
+            bgImage.onload = function() {
+                console.log('Background image loaded successfully');
+            };
+            bgImage.src = '{{ asset('images/pmabg1.png') }}';
+        } else {
+            console.warn('Background element not found');
+        }
+
+        // Handle user name display with better fallback
+        const welcomeTitle = document.querySelector('.welcome-banner-title');
+        if (welcomeTitle) {
+            console.log('Welcome title found:', welcomeTitle.textContent);
+            const userName = '{{ auth()->user()->name ?? "" }}';
+            if (userName && userName.trim() !== '') {
+                console.log('User name is set:', userName);
+            } else {
+                console.log('Using fallback administrator name');
+                welcomeTitle.textContent = 'Welcome back, Administrator! 👋';
+            }
+        } else {
+            console.warn('Welcome title not found');
+        }
+
+        // Enhanced time and date update with error handling
+        function updateWelcomeTime() {
+            try {
+                const now = new Date();
+                const timeElement = document.getElementById('current-time');
+                const dateElement = document.getElementById('current-date');
+                
+                if (timeElement) {
+                    timeElement.textContent = now.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    timeElement.classList.remove('loading');
+                } else {
+                    console.warn('Time element not found');
+                }
+                
+                if (dateElement) {
+                    dateElement.textContent = now.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    dateElement.classList.remove('loading');
+                } else {
+                    console.warn('Date element not found');
+                }
+            } catch (error) {
+                console.error('Error updating time/date:', error);
+            }
+        }
+
+        // Update time immediately and then every second
+        console.log('Setting up time updates');
+        updateWelcomeTime();
+        const timeInterval = setInterval(updateWelcomeTime, 1000);
+
+        // Add animation classes to welcome banner
+        const welcomeBanner = document.querySelector('.relative.overflow-hidden.rounded-2xl.shadow-xl');
+        if (welcomeBanner) {
+            console.log('Adding animation to welcome banner');
+            welcomeBanner.classList.add('fade-in');
+        } else {
+            console.warn('Welcome banner element not found');
+        }
+        
+        // Cleanup function for interval
+        window.addEventListener('beforeunload', function() {
+            clearInterval(timeInterval);
+        });
+        
+        console.log('Welcome banner initialization completed');
+    });
+
+    // Update current time (legacy function for compatibility)
     function updateTime() {
         const now = new Date();
         const timeElement = document.getElementById('current-time');
@@ -500,133 +696,131 @@
         }
     }
 
-    // Update time immediately and then every minute
-    document.addEventListener('DOMContentLoaded', function() {
-        updateTime(); // Set initial time
-        setInterval(updateTime, 60000); // Update every minute
-    });
-
     // Enhanced Submission Status Chart
-    const submissionStatusCtx = document.getElementById('submissionStatusChart').getContext('2d');
-    new Chart(submissionStatusCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Pending', 'Reviewed', 'Approved', 'Rejected'],
-            datasets: [{
-                data: [
-                    {{ $submissionStats['pending'] ?? 0 }},
-                    {{ $submissionStats['reviewed'] ?? 0 }},
-                    {{ $submissionStats['approved'] ?? 0 }},
-                    {{ $submissionStats['rejected'] ?? 0 }}
-                ],
-                backgroundColor: [
-                    '#D4AF37', // PMA Gold
-                    '#1B365D', // PMA Navy
-                    '#34D399', // Green
-                    '#F87171'  // Red
-                ],
-                borderWidth: 0,
-                hoverOffset: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true,
-                        pointStyle: 'circle'
+    const submissionStatusCtx = document.getElementById('submissionStatusChart');
+    if (submissionStatusCtx) {
+        new Chart(submissionStatusCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Reviewed', 'Approved', 'Rejected'],
+                datasets: [{
+                    data: [
+                        {{ $submissionStats['pending'] ?? 0 }},
+                        {{ $submissionStats['reviewed'] ?? 0 }},
+                        {{ $submissionStats['approved'] ?? 0 }},
+                        {{ $submissionStats['rejected'] ?? 0 }}
+                    ],
+                    backgroundColor: [
+                        '#D4AF37', // PMA Gold
+                        '#1B365D', // PMA Navy
+                        '#34D399', // Green
+                        '#F87171'  // Red
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(27, 54, 93, 0.9)',
+                        titleColor: '#D4AF37',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1
                     }
                 },
-                tooltip: {
-                    backgroundColor: 'rgba(27, 54, 93, 0.9)',
-                    titleColor: '#D4AF37',
-                    bodyColor: '#fff',
-                    borderColor: 'rgba(255, 255, 255, 0.1)',
-                    borderWidth: 1
-                }
-            },
-            cutout: '60%'
-        }
-    });
+                cutout: '60%'
+            }
+        });
+    }
 
     // Enhanced Monthly Submissions Chart
-    const monthlySubmissionsCtx = document.getElementById('monthlySubmissionsChart').getContext('2d');
-    new Chart(monthlySubmissionsCtx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($monthlyStats->pluck('month')) !!},
-            datasets: [{
-                label: 'PHS Submissions',
-                data: {!! json_encode($monthlyStats->pluck('phs_count')) !!},
-                borderColor: '#1B365D',
-                backgroundColor: 'rgba(27, 54, 93, 0.1)',
-                borderWidth: 3,
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#1B365D',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 6
-            }, {
-                label: 'PDS Submissions',
-                data: {!! json_encode($monthlyStats->pluck('pds_count')) !!},
-                borderColor: '#D4AF37',
-                backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                borderWidth: 3,
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#D4AF37',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                intersect: false,
-                mode: 'index'
+    const monthlySubmissionsCtx = document.getElementById('monthlySubmissionsChart');
+    if (monthlySubmissionsCtx) {
+        new Chart(monthlySubmissionsCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($monthlyStats->pluck('month')) !!},
+                datasets: [{
+                    label: 'PHS Submissions',
+                    data: {!! json_encode($monthlyStats->pluck('phs_count')) !!},
+                    borderColor: '#1B365D',
+                    backgroundColor: 'rgba(27, 54, 93, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#1B365D',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                }, {
+                    label: 'PDS Submissions',
+                    data: {!! json_encode($monthlyStats->pluck('pds_count')) !!},
+                    borderColor: '#D4AF37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#D4AF37',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
                     },
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.1)'
+                    x: {
+                        grid: {
+                            display: false
+                        }
                     }
                 },
-                x: {
-                    grid: {
-                        display: false
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(27, 54, 93, 0.9)',
+                        titleColor: '#D4AF37',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1
                     }
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        usePointStyle: true,
-                        pointStyle: 'circle',
-                        padding: 20
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(27, 54, 93, 0.9)',
-                    titleColor: '#D4AF37',
-                    bodyColor: '#fff',
-                    borderColor: 'rgba(255, 255, 255, 0.1)',
-                    borderWidth: 1
                 }
             }
-        }
-    });
+        });
+    }
 
     // Switch to Client View Info Modal
     function showSwitchInfo() {

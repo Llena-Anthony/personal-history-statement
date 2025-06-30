@@ -33,7 +33,24 @@
                         <i class="{{ $activityLog->action_icon }} text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <h1 class="text-2xl font-bold text-gray-900">{{ ucfirst(str_replace('_', ' ', $activityLog->action)) }}</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            @php
+                                $actionLabels = [
+                                    'access_own_phs' => 'Access',
+                                    'return_to_admin' => 'Return',
+                                    'login' => 'Login',
+                                    'logout' => 'Logout',
+                                    'create' => 'Create',
+                                    'update' => 'Update',
+                                    'delete' => 'Delete',
+                                    'submit' => 'Submit',
+                                    'enable' => 'Enable',
+                                    'disable' => 'Disable',
+                                    'password_reset' => 'Reset',
+                                ];
+                                echo $actionLabels[$activityLog->action] ?? ucfirst(explode('_', $activityLog->action)[0]);
+                            @endphp
+                        </h1>
                         <p class="text-gray-600">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('F d, Y \a\t h:i:s A') }}</p>
                     </div>
                 </div>
@@ -69,11 +86,11 @@
                                 <span class="font-medium text-gray-900">{{ $activityLog->user->email ?? 'N/A' }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Role:</span>
-                                <span class="font-medium text-gray-900">{{ ucfirst($activityLog->user->role ?? 'N/A') }}</span>
+                                <span class="text-gray-600">User Type:</span>
+                                <span class="font-medium text-gray-900">{{ ucfirst($activityLog->user->usertype ?? 'N/A') }}</span>
                             </div>
-        </div>
-        </div>
+                        </div>
+                    </div>
                     
                     <div class="bg-gray-50 rounded-xl p-6">
                         <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
@@ -83,8 +100,25 @@
                         <div class="space-y-3">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Action:</span>
-                                <span class="font-medium text-gray-900">{{ ucfirst(str_replace('_', ' ', $activityLog->action)) }}</span>
-        </div>
+                                <span class="font-medium text-gray-900">
+                                    @php
+                                        $actionLabels = [
+                                            'access_own_phs' => 'Access',
+                                            'return_to_admin' => 'Return',
+                                            'login' => 'Login',
+                                            'logout' => 'Logout',
+                                            'create' => 'Create',
+                                            'update' => 'Update',
+                                            'delete' => 'Delete',
+                                            'submit' => 'Submit',
+                                            'enable' => 'Enable',
+                                            'disable' => 'Disable',
+                                            'password_reset' => 'Reset',
+                                        ];
+                                        echo $actionLabels[$activityLog->action] ?? ucfirst(explode('_', $activityLog->action)[0]);
+                                    @endphp
+                                </span>
+                            </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Status:</span>
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full 

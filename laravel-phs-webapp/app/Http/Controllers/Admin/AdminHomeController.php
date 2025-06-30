@@ -108,7 +108,9 @@ class AdminHomeController extends Controller
             'user_id' => auth()->id(),
             'description' => 'Admin accessed their own PHS as an Academy member',
             'status' => 'success',
-            'action' => 'access_own_phs'
+            'action' => 'access_own_phs',
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent()
         ]);
 
         // Redirect to client dashboard

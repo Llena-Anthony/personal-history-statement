@@ -87,7 +87,9 @@ Route::middleware('auth')->group(function () {
             'user_id' => auth()->id(),
             'description' => 'Admin returned to admin view from PHS management',
             'status' => 'success',
-            'action' => 'return_to_admin'
+            'action' => 'return_to_admin',
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent()
         ]);
         
         return redirect()->route('admin.dashboard')->with('success', 'Returned to admin view.');
