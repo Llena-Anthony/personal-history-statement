@@ -75,6 +75,23 @@ Route::middleware('auth')->group(function () {
 
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
+    
+    // Return to Admin Route (for admins who switched to client view)
+    Route::get('/return-to-admin', function() {
+        // Clear the admin switch session
+        session()->forget('admin_switched_to_client');
+        session()->forget('admin_original_route');
+        
+        // Log the activity
+        \App\Models\ActivityLog::create([
+            'user_id' => auth()->id(),
+            'description' => 'Admin returned to admin view from PHS management',
+            'status' => 'success',
+            'action' => 'return_to_admin'
+        ]);
+        
+        return redirect()->route('admin.dashboard')->with('success', 'Returned to admin view.');
+    })->name('return.to.admin');
 
     // PHS Routes - Personal Details
     Route::get('/phs/personal-details', [PHSController::class, 'create'])->name('phs.create');
@@ -389,6 +406,9 @@ Route::middleware('auth')->group(function () {
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
+    
+    // Switch to Client View Route
+    Route::get('/switch-to-client', [AdminHomeController::class, 'switchToClient'])->name('switch.to.client');
 
     // Profile Management Routes
     Route::get('/profile', [App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');

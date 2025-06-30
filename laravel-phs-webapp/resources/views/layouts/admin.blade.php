@@ -668,6 +668,13 @@
                             <div class="font-bold text-white">Philippine Standard Time:</div>
                             <div id="ph-time-value-admin" class="text-yellow-400"></div>
                         </a>
+                        <!-- Access My PHS Button (aesthetic, bold) -->
+                        <a href="{{ route('admin.switch.to.client') }}"
+                           class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-full shadow-md transition-all duration-200 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                           style="box-shadow: 0 2px 8px 0 rgba(44, 114, 255, 0.10);">
+                            <i class="fas fa-file-alt text-lg"></i>
+                            Access My PHS
+                        </a>
                         <!-- Notifications -->
                         <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
                             <i class="fas fa-bell text-lg"></i>
@@ -761,6 +768,31 @@
             <!-- Content Area -->
             <div class="content-area">
                 <div class="content-scroll" id="mainContent">
+                    <!-- Success Messages -->
+                    @if(session('success'))
+                    <div id="success-message" class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg transition-opacity duration-500">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-green-800">
+                                    {{ session('success') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        setTimeout(function() {
+                            var msg = document.getElementById('success-message');
+                            if (msg) {
+                                msg.style.opacity = '0';
+                                setTimeout(function() { msg.style.display = 'none'; }, 500);
+                            }
+                        }, 3000);
+                    </script>
+                    @endif
+                    
                     @yield('content')
                 </div>
             </div>

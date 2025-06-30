@@ -92,4 +92,22 @@ class AdminHomeController extends Controller
 
         return view('admin.dashboard', $data);
     }
+
+    public function switchToClient()
+    {
+        // Store admin session data to remember the switch
+        session()->put('admin_switched_to_client', true);
+        session()->put('admin_original_route', request()->headers->get('referer'));
+        
+        // Log the activity
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'description' => 'Admin accessed their own PHS as an Academy member',
+            'status' => 'success',
+            'action' => 'access_own_phs'
+        ]);
+
+        // Redirect to client dashboard
+        return redirect()->route('client.dashboard')->with('success', 'Welcome to your PHS! You can now fill out and manage your Personal History Statement as an Academy member.');
+    }
 } 
