@@ -98,6 +98,8 @@
         </div>
         @endif
     </div>
+
+    {{-- Preview template --- Include username parameter --}}
     <a href="{{route('admin.phs.preview')}}"><hr><br>Print</a>
 </div>
 

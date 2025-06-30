@@ -74,13 +74,13 @@
                 <div class="font-bold"><span class="mr-[0.5in]">I.</span><span>PERSONAL DETAIL</span></div>
 
                 {{-- Signature --}}
-                <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                <div class="mt-[160pt] border-t-[2px] border-black w-[2.1in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
                     (Signature of Applicant)
                 </div>
 
                 {{-- Personal-A --}}
-                <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>
-                    Name:<div class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2"></div>
+                <div class="mt-[-170pt] flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>
+                    Name:<div id="app-name" class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2"></div>
                 </div>
                 <div class="ml-[1.8in] text-center">
                     <span class="mr-[0.9in]">(Last Name)</span>
@@ -90,59 +90,59 @@
 
                 {{-- Personal-B --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">B.</span>
-                    Rank:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
-                    AFPSN:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.65in] pl-2"></div>
-                    Br of Svc:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.7in] pl-2"></div>
+                    Rank:<div id="app-rank" class="border-b border-black text-[11pt] text-center ml-auto w-[1.2in]"></div>
+                    AFPSN:<div id="app-num" class="border-b border-black text-[11pt] text-center ml-auto w-[1.65in]"></div>
+                    Br of Svc:<div id="app-branch" class="border-b border-black text-[11pt] text-center ml-auto w-[1.7in]"></div>
                 </div>
 
                 {{-- Personal-C --}}
                 <div  class="flex ml-[0.6in]"><span class="mr-[0.5in]">C.</span>Present Job/Assignment:
-                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.45in] pl-2"></div>
+                    <div id="app-job" class="border-b border-black text-[11pt] text-left ml-auto w-[4.4in] pl-2"></div>
                 </div>
 
                 {{-- Personal-D --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">D.</span>Business or Duty Address:
-                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.35in] pl-2"></div>
+                    <div id="app-job-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[4.3in] pl-2"></div>
                 </div>
 
                 {{-- Personal-E --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Home Address:
-                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[5.1in] pl-2"></div>
+                    <div id="app-home-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[5.1in] pl-2"></div>
                 </div>
 
                 {{-- Personal-F --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">F.</span>
-                    Birth Date:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                    Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
+                    Birth Date:<div id="app-bdate" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    Place of Birth:<div id="app-bplace" class="border-b border-black text-[11pt] text-left ml-auto w-[2.95in] pl-2"></div>
                 </div>
 
                 {{-- Personal-G --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">G.</span>CHANGE IN NAME (If by Court Action, give details):
-                    <div class="border-b border-black text-[11pt] text-left ml-auto w-[2.6in] pl-2"></div>
+                    <div id="app-change-name" class="border-b border-black text-[11pt] text-left ml-auto w-[2.5in] pl-2"></div>
                 </div>
 
                 {{-- Personal-H --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">H.</span>
-                    NICKNAMES: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
-                    NATIONALITY:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
+                    NICKNAMES: <div id="app-nickname" class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
+                    NATIONALITY:<div id="app-nationality" class="border-b border-black text-[11pt] text-left ml-auto w-[1.2in] pl-2"></div>
                 </div>
 
                 {{-- Personal-I --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">I.</span>
-                    TAX IDENTIFICATION NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[2in] pl-2"></div>
-                    RELIGION:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    TAX IDENTIFICATION NR:<div class="app-tin border-b border-black text-[11pt] text-left ml-auto w-[2in] pl-2"></div>
+                    RELIGION:<div id="app-religion" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
                 </div>
 
                 {{-- Personal-J --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">J.</span>
-                    MOBILE NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                    EMAIL ADDRESS:<div class="border-b border-black text-[11pt] text-left ml-auto w-[2.5in] pl-2"></div>
+                    MOBILE NR:<div id="app-mobilenum" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    EMAIL ADDRESS:<div id="app-email" class="border-b border-black text-[11pt] text-left ml-auto w-[2.5in] pl-2"></div>
                 </div>
 
                 {{-- Personal-K --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">K.</span>
-                    PASSPORT NR:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
-                    DATE OF EXPIRATION:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.9in] pl-2"></div>
+                    PASSPORT NR:<div id="app-pass" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                    DATE OF EXPIRATION:<div id="app-pass-exp" class="border-b border-black text-[11pt] text-left ml-auto w-[1.9in] pl-2"></div>
                 </div>
 
                 {{-- Footer --}}
@@ -193,40 +193,40 @@
 
                     {{-- Characteristics-A --}}
                     <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>DESCRIPTION:
-                        Sex: <div class="border-b border-black text-[11pt] text-left ml-auto w-[1in] pl-2"></div>
-                        Age: <div class="border-b border-black text-[11pt] text-left ml-auto w-[0.5in] pl-2"></div>
-                        Height: (mtrs) <div class="border-b border-black text-[11pt] text-left ml-auto w-[0.5in] pl-2"></div>
-                        Weight: (kgs) <div class="border-b border-black text-[11pt] text-left ml-auto w-[0.5in] pl-2"></div>
+                        Sex: <div id="app-sex" class="border-b border-black text-[11pt] text-left ml-auto w-[1in] pl-2"></div>
+                        Age: <div id="app-age" class="border-b border-black text-[11pt] text-left ml-auto w-[0.5in] pl-2"></div>
+                        Height: (mtrs) <div id="app-ht" class="border-b border-black text-[11pt] text-left ml-auto w-[0.5in] pl-2"></div>
+                        Weight: (kgs) <div id="app-wt" class="border-b border-black text-[11pt] text-left ml-auto w-[0.5in] pl-2"></div>
                     </div>
 
                     <div class="flex ml-[1.25in]">Body Build: (Heavy, Medium, Light)
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.75in] pl-2"></div>
+                        <div id="app-build" class="border-b border-black text-[11pt] text-left ml-auto w-[3.75in] pl-2"></div>
                     </div>
 
                     <div class="flex ml-[1.25in]">Complexion: (Dark, Fair, Light)
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                        <div id="app-complexion" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
                         Color of eyes:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                        <div id="app-eyecolor" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
                     </div>
 
                     <div class="flex ml-[1.25in]">
-                        Color of Hair:<div class="border-b border-black text-[11pt] text-left ml-auto w-[0.8in] mr-[0.05in] pl-2"></div>
-                        Scar or Mark & Other distinguishing Feature:<div class="border-b border-black text-[11pt] text-left ml-auto w-[1.3in] pl-2"></div>
+                        Color of Hair:<div id="app-haircolor" class="border-b border-black text-[11pt] text-left ml-auto w-[0.8in] mr-[0.05in] pl-2"></div>
+                        Scar or Mark & Other distinguishing Feature:<div id="app-mark" class="border-b border-black text-[11pt] text-left ml-auto w-[1.3in] pl-2"></div>
                     </div>
 
 
                     {{-- Characteristics-B --}}
                     <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">B.</span>PHYSICAL CONDITION:</div>
                     <div class="flex ml-[1.25in]">Present state of health (Excellent, Good, Poor)
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
+                        <div id="app-healthstat" class="border-b border-black text-[11pt] text-left ml-auto w-[3in] pl-2"></div>
                     </div>
 
                     <div class="flex ml-[1.25in]">Recent Serious Illness:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.6in] pl-2"></div>
+                        <div id="app-illness" class="border-b border-black text-[11pt] text-left ml-auto w-[4.6in] pl-2"></div>
                     </div>
 
                     <div class="flex ml-[1.25in]">Blood Type:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[5.3in] pl-2"></div>
+                        <div id="app-bloodtype" class="border-b border-black text-[11pt] text-left ml-auto w-[5.3in] pl-2"></div>
                     </div>
 
                 {{-- Section III-Marital Status --}}
@@ -234,42 +234,44 @@
 
                     {{-- Marital-A --}}
                     <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>MARITAL STATUS:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.85in]"></div>
+                        <div id="app-maritalstat" class="border-b border-black text-[11pt] text-left ml-auto w-[4.85in]"></div>
                     </div>
                     <div class="text-center ml-auto w-[4.85in]">(Single, Married, Separated or Widowed)</div>
 
                     {{-- Marital-B --}}
                     <div class="flex ml-[0.6in]">
                         <span class="mr-[0.5in]">B.</span>NAME OF SPOUSE:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.7in]"></div>
+                        <div id="spouse-name" class="border-b border-black text-[11pt] text-left ml-auto w-[4.7in]"></div>
                     </div>
                     <div class="text-center ml-auto w-[5in]">(Full Name)</div>
 
-                    <div class="ml-[1.25in]">Date and Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
+                    <div class="flex ml-[1.25in]">Date and Place of Marriage:<div id="marriage-detail" class="border-b border-black text-[11pt] text-left ml-auto w-[4.2in]"></div></div>
 
-                    <div class="ml-[1.25in]">Complete Address:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
-
-                    <div class="ml-[1.25in]">Occupation/Employer/Place of Employment:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.2in]"></div>
+                    <div class="flex ml-[1.25in]">
+                        Birth Date:<div id="spouse-bdate" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+                        Place of Birth:<div id="spouse-bplace" class="border-b border-black text-[11pt] text-left ml-auto w-[2.95in] pl-2"></div>
                     </div>
-                    <div class="ml-[1.25in] border-b border-black align-bottom text-[11pt] text-left h-[20pt]"></div>
+                    <div class="flex ml-[1.25in]">Occupation/Employer/Place of Employment:
+                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[3in]"></div>
+                    </div>
+                    <div id="spouse-jobdetail" class="ml-[1.25in] border-b border-black align-bottom text-[11pt] text-left h-[20pt]"></div>
 
                     <div class="ml-[1.25in] flex">
                         <div>Contact Number:
-                            <div class="border-b border-black w-[1.15in] ml-[1.2in] pl-2 text-[11pt]"></div>
+                            <div id="spouse-mobilenum" class="border-b border-black w-[1.15in] ml-[1.2in] pl-2 text-[11pt]"></div>
                         </div>
                         <div class="pl-2"> Citizenship:
-                            <div class="border-b border-black w-[1.2in] ml-[0.8in] pl-2 text-[11pt]"></div>
+                            <div id="spuse-citizenship" class="border-b border-black w-[1.2in] ml-[0.8in] pl-2 text-[11pt]"></div>
                         </div>
                         <div>If dual,
-                            <div class="border-b border-black w-[1.3in] ml-[0.5in] pl-2 text-[11pt]"></div>
+                            <div id="spouse-dual" class="border-b border-black w-[1.3in] ml-[0.5in] pl-2 text-[11pt]"></div>
                         </div>
                     </div>
 
-                    <div class="ml-[6.2in]">(other Citizenship)</div>
+                    <div class="ml-[6.15in]">(other Citizenship)</div>
 
                     {{-- Signature --}}
-                    <div class="mt-[60pt] ml-[0.4in] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    <div class="mt-[60pt] ml-[0.2in] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
                         (Signature of Applicant)
                     </div>
 
@@ -319,7 +321,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="w-full text-center font-bold underline decoration-2">(Use back page for additional information)</div>
+                    <div class="ml-[0.6in] w-full text-center font-bold underline decoration-2">(Use back page for additional information)</div>
 
 
                 {{-- Section IV-Family History and Information --}}
@@ -328,13 +330,13 @@
                     {{-- Family-Father --}}
                     <div class="flex ml-[0.6in]">
                         <span class="mr-[0.5in]">A.</span>
-                        FATHER: <div class="border-b border-black text-[11pt] text-left ml-auto w-[5.4in]"></div>
+                        FATHER: <div id="father-name" class="border-b border-black text-[11pt] text-left ml-auto w-[5.4in]"></div>
                     </div>
                     <div class="text-center ml-[0.6in]">(Full Name)</div>
-                    <div class="ml-[1.25in]">Date and Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
-                    <div class="ml-[1.25in]">Complete Address:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
+                    <div class="ml-[1.25in]">Date and Place of Birth:<div id="father-birth" class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
+                    <div class="ml-[1.25in]">Complete Address:<div id="father-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
                     <div class="ml-[1.25in]">Occupation/Employer/Place of Employment:
-                        <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div>
+                        <div id="father-jobdetail" class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div>
                     </div>
 
                 {{-- Footer --}}
@@ -378,23 +380,23 @@
                 </div>
 
                 <div class="section-name mt-[65pt]">
-                    <div class="ml-[1.25in]">Citizenship: <span class="citizenship inline-block border-b border-black w-32 align-bottom"> </span>
+                    <div class="ml-[1.25in]">Citizenship: <span id="father-citizenship" class="inline-block border-b border-black w-32 align-bottom"> </span>
                         If dual, write both citizenship. If naturalized, give date and place where naturalized:
-                        <span class="citizenship inline-block border-b border-black w-[4.4in] align-bottom"> </span>
+                        <span id="father-dual" class="inline-block border-b border-black w-[4.4in] align-bottom"> </span>
                     </div>
 
                     {{-- Family-Mother --}}
                     <div class="flex ml-[0.6in]">
                         <span class="mr-[0.5in]">B.</span>
-                        Mother: <div class="border-b border-black text-[11pt] text-left ml-auto w-[5.6in]"></div>
+                        Mother: <div id="mother-name" class="border-b border-black text-[11pt] text-left ml-auto w-[5.6in]"></div>
                     </div>
 
-                    <div class="ml-[1.25in]">Date and Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
-                    <div class="ml-[1.25in]">Complete Address:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
-                    <div class="ml-[1.25in]">Occupation/Employer/Place of Employment: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div></div>
-                    <div class="ml-[1.25in]">Citizenship: <span class="citizenship inline-block border-b border-black w-32 align-bottom"> </span>
+                    <div class="ml-[1.25in]">Date and Place of Birth:<div id="mother-birth" class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
+                    <div class="ml-[1.25in]">Complete Address:<div id="mother-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
+                    <div class="ml-[1.25in]">Occupation/Employer/Place of Employment: <div id="mother-jobdetail" class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div></div>
+                    <div class="ml-[1.25in]">Citizenship: <span id="mother-citizenship" class="inline-block border-b border-black w-32 align-bottom"> </span>
                         If dual, write both citizenship. If naturalized, give date and place where naturalized:
-                        <span class="citizenship inline-block border-b border-black w-[4.5in] align-bottom"> </span>
+                        <span id="mother-dual" class="inline-block border-b border-black w-[4.5in] align-bottom"> </span>
                     </div>
 
                     {{-- Family-Siblings --}}
@@ -448,41 +450,41 @@
                     <div class="mt-[10pt]">
                         <div>
                             <span class="mr-[0.5in] ml-[0.6in]">D.</span>
-                            STEP-PARENT OR GUARDIAN: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.8in]"></div>
-                            <div class="pl-[1in] ml-auto w-[4in]">(Full Name)</div>
+                            STEP-PARENT OR GUARDIAN: <div id="guardian-name" class="border-b border-black text-[11pt] text-left ml-auto w-[3.8in]"></div>
+                            <div class="text-center ml-auto w-[4in]">(Full Name)</div>
                         </div>
-                        <div class="ml-[1.35in]">Date and Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
-                        <div class="ml-[1.35in]">Complete Address:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
-                        <div class="ml-[1.35in]">Occupation/Employer/Place of Employment: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div></div>
-                        <div class="ml-[1.35in]">Citizenship: <span class="citizenship inline-block border-b border-black w-32 align-bottom"> </span>
+                        <div class="ml-[1.35in]">Date and Place of Birth:<div id="guardian-birth" class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
+                        <div class="ml-[1.35in]">Complete Address:<div id="guardian-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
+                        <div class="ml-[1.35in]">Occupation/Employer/Place of Employment: <div id="guardian-jobdetail" class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div></div>
+                        <div class="ml-[1.35in]">Citizenship: <span id="guardian-citizenship" class="inline-block border-b border-black w-32 align-bottom"> </span>
                             If dual, write both citizenship. If naturalized, give date and place where naturalized:
-                            <span class="citizenship inline-block border-b border-black w-[4.4in] align-bottom"> </span>
+                            <span id="guardian-dual" class="inline-block border-b border-black w-[4.4in] align-bottom"> </span>
                         </div>
                     </div>
 
                     {{-- Signature --}}
-                    <div class="ml-[0.4in] mt-[75pt] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    <div class="ml-[0.25in] mt-[75pt] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
                         (Signature of Applicant)
                     </div>
 
                     {{-- Family-Father In Law --}}
                     <div class="mt-[-80pt] ml-[0.6in]">
                         <span class="mr-[0.5in]">E.</span>
-                        FATHER-IN-LAW: <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.9in]"></div>
+                        FATHER-IN-LAW: <div id="fil-name" class="border-b border-black text-[11pt] text-left ml-auto w-[4.9in]"></div>
                         <div class="pl-[1in] ml-auto w-[4.5in]">(Full Name)</div>
                     </div>
-                    <div class="ml-[1.35in]">Date and Place of Birth:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
-                    <div class="ml-[1.35in]">Complete Address:<div class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
-                    <div class="ml-[1.35in]">Occupation/Employer/Place of Employment: <div class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div></div>
-                    <div class="ml-[1.35in]">Citizenship: <span class="citizenship inline-block border-b border-black w-32 align-bottom"> </span>
+                    <div class="ml-[1.35in]">Date and Place of Birth:<div id="fil-birth" class="border-b border-black text-[11pt] text-left ml-auto w-[4.5in]"></div></div>
+                    <div class="ml-[1.35in]">Complete Address:<div id="fil-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div> </div>
+                    <div class="ml-[1.35in]">Occupation/Employer/Place of Employment: <div id="fil-jobdetail" class="border-b border-black text-[11pt] text-left ml-auto w-[3.1in]"></div></div>
+                    <div class="ml-[1.35in]">Citizenship: <span id="fil-citizenship" class="inline-block border-b border-black w-32 align-bottom"> </span>
                         If dual, write both citizenship. If naturalized, give date and place where naturalized:
-                        <span class="citizenship inline-block border-b border-black w-[4.4in] align-bottom"> </span>
+                        <span id="fil-dual" class="inline-block border-b border-black w-[4.4in] align-bottom"> </span>
                     </div>
 
                     {{-- Family-Mother In Law --}}
                     <div class="mt-[10pt] ml-[0.7in]">
                         <span class="mr-[0.5in]">F.</span>
-                        MOTHER-IN-LAW: <div class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div>
+                        MOTHER-IN-LAW: <div id="mil-name" class="border-b border-black text-[11pt] text-left ml-auto w-[4.8in]"></div>
                         <div class="pl-[1in] ml-auto w-[4.5in]">(Full Name)</div>
                     </div>
                 </div>
@@ -532,17 +534,17 @@
 
                 <div class="mt-[53pt] ml-[1.35in]">
                     <div>Date and Place of Birth:
-                        <div id="m-inlaw-birth" class="text-[11pt] text-left border-b border-black ml-auto w-[4.4in]"></div>
+                        <div id="mil-birth" class="text-[11pt] text-left border-b border-black ml-auto w-[4.4in]"></div>
                     </div>
                     <div>Complete Address:
-                        <div id="m-inlaw-birth" class="text-[11pt] text-left border-b border-black ml-auto w-[4.75in]"></div>
+                        <div id="mil-addr" class="text-[11pt] text-left border-b border-black ml-auto w-[4.75in]"></div>
                     </div>
                     <div>Occupation/Employer/Place of Employment:
-                        <div id="m-inlaw-birth" class="text-[11pt] text-left border-b border-black ml-auto w-[3in]"></div>
+                        <div id="mil-jobdetail" class="text-[11pt] text-left border-b border-black ml-auto w-[3in]"></div>
                     </div>
-                    <div>Citizenship: <span class="citizenship inline-block border-b border-black w-32 align-bottom"> </span>
+                    <div>Citizenship: <span id="mil-citizenship" class="inline-block border-b border-black w-32 align-bottom"> </span>
                         If dual, write both citizenship. If naturalized, give date and place where naturalized:
-                        <span class="citizenship inline-block border-b border-black w-[3in] align-bottom"> </span>
+                        <span id="mil-dual" class="inline-block border-b border-black w-[3in] align-bottom"> </span>
                     </div>
                 </div>
 
@@ -550,7 +552,7 @@
                 <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">V.</span>EDUCATIONAL BACKGROUND:</div>
 
                 {{-- Education-Elementary --}}
-                <table class="table-auto border-collapse w-full text-normal">
+                <table id="elementary-table" class="table-auto border-collapse w-full text-normal">
                     <thead>
                         <tr class="text-center">
                             <th class="pr-[0.2in] font-normal"><span class="mr-[0.5in]">A.</span>Elementary</th>
@@ -606,7 +608,7 @@
                 </table>
 
                 {{-- Education-Highschool --}}
-                <table class="educ-table table-auto border-collapse w-full">
+                <table id="highschool-table" class="table-auto border-collapse w-full">
                     <thead>
                         <tr class="text-center">
                             <th class="text-left pl-[0.7in] font-normal"><span class="mr-[0.5in]">B.</span>High School</th>
@@ -650,7 +652,7 @@
                 </table>
 
                 {{-- Education-College --}}
-                <table class="educ-table table-auto border-collapse w-full">
+                <table id="college-table" class="table-auto border-collapse w-full">
                     <thead>
                         <tr class="text-center">
                             <th class="pr-[0.35in] font-normal"><span class="mr-[0.5in]">C.</span>College</th>
@@ -689,7 +691,7 @@
 
                 {{-- Education-Post Graduate --}}
                 <div class="ml-[0.75in]">
-                    <table class="educ-table table-auto border-collapse w-full">
+                    <table id="postgrad-table" class="table-auto border-collapse w-full">
                         <thead>
                             <tr class="text-center">
                                 <th class="text-left font-normal"><span class="mr-[0.5in]">D.</span>Post Graduate</th>
@@ -729,7 +731,7 @@
 
                 {{-- Education-Other Schools --}}
                 <div class="mt-4 ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Other Schools/Training Attended and Date of Attendance: </div>
-                <div id="other-school" class="ml-[1.3in] text-[11pt] text-left">
+                <div id="other-training" class="ml-[1.3in] text-[11pt] text-left">
                     <hr class="h-[11pt] border-none border-t border-black">
                     <hr class="h-[11pt] border-t border-black">
                     <hr class="h-[11pt] border-b border-black">
@@ -793,23 +795,23 @@
 
                     {{-- Military-Date Enlisted --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.5in]">A.</span>Date Enlisted in AFP:
-                        <span class="inline-block text-[11pt] border-b-[1px] border-black w-[4.75in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                        <span id="date-enlisted" class="inline-block text-[11pt] border-b-[1px] border-black w-[4.75in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
                     </div>
 
                     {{-- Military-Date Commissioned --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.5in]">B.</span>Date of Commision:
-                        <span class="inline-block text-[11pt] border-b-[1px] border-black w-[2.3in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span> :
-                        <span class="inline-block text-[11pt] border-b-[1px] border-black w-[2.4in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                        <span id="start-comm" class="inline-block text-[11pt] border-b-[1px] border-black w-[2.3in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span> :
+                        <span id="end-comm" class="inline-block text-[11pt] border-b-[1px] border-black w-[2.4in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
                     </div>
 
                     {{-- Military-Source of Commission --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.5in]">C.</span>Source of Commission:
-                        <span class="inline-block text-[11pt] border-b-[1px] border-black w-[4.6in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                        <span id="comm-source" class="inline-block text-[11pt] border-b-[1px] border-black w-[4.6in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
                     </div>
 
                     {{-- Military-Unit Assignments --}}
                     <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">D.</span>Important Unit Assignment since enlisted/CAD</div>
-                    <table class="w-full">
+                    <table id="assignment-table" class="w-full">
                         <thead>
                             <tr>
                                 <th class="text-center border-black border-[1px]">INCLUSIVE DATES</th>
@@ -838,7 +840,7 @@
                     {{-- Military-Military Schools --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Military Schools Attended</div>
                     <div class="ml-14 mt-4">
-                        <table class="w-full">
+                        <table id="military-school-table" class="w-full border-collapse">
                             <thead>
                                 <tr>
                                     <th class="text-center border-black border-[1px]">School/Location</th>
@@ -918,7 +920,7 @@
 
                 {{-- Military-Decorations --}}
                 <div class="mt-[70pt]"><span class="mr-[0.5in]">F.</span>Decorations, Awards or Commendations Received: </div>
-                <table class="border-collapse w-full">
+                <table id="award-table" class="border-collapse w-full">
                     <tbody>
                         <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
                         <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
@@ -950,7 +952,7 @@
 
                 {{-- Section VII-Residence --}}
                 <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">VII.</span>PLACES OF RESIDENCE SINCE BIRTH:</div>
-                <table class="mb-[5pt] border-collapse w-full">
+                <table id="residence-table" class="mb-[5pt] border-collapse w-full">
                     <tbody>
                         <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
                         <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
@@ -967,7 +969,7 @@
                 {{-- Section VIII-Employment --}}
                 <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">VIII.</span>EMPLOYMENT:</div>
                 <div>
-                    <table class="ml-[0.5in] w-[7in] border-collapse">
+                    <table id="employment table" class="ml-[0.5in] w-[7in] border-collapse">
                         <thead>
                             <tr>
                                 <th class="text-center border-black border-[1px]">Inclusive Dates</th>
@@ -1066,16 +1068,17 @@
                 </div>
 
                 {{-- Employment-Forced Resignation --}}
-                <div class="flex mt-[60pt] ml-[1in]">Have you been dismissed or forced to resign from a position?
-                     No ( <div class="text-[11pt] text-center w-[0.1in]"></div> )
-                     Yes (<div class="text-[11pt] text-center w-[0.1in]"></div> ) If Yes, Explain:
+                <div class="mt-[60pt] ml-[1in]">Have you been dismissed or forced to resign from a position?
+                     No ( <span id="no-dismissal" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                     Yes (<span id="has-been-dismissed" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                     If Yes, explain:
                 </div>
 
-               <div class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+               <div id="dismissal-detail" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                 {{-- Section IX-Visited Countries --}}
                 <div class="font-bold text[12pt]"><span class="mr-[0.4in]">IX.</span>FOREIGN COUNTRIES VISITED:</div>
-                    <table class="border-collapse w-full">
+                    <table id="foreign-country-table" class="border-collapse w-full">
                         <thead>
                             <tr>
                                 <th class="text-center border-black border-[1px]">Date of Visit</th>
@@ -1122,33 +1125,39 @@
                 <div class="font-bold text-[12pt]"><span class="mr-[0.4in]">X.</span>CREDIT REPUTATION:</div>
 
                     {{-- Credit Rep-Salary Dependent --}}
-                    <div class="flex ml-[0.6in] text-[11pt] leading-tight">
+                    <div class="ml-[0.6in] text-[11pt] leading-tight">
                         <span class="mr-[0.5in] inline-block">A.</span>Are you entirely dependent on your salary?
-                        Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"> </span> )
-                        No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If no, State other source of income:
+                        Yes ( <span id="dependent" class="inline-block text-[11pt] h-[11pt] align-middle text-center"> </span> )
+                        No ( <span id="not-dependent" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        If no, State other source of income:
                     </div>
+                    <div id="other-income" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                     {{-- Credit Rep-Banks --}}
                     <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">B.</span>Name and address of Banks or other credit institutions with which you have accounts/loans:</div>
-                    <div class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                    <div id="bank-account" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                     {{-- Credit Rep-SALN --}}
                     <div class="ml-[0.6in] leading-tight"><span class="mr-[0.4in]">C.</span>Have you filed a statement of your Assets and Liabilities with any government agency?</div>
                     <div class="ml-[1.16in] leading-tight">
-                        Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
-                        No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"> </span> )
+                        Yes ( <span id="filed-saln" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        No ( <span id="not-filed-saln" class="inline-block text-[11pt] h-[11pt] align-middle text-center"> </span> )
                         If so, what agency and when?
                     </div>
-                    <div class="w-[6.5in] ml-[1in] h-[11.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                    <div id="saln-detail" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                     {{-- Credit Rep-Income Tax --}}
-                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Have you filed your latest Income Tax Returns?<span class="inline-block text-[11pt] border-b-[1px] border-black w-[3.13in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span></div>
-                    <div class="ml-[1.2in]">Amount paid for last Calendar Year:<span class="inline-block text-[11pt] border-b-[1px] border-black w-[3.87in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span></div>
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Have you filed your latest Income Tax Returns?
+                        <span id="filed-itr" class="inline-block text-[11pt] border-b-[1px] border-black w-[2.9in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+                    <div class="ml-[1.2in]">Amount paid for last Calendar Year:
+                        <span id="amount-paid" class="inline-block text-[11pt] border-b-[1px] border-black w-[3.67in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
 
                     {{-- Credit Rep-Credit Reference --}}
                     <div class="flex ml-[0.6in]"><span class="mr-[0.4in]">E.</span>Three (3) credit references in the Philippines:</div>
                     <div class="ml-[0.6in]">
-                        <table class="border-collapse w-full">
+                        <table id="credit-reference-table" class="border-collapse w-full">
                             <thead>
                                 <tr>
                                     <th class="text-center border-black border-[1px]">Name</th>
@@ -1163,7 +1172,6 @@
                         </table>
                     </div>
 
-
                     {{-- Signature --}}
                     <div class="mt-20pt border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
                         (Signature of Applicant)
@@ -1173,18 +1181,19 @@
                 <div class="font-bold text-[12pt]"><span class="mr-[0.4in]">XI.</span>ARREST RECORD AND CONDUCT:</div>
 
                     {{-- Arrest Record-Self Investigation --}}
-                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Have you ever been investigated/arrested, Indicted or convicted for any violation of law?</div>
-                    <div class="ml-[0.6in]">No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
-                        Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, state name of court, nature of offense and disposition of case:
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Have you ever been investigated/arrested, Indicted or convicted for any violation of law?
+                        No ( <span id="no-personal-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        Yes ( <span id="personal-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        If so, state name of court, nature of offense and disposition of case:
                     </div>
-                    <div class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                    <div id="personal-arrest-detail" class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                     {{-- Arrest-Record-Family Investigation --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.4in]">B.</span>Has any member of your family ever been investigated/arrested, indicted or convicted for any violation of law?
-                        No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
-                        Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, state name of court, nature of offense and disposition of case:
+                        No ( <span id="no-fam-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        Yes ( <span id="fam-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, state name of court, nature of offense and disposition of case:
                     </div>
-                    <div class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                    <div id="fam-arrest-detail" class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                 {{-- Footer --}}
                 <div class="w-full left-0 right-0 bottom-0 z-[1000] text-center bg-white absolute">
@@ -1231,32 +1240,32 @@
 
                 {{-- Arrest-Record-Admin Case --}}
                 <div class="ml-[0.6in] mt-[90pt]"><span class="mr-[0.4in]">C.</span>Have you ever been charge of any administrative case?
-                    No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
-                    Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so explain:
+                    No ( <span id="no-admin-case" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                    Yes ( <span id="admin-case" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so explain:
                 </div>
-                <div class="w-[6.9in] ml-[0.6in] h-[34.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                <div id="admin-case-detail" class="w-[6.9in] ml-[0.6in] h-[34.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                 {{-- Arrest Record-1081 --}}
                 <div class="mt-3.5 ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Have you ever been arrested or detained pursuant to the provisions of PD 1081 and its implementing orders
                     (GO, PD, LOI)?
-                    No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
-                    Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )  If so, state the nature of offense and disposition of case.
+                    No ( <span id="no-provison-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                    Yes ( <span id="provision-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )  If so, state the nature of offense and disposition of case.
                 </div>
-                <div class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                <div id="provision-arrest-detail" class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                 {{-- Arrest Record-Liquor --}}
                 <div class="mt-3.5 ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Do you take/use intoxicating liquor or narcotics?
-                    No ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
-                    Yes ( <span class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, to what extent:
+                    No ( <span id="no-intake" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                    Yes ( <span id="do-intake" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, to what extent:
                 </div>
-                <div class="w-[6.9in] ml-[0.6in] h-[46pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                <div id="intake-extent" class="w-[6.9in] ml-[0.6in] h-[46pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                 {{-- Section XII-Character --}}
                 <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">XII.</span>CHARACTER AND REPUTATION:</div>
 
                     {{-- Character-Reference --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Give five (5) character references (known for three (3) years or longer except your relatives):</div>
-                    <table class="border-collapse w-full mb-[5pt]">
+                    <table id="character-reference-table" class="border-collapse w-full mb-[5pt]">
                         <thead>
                             <tr>
                                 <th class="text-center">NAME</th>
@@ -1293,7 +1302,7 @@
 
                     {{-- Character-Neighbor --}}
                     <div class="mb-3.5 ml-[0.6in]"><span class="mr-[0.5in]">B.</span>List down three (3) neighbors at your present residence:</div>
-                    <table class="border-collapse w-full mb-[5pt]">
+                    <table id="neighbor-table" class="border-collapse w-full mb-[5pt]">
                         <thead>
                             <tr>
                                 <th class="text-center">NAME</th>
@@ -1325,7 +1334,7 @@
 
                     {{-- Organization-Membership --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>List of organization or social groups, which you have been a member of:
-                        <table class="border-collapse w-full mb-[5pt]">
+                        <table id="organization-table" class="border-collapse w-full mb-[5pt]">
                             <thead>
                                 <tr class="border-b border-black">
                                     <th class="text-center">Organization</th>
@@ -1425,14 +1434,14 @@
 
                     {{-- Miscellaneous-Hobbies --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Hobbies, Sport and past time:</div>
-                    <div class="w-full h-[69pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+                    <div id="hobbies" class="w-full h-[69pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
                     {{-- Miscellaneous-Language --}}
                     <div class="mt-[11pt]"><span class="mr-[0.5in]">B.</span>Language and Dialect (Indicate as <span class="underline">FLUENT</span>,
                         <span class="underline">FAIR</span>, or <span class="underline">POOR</span>):
 
                     </div>
-                    <table class="mt-[5pt] border-collapse w-full mb-[5pt]">
+                    <table id="language-table" class="mt-[5pt] border-collapse w-full mb-[5pt]">
                         <thead>
                             <tr>
                                 <th class="text-bold text-center">Language/Dialect</th>
@@ -1471,7 +1480,9 @@
                     </table>
 
                     {{-- Miscellaneous-Lie Detection Test --}}
-                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">C.</span>Are you willing to undergo periodic lie detection test?<span class="inline-block text-[11pt] border-b-[1px] border-black w-[2in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span></div>
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">C.</span>Are you willing to undergo periodic lie detection test?
+                        <span  id="lie-detection" class="inline-block text-[11pt] border-b-[1px] border-black w-[2in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
 
                     {{-- Miscellaneous-Text --}}
                     <div class="ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Copy exactly the following paragraph in your own handwriting:</div>
@@ -1537,7 +1548,8 @@
                     knowledge and belief and I agree that any misstatement or omission as to a material fact
                     will constitute ground for immediate denial of my application for clearance.
                 </p>
-                <p class="mt-[11pt] mb-[11pt]">Signed at ____________________________________________________ Date _______________________</p>
+                <p class="mt-[11pt] mb-[11pt]">Signed at <span class="border-b-[2px] w-[4.34in] border-black inline-block h-[11pt] align-text-bottom"></span>
+                    Date <span class="border-b-[2px] w-[2in] border-black inline-block h-[11pt] align-text-bottom"></span></p>
                 <div class="flex ">
                     <div class="w-[2.5in] text-center border-t-[2px] border-black mt-[22pt]">(Witness)</div>
                     <div class="w-[2.5in] text-center border-t-[2px] border-black mt-[22pt] ml-auto">(Signature of Applicant)</div>
@@ -1564,9 +1576,11 @@
                     </div>
                 </div>
 
-                <p class="mt-[20pt] indent-[0.5in]">SUBSCRIBED AND SWORN to before me this ______________ of _________________________ Philippines,
-                    Affiant exhibited to me his/her Community Tax Certificate Nr. _________________________ Issued at
-                    __________________________________________ on __________________________________.
+                <p class="mt-[20pt] indent-[0.5in]">SUBSCRIBED AND SWORN to before me this <span class="border-b-[2px] w-[1in] border-black inline-block align-baseline text-right leading-none">day</span> of
+                    <span class="border-b-[2px] w-[2in] border-black inline-block h-[11pt] align-text-bottom"></span> Philippines,
+                    Affiant exhibited to me his/her Community Tax Certificate Nr. <span class="border-b-[2px] w-[2in] border-black inline-block h-[11pt] align-baseline text-center leading-none"></span> Issued at
+                    <span class="border-b-[2px] w-[3.5in] border-black inline-block h-[11pt] align-text-bottom"></span> on
+                    <span class="border-b-[2px] w-[3in] border-black inline-block h-[11pt] align-text-bottom"></span>
                 </p>
 
                 <div class="flex mt-[30pt]">
