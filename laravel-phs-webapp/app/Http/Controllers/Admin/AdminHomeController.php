@@ -72,6 +72,9 @@ class AdminHomeController extends Controller
             ->take(10)
             ->get();
 
+        // Get all users for user type distribution
+        $users = User::all();
+
         $data = compact(
             'totalUsers',
             'enabledUsers',
@@ -82,7 +85,8 @@ class AdminHomeController extends Controller
             'newPDSSubmissionsThisMonth',
             'submissionStats',
             'monthlyStats',
-            'recentActivities'
+            'recentActivities',
+            'users'
         );
 
         // Check if it's an AJAX request
