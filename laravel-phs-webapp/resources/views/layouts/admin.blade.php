@@ -1038,5 +1038,10 @@
         setInterval(updatePHTimeHeaderAdmin, 1000);
         updatePHTimeHeaderAdmin();
     </script>
+    
+    <!-- Activity Logs JavaScript -->
+    @if(request()->routeIs('admin.activity-logs.*'))
+        @vite(['resources/js/activity-logs.js'])
+    @endif
 </body>
 </html> 

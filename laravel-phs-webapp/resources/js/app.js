@@ -1,6 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
 import './confirmation-modal.js';
+import './activity-logs.js';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);

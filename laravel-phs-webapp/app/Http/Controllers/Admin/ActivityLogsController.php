@@ -85,6 +85,26 @@ class ActivityLogsController extends Controller
             ->applyFilters($request->all())
             ->orderBy('created_at', 'desc');
 
+        // Check if this is a preview request
+        if ($request->has('preview')) {
+            $totalRecords = $query->count();
+            $previewData = $query->limit(10)->get()->map(function ($log) {
+                return [
+                    'user_name' => $log->user->name ?? 'N/A',
+                    'username' => $log->user->username ?? 'N/A',
+                    'action' => ucfirst(str_replace('_', ' ', $log->action)),
+                    'description' => $log->description,
+                    'status' => $log->status,
+                    'created_at' => $log->created_at->format('M d, Y h:i A')
+                ];
+            });
+
+            return response()->json([
+                'total_records' => $totalRecords,
+                'preview_data' => $previewData
+            ]);
+        }
+
         $activityLogs = $query->get();
 
         $filename = 'activity_logs_' . now()->format('Y-m-d_H-i-s') . '.csv';
