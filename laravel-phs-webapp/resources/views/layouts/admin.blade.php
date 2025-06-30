@@ -630,6 +630,131 @@
             justify-content: center;
             box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
+
+        #header-breadcrumb:hover {
+            box-shadow: 0 4px 16px rgba(212,175,55,0.13);
+            background: linear-gradient(90deg, rgba(212,175,55,0.18) 0%, rgba(27,54,93,0.15) 100%);
+        }
+
+        .pma-switch-btn {
+            margin-top: 2px;
+            margin-right: 2px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #D4AF37 0%, #B38F2A 100%);
+            color: #1B365D;
+            border: 2px solid #D4AF37;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px 0 rgba(212, 175, 55, 0.15);
+            transition: box-shadow 0.2s, background 0.2s, color 0.2s;
+            z-index: 2;
+        }
+        .pma-switch-btn:hover {
+            background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+            color: #2B4B7D;
+            box-shadow: 0 4px 16px 0 rgba(212, 175, 55, 0.25);
+        }
+
+        .pma-switch-btn-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .pma-switch-tooltip {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%);
+            color: #fffbe8;
+            padding: 8px 18px;
+            border-radius: 1.5rem;
+            font-size: 0.92rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 8px 32px rgba(27, 54, 93, 0.15);
+            border: 2px solid #D4AF37;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.18s;
+            text-align: left;
+            visibility: hidden;
+        }
+        .pma-switch-tooltip::before {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 10px 10px 10px 0;
+            border-style: solid;
+            border-color: transparent #D4AF37 transparent transparent;
+        }
+
+        .pma-switch-btn i {
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .pma-switch-btn:hover i,
+        .pma-switch-btn:focus i {
+            transform: rotate(180deg);
+        }
+
+        .switch-loading-overlay {
+            display: flex;
+            position: fixed;
+            z-index: 2147483647;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(27,54,93,0.55);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+        .switch-loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .switch-loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: scaleInSpinner 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .switch-spinner {
+            border: 6px solid #FFD700;
+            border-top: 6px solid #1B365D;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            animation: spin 1.2s cubic-bezier(0.4,0,0.2,1) infinite;
+            margin-bottom: 22px;
+            box-shadow: 0 0 24px 4px #fffbe8, 0 4px 24px 0 rgba(27,54,93,0.18);
+            background: transparent;
+        }
+        .switch-loading-text {
+            color: #fffbe8;
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-shadow: 0 2px 12px #1B365D, 0 0 8px #fff;
+            letter-spacing: 0.01em;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes scaleInSpinner {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -668,13 +793,6 @@
                             <div class="font-bold text-white">Philippine Standard Time:</div>
                             <div id="ph-time-value-admin" class="text-yellow-400"></div>
                         </a>
-                        <!-- Access My PHS Button (aesthetic, bold) -->
-                        <a href="{{ route('admin.switch.to.client') }}"
-                           class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold rounded-full shadow-md transition-all duration-200 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                           style="box-shadow: 0 2px 8px 0 rgba(44, 114, 255, 0.10);">
-                            <i class="fas fa-file-alt text-lg"></i>
-                            Access My PHS
-                        </a>
                         <!-- Notifications -->
                         <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
                             <i class="fas fa-bell text-lg"></i>
@@ -684,7 +802,31 @@
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">Admin</span>
                             <span class="mx-2">/</span>
-                            <span>@yield('header', 'Dashboard')</span>
+                            <span id="header-breadcrumb" style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                min-width: 140px;
+                                max-width: 220px;
+                                width: 180px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                text-align: center;
+                                vertical-align: middle;
+                                background: linear-gradient(90deg, rgba(212,175,55,0.13) 0%, rgba(27,54,93,0.10) 100%);
+                                border: 1.5px solid #D4AF37;
+                                box-shadow: 0 2px 8px rgba(27,54,93,0.07);
+                                border-radius: 0.75rem;
+                                padding: 4px 18px 4px 14px;
+                                font-weight: 700;
+                                font-size: 1.05rem;
+                                color: #fffbe8;
+                                letter-spacing: 0.02em;
+                                transition: box-shadow 0.2s, background 0.2s;
+                            ">
+                                @yield('header', 'Dashboard')
+                            </span>
                         </div>
                         <!-- Logout Icon Button -->
                         <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
@@ -700,7 +842,7 @@
         <!-- Sidebar -->
             <aside class="sidebar text-white flex flex-col">
             <!-- Profile Section -->
-            <div class="profile-container">
+            <div class="profile-container relative">
                     <a href="{{ route('admin.profile.edit') }}" class="block">
                         <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
                     </a>
@@ -716,7 +858,16 @@
                     <div class="user-role">
                         {{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}
                     </div>
+                    <div class="pma-switch-btn-wrapper absolute top-0 right-0" style="margin-top:2px; margin-right:2px; z-index:2;">
+                        <a href="{{ route('admin.switch.to.client') }}"
+                           class="pma-switch-btn"
+                           id="pmaSwitchBtn"
+                           tabindex="0">
+                            <i class="fas fa-repeat" style="font-size: 1rem;"></i>
+                        </a>
+                        <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Switch to Client View<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Preview your PHS as a client</span></div>
                     </div>
+                </div>
                 </div>
                 
             <!-- Navigation -->
@@ -865,6 +1016,14 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Switch Loading Overlay -->
+    <div id="switchLoadingOverlay" class="switch-loading-overlay">
+        <div class="switch-loading-content">
+            <div class="switch-spinner"></div>
+            <span class="switch-loading-text">Switching to Client View...</span>
         </div>
     </div>
 
@@ -1018,6 +1177,15 @@
                     if (titleElement) {
                         document.title = titleElement.textContent;
                     }
+
+                    // Update header breadcrumb if available
+                    const newHeader = tempDiv.querySelector('#header-breadcrumb');
+                    if (newHeader) {
+                        const headerBreadcrumb = document.getElementById('header-breadcrumb');
+                        if (headerBreadcrumb) {
+                            headerBreadcrumb.textContent = newHeader.textContent;
+                        }
+                    }
                 })
                 .catch(error => {
                     console.error('Error loading content:', error);
@@ -1070,6 +1238,47 @@
         }
         setInterval(updatePHTimeHeaderAdmin, 1000);
         updatePHTimeHeaderAdmin();
+
+        // Tooltip positioning for switch button (to the right of the icon)
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('pmaSwitchBtn');
+            const tooltip = document.getElementById('pmaSwitchTooltip');
+            if (!btn || !tooltip) return;
+
+            function showTooltip() {
+                const rect = btn.getBoundingClientRect();
+                tooltip.style.visibility = 'visible';
+                tooltip.style.opacity = '1';
+                // Position tooltip to the right, vertically centered to the button
+                const tooltipRect = tooltip.getBoundingClientRect();
+                const left = rect.right + 10; // 10px to the right of the button
+                const top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
+            }
+            function hideTooltip() {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.opacity = '0';
+            }
+            btn.addEventListener('mouseenter', showTooltip);
+            btn.addEventListener('focus', showTooltip);
+            btn.addEventListener('mouseleave', hideTooltip);
+            btn.addEventListener('blur', hideTooltip);
+        });
+
+        // Show loading overlay on switch button click
+        const switchBtn = document.getElementById('pmaSwitchBtn');
+        if (switchBtn) {
+            switchBtn.addEventListener('click', function(e) {
+                const overlay = document.getElementById('switchLoadingOverlay');
+                if (overlay) {
+                    overlay.classList.add('active');
+                    // Force reflow for transition
+                    void overlay.offsetWidth;
+                }
+                // Let the navigation proceed
+            });
+        }
     </script>
     
     <!-- Activity Logs JavaScript -->
