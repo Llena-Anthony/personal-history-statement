@@ -348,7 +348,7 @@
             <div class="bg-gray-50 p-4 rounded-lg">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Home Address</label>
                 <div id="home_complete_address" class="text-gray-600 text-sm">
-                    {{ $phs->home_street ?? '' }}{{ $phs->home_street ? ', ' : '' }}{{ $phs->home_barangay_name ?? '' }}{{ $phs->home_barangay_name ? ', ' : '' }}{{ $phs->home_city_name ?? '' }}{{ $phs->home_city_name ? ', ' : '' }}{{ $phs->home_province_name ?? '' }}{{ $phs->home_province_name ? ', ' : '' }}{{ $phs->home_region_name ?? '' }}
+                    {{ $phs->home_street ?? '' }}{{ ($phs && $phs->home_street) ? ', ' : '' }}{{ $phs->home_barangay_name ?? '' }}{{ ($phs && $phs->home_barangay_name) ? ', ' : '' }}{{ $phs->home_city_name ?? '' }}{{ ($phs && $phs->home_city_name) ? ', ' : '' }}{{ $phs->home_province_name ?? '' }}{{ ($phs && $phs->home_province_name) ? ', ' : '' }}{{ $phs->home_region_name ?? '' }}
                 </div>
                 <input type="hidden" name="home_complete_address" id="home_complete_address_input" 
                        value="{{ $phs->home_complete_address ?? '' }}">
@@ -448,7 +448,7 @@
             <div class="bg-gray-50 p-4 rounded-lg">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Business Address</label>
                 <div id="business_complete_address" class="text-gray-600 text-sm">
-                    {{ $phs->business_street ?? '' }}{{ $phs->business_street ? ', ' : '' }}{{ $phs->business_barangay_name ?? '' }}{{ $phs->business_barangay_name ? ', ' : '' }}{{ $phs->business_city_name ?? '' }}{{ $phs->business_city_name ? ', ' : '' }}{{ $phs->business_province_name ?? '' }}{{ $phs->business_province_name ? ', ' : '' }}{{ $phs->business_region_name ?? '' }}
+                    {{ $phs->business_street ?? '' }}{{ ($phs && $phs->business_street) ? ', ' : '' }}{{ $phs->business_barangay_name ?? '' }}{{ ($phs && $phs->business_barangay_name) ? ', ' : '' }}{{ $phs->business_city_name ?? '' }}{{ ($phs && $phs->business_city_name) ? ', ' : '' }}{{ $phs->business_province_name ?? '' }}{{ ($phs && $phs->business_province_name) ? ', ' : '' }}{{ $phs->business_region_name ?? '' }}
                 </div>
                 <input type="hidden" name="business_complete_address" id="business_complete_address_input"
                        value="{{ $phs->business_complete_address ?? '' }}">
@@ -551,7 +551,7 @@
                     </label>
                     <textarea name="name_change" id="name_change" rows="3"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                              placeholder="If you have legally changed your name, please provide details including court case number, date, and reason">{{ $phs->change_in_name ?? $phs->name_change ?? '' }}</textarea>
+                              placeholder="If you have legally changed your name, please provide details including court case number, date, and reason">{{ ($phs && $phs->change_in_name) ? $phs->change_in_name : (($phs && $phs->name_change) ? $phs->name_change : '') }}</textarea>
                 </div>
             </div>
         </div>
