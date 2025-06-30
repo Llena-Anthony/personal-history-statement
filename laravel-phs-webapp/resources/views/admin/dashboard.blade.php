@@ -393,7 +393,6 @@
     </div>
 </div>
 
-<<<<<<< HEAD
 <!-- Switch to Client View Info Modal -->
 <div id="switchInfoModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="switchInfoModalContent">
@@ -456,7 +455,7 @@
         </div>
     </div>
 </div>
-=======
+
 <style>
 .line-clamp-2 {
     display: -webkit-box;
@@ -480,7 +479,6 @@
     animation: fadeInUp 0.6s ease-out;
 }
 </style>
->>>>>>> 32ba6e4 (revised ui admin side)
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
