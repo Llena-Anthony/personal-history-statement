@@ -6,14 +6,6 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <!-- Success Message -->
-    @if(session('success'))
-        <div id="successMessage" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center animate-fade-in">
-            <i class="fas fa-check-circle mr-2"></i>
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="bg-white rounded-xl shadow-lg overflow-hidden animate-scale-in">
         <!-- Profile Header -->
         <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-8 py-6 relative overflow-hidden">

@@ -19,10 +19,10 @@
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.users.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium shadow-sm">
+               class="inline-flex items-center px-4 py-2 border border-[#1B365D] text-[#1B365D] bg-white hover:bg-[#1B365D] hover:text-white rounded-xl font-medium shadow-sm transition-all duration-200">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Users
-        </a>
+            </a>
         </div>
     </div>
 
@@ -68,18 +68,15 @@
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
                     <!-- Card Header -->
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
+                    <div class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10 px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <i class="fas fa-edit text-blue-600 mr-3"></i>
+                                <i class="fas fa-edit text-[#1B365D] mr-3"></i>
                                 <h2 class="text-lg font-semibold text-gray-900">User Information</h2>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                    @if($user->is_active) bg-green-100 text-green-800 @else bg-red-100 text-red-800 @endif">
-                                    {{ $user->is_active ? 'Active' : 'Inactive' }}
-                                </span>
-            </div>
+                                <div class="w-3 h-3 rounded-full @if($user->is_active) bg-green-500 @else bg-red-500 @endif border-2 border-white shadow-sm"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -88,7 +85,7 @@
                         <!-- Read-only Information Section -->
                     <div>
                             <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center">
-                                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                                <i class="fas fa-info-circle text-[#1B365D] mr-2"></i>
                                 Account Details (Read-only)
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,7 +138,7 @@
                         <!-- Editable Settings Section -->
                         <div class="border-t border-gray-200 pt-6">
                             <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center">
-                                <i class="fas fa-cog text-green-500 mr-2"></i>
+                                <i class="fas fa-cog text-[#D4AF37] mr-2"></i>
                                 Account Settings (Editable)
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -151,7 +148,7 @@
                                     </label>
                                     <div class="relative">
                                         <select name="usertype" id="usertype" required
-                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-all duration-200">
                                             <option value="admin" {{ old('usertype', $user->usertype) == 'admin' ? 'selected' : '' }}>
                                                 <i class="fas fa-shield-alt"></i> Admin
                                             </option>
@@ -162,11 +159,8 @@
                                                 <i class="fas fa-user"></i> Client
                                             </option>
                                         </select>
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <i class="fas fa-chevron-down text-gray-400"></i>
-                                        </div>
-                        </div>
-                    </div>
+                                    </div>
+                                </div>
                                 
                                 <div class="form-group">
                                     <label for="is_active" class="block text-sm font-medium text-gray-700 mb-2">
@@ -174,17 +168,14 @@
                                     </label>
                         <div class="relative">
                                         <select name="is_active" id="is_active" required
-                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-all duration-200">
                                             <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>
                                                 <i class="fas fa-check-circle"></i> Active
                                             </option>
                                             <option value="0" {{ old('is_active', $user->is_active) == 0 ? 'selected' : '' }}>
-                                                <i class="fas fa-times-circle"></i> Inactive
+                                                <i class="fas fa-times-circle"></i> Disabled
                                             </option>
                                         </select>
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                            <i class="fas fa-chevron-down text-gray-400"></i>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -197,9 +188,9 @@
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
                     <!-- Card Header -->
-                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-100">
+                    <div class="bg-gradient-to-r from-[#D4AF37]/10 to-[#B38F2A]/10 px-6 py-4 border-b border-gray-100">
                         <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                            <i class="fas fa-user-circle text-gray-600 mr-3"></i>
+                            <i class="fas fa-user-circle text-[#D4AF37] mr-3"></i>
                             User Profile
                         </h2>
                     </div>
@@ -208,40 +199,47 @@
                     <div class="p-6">
                         <!-- User Avatar -->
                         <div class="text-center mb-6">
-                            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
-                            </div>
+                            @if($user->profile_picture)
+                                <div class="w-20 h-20 rounded-full mx-auto mb-3 shadow-lg overflow-hidden">
+                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" 
+                                         alt="{{ $user->name }}" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                            @else
+                                <div class="w-20 h-20 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                    <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
+                                </div>
+                            @endif
                             <h3 class="font-semibold text-gray-900">{{ $user->name }}</h3>
                             <p class="text-sm text-gray-500">{{ $user->username }}</p>
                         </div>
 
                         <!-- User Stats -->
                         <div class="space-y-4">
-                            <div class="bg-blue-50 rounded-xl p-4">
+                            <div class="bg-[#1B365D]/10 rounded-xl p-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-blue-900">User Type</span>
+                                    <span class="text-sm font-medium text-[#1B365D]">User Type</span>
                                     <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        @if($user->usertype == 'admin') bg-red-100 text-red-800
-                                        @elseif($user->usertype == 'personnel') bg-blue-100 text-blue-800
-                                        @else bg-green-100 text-green-800 @endif">
+                                        @if($user->usertype == 'admin') bg-[#1B365D]/20 text-[#1B365D] border border-[#1B365D]/30
+                                        @elseif($user->usertype == 'personnel') bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30
+                                        @else bg-[#1B365D]/20 text-[#1B365D] border border-[#1B365D]/30 @endif">
                                         {{ ucfirst($user->usertype) }}
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="bg-[#D4AF37]/10 rounded-xl p-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-gray-900">Account Status</span>
-                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                        @if($user->is_active) bg-green-100 text-green-800 @else bg-red-100 text-red-800 @endif">
-                                        {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                    <span class="text-sm font-medium text-[#D4AF37]">Account Status</span>
+                                    <span class="text-sm font-medium @if($user->is_active) text-[#1B365D] @else text-[#D4AF37] @endif">
+                                        {{ $user->is_active ? 'Active' : 'Disabled' }}
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="bg-gray-50 rounded-xl p-4">
+                            <div class="bg-[#1B365D]/10 rounded-xl p-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-gray-900">Member Since</span>
+                                    <span class="text-sm font-medium text-[#1B365D]">Member Since</span>
                                     <span class="text-sm text-gray-600">{{ $user->created_at->format('M Y') }}</span>
                                 </div>
                     </div>
@@ -250,7 +248,7 @@
                         <!-- Action Buttons -->
                         <div class="mt-6 space-y-3">
                             <button type="button" id="updateBtn" 
-                                    class="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                                    class="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] text-white rounded-xl font-medium hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:ring-offset-2 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-save mr-2"></i>
                         <span id="btnText">Update User</span>
                     </button>
@@ -288,7 +286,7 @@
 
 /* Enhanced select styling */
 select:focus {
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.1);
 }
 </style>
 
@@ -328,14 +326,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Disable button when no changes
             updateBtn.disabled = true;
             updateBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            updateBtn.classList.remove('hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
+            updateBtn.classList.remove('hover:from-[#2B4B7D]', 'hover:to-[#1B365D]', 'focus:ring-[#1B365D]');
             btnText.textContent = 'No Changes';
             updateBtn.querySelector('i').className = 'fas fa-check mr-2';
         } else {
             // Enable button when there are changes
             updateBtn.disabled = false;
             updateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            updateBtn.classList.add('hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
+            updateBtn.classList.add('hover:from-[#2B4B7D]', 'hover:to-[#1B365D]', 'focus:ring-[#1B365D]');
             btnText.textContent = 'Update User';
             updateBtn.querySelector('i').className = 'fas fa-save mr-2';
         }
@@ -355,8 +353,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!isConfirming) {
             // First click - show confirmation
-            updateBtn.classList.remove('from-blue-600', 'to-blue-700', 'hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
-            updateBtn.classList.add('from-green-600', 'to-green-700', 'hover:from-green-700', 'hover:to-green-800', 'focus:ring-green-500');
+            updateBtn.classList.remove('from-[#1B365D]', 'to-[#2B4B7D]', 'hover:from-[#2B4B7D]', 'hover:to-[#1B365D]', 'focus:ring-[#1B365D]');
+            updateBtn.classList.add('from-[#D4AF37]', 'to-[#B38F2A]', 'hover:from-[#B38F2A]', 'hover:to-[#D4AF37]', 'focus:ring-[#D4AF37]');
             btnText.textContent = 'Confirm Update';
             updateBtn.querySelector('i').className = 'fas fa-check mr-2';
             isConfirming = true;
@@ -376,8 +374,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetButton() {
         if (hasChanges) {
-            updateBtn.classList.remove('from-green-600', 'to-green-700', 'hover:from-green-700', 'hover:to-green-800', 'focus:ring-green-500');
-            updateBtn.classList.add('from-blue-600', 'to-blue-700', 'hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
+            updateBtn.classList.remove('from-[#D4AF37]', 'to-[#B38F2A]', 'hover:from-[#B38F2A]', 'hover:to-[#D4AF37]', 'focus:ring-[#D4AF37]');
+            updateBtn.classList.add('from-[#1B365D]', 'to-[#2B4B7D]', 'hover:from-[#2B4B7D]', 'hover:to-[#1B365D]', 'focus:ring-[#1B365D]');
             btnText.textContent = 'Update User';
             updateBtn.querySelector('i').className = 'fas fa-save mr-2';
         } else {

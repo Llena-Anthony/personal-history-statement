@@ -56,17 +56,17 @@
 
     <!-- Enhanced Statistics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl shadow-sm p-6 border border-green-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-calendar-day text-green-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#1B365D]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calendar-day text-[#1B365D] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Today's Activities</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['today']) }}</p>
-                    <p class="text-xs text-green-600 mt-1">
+                    <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-clock mr-1"></i>
                         Recent activity
                     </p>
@@ -74,17 +74,17 @@
             </div>
         </div>
 
-        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-sm p-6 border border-purple-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#D4AF37]/10 to-[#B38F2A]/10 rounded-xl shadow-sm p-6 border border-[#D4AF37]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-calendar-week text-purple-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#D4AF37]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calendar-week text-[#D4AF37] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">This Week</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['this_week']) }}</p>
-                    <p class="text-xs text-purple-600 mt-1">
+                    <p class="text-xs text-[#D4AF37] mt-1">
                         <i class="fas fa-calendar-alt mr-1"></i>
                         Weekly activity
                     </p>
@@ -92,17 +92,17 @@
             </div>
         </div>
 
-        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-sm p-6 border border-orange-200 hover:shadow-md transition-all duration-200">
+        <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                        <i class="fas fa-calendar-alt text-orange-600 text-xl"></i>
+                    <div class="w-12 h-12 bg-[#1B365D]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-[#1B365D] text-xl"></i>
                     </div>
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">This Month</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['this_month']) }}</p>
-                    <p class="text-xs text-orange-600 mt-1">
+                    <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-chart-bar mr-1"></i>
                         Monthly activity
                     </p>
@@ -137,7 +137,7 @@
     <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
                     <tr>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
@@ -153,8 +153,8 @@
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                                    {{ substr($log->user->name ?? 'N/A', 0, 1) }}
+                                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-base font-bold border border-gray-300 shadow-sm">
+                                    {{ strtoupper(substr($log->user->name ?? ($log->user->username ?? 'N/A'), 0, 1)) }}
                                 </div>
                                 <div class="ml-3">
                                     <div class="text-sm font-medium text-gray-900">{{ $log->user->name ?? 'N/A' }}</div>
@@ -164,10 +164,27 @@
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <div class="p-1 rounded bg-blue-100 text-blue-600 mr-2">
+                                <div class="p-1 rounded bg-[#1B365D]/20 text-[#1B365D] mr-2">
                                     <i class="{{ $log->action_icon }} text-xs"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-900">{{ ucfirst(str_replace('_', ' ', $log->action)) }}</span>
+                                <span class="text-sm font-medium text-gray-900">
+                                    @php
+                                        $actionLabels = [
+                                            'access_own_phs' => 'Access',
+                                            'return_to_admin' => 'Return',
+                                            'login' => 'Login',
+                                            'logout' => 'Logout',
+                                            'create' => 'Create',
+                                            'update' => 'Update',
+                                            'delete' => 'Delete',
+                                            'submit' => 'Submit',
+                                            'enable' => 'Enable',
+                                            'disable' => 'Disable',
+                                            'password_reset' => 'Reset',
+                                        ];
+                                        echo $actionLabels[$log->action] ?? ucfirst(explode('_', $log->action)[0]);
+                                    @endphp
+                                </span>
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -178,7 +195,7 @@
                         <td class="px-6 py-4">
                             <span class="px-2 py-1 text-xs font-semibold rounded-full 
                                 @if($log->status === 'success') bg-green-100 text-green-800
-                                @elseif($log->status === 'warning') bg-yellow-100 text-yellow-800
+                                @elseif($log->status === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
                                 @else bg-red-100 text-red-800
                                 @endif">
                                 {{ ucfirst($log->status) }}
@@ -197,7 +214,7 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <a href="{{ route('admin.activity-logs.show', $log->id) }}" 
-                               class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                               class="inline-flex items-center text-sm text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
                                 <i class="fas fa-eye mr-1"></i>
                                 View
                             </a>
@@ -231,8 +248,8 @@
 <div id="clearLogsModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-2xl rounded-2xl bg-white">
         <div class="mt-3 text-center">
-            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-red-100 to-red-200">
-                <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-[#1B365D]/20 to-[#2B4B7D]/20">
+                <i class="fas fa-exclamation-triangle text-[#1B365D] text-2xl"></i>
             </div>
             <h3 class="text-xl leading-6 font-bold text-gray-900 mt-4">Clear Old Logs</h3>
             <div class="mt-4 px-7 py-3">
@@ -243,11 +260,11 @@
             <div class="flex items-center justify-center gap-3 px-4 py-4">
                 <form action="{{ route('admin.activity-logs.clear-old') }}" method="POST" class="inline">
                     @csrf
-                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-base font-medium rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200 transform hover:scale-105">
+                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] text-white text-base font-medium rounded-xl shadow-lg hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-[#1B365D] transition-all duration-200 transform hover:scale-105">
                         Clear Logs
                     </button>
                 </form>
-                <button onclick="closeClearLogsModal()" class="px-6 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white text-base font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200 transform hover:scale-105">
+                <button onclick="closeClearLogsModal()" class="px-6 py-2 bg-gradient-to-r from-[#D4AF37] to-[#B38F2A] text-white text-base font-medium rounded-xl shadow-lg hover:from-[#B38F2A] hover:to-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] transition-all duration-200 transform hover:scale-105">
                     Cancel
                 </button>
             </div>

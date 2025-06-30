@@ -27,8 +27,21 @@ class ActivityLogsController extends Controller
         $activityLogs = $query->paginate(20)->withQueryString();
 
         // Get filter options for dropdowns
-        $actions = ActivityLog::distinct()->pluck('action')->filter()->sort()->mapWithKeys(function ($action) {
-            return [$action => ucfirst(str_replace('_', ' ', $action))];
+        $actionLabels = [
+            'access_own_phs' => 'Access',
+            'return_to_admin' => 'Return',
+            'login' => 'Login',
+            'logout' => 'Logout',
+            'create' => 'Create',
+            'update' => 'Update',
+            'delete' => 'Delete',
+            'submit' => 'Submit',
+            'enable' => 'Enable',
+            'disable' => 'Disable',
+            'password_reset' => 'Reset',
+        ];
+        $actions = ActivityLog::distinct()->pluck('action')->filter()->sort()->mapWithKeys(function ($action) use ($actionLabels) {
+            return [$action => $actionLabels[$action] ?? ucfirst(explode('_', $action)[0])];
         })->toArray();
         
         $statuses = ActivityLog::distinct()->pluck('status')->filter()->sort()->mapWithKeys(function ($status) {

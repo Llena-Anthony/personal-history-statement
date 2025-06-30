@@ -8,14 +8,14 @@
     <!-- Back Navigation -->
     <div class="flex items-center justify-between">
         <a href="{{ route('admin.activity-logs.index') }}" 
-           class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors">
+           class="inline-flex items-center text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
             <i class="fas fa-arrow-left mr-2"></i>
             Back to Activity Logs
         </a>
         <div class="flex items-center gap-3">
             <span class="px-3 py-1 text-xs font-semibold rounded-full 
                 @if($activityLog->status === 'success') bg-green-100 text-green-800
-                @elseif($activityLog->status === 'warning') bg-yellow-100 text-yellow-800
+                @elseif($activityLog->status === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
                 @else bg-red-100 text-red-800
                 @endif">
                 {{ ucfirst($activityLog->status) }}
@@ -26,14 +26,31 @@
     <!-- Main Activity Card -->
     <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
         <!-- Card Header -->
-        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-100">
+        <div class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10 px-8 py-6 border-b border-gray-100">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg">
+                    <div class="p-3 rounded-xl bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] text-white shadow-lg">
                         <i class="{{ $activityLog->action_icon }} text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <h1 class="text-2xl font-bold text-gray-900">{{ ucfirst(str_replace('_', ' ', $activityLog->action)) }}</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            @php
+                                $actionLabels = [
+                                    'access_own_phs' => 'Access',
+                                    'return_to_admin' => 'Return',
+                                    'login' => 'Login',
+                                    'logout' => 'Logout',
+                                    'create' => 'Create',
+                                    'update' => 'Update',
+                                    'delete' => 'Delete',
+                                    'submit' => 'Submit',
+                                    'enable' => 'Enable',
+                                    'disable' => 'Disable',
+                                    'password_reset' => 'Reset',
+                                ];
+                                echo $actionLabels[$activityLog->action] ?? ucfirst(explode('_', $activityLog->action)[0]);
+                            @endphp
+                        </h1>
                         <p class="text-gray-600">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('F d, Y \a\t h:i:s A') }}</p>
                     </div>
                 </div>
@@ -49,7 +66,7 @@
             <!-- User Information Section -->
             <div class="mb-8">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-user mr-2 text-blue-500"></i>
+                    <i class="fas fa-user mr-2 text-[#1B365D]"></i>
                     User Information
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -69,27 +86,44 @@
                                 <span class="font-medium text-gray-900">{{ $activityLog->user->email ?? 'N/A' }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Role:</span>
-                                <span class="font-medium text-gray-900">{{ ucfirst($activityLog->user->role ?? 'N/A') }}</span>
+                                <span class="text-gray-600">User Type:</span>
+                                <span class="font-medium text-gray-900">{{ ucfirst($activityLog->user->usertype ?? 'N/A') }}</span>
                             </div>
-        </div>
-        </div>
+                        </div>
+                    </div>
                     
                     <div class="bg-gray-50 rounded-xl p-6">
                         <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
-                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                            <i class="fas fa-info-circle mr-2 text-[#1B365D]"></i>
                             Activity Details
                         </h3>
                         <div class="space-y-3">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Action:</span>
-                                <span class="font-medium text-gray-900">{{ ucfirst(str_replace('_', ' ', $activityLog->action)) }}</span>
-        </div>
+                                <span class="font-medium text-gray-900">
+                                    @php
+                                        $actionLabels = [
+                                            'access_own_phs' => 'Access',
+                                            'return_to_admin' => 'Return',
+                                            'login' => 'Login',
+                                            'logout' => 'Logout',
+                                            'create' => 'Create',
+                                            'update' => 'Update',
+                                            'delete' => 'Delete',
+                                            'submit' => 'Submit',
+                                            'enable' => 'Enable',
+                                            'disable' => 'Disable',
+                                            'password_reset' => 'Reset',
+                                        ];
+                                        echo $actionLabels[$activityLog->action] ?? ucfirst(explode('_', $activityLog->action)[0]);
+                                    @endphp
+                                </span>
+                            </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Status:</span>
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full 
                     @if($activityLog->status === 'success') bg-green-100 text-green-800
-                    @elseif($activityLog->status === 'warning') bg-yellow-100 text-yellow-800
+                    @elseif($activityLog->status === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
                     @else bg-red-100 text-red-800
                     @endif">
                     {{ ucfirst($activityLog->status) }}
@@ -111,7 +145,7 @@
             <!-- Description Section -->
             <div class="mb-8">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-align-left mr-2 text-blue-500"></i>
+                    <i class="fas fa-align-left mr-2 text-[#1B365D]"></i>
                     Activity Description
                 </h2>
                 <div class="bg-gray-50 rounded-xl p-6">
@@ -122,13 +156,13 @@
             <!-- Technical Details Section -->
             <div class="mb-8">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-cogs mr-2 text-blue-500"></i>
+                    <i class="fas fa-cogs mr-2 text-[#1B365D]"></i>
                     Technical Details
                 </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 rounded-xl p-6">
                         <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-network-wired mr-2 text-green-500"></i>
+                            <i class="fas fa-network-wired mr-2 text-[#D4AF37]"></i>
                             Network Information
                         </h3>
                         <div class="space-y-3">
@@ -145,7 +179,7 @@
                     
                     <div class="bg-gray-50 rounded-xl p-6">
                         <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-clock mr-2 text-purple-500"></i>
+                            <i class="fas fa-clock mr-2 text-[#D4AF37]"></i>
                             Timestamp Information
                         </h3>
                         <div class="space-y-3">
@@ -169,18 +203,18 @@
             <!-- Related Actions -->
             <div class="border-t border-gray-200 pt-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-link mr-2 text-blue-500"></i>
+                    <i class="fas fa-link mr-2 text-[#1B365D]"></i>
                     Related Actions
                 </h2>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('admin.activity-logs.index') }}" 
-                       class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                       class="inline-flex items-center px-4 py-2 bg-[#1B365D]/10 text-[#1B365D] rounded-lg hover:bg-[#1B365D]/20 transition-colors border border-[#1B365D]/20">
                         <i class="fas fa-list mr-2"></i>
                         View All Logs
                     </a>
                     @if($activityLog->user)
                     <a href="{{ route('admin.users.show', $activityLog->user->id) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                       class="inline-flex items-center px-4 py-2 bg-[#D4AF37]/10 text-[#D4AF37] rounded-lg hover:bg-[#D4AF37]/20 transition-colors border border-[#D4AF37]/20">
                         <i class="fas fa-user mr-2"></i>
                         View User Profile
                     </a>

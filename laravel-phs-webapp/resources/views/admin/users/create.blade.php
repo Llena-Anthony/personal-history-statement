@@ -42,7 +42,7 @@
 
     <!-- Enhanced Form -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+        <div class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10 px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <i class="fas fa-user-edit text-[#1B365D]"></i>
                 User Information
@@ -57,7 +57,7 @@
             <div class="space-y-6">
                 <div class="border-b border-gray-200 pb-4">
                     <h4 class="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fas fa-user text-blue-600"></i>
+                        <i class="fas fa-user text-[#1B365D]"></i>
                         Personal Information
                     </h4>
                     
@@ -129,7 +129,7 @@
                 <!-- Account Information Section -->
                 <div class="border-b border-gray-200 pb-4">
                     <h4 class="text-md font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <i class="fas fa-shield-alt text-green-600"></i>
+                        <i class="fas fa-shield-alt text-[#D4AF37]"></i>
                         Account Information
                     </h4>
                     
@@ -201,14 +201,14 @@
                 </div>
 
                 <!-- Help Section -->
-                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="bg-[#1B365D]/10 border border-[#1B365D]/20 rounded-lg p-4">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
-                            <i class="fas fa-info-circle text-blue-500 text-lg mt-1"></i>
+                            <i class="fas fa-info-circle text-[#1B365D] text-lg mt-1"></i>
                         </div>
                         <div class="ml-3">
-                            <h4 class="text-sm font-medium text-blue-800">User Types & Organic Groups</h4>
-                            <div class="mt-2 text-sm text-blue-700 space-y-1">
+                            <h4 class="text-sm font-medium text-[#1B365D]">User Types & Organic Groups</h4>
+                            <div class="mt-2 text-sm text-[#1B365D]/80 space-y-1">
                                 <p><strong>Administrator:</strong> Full system access, can manage users and view all data</p>
                                 <p><strong>Personnel:</strong> Staff access, can view and manage PHS submissions</p>
                                 <p><strong>Client:</strong> Standard user access, can create and edit their own PHS</p>
@@ -223,7 +223,7 @@
             <div class="flex items-center gap-3 justify-end w-full">
                 <a href="{{ route('admin.users.index') }}" 
                    id="cancelBtn"
-                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none"
+                   class="inline-flex items-center px-4 py-2 border border-[#1B365D] text-sm font-medium rounded-xl text-[#1B365D] bg-white hover:bg-[#1B365D] hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none"
                    tabindex="-1"
                    aria-disabled="true"
                    style="pointer-events: none; opacity: 0.5;"

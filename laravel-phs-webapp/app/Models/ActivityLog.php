@@ -226,6 +226,14 @@ class ActivityLog extends Model
             return "Submitted form";
         }
         
+        // Handle admin PHS access/return actions
+        if ($this->action === 'access_own_phs') {
+            return 'Accessed own PHS';
+        }
+        if ($this->action === 'return_to_admin') {
+            return 'Returned to admin view';
+        }
+        
         // For other actions, return a more descriptive version
         return $action . " action performed";
     }

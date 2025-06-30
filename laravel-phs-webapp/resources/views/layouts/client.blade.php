@@ -289,11 +289,26 @@
                         </a>
                         <!-- User Avatar and Name (no dropdown) -->
                         <!-- Removed user avatar/profile picture and name from header -->
-                        <div class="hidden lg:block text-white text-xs">
+                        <div class="hidden lg:block text-white text-xs flex items-center gap-2">
                             <span class="text-[#D4AF37]">Client</span>
                             <span class="mx-2">/</span>
                             <span>@yield('header', 'Dashboard')</span>
+                            @if(session('admin_switched_to_client'))
+                            <span class="ml-2 px-2 py-1 bg-blue-600 text-white text-xs rounded-full font-medium flex items-center">
+                                <i class="fas fa-user-shield mr-1"></i>Admin PHS
+                            </span>
+                            @endif
                         </div>
+                        
+                        <!-- Return to Admin Button (only show if admin switched to client) -->
+                        @if(session('admin_switched_to_client'))
+                        <a href="{{ route('return.to.admin') }}" 
+                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-sm font-medium rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Return to Admin
+                        </a>
+                        @endif
+                        
                         <!-- Logout Icon Button -->
                         <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
                             <i class="fas fa-power-off text-lg"></i>
@@ -308,6 +323,31 @@
             <!-- Content Area -->
             <div class="content-area w-full">
                 <div class="content-scroll">
+                    <!-- Success Messages -->
+                    @if(session('success'))
+                    <div id="success-message" class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg transition-opacity duration-500">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-green-800">
+                                    {{ session('success') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        setTimeout(function() {
+                            var msg = document.getElementById('success-message');
+                            if (msg) {
+                                msg.style.opacity = '0';
+                                setTimeout(function() { msg.style.display = 'none'; }, 500);
+                            }
+                        }, 3000);
+                    </script>
+                    @endif
+                    
                     @yield('content')
                 </div>
             </div>
