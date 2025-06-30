@@ -12,9 +12,6 @@ class PHS extends Model
     protected $fillable = [
         'user_id',
         'name_id',
-        'first_name',
-        'middle_name',
-        'last_name',
         'suffix',
         'date_of_birth',
         'place_of_birth',
@@ -103,15 +100,19 @@ class PHS extends Model
         return $this->belongsTo(NameDetails::class, 'name_id');
     }
 
-    // Helper method to get full name from direct fields
+    // Helper method to get full name from name relationship
     public function getFullNameAttribute()
     {
-        $name = $this->first_name ?? '';
-        if ($this->middle_name) {
-            $name .= ' ' . $this->middle_name;
+        if (!$this->name) {
+            return '';
         }
-        if ($this->last_name) {
-            $name .= ' ' . $this->last_name;
+        
+        $name = $this->name->first_name ?? '';
+        if ($this->name->middle_name) {
+            $name .= ' ' . $this->name->middle_name;
+        }
+        if ($this->name->last_name) {
+            $name .= ' ' . $this->name->last_name;
         }
         if ($this->suffix) {
             $name .= ' ' . $this->suffix;
@@ -119,21 +120,21 @@ class PHS extends Model
         return trim($name);
     }
 
-    // Helper method to get first name (from direct field)
+    // Helper method to get first name (from name relationship)
     public function getFirstNameAttribute()
     {
-        return $this->attributes['first_name'] ?? null;
+        return $this->name ? $this->name->first_name : null;
     }
 
-    // Helper method to get middle name (from direct field)
+    // Helper method to get middle name (from name relationship)
     public function getMiddleNameAttribute()
     {
-        return $this->attributes['middle_name'] ?? null;
+        return $this->name ? $this->name->middle_name : null;
     }
 
-    // Helper method to get last name (from direct field)
+    // Helper method to get last name (from name relationship)
     public function getLastNameAttribute()
     {
-        return $this->attributes['last_name'] ?? null;
+        return $this->name ? $this->name->last_name : null;
     }
 } 

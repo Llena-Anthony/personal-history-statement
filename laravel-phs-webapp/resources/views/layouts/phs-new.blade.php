@@ -573,6 +573,7 @@
 
         .max-w-4xl.mx-auto { max-width: 900px !important; margin-left: auto; margin-right: auto; }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <div class="phs-layout" x-data="phsNavigation('{{ $currentSection ?? 'personal-details' }}')">
@@ -789,6 +790,15 @@
     </div>
     
     <script>
+        // Add this helper at the top of your main JS block or before any fetch calls
+        function getCsrfToken() {
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            return meta ? meta.getAttribute('content') : '';
+        }
+
+        // In every fetch POST (form submission), add the CSRF token header
+        const csrfToken = getCsrfToken();
+
         // PHS Section Navigation Utility
         const PHSSectionOrder = [
             'personal-details',
@@ -928,7 +938,8 @@
                     body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-Save-Only': 'true' // Custom header to indicate save-only mode
+                        'X-Save-Only': 'true',
+                        'X-CSRF-TOKEN': csrfToken
                     }
                 });
 

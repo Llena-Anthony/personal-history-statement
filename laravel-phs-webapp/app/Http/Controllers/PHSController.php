@@ -43,130 +43,169 @@ class PHSController extends Controller
 
     public function store(Request $request)
     {
-        // Debug: Log the request data
+        // Check if this is a save-only request (for dynamic navigation)
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
         \Log::info('PHS Store Request:', $request->all());
         
-        // Log address, TIN, and change in name fields from the request
-        \Log::info('Address/TIN/NameChange fields:', [
-            'home_region' => $request->input('home_region'),
-            'home_region_name' => $request->input('home_region_name'),
-            'home_province' => $request->input('home_province'),
-            'home_province_name' => $request->input('home_province_name'),
-            'home_city' => $request->input('home_city'),
-            'home_city_name' => $request->input('home_city_name'),
-            'home_barangay' => $request->input('home_barangay'),
-            'home_barangay_name' => $request->input('home_barangay_name'),
-            'business_region' => $request->input('business_region'),
-            'business_region_name' => $request->input('business_region_name'),
-            'business_province' => $request->input('business_province'),
-            'business_province_name' => $request->input('business_province_name'),
-            'business_city' => $request->input('business_city'),
-            'business_city_name' => $request->input('business_city_name'),
-            'business_barangay' => $request->input('business_barangay'),
-            'business_barangay_name' => $request->input('business_barangay_name'),
-            'tin' => $request->input('tin'),
-            'tin_no' => $request->input('tin_no'),
-            'name_change' => $request->input('name_change'),
-            'change_in_name' => $request->input('change_in_name'),
-        ]);
-        
-        // Combine granular address fields into single address strings for DB (use names if available)
-        $home_address = trim(implode(', ', array_filter([
-            $request->input('home_street'),
-            $request->input('home_barangay_name', $request->input('home_barangay')),
-            $request->input('home_city_name', $request->input('home_city')),
-            $request->input('home_province_name', $request->input('home_province')),
-            $request->input('home_region_name', $request->input('home_region')),
-        ])));
-        $business_address = trim(implode(', ', array_filter([
-            $request->input('business_street'),
-            $request->input('business_barangay_name', $request->input('business_barangay')),
-            $request->input('business_city_name', $request->input('business_city')),
-            $request->input('business_province_name', $request->input('business_province')),
-            $request->input('business_region_name', $request->input('business_region')),
-        ])));
-
-        // Validate all Section 1 fields
-        $validated = $request->validate([
-            'first_name' => 'nullable|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
-            'suffix' => 'nullable|string|max:20',
-            'nickname' => 'nullable|string|max:100',
-            'date_of_birth' => 'nullable|date',
-            'place_of_birth' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|max:20',
-            'civil_status' => 'nullable|string|max:20',
-            'citizenship' => 'nullable|string|max:100',
-            'nationality' => 'nullable|string|max:100',
-            'rank' => 'nullable|string|max:100',
-            'afpsn' => 'nullable|string|max:100',
-            'branch_of_service' => 'nullable|string|max:100',
-            'present_job' => 'nullable|string|max:255',
-            'religion' => 'nullable|string|max:100',
-            'email' => 'nullable|email|max:255',
-            'mobile' => 'nullable|string|max:50',
-            'tin_no' => 'nullable|string|max:50',
-            'passport_number' => 'nullable|string|max:50',
-            'passport_expiry' => 'nullable|date',
-            // Home address fields
-            'home_region' => 'nullable|string|max:100',
-            'home_province' => 'nullable|string|max:100',
-            'home_city' => 'nullable|string|max:100',
-            'home_barangay' => 'nullable|string|max:100',
-            'home_street' => 'nullable|string|max:255',
-            'home_complete_address' => 'nullable|string|max:255',
-            // Business address fields
-            'business_region' => 'nullable|string|max:100',
-            'business_province' => 'nullable|string|max:100',
-            'business_city' => 'nullable|string|max:100',
-            'business_barangay' => 'nullable|string|max:100',
-            'business_street' => 'nullable|string|max:255',
-            'business_complete_address' => 'nullable|string|max:255',
-        ]);
-
-        // Map form 'tin' input to both 'tin_no' and 'tin' for DB
-        if ($request->has('tin')) {
-            $validated['tin_no'] = $request->input('tin');
-        }
-
-        // Add name change fields from form 'name_change'
-        $name_change = $request->input('name_change', $request->input('change_in_name'));
-        $validated['name_change'] = $name_change;
-        $validated['change_in_name'] = $name_change;
-        // Add combined address fields
-        $validated['home_address'] = $home_address;
-        $validated['business_address'] = $business_address;
-
-        // Debug: Log the validated data before saving
-        \Log::info('PHS Validated Data Before Save:', $validated);
-
-        // Capitalize first letter of each word for names
-        if (isset($validated['first_name']) && $validated['first_name']) {
-            $validated['first_name'] = ucwords(strtolower($validated['first_name']));
-        }
-        if (isset($validated['middle_name']) && $validated['middle_name']) {
-            $validated['middle_name'] = ucwords(strtolower($validated['middle_name']));
-        }
-        if (isset($validated['last_name']) && $validated['last_name']) {
-            $validated['last_name'] = ucwords(strtolower($validated['last_name']));
-        }
-
-        // Assign address name fields to $validated
-        $validated['home_region_name'] = $request->input('home_region_name');
-        $validated['home_province_name'] = $request->input('home_province_name');
-        $validated['home_city_name'] = $request->input('home_city_name');
-        $validated['home_barangay_name'] = $request->input('home_barangay_name');
-        $validated['business_region_name'] = $request->input('business_region_name');
-        $validated['business_province_name'] = $request->input('business_province_name');
-        $validated['business_city_name'] = $request->input('business_city_name');
-        $validated['business_barangay_name'] = $request->input('business_barangay_name');
-
-        // After validation and before saving ...
-        $validated['home_region'] = $request->input('home_region_name');
-        $validated['business_region'] = $request->input('business_region_name');
-
         try {
+            // For save-only mode, use minimal validation
+            if ($isSaveOnly) {
+                $validated = $request->validate([
+                    'first_name' => 'nullable|string|max:255',
+                    'middle_name' => 'nullable|string|max:255',
+                    'last_name' => 'nullable|string|max:255',
+                    'suffix' => 'nullable|string|max:20',
+                    'nickname' => 'nullable|string|max:100',
+                    'date_of_birth' => 'nullable|date',
+                    'place_of_birth' => 'nullable|string|max:255',
+                    'gender' => 'nullable|string|max:20',
+                    'civil_status' => 'nullable|string|max:20',
+                    'citizenship' => 'nullable|string|max:100',
+                    'nationality' => 'nullable|string|max:100',
+                    'rank' => 'nullable|string|max:100',
+                    'afpsn' => 'nullable|string|max:100',
+                    'branch_of_service' => 'nullable|string|max:100',
+                    'present_job' => 'nullable|string|max:255',
+                    'religion' => 'nullable|string|max:100',
+                    'email' => 'nullable|email|max:255',
+                    'mobile' => 'nullable|string|max:50',
+                    'tin_no' => 'nullable|string|max:50',
+                    'passport_number' => 'nullable|string|max:50',
+                    'passport_expiry' => 'nullable|date',
+                    // Home address fields
+                    'home_region' => 'nullable|string|max:100',
+                    'home_province' => 'nullable|string|max:100',
+                    'home_city' => 'nullable|string|max:100',
+                    'home_barangay' => 'nullable|string|max:100',
+                    'home_street' => 'nullable|string|max:255',
+                    'home_complete_address' => 'nullable|string|max:255',
+                    // Business address fields
+                    'business_region' => 'nullable|string|max:100',
+                    'business_province' => 'nullable|string|max:100',
+                    'business_city' => 'nullable|string|max:100',
+                    'business_barangay' => 'nullable|string|max:100',
+                    'business_street' => 'nullable|string|max:255',
+                    'business_complete_address' => 'nullable|string|max:255',
+                ]);
+            } else {
+                // Full validation for final submission
+                $validated = $request->validate([
+                    'first_name' => 'required|string|max:255',
+                    'middle_name' => 'nullable|string|max:255',
+                    'last_name' => 'required|string|max:255',
+                    'suffix' => 'nullable|string|max:20',
+                    'nickname' => 'nullable|string|max:100',
+                    'date_of_birth' => 'required|date',
+                    'place_of_birth' => 'required|string|max:255',
+                    'gender' => 'required|string|max:20',
+                    'civil_status' => 'required|string|max:20',
+                    'citizenship' => 'required|string|max:100',
+                    'nationality' => 'nullable|string|max:100',
+                    'rank' => 'nullable|string|max:100',
+                    'afpsn' => 'nullable|string|max:100',
+                    'branch_of_service' => 'nullable|string|max:100',
+                    'present_job' => 'nullable|string|max:255',
+                    'religion' => 'nullable|string|max:100',
+                    'email' => 'required|email|max:255',
+                    'mobile' => 'required|string|max:50',
+                    'tin_no' => 'nullable|string|max:50',
+                    'passport_number' => 'nullable|string|max:50',
+                    'passport_expiry' => 'nullable|date',
+                    // Home address fields
+                    'home_region' => 'required|string|max:100',
+                    'home_province' => 'required|string|max:100',
+                    'home_city' => 'required|string|max:100',
+                    'home_barangay' => 'required|string|max:100',
+                    'home_street' => 'required|string|max:255',
+                    'home_complete_address' => 'required|string|max:255',
+                    // Business address fields
+                    'business_region' => 'required|string|max:100',
+                    'business_province' => 'required|string|max:100',
+                    'business_city' => 'required|string|max:100',
+                    'business_barangay' => 'required|string|max:100',
+                    'business_street' => 'required|string|max:255',
+                    'business_complete_address' => 'required|string|max:255',
+                ]);
+            }
+
+            // Map form 'tin' input to 'tin_no' for DB
+            if ($request->has('tin')) {
+                $validated['tin_no'] = $request->input('tin');
+            }
+
+            // Add name change fields from form 'name_change'
+            $name_change = $request->input('name_change', $request->input('change_in_name'));
+            $validated['change_in_name'] = $name_change;
+
+            // Combine granular address fields into single address strings for DB (use names if available)
+            $home_address = trim(implode(', ', array_filter([
+                $request->input('home_street'),
+                $request->input('home_barangay_name', $request->input('home_barangay')),
+                $request->input('home_city_name', $request->input('home_city')),
+                $request->input('home_province_name', $request->input('home_province')),
+                $request->input('home_region_name', $request->input('home_region')),
+            ])));
+            $business_address = trim(implode(', ', array_filter([
+                $request->input('business_street'),
+                $request->input('business_barangay_name', $request->input('business_barangay')),
+                $request->input('business_city_name', $request->input('business_city')),
+                $request->input('business_province_name', $request->input('business_province')),
+                $request->input('business_region_name', $request->input('business_region')),
+            ])));
+
+            // Add combined address fields
+            $validated['home_address'] = $home_address;
+            $validated['business_address'] = $business_address;
+
+            // Capitalize first letter of each word for names
+            foreach (['first_name', 'middle_name', 'last_name'] as $field) {
+                if (isset($validated[$field]) && $validated[$field]) {
+                    $validated[$field] = ucwords(strtolower($validated[$field]));
+                }
+            }
+
+            // Add address name fields to validated data
+            $addressNameFields = [
+                'home_region_name', 'home_province_name', 'home_city_name', 'home_barangay_name',
+                'business_region_name', 'business_province_name', 'business_city_name', 'business_barangay_name'
+            ];
+            
+            foreach ($addressNameFields as $field) {
+                $validated[$field] = $request->input($field);
+            }
+
+            // For save-only mode, provide default values for required fields if they're missing
+            if ($isSaveOnly) {
+                $defaults = [
+                    'first_name' => 'N/A',
+                    'last_name' => 'N/A',
+                    'date_of_birth' => '1900-01-01',
+                    'place_of_birth' => 'N/A',
+                    'gender' => 'N/A',
+                    'civil_status' => 'N/A',
+                    'citizenship' => 'N/A',
+                    'email' => 'n/a@example.com',
+                ];
+                
+                // Only add defaults for fields that are missing or empty
+                foreach ($defaults as $field => $defaultValue) {
+                    if (!isset($validated[$field]) || empty($validated[$field])) {
+                        $validated[$field] = $defaultValue;
+                    }
+                }
+            }
+
+            // Filter out any fields that don't exist in the PHS model's fillable array
+            $phsModel = new PHS();
+            $fillableFields = $phsModel->getFillable();
+            $validated = array_intersect_key($validated, array_flip($fillableFields));
+
+            // Add user_id
+            $validated['user_id'] = auth()->id();
+
+            \Log::info('PHS Validated Data Before Save:', $validated);
+
             DB::beginTransaction();
 
             // Check if PHS already exists for this user
@@ -180,10 +219,7 @@ class PHSController extends Controller
             } else {
                 // Create new PHS
                 \Log::info('Creating new PHS for user:', ['user_id' => auth()->id()]);
-                $phs = PHS::create([
-                    'user_id' => auth()->id(),
-                    ...$validated
-                ]);
+                $phs = PHS::create($validated);
                 \Log::info('PHS after create:', $phs->toArray());
             }
 
@@ -195,18 +231,25 @@ class PHSController extends Controller
             \Log::info('PHS saved successfully:', ['phs_id' => $phs->id]);
 
             // Return appropriate response based on mode
-            if ($request->header('X-Save-Only') === 'true') {
-                return response()->json(['success' => true, 'message' => 'Data saved successfully']);
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Personal details saved successfully']);
             }
 
-            return redirect()->route('phs.family-background.create')
-                ->with('success', 'Personal information saved successfully. Please continue with your family background.');
+            return redirect()->route('phs.personal-characteristics.create')
+                ->with('success', 'Personal details saved successfully. Please continue with your personal characteristics.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('PHS validation error:', ['errors' => $e->errors()]);
+            
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
             
             \Log::error('PHS save error:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             
-            if ($request->header('X-Save-Only') === 'true') {
+            if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving: ' . $e->getMessage()], 500);
             }
             

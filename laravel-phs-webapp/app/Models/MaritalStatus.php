@@ -12,7 +12,9 @@ class MaritalStatus extends Model
     protected $fillable = [
         'user_id',
         'marital_status',
-        'spouse_name_id',
+        'spouse_first_name',
+        'spouse_middle_name',
+        'spouse_last_name',
         'spouse_suffix',
         'marriage_date',
         'marriage_date_type',
@@ -39,8 +41,19 @@ class MaritalStatus extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function spouseName()
+    // Helper method to get spouse full name
+    public function getSpouseFullNameAttribute()
     {
-        return $this->belongsTo(NameDetails::class, 'spouse_name_id');
+        $name = $this->spouse_first_name ?? '';
+        if ($this->spouse_middle_name) {
+            $name .= ' ' . $this->spouse_middle_name;
+        }
+        if ($this->spouse_last_name) {
+            $name .= ' ' . $this->spouse_last_name;
+        }
+        if ($this->spouse_suffix) {
+            $name .= ' ' . $this->spouse_suffix;
+        }
+        return trim($name);
     }
 } 
