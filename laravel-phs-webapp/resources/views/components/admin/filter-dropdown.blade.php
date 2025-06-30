@@ -37,9 +37,10 @@
                     <a href="{{ request()->fullUrlWithQuery(['status' => $status]) }}" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150">
                         <i class="fas fa-circle mr-2 text-xs 
-                            @if($status === 'success') text-green-500
-                            @elseif($status === 'warning') text-yellow-500
-                            @else text-red-500
+                            @if($status === 'active' || $status === 'success') text-green-500
+                            @elseif($status === 'disabled' || $status === 'inactive' || $status === 'warning') text-red-500
+                            @elseif($status === 'error') text-red-600
+                            @else text-gray-500
                             @endif"></i>
                         {{ $label }}
                     </a>
@@ -243,6 +244,15 @@
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                 Status: {{ $filters['status'][request('status')] ?? request('status') }}
                 <a href="{{ request()->fullUrlWithQuery(['status' => null]) }}" class="ml-2 text-green-600 hover:text-green-800">
+                    <i class="fas fa-times"></i>
+                </a>
+            </span>
+            @endif
+            
+            @if(request('user_type'))
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                User Type: {{ $filters['user_type'][request('user_type')] ?? request('user_type') }}
+                <a href="{{ request()->fullUrlWithQuery(['user_type' => null]) }}" class="ml-2 text-blue-600 hover:text-blue-800">
                     <i class="fas fa-times"></i>
                 </a>
             </span>

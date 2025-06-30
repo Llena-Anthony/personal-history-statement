@@ -5,38 +5,57 @@
 @section('header', 'Edit User')
 
 @section('content')
-<div class="max-w-3xl mx-auto py-4">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
+<div class="max-w-4xl mx-auto py-6">
+    <!-- Enhanced Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
+        <div class="flex items-center gap-4">
+            <div class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg">
+                <i class="fas fa-user-edit text-white text-xl"></i>
+            </div>
         <div>
-            <h2 class="text-xl font-bold text-[#1B365D] flex items-center gap-2">
-                <i class="fas fa-user-edit text-[#1B365D] text-base"></i> Edit User
-            </h2>
-            <p class="text-gray-500 mt-1 text-sm">Edit user account details below.</p>
+                <h1 class="text-2xl font-bold text-gray-900">Edit User</h1>
+                <p class="text-gray-600 mt-1">Update user account settings and permissions</p>
+            </div>
         </div>
-        <a href="{{ route('admin.users.index') }}" class="inline-flex items-center px-4 py-2 border border-[#1B365D] text-[#1B365D] bg-white hover:bg-[#1B365D] hover:text-white rounded-lg font-medium shadow-sm transition text-sm">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Users
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.users.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium shadow-sm">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Users
         </a>
+        </div>
     </div>
 
+    <!-- Error Messages -->
     @if($errors->any())
-    <div class="bg-red-50 border border-red-200 rounded-xl p-3 fade-in mb-3 text-sm">
-        <div class="flex items-center">
-            <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
-            <span class="text-sm text-red-700 font-medium">Please correct the following errors:</span>
+    <div class="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 animate-fade-in">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500 text-lg"></i>
         </div>
-        <ul class="mt-2 list-disc list-inside text-sm text-red-700">
+            <div class="ml-3">
+                <h3 class="text-sm font-semibold text-red-800">Please correct the following errors:</h3>
+                <ul class="mt-2 list-disc list-inside text-sm text-red-700 space-y-1">
             @foreach($errors->all() as $error)
             <li>{{ $error }}</li>
             @endforeach
         </ul>
+            </div>
+        </div>
     </div>
     @endif
 
     @if(session('error'))
-    <div class="bg-red-50 border border-red-200 text-red-800 px-3 py-2 rounded-xl mb-3 flex items-center gap-2 text-sm" role="alert">
-        <i class="fas fa-exclamation-circle"></i>
-        <span>{{ session('error') }}</span>
+    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-2xl mb-6 flex items-center gap-3 animate-fade-in" role="alert">
+        <i class="fas fa-exclamation-circle text-lg"></i>
+        <span class="font-medium">{{ session('error') }}</span>
+    </div>
+    @endif
+
+    @if(session('success'))
+    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-2xl mb-6 flex items-center gap-3 animate-fade-in" role="alert">
+        <i class="fas fa-check-circle text-lg"></i>
+        <span class="font-medium">{{ session('success') }}</span>
     </div>
     @endif
 
@@ -44,79 +63,234 @@
         @csrf
         @method('PUT')
         
-        <div class="bg-white rounded-2xl shadow-lg p-4">
-            <!-- Instruction -->
-            <div class="mb-4 flex items-center gap-2">
-                <i class="fas fa-info-circle text-blue-500 text-xs"></i>
-                <span class="text-gray-500 text-xs font-semibold">Only user type and status can be edited. Other fields are read-only.</span>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Form Card -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+                    <!-- Card Header -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-edit text-blue-600 mr-3"></i>
+                                <h2 class="text-lg font-semibold text-gray-900">User Information</h2>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                    @if($user->is_active) bg-green-100 text-green-800 @else bg-red-100 text-red-800 @endif">
+                                    {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                </span>
             </div>
-            <div class="border-b border-gray-200 mb-4"></div>
-            <div class="space-y-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="username" class="block text-xs font-semibold text-gray-700 mb-1">Username</label>
-                        <div class="relative">
-                            <input type="text" id="username" value="{{ $user->username }}" disabled
-                                class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
-                            <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited."><i class="fas fa-lock"></i></span>
                         </div>
                     </div>
+
+                    <!-- Form Content -->
+                    <div class="p-6 space-y-6">
+                        <!-- Read-only Information Section -->
                     <div>
-                        <label for="name" class="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
+                            <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                                Account Details (Read-only)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                                    <div class="relative">
+                                        <input type="text" value="{{ $user->username }}" disabled
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <i class="fas fa-lock text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                    <div class="relative">
+                                        <input type="text" value="{{ $user->name }}" disabled
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <i class="fas fa-lock text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                         <div class="relative">
-                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" required disabled
-                                class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
-                            <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited."><i class="fas fa-lock"></i></span>
+                                        <input type="email" value="{{ $user->email }}" disabled
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <i class="fas fa-lock text-gray-400"></i>
+                                        </div>
                         </div>
                     </div>
-                    <div>
-                        <label for="email" class="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+                                
+                                <div class="form-group">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Organic Group</label>
                         <div class="relative">
-                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" required disabled
-                                class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
-                            <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited."><i class="fas fa-lock"></i></span>
+                                        <input type="text" value="{{ $user->organic_role ?? 'N/A' }}" disabled
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed">
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <i class="fas fa-lock text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Editable Settings Section -->
+                        <div class="border-t border-gray-200 pt-6">
+                            <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center">
+                                <i class="fas fa-cog text-green-500 mr-2"></i>
+                                Account Settings (Editable)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-group">
+                                    <label for="usertype" class="block text-sm font-medium text-gray-700 mb-2">
+                                        User Type <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <select name="usertype" id="usertype" required
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                                            <option value="admin" {{ old('usertype', $user->usertype) == 'admin' ? 'selected' : '' }}>
+                                                <i class="fas fa-shield-alt"></i> Admin
+                                            </option>
+                                            <option value="personnel" {{ old('usertype', $user->usertype) == 'personnel' ? 'selected' : '' }}>
+                                                <i class="fas fa-user-tie"></i> Personnel
+                                            </option>
+                                            <option value="client" {{ old('usertype', $user->usertype) == 'client' ? 'selected' : '' }}>
+                                                <i class="fas fa-user"></i> Client
+                                            </option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                            <i class="fas fa-chevron-down text-gray-400"></i>
+                                        </div>
                         </div>
                     </div>
-                    <div>
-                        <label for="organic_role" class="block text-xs font-semibold text-gray-700 mb-1">Organic Group</label>
+                                
+                                <div class="form-group">
+                                    <label for="is_active" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Account Status <span class="text-red-500">*</span>
+                                    </label>
                         <div class="relative">
-                            <input type="text" name="organic_role" id="organic_role" value="{{ old('organic_role', $user->organic_role) }}" required disabled
-                                class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
-                            <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited."><i class="fas fa-lock"></i></span>
+                                        <select name="is_active" id="is_active" required
+                                            class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+                                            <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>
+                                                <i class="fas fa-check-circle"></i> Active
+                                            </option>
+                                            <option value="0" {{ old('is_active', $user->is_active) == 0 ? 'selected' : '' }}>
+                                                <i class="fas fa-times-circle"></i> Inactive
+                                            </option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                            <i class="fas fa-chevron-down text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-                    <div>
-                        <label for="usertype" class="block text-xs font-semibold text-gray-700 mb-1">User Type <span class="text-red-500">*</span></label>
-                        <select name="usertype" id="usertype" required
-                            class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5">
-                            <option value="admin" {{ old('usertype', $user->usertype) == 'admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="personnel" {{ old('usertype', $user->usertype) == 'personnel' ? 'selected' : '' }}>Personnel</option>
-                            <option value="client" {{ old('usertype', $user->usertype) == 'client' ? 'selected' : '' }}>Client</option>
-                        </select>
+            </div>
+
+            <!-- Sidebar Card -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+                    <!-- Card Header -->
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-100">
+                        <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <i class="fas fa-user-circle text-gray-600 mr-3"></i>
+                            User Profile
+                        </h2>
                     </div>
-                    <div>
-                        <label for="is_active" class="block text-xs font-semibold text-gray-700 mb-1">Status <span class="text-red-500">*</span></label>
-                        <select name="is_active" id="is_active" required
-                            class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5">
-                            <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>Active</option>
-                            <option value="0" {{ old('is_active', $user->is_active) == 0 ? 'selected' : '' }}>Inactive</option>
-                        </select>
+
+                    <!-- Profile Content -->
+                    <div class="p-6">
+                        <!-- User Avatar -->
+                        <div class="text-center mb-6">
+                            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
+                                <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
+                            </div>
+                            <h3 class="font-semibold text-gray-900">{{ $user->name }}</h3>
+                            <p class="text-sm text-gray-500">{{ $user->username }}</p>
+                        </div>
+
+                        <!-- User Stats -->
+                        <div class="space-y-4">
+                            <div class="bg-blue-50 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-blue-900">User Type</span>
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                        @if($user->usertype == 'admin') bg-red-100 text-red-800
+                                        @elseif($user->usertype == 'personnel') bg-blue-100 text-blue-800
+                                        @else bg-green-100 text-green-800 @endif">
+                                        {{ ucfirst($user->usertype) }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-900">Account Status</span>
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                        @if($user->is_active) bg-green-100 text-green-800 @else bg-red-100 text-red-800 @endif">
+                                        {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-900">Member Since</span>
+                                    <span class="text-sm text-gray-600">{{ $user->created_at->format('M Y') }}</span>
+                                </div>
                     </div>
                 </div>
                 
-                <!-- Submit Button -->
-                <div class="flex justify-end pt-4 border-t border-gray-200">
-                    <button type="button" id="updateBtn" class="inline-flex items-center px-4 py-2 bg-[#1B365D] border border-transparent rounded-lg font-medium text-white hover:bg-[#2B4B7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition text-sm">
+                        <!-- Action Buttons -->
+                        <div class="mt-6 space-y-3">
+                            <button type="button" id="updateBtn" 
+                                    class="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-save mr-2"></i>
                         <span id="btnText">Update User</span>
                     </button>
+                            
+                            <a href="{{ route('admin.users.show', $user->id) }}" 
+                               class="w-full inline-flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200">
+                                <i class="fas fa-eye mr-2"></i>
+                                View Profile
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
+
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+
+.form-group {
+    transition: all 0.2s ease;
+}
+
+.form-group:focus-within {
+    transform: translateY(-1px);
+}
+
+/* Enhanced select styling */
+select:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -154,14 +328,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Disable button when no changes
             updateBtn.disabled = true;
             updateBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            updateBtn.classList.remove('hover:bg-[#2B4B7D]', 'focus:ring-[#1B365D]');
-            btnText.textContent = 'Update User';
-            updateBtn.querySelector('i').className = 'fas fa-save mr-2';
+            updateBtn.classList.remove('hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
+            btnText.textContent = 'No Changes';
+            updateBtn.querySelector('i').className = 'fas fa-check mr-2';
         } else {
             // Enable button when there are changes
             updateBtn.disabled = false;
             updateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            updateBtn.classList.add('hover:bg-[#2B4B7D]', 'focus:ring-[#1B365D]');
+            updateBtn.classList.add('hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
             btnText.textContent = 'Update User';
             updateBtn.querySelector('i').className = 'fas fa-save mr-2';
         }
@@ -181,9 +355,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!isConfirming) {
             // First click - show confirmation
-            updateBtn.classList.remove('bg-[#1B365D]', 'hover:bg-[#2B4B7D]', 'focus:ring-[#1B365D]');
-            updateBtn.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-500');
-            btnText.textContent = 'Save Changes';
+            updateBtn.classList.remove('from-blue-600', 'to-blue-700', 'hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
+            updateBtn.classList.add('from-green-600', 'to-green-700', 'hover:from-green-700', 'hover:to-green-800', 'focus:ring-green-500');
+            btnText.textContent = 'Confirm Update';
             updateBtn.querySelector('i').className = 'fas fa-check mr-2';
             isConfirming = true;
             
@@ -195,14 +369,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 10000);
         } else {
             // Second click - submit the form
+            updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Updating...';
             form.submit();
         }
     });
 
     function resetButton() {
         if (hasChanges) {
-            updateBtn.classList.remove('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-500');
-            updateBtn.classList.add('bg-[#1B365D]', 'hover:bg-[#2B4B7D]', 'focus:ring-[#1B365D]');
+            updateBtn.classList.remove('from-green-600', 'to-green-700', 'hover:from-green-700', 'hover:to-green-800', 'focus:ring-green-500');
+            updateBtn.classList.add('from-blue-600', 'to-blue-700', 'hover:from-blue-700', 'hover:to-blue-800', 'focus:ring-blue-500');
             btnText.textContent = 'Update User';
             updateBtn.querySelector('i').className = 'fas fa-save mr-2';
         } else {
