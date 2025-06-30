@@ -66,7 +66,7 @@ SCHOOLDETAILS (school_id, location, level)
 	FK	location REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
 
-033333MILITARYHISTORY (username, date_enlisted_afp, start_date_of_commision, end_date_of_commision, source_of_commision, military_assign)
+MILITARYHISTORY (username, date_enlisted_afp, start_date_of_commision, end_date_of_commision, source_of_commision, military_assign)
 	FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
 		military_assign REFERENCES MILITARYASSIGNMENTS NULLS NOT ALLOWED

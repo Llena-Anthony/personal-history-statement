@@ -13,38 +13,38 @@ return new class extends Migration
     {
         Schema::table('family_backgrounds', function (Blueprint $table) {
             // Mother citizenship fields
-            $table->string('mother_citizenship_type')->nullable();
+            $table->text('mother_citizenship_type')->nullable();
             $table->text('mother_citizenship_dual_1')->nullable();
             $table->text('mother_citizenship_dual_2')->nullable();
             $table->text('mother_citizenship_naturalized')->nullable();
-            $table->string('mother_naturalized_month')->nullable();
+            $table->text('mother_naturalized_month')->nullable();
             $table->integer('mother_naturalized_year')->nullable();
             $table->text('mother_naturalized_place')->nullable();
             
             // Step-parent/Guardian citizenship fields
-            $table->string('step_parent_guardian_citizenship_type')->nullable();
+            $table->text('step_parent_guardian_citizenship_type')->nullable();
             $table->text('step_parent_guardian_citizenship_dual_1')->nullable();
             $table->text('step_parent_guardian_citizenship_dual_2')->nullable();
             $table->text('step_parent_guardian_citizenship_naturalized')->nullable();
-            $table->string('step_parent_guardian_naturalized_month')->nullable();
+            $table->text('step_parent_guardian_naturalized_month')->nullable();
             $table->integer('step_parent_guardian_naturalized_year')->nullable();
             $table->text('step_parent_guardian_naturalized_place')->nullable();
             
             // Father-in-law citizenship fields
-            $table->string('father_in_law_citizenship_type')->nullable();
+            $table->text('father_in_law_citizenship_type')->nullable();
             $table->text('father_in_law_citizenship_dual_1')->nullable();
             $table->text('father_in_law_citizenship_dual_2')->nullable();
             $table->text('father_in_law_citizenship_naturalized')->nullable();
-            $table->string('father_in_law_naturalized_month')->nullable();
+            $table->text('father_in_law_naturalized_month')->nullable();
             $table->integer('father_in_law_naturalized_year')->nullable();
             $table->text('father_in_law_naturalized_place')->nullable();
             
             // Mother-in-law citizenship fields
-            $table->string('mother_in_law_citizenship_type')->nullable();
+            $table->text('mother_in_law_citizenship_type')->nullable();
             $table->text('mother_in_law_citizenship_dual_1')->nullable();
             $table->text('mother_in_law_citizenship_dual_2')->nullable();
             $table->text('mother_in_law_citizenship_naturalized')->nullable();
-            $table->string('mother_in_law_naturalized_month')->nullable();
+            $table->text('mother_in_law_naturalized_month')->nullable();
             $table->integer('mother_in_law_naturalized_year')->nullable();
             $table->text('mother_in_law_naturalized_place')->nullable();
         });
