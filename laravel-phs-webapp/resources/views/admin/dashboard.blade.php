@@ -22,7 +22,7 @@
                     <div class="flex items-center mt-4 space-x-6 text-sm">
                         <div class="flex items-center">
                             <i class="fas fa-clock mr-2 text-[#D4AF37]"></i>
-                            <span id="current-time">{{ now()->format('l, F d, Y g:i A') }}</span>
+                            <span id="current-time"></span>
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-users mr-2 text-[#D4AF37]"></i>
@@ -500,9 +500,11 @@
         }
     }
 
-    // Update time every minute
-    setInterval(updateTime, 60000);
-    updateTime();
+    // Update time immediately and then every minute
+    document.addEventListener('DOMContentLoaded', function() {
+        updateTime(); // Set initial time
+        setInterval(updateTime, 60000); // Update every minute
+    });
 
     // Enhanced Submission Status Chart
     const submissionStatusCtx = document.getElementById('submissionStatusChart').getContext('2d');
