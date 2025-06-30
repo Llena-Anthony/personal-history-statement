@@ -1050,6 +1050,7 @@
             mainContent.style.transition = 'all 0.3s ease-in-out';
         });
 
+        // Philippine Standard Time for admin (full date and time)
         function updatePHTimeHeaderAdmin() {
             const now = new Date();
             const options = {

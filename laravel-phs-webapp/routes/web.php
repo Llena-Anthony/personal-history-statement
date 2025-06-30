@@ -449,3 +449,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('reports', [App\Http\Controllers\Admin\ReportsController::class, 'index'])->name('reports.index');
     Route::get('reports/export', [App\Http\Controllers\Admin\ReportsController::class, 'export'])->name('reports.export');
 });
+
+// Personnel Routes
+Route::middleware(['auth', 'personnel'])->prefix('personnel')->name('personnel.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\PersonnelDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/phs', [App\Http\Controllers\PersonnelDashboardController::class, 'phs'])->name('phs');
+    
+    // Personnel Profile Routes
+    Route::get('/profile/edit', [App\Http\Controllers\PersonnelDashboardController::class, 'editProfile'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/picture', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfilePicture'])->name('profile.picture');
+    
+    // PDS route is not accessible yet
+});
