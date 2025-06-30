@@ -5,18 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\ArrestRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\PHSSectionTracking;
 
 class ArrestRecordController extends Controller
 {
+    use PHSSectionTracking;
+
     public function create()
     {
-        $arrestRecord = ArrestRecord::where('username', Auth::user()->username)->first();
+        $arrestRecord = ArrestRecord::where('user_id', Auth::id())->first();
+        
+        $data = $this->getCommonViewData('arrest-record');
+        $data['arrestRecord'] = $arrestRecord;
         
         if (request()->ajax()) {
-            return view('phs.sections.arrest-record-content', compact('arrestRecord'));
+            return view('phs.sections.arrest-record-content', $data);
         }
 
-        return view('phs.arrest-record', compact('arrestRecord'));
+        return view('phs.arrest-record', $data);
     }
 
     public function store(Request $request)
@@ -54,22 +60,22 @@ class ArrestRecordController extends Controller
             ]);
         }
 
-        // Add username to validated data
-        $validated['username'] = Auth::user()->username;
+        // Add user_id to validated data
+        $validated['user_id'] = Auth::id();
 
         \Log::info('ArrestRecord validated data:', $validated);
 
         try {
             // Save or update arrest record
             $arrestRecord = ArrestRecord::updateOrCreate(
-                ['username' => Auth::user()->username],
+                ['user_id' => Auth::id()],
                 $validated
             );
 
             \Log::info('ArrestRecord after save:', $arrestRecord->toArray());
 
-            // Mark section as completed
-            session()->put('phs_sections.arrest-record', 'completed');
+            // Mark section as completed using trait method
+            $this->markSectionAsCompleted('arrest-record');
             
             // Return appropriate response based on mode
             if ($isSaveOnly) {
@@ -88,5 +94,28 @@ class ArrestRecordController extends Controller
             }
             return back()->with('error', 'An error occurred while saving your arrest record. Please try again.');
         }
+    }
+
+    /**
+     * Get the list of PHS sections for progress calculation.
+     *
+     * @return array
+     */
+    protected function getSections()
+    {
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'personal-characteristics',
+            'marital-status',
+            'family-history',
+            'organization',
+            'miscellaneous',
+        ];
     }
 }

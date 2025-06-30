@@ -855,23 +855,35 @@
         }
 
         // Global function for dynamic navigation
-        window.navigateToNextSection = async function(currentSection) {
-            const nextSection = getNextSection(currentSection);
+        window.navigateToNextSection = async function(sectionId) {
+            console.log('navigateToNextSection called with sectionId:', sectionId);
             
-            if (!nextSection) {
-                return true;
-            }
-
-            const nextRoute = getSectionRoute(nextSection);
+            // Save current section data without validation
+            const saveSuccess = await saveCurrentSectionData(sectionId);
+            console.log('Save success:', saveSuccess);
             
-            if (nextRoute === '#') {
-                return false;
+            if (saveSuccess) {
+                // Navigate to next section
+                const nextSection = getNextSection(sectionId);
+                console.log('Next section:', nextSection);
+                
+                if (nextSection) {
+                    const nextRoute = getSectionRoute(nextSection);
+                    console.log('Next route:', nextRoute);
+                    if (nextRoute && nextRoute !== '#') {
+                        // Use the navigation instance to load content dynamically instead of page redirect
+                        if (window.phsNavigationInstance) {
+                            await window.phsNavigationInstance.loadContent(nextRoute, nextSection);
+                        } else {
+                            // Fallback to page redirect if navigation instance not available
+                            window.location.href = nextRoute;
+                        }
+                        return false; // Prevent form submission
+                    }
+                }
             }
-
-            await saveCurrentSectionData(currentSection);
-
-            await window.phsNavigationInstance.loadContent(nextRoute, nextSection);
-            return false; // Prevent form submission
+            
+            return false; // Always return false to prevent form submission
         };
 
         window.navigateToPreviousSection = async function(currentSection) {
@@ -893,31 +905,50 @@
         };
 
         // Global function for handling form submission
-        window.handleFormSubmit = async function(event, currentSection) {
-            // Prevent default form submission
+        window.handleFormSubmit = async function(event) {
+            console.log('Form submit event triggered');
             event.preventDefault();
+            
+            const form = event.target.form;
+            const currentSection = window.currentSection || 'family-background'; // Use the section set by the global function
+            
+            console.log('Current section:', currentSection);
+            console.log('Form action:', form.action);
             
             // Check if this is the last section (miscellaneous)
             if (currentSection === 'miscellaneous') {
+                console.log('Last section - allowing normal submission');
                 // For the last section, allow normal form submission with full validation
                 event.target.form.submit();
                 return;
             }
             
+            console.log('Intermediate section - using dynamic navigation');
             // For intermediate sections, use dynamic navigation
-            const shouldSubmit = await window.navigateToNextSection(currentSection);
-            
-            if (shouldSubmit) {
-                event.target.form.submit();
-            }
+            // The navigateToNextSection function now handles both saving and navigation
+            await window.navigateToNextSection(currentSection);
+            // No need to submit the form since navigation is handled by AJAX
         };
+
+        // Global function that buttons can call (without window. prefix)
+        function handleFormSubmit(event, sectionId) {
+            console.log('Global handleFormSubmit called with sectionId:', sectionId);
+            // Set the current section before calling the window function
+            window.currentSection = sectionId;
+            return window.handleFormSubmit(event);
+        }
 
         // Save current section data without validation
         async function saveCurrentSectionData(sectionId) {
+            console.log('saveCurrentSectionData called with sectionId:', sectionId);
+            
             const form = document.querySelector('form');
             if (!form) {
+                console.log('No form found, allowing navigation');
                 return true; // allow navigation if no form
             }
+
+            console.log('Form found, action:', form.action);
 
             // Ensure address name hidden fields are set before AJAX save
             if (window.setAddressNameHiddenFields) {
@@ -932,6 +963,8 @@
             const formData = new FormData(form);
             let saveSuccess = false;
             let errorMsg = '';
+            
+            console.log('Sending AJAX request...');
             try {
                 const response = await fetch(form.action, {
                     method: 'POST',
@@ -943,18 +976,24 @@
                     }
                 });
 
+                console.log('Response status:', response.status);
+
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('Response data:', data);
                     if (data.success) {
                         // Mark section as visited
                         window.phsNavigationInstance.markSectionAsVisited(sectionId);
                         saveSuccess = true;
+                        console.log('Save successful');
                     } else {
                         errorMsg = data.message || 'Save failed.';
+                        console.log('Save failed:', errorMsg);
                     }
                 } else if (response.status === 422) {
                     // Validation error
                     const data = await response.json();
+                    console.log('Validation errors:', data.errors);
                     if (data.errors) {
                         for (const [field, messages] of Object.entries(data.errors)) {
                             // Try to find the input/select/textarea by name
@@ -974,9 +1013,11 @@
                     }
                 } else {
                     errorMsg = 'Server error: ' + response.status;
+                    console.log('Server error:', errorMsg);
                 }
             } catch (error) {
                 errorMsg = 'An error occurred while saving.';
+                console.log('Exception occurred:', error);
             }
             if (!saveSuccess) {
                 alert(errorMsg || 'Failed to save. Please check your input.');
@@ -995,7 +1036,7 @@
                         description: 'Basic information',
                         icon: 'fas fa-user',
                         route: '{{ route("phs.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['personal-details'] ?? 'not-started' }}'
                     },
                     {
                         id: 'personal-characteristics',
@@ -1003,7 +1044,7 @@
                         description: 'Physical attributes',
                         icon: 'fas fa-user-tag',
                         route: '{{ route("phs.personal-characteristics.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['personal-characteristics'] ?? 'not-started' }}'
                     },
                     {
                         id: 'marital-status',
@@ -1011,7 +1052,7 @@
                         description: 'Marriage information',
                         icon: 'fas fa-heart',
                         route: '{{ route("phs.marital-status.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['marital-status'] ?? 'not-started' }}'
                     },
                     {
                         id: 'family-background',
@@ -1019,7 +1060,7 @@
                         description: 'Extended family',
                         icon: 'fas fa-tree',
                         route: '{{ route("phs.family-background.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['family-background'] ?? 'not-started' }}'
                     },
                     {
                         id: 'educational-background',
@@ -1027,7 +1068,7 @@
                         description: 'Academic history',
                         icon: 'fas fa-graduation-cap',
                         route: '{{ route("phs.educational-background") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['educational-background'] ?? 'not-started' }}'
                     },
                     {
                         id: 'military-history',
@@ -1035,7 +1076,7 @@
                         description: 'Military service',
                         icon: 'fas fa-medal',
                         route: '{{ route("phs.military-history.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['military-history'] ?? 'not-started' }}'
                     },
                     {
                         id: 'places-of-residence',
@@ -1043,7 +1084,7 @@
                         description: 'Residential history',
                         icon: 'fas fa-home',
                         route: '{{ route("phs.places-of-residence.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['places-of-residence'] ?? 'not-started' }}'
                     },
                     {
                         id: 'employment-history',
@@ -1051,7 +1092,7 @@
                         description: 'Work experience',
                         icon: 'fas fa-briefcase',
                         route: '{{ route("phs.employment-history.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['employment-history'] ?? 'not-started' }}'
                     },
                     {
                         id: 'foreign-countries',
@@ -1059,7 +1100,7 @@
                         description: 'International travel',
                         icon: 'fas fa-globe',
                         route: '{{ route("phs.foreign-countries.create") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['foreign-countries'] ?? 'not-started' }}'
                     },
                     {
                         id: 'credit-reputation',
@@ -1067,7 +1108,7 @@
                         description: 'Credit standing',
                         icon: 'fas fa-credit-card',
                         route: '{{ route("phs.credit-reputation") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['credit-reputation'] ?? 'not-started' }}'
                     },
                     {
                         id: 'arrest-record',
@@ -1075,7 +1116,7 @@
                         description: 'Legal and conduct history',
                         icon: 'fas fa-gavel',
                         route: '{{ route("phs.arrest-record") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['arrest-record'] ?? 'not-started' }}'
                     },
                     {
                         id: 'character-and-reputation',
@@ -1083,7 +1124,7 @@
                         description: 'Character and reputation information',
                         icon: 'fas fa-user-shield',
                         route: '{{ route("phs.character-and-reputation") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['character-and-reputation'] ?? 'not-started' }}'
                     },
                     {
                         id: 'organization',
@@ -1091,7 +1132,7 @@
                         description: 'Memberships',
                         icon: 'fas fa-users-cog',
                         route: '{{ route("phs.organization") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['organization'] ?? 'not-started' }}'
                     },
                     {
                         id: 'miscellaneous',
@@ -1099,7 +1140,7 @@
                         description: 'Additional information',
                         icon: 'fas fa-puzzle-piece',
                         route: '{{ route("phs.miscellaneous") }}',
-                        status: 'not-started'
+                        status: '{{ $sectionStatus['miscellaneous'] ?? 'not-started' }}'
                     }
                 ],
                 
@@ -2937,6 +2978,38 @@
                 alert('Error loading section: ' + e.message);
             }
         };
+
+        // Function to toggle citizenship fields based on citizenship type
+        function toggleCitizenshipFields(person) {
+            const type = document.getElementById(`${person}_citizenship_type`).value;
+            
+            // Hide all citizenship groups first
+            document.querySelectorAll(`#${person}_citizenship_single, #${person}_citizenship_dual, #${person}_citizenship_naturalized`).forEach(group => {
+                if (group) group.classList.add('hidden');
+            });
+            
+            // Show the appropriate group based on selection
+            if (type === 'Single') {
+                const singleGroup = document.getElementById(`${person}_citizenship_single`);
+                if (singleGroup) singleGroup.classList.remove('hidden');
+            } else if (type === 'Dual') {
+                const dualGroup = document.getElementById(`${person}_citizenship_dual`);
+                if (dualGroup) dualGroup.classList.remove('hidden');
+            } else if (type === 'Naturalized') {
+                const naturalizedGroup = document.getElementById(`${person}_citizenship_naturalized`);
+                if (naturalizedGroup) naturalizedGroup.classList.remove('hidden');
+            }
+        }
+
+        // Initialize citizenship fields on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            ['father', 'mother', 'step_parent_guardian', 'father_in_law', 'mother_in_law'].forEach(person => {
+                const typeSelect = document.getElementById(`${person}_citizenship_type`);
+                if (typeSelect) {
+                    toggleCitizenshipFields(person);
+                }
+            });
+        });
     </script>
 </body>
 </html> 

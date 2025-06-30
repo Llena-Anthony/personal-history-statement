@@ -12,6 +12,9 @@ class Sibling extends Model
     protected $fillable = [
         'family_background_id',
         'name_id',
+        'first_name',
+        'middle_name',
+        'last_name',
         'date_of_birth',
         'citizenship',
         'dual_citizenship',

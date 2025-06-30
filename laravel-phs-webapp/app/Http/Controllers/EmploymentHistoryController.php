@@ -18,7 +18,7 @@ class EmploymentHistoryController extends Controller
     public function create()
     {
         // Load existing employment history data for autofill
-        $employmentHistory = EmploymentHistory::where('username', auth()->user()->username)->first();
+        $employmentHistory = EmploymentHistory::where('user_id', auth()->id())->first();
         
         $data = $this->getCommonViewData('employment-history');
         $data['employmentHistory'] = $employmentHistory;
@@ -65,18 +65,18 @@ class EmploymentHistoryController extends Controller
         }
 
         try {
-            // Add username to validated data
-            $validated['username'] = auth()->user()->username;
+            // Add user_id to validated data
+            $validated['user_id'] = auth()->id();
 
             \Log::info('EmploymentHistory validated data:', $validated);
 
             // Save or update employment history
             $employmentHistory = EmploymentHistory::updateOrCreate(
-                ['username' => auth()->user()->username],
+                ['user_id' => auth()->id()],
                 $validated
             );
 
-            \Log::info('EmploymentHistory before save:', ['username' => auth()->user()->username, 'data' => $validated]);
+            \Log::info('EmploymentHistory before save:', ['user_id' => auth()->id(), 'data' => $validated]);
 
             // Mark employment history as completed
             $this->markSectionAsCompleted('employment-history');
