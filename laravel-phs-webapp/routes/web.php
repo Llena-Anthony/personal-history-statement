@@ -75,13 +75,13 @@ Route::middleware('auth')->group(function () {
 
     // Client Routes
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
-    
+
     // Return to Admin Route (for admins who switched to client view)
     Route::get('/return-to-admin', function() {
         // Clear the admin switch session
         session()->forget('admin_switched_to_client');
         session()->forget('admin_original_route');
-        
+
         // Log the activity
         \App\Models\ActivityLog::create([
             'user_id' => auth()->id(),
@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
             'status' => 'success',
             'action' => 'return_to_admin'
         ]);
-        
+
         return redirect()->route('admin.dashboard')->with('success', 'Returned to admin view.');
     })->name('return.to.admin');
 
@@ -142,23 +142,23 @@ Route::middleware('auth')->group(function () {
     Route::post('/phs/arrest-record', [ArrestRecordController::class, 'store'])->name('phs.arrest-record.store');
 
     // PHS Routes - Organization
-    Route::get('/phs/organization', function() { 
+    Route::get('/phs/organization', function() {
         // Load existing organization data for autofill
         $organizations = Organization::with(['membershipDetails' => function($query) {
             $query->where('username', Auth::user()->username);
         }])->get();
-        
+
         $viewData = [
             'organizations' => $organizations
         ];
-        
+
         if (request()->ajax()) {
             return view('phs.sections.organization-content', $viewData);
         }
-        return view('phs.organization', $viewData); 
+        return view('phs.organization', $viewData);
     })->name('phs.organization');
 
-    Route::post('/phs/organization', function(Request $request) { 
+    Route::post('/phs/organization', function(Request $request) {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
         try {
             // Check if this is a save-only request (for dynamic navigation)
@@ -263,13 +263,13 @@ Route::middleware('auth')->group(function () {
 
             // Mark organization section as completed
             session()->put('phs_sections.organization', 'completed');
-            
+
             // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
             }
-            
-            return redirect()->route('phs.miscellaneous')->with('success', 'Organization information saved successfully!'); 
+
+            return redirect()->route('phs.miscellaneous')->with('success', 'Organization information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $e->errors()], 422);
@@ -290,13 +290,13 @@ Route::middleware('auth')->group(function () {
     // PHS Routes - Miscellaneous
     Route::get('/phs/miscellaneous', function() {
         $miscellaneous = Miscellaneous::where('username', Auth::user()->username)->where('misc_type', 'general-miscellaneous')->first();
-        
+
         // Decode languages data if it exists
         $languages = [];
         if ($miscellaneous && $miscellaneous->languages_dialects) {
             $languages = json_decode($miscellaneous->languages_dialects, true) ?: [];
         }
-        
+
         $viewData = [
             'miscellaneous' => $miscellaneous,
             'languages' => $languages
@@ -367,12 +367,12 @@ Route::middleware('auth')->group(function () {
             \Log::info('Miscellaneous after save:', $miscellaneous->toArray());
 
             session()->put('phs_sections.miscellaneous', 'completed');
-            
+
             // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
             }
-            
+
             return redirect()->route('phs.review')->with('success', 'Miscellaneous information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
@@ -406,7 +406,7 @@ Route::middleware('auth')->group(function () {
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
-    
+
     // Switch to Client View Route
     Route::get('/switch-to-client', [AdminHomeController::class, 'switchToClient'])->name('switch.to.client');
 
@@ -428,6 +428,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // PHS Submission Management Routes
     Route::get('print-preview', [App\Http\Controllers\PrintController::class, 'preview'])->name('phs.preview');
+    
     Route::resource('phs', App\Http\Controllers\Admin\PHSController::class)->names([
         'index' => 'phs.index',
         'show' => 'phs.show',
@@ -454,11 +455,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth', 'personnel'])->prefix('personnel')->name('personnel.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\PersonnelDashboardController::class, 'index'])->name('dashboard');
     Route::get('/phs', [App\Http\Controllers\PersonnelDashboardController::class, 'phs'])->name('phs');
-    
+
     // Personnel Profile Routes
     Route::get('/profile/edit', [App\Http\Controllers\PersonnelDashboardController::class, 'editProfile'])->name('profile.edit');
     Route::put('/profile', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/picture', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfilePicture'])->name('profile.picture');
-    
+
     // PDS route is not accessible yet
 });

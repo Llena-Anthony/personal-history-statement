@@ -10,13 +10,18 @@ class BankAccount extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'bank_name',
-        'address',
+        'username',
+        'bank_id'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'username');
     }
+
+    public function bankDetails()
+    {
+        return $this->(BankDetails::class, 'bank_id');
+    }
+
 }

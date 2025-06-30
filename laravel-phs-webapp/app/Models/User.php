@@ -21,6 +21,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $primaryKey ='username';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'name',
         'username',
@@ -131,7 +135,7 @@ class User extends Authenticatable
         if ($this->profile_picture) {
             return asset('storage/' . $this->profile_picture);
         }
-        
+
         return asset('images/default-avatar.svg');
     }
 
