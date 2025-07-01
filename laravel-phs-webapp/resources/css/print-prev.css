@@ -8,10 +8,59 @@
     box-sizing: border-box;
 }
 .phs-preview-container > div {
-    box-shadow: 0 8px 32px rgba(44,62,80,0.12), 0 1.5px 6px rgba(44,62,80,0.08);
-    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.15), 0 1.5px 6px rgba(44,62,80,0.10);
+    border-radius: 1.25rem;
     background: white;
+    border: 1.5px solid #e5e7eb;
+    padding: 2.5rem 2rem;
+    margin-bottom: 2rem;
+    transition: box-shadow 0.2s;
 }
+
+.section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1B365D;
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.section-divider {
+    border-top: 2px solid #e5e7eb;
+    margin: 2rem 0 1.5rem 0;
+}
+
+.print-footer-onscreen {
+    width: 100%;
+    text-align: center;
+    font-size: 10pt;
+    color: #1B365D;
+    border-top: 2px solid #C9B037;
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+    background: #f9fafb;
+    border-radius: 0 0 1.25rem 1.25rem;
+    font-family: 'Inter', 'Times New Roman', Times, serif;
+}
+
+.print-btn {
+    background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 @media print {
     @page {
         margin-top: 0.3in;
@@ -50,10 +99,14 @@
     .print-header {
         border-bottom: 3px solid #1B365D !important;
     }
-    .print-footer {
-        color: #1B365D !important;
-        border-top: 2px solid #C9B037 !important;
-        background: white !important;
-        font-family: 'Times New Roman', Times, serif !important;
+    .print-footer-onscreen {
+        display: none !important;
+    }
+    .print-btn {
+        display: none !important;
+    }
+    .section-title, .section-divider {
+        color: black !important;
+        border-color: #aaa !important;
     }
 }

@@ -11,7 +11,112 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body, .print-container, .print-header, .submission-info, .info-label, .info-value {
-            font-family: 'Times New Roman', Times, serif !important;
+            font-family: 'Inter', 'Times New Roman', Times, serif !important;
+        }
+        body {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+        }
+        .print-container {
+            background: #f9fafb;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.10), 0 1.5px 6px rgba(44,62,80,0.08);
+            padding: 2.5rem 2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .phs-form-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 16px rgba(44,62,80,0.08);
+            border: 1px solid #e5e7eb;
+            padding: 2rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1B365D;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 2rem 0 1.5rem 0;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            border: 1px solid #e5e7eb;
+        }
+        .info-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.25rem;
+        }
+        .info-value {
+            font-size: 1.08rem;
+            color: #1B365D;
+            font-weight: 600;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #F59E0B;
+        }
+        .status-reviewed {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+            border: 1px solid #3B82F6;
+        }
+        .status-approved {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #10B981;
+        }
+        .status-rejected {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #EF4444;
+        }
+        .admin-notes {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 0.75rem;
+        }
+        .admin-notes-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #b45309;
+            margin-bottom: 0.5rem;
+        }
+        .admin-notes-content {
+            font-size: 0.98rem;
+            color: #92400E;
         }
         @media print {
             .no-print {
@@ -124,65 +229,6 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             color: white;
         }
-        .submission-info {
-            background: white;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: 1px solid #E5E7EB;
-        }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        .info-item {
-            display: flex;
-            flex-direction: column;
-        }
-        .info-label {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.25rem;
-        }
-        .info-value {
-            font-size: 1rem;
-            color: #111827;
-            font-weight: 500;
-        }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .status-pending {
-            background-color: #FEF3C7;
-            color: #92400E;
-            border: 1px solid #F59E0B;
-        }
-        .status-reviewed {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-            border: 1px solid #3B82F6;
-        }
-        .status-approved {
-            background-color: #D1FAE5;
-            color: #065F46;
-            border: 1px solid #10B981;
-        }
-        .status-rejected {
-            background-color: #FEE2E2;
-            color: #991B1B;
-            border: 1px solid #EF4444;
-        }
     </style>
 @endpush
 
@@ -216,10 +262,7 @@
 
         <!-- Submission Information -->
         <div class="submission-info">
-            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                <i class="fas fa-user-circle text-[#1B365D] mr-3"></i>
-                Applicant Information
-            </h2>
+            <div class="section-title"><i class="fas fa-user-circle text-[#1B365D]"></i>Applicant Information</div>
             <div class="info-grid">
                 <div class="info-item">
                     <span class="info-label">Applicant Name</span>
@@ -256,15 +299,15 @@
             </div>
             
             @if($submission->admin_notes)
-            <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <h3 class="text-sm font-semibold text-yellow-800 mb-2">Admin Notes</h3>
-                <p class="text-sm text-yellow-700">{{ $submission->admin_notes }}</p>
+            <div class="admin-notes">
+                <div class="admin-notes-title">Admin Notes</div>
+                <div class="admin-notes-content">{{ $submission->admin_notes }}</div>
             </div>
             @endif
         </div>
-
+        <div class="section-divider"></div>
         <!-- PHS Form Content -->
-        <div class="text-justify font-sans text-[11pt] bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div class="phs-form-card">
             {{-- Page 1 --}}
             <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
 
