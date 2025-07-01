@@ -1,29 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device, initial-scale=1.0">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>@yield('title','Print PHS Document')</title>
+@extends('layouts.admin')
 
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/print-prev.css'])
+@section('title', 'Print PHS Document')
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <link rel="stylesheet" href="{{ asset('public/build/assets/print-prev.css') }}"
+@push('styles')
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/print-prev.css'])
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('public/build/assets/print-prev.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    @media print {
+        body *:not(#phs-print-section):not(#phs-print-section *) {
+            display: none !important;
+        }
+        #phs-print-section, #phs-print-section * {
+            display: block !important;
+        }
+    }
+    </style>
+@endpush
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    </head>
-
-    <body class="bg-white m-0 p-0">
-        <button onclick="printDiv()">Print</button>
-
-		<div class="text-justify font-sans text-[11pt] bg-white">
+@section('content')
+    <!-- Print Preview Header Bar (visible only on screen) -->
+    <div class="no-print w-full sticky top-0 z-30 bg-white/90 border-b border-gray-200 shadow-sm flex items-center justify-between px-6 py-3 mb-4" style="backdrop-filter: blur(8px);">
+        <div>
+            <a href="{{ route('admin.phs.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg font-semibold shadow hover:from-gray-700 hover:to-gray-800 transition-all">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+        <div>
+            <button onclick="printPHSTemplate()" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-800 to-blue-600 text-white rounded-lg font-semibold shadow hover:from-blue-900 hover:to-blue-700 transition-all">
+                <i class="fas fa-print"></i> Print Template
+            </button>
+        </div>
+    </div>
+    <div class="phs-preview-container" id="phs-print-section">
+        <div class="text-justify font-sans text-[11pt] bg-white">
             {{-- Page 1 --}}
             <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
-
                 {{-- Header --}}
                 <div class="w-full left-0 right-0 top-0 z-[1000] text-center bg-white absolute">
                     <p class="text-[12pt] mt-0 mb-[10pt] tracking-[2px]">
@@ -41,9 +56,8 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
-
                 {{-- Title --}}
                 <p class="text-[9pt] text-right mt-[60pt]">File Nr:_______</p>
                 <p class="text-[9pt] text-left">GHQ, OJ2</p>
@@ -56,7 +70,7 @@
 
                 {{-- Instruction --}}
                 <p class="text-[12pt] font-bold tracking-[3px] text-center underline mt-[12pt] mb-[11pt]">INSTRUCTIONS</p>
-                <p class=" mb-[10pt]"><span class="ml-[0.5in] mr-[0.5in]">1.</span>Answer all questions completely; if question is not applicable, write “NA”.write “Unknown”
+                <p class=" mb-[10pt]"><span class="ml-[0.5in] mr-[0.5in]">1.</span>Answer all questions completely; if question is not applicable, write "NA".write "Unknown"
                     only if you do not know the answer and cannot obtain the answer from personal records.
                     Use the blank pages at the back of this form for extra details on any question for which you
                     do not have sufficient space.
@@ -167,7 +181,6 @@
 
             {{-- Page 2 --}}
             <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
-
                 {{-- Header --}}
                 <div class="w-full left-0 right-0 top-0 z-[1000] text-center bg-white absolute">
                     <p class="text-[12pt] mt-0 mb-[10pt] tracking-[2px]">
@@ -185,7 +198,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 {{-- Section II-Personal Characteristics --}}
@@ -529,7 +542,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 <div class="mt-[53pt] ml-[1.35in]">
@@ -787,7 +800,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 {{-- Section VI-Military History --}}
@@ -915,7 +928,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 {{-- Military-Decorations --}}
@@ -1064,7 +1077,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 {{-- Employment-Forced Resignation --}}
@@ -1235,7 +1248,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 {{-- Arrest-Record-Admin Case --}}
@@ -1423,7 +1436,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 <div class="mt-[60pt] w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
@@ -1491,8 +1504,8 @@
                 of brandy. Josephine Z Quanzing, a partner in law firm of San Diego and Ballesteros
                 located at 2879 Valley Forge St., Quezon City turned to Richard Ting, a Chinese food
                 expert from Q.W. Kwantung Company, Ltd., 346 Hadji Jairula Hussin Blvd., and said.
-                “I can’t speak for my government but I’m quite sure your country and mine get together
-                for closer understanding”
+                "I can't speak for my government but I'm quite sure your country and mine get together
+                for closer understanding"
                 </p>
                 <div class="w-full h-[110.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
@@ -1541,7 +1554,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 <p class="indent-[0.5in] mt-[110pt]">I certify that the foregoing answers are true and correct to the best of my
@@ -1635,7 +1648,7 @@
                         <span class="underline">L</span>
                     </p>
                     <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont’n:</p>
+                    <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
                 </div>
 
                 <p class="font-bold text-center text-[12pt] mt-[150pt] mb-[550pt]">SKETCH OF THE LOCATION OF RESIDENCE</p>
@@ -1664,18 +1677,19 @@
                     <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                 </div>
             </div>
-		</div>
+        </div>
+    </div>
+@endsection
 
-        <script>
-            function printDiv() {
-                const printContent = document.getElementById('printable-area').innerHTML;
-                const originalContent = document.body.innerHTML;
-
-                document.body.innerHTML = printContent;
-                window.print();
-                document.body.innerHTML = originalContent;
-                location.reload();
-            }
-        </script>
-    </body>
-</html>
+@push('scripts')
+<script>
+function printPHSTemplate() {
+    const printContents = document.getElementById('phs-print-section').innerHTML;
+    const originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // reload to restore event handlers and scripts
+}
+</script>
+@endpush

@@ -1285,5 +1285,6 @@
     @if(request()->routeIs('admin.activity-logs.*'))
         @vite(['resources/js/activity-logs.js'])
     @endif
+    @stack('scripts')
 </body>
 </html> 
