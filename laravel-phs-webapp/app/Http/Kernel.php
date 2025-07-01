@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'personnel' => \App\Http\Middleware\PersonnelMiddleware::class,
+        'client' => \App\Http\Middleware\ClientMiddleware::class,
         'login.throttle' => \App\Http\Middleware\LoginThrottle::class,
         'complete.personal' => \App\Http\Middleware\EnsurePersonalDetailsCompleted::class,
     ];

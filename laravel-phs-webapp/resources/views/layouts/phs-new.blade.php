@@ -605,7 +605,13 @@
                             <div id="ph-time-value"></div>
                         </div>
                         <div class="hidden lg:block text-white text-xs">
-                            <span class="text-[#D4AF37]">Client</span>
+                            <span class="text-[#D4AF37]">
+                                @if(Auth::user() && Auth::user()->role === 'personnel')
+                                    Personnel
+                                @else
+                                    Client
+                                @endif
+                            </span>
                             <span class="mx-2">/</span>
                             <span>PHS Form</span>
                         </div>
@@ -637,7 +643,13 @@
                         </div>
                         <div class="flex-1">
                             <h3 class="font-bold text-lg text-white">{{ Auth::user()->name }}</h3>
-                            <p class="text-[#D4AF37] text-sm">Client</p>
+                            <p class="text-[#D4AF37] text-sm">
+                                @if(Auth::user() && Auth::user()->role === 'personnel')
+                                    Personnel
+                                @else
+                                    Client
+                                @endif
+                            </p>
                         </div>
                     </div>
                     

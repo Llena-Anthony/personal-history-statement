@@ -13,7 +13,13 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.marital-status.store') }}" class="space-y-8">
+    @php
+        $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
+        $formAction = $isPersonnel ? route('personnel.phs.marital-status.store') : route('phs.marital-status.store');
+        $nextSectionRoute = $isPersonnel ? route('personnel.phs.family-background') : route('phs.family-background.create');
+    @endphp
+
+    <form method="POST" action="{{ $formAction }}" class="space-y-8">
         @csrf
         
         <!-- Marital Status -->
@@ -321,8 +327,9 @@
             <button type="button" onclick="window.navigateToPreviousSection('marital-status')" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </button>
-            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'marital-status')">
-                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+            <button type="submit" class="btn-primary" formaction="{{ $nextSectionRoute }}">
+                Save & Continue
+                <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>

@@ -11,7 +11,13 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('phs.family-background.store') }}" autocomplete="off" class="space-y-10" id="phs-form">
+    @php
+        $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
+        $formAction = $isPersonnel ? route('personnel.phs.family-background.store') : route('phs.family-background.store');
+        $nextSectionRoute = $isPersonnel ? route('personnel.phs.educational-background') : route('phs.educational-background');
+    @endphp
+
+    <form method="POST" action="{{ $formAction }}" autocomplete="off" class="space-y-10" id="phs-form">
         @csrf
         <!-- Father's Information -->
         <div class="bg-white shadow-lg rounded-2xl border border-gray-200 p-8 mb-8">
@@ -773,8 +779,9 @@
             <button type="button" onclick="window.navigateToPreviousSection('family-background')" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </button>
-            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'family-background')">
-                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+            <button type="submit" class="btn-primary" formaction="{{ $nextSectionRoute }}">
+                Save & Continue
+                <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>

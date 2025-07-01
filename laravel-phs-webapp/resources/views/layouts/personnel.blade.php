@@ -644,8 +644,10 @@
                         <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest select-none" draggable="false">
                     </a>
                     <div class="hidden sm:block">
-                        <h1 class="header-title text-white font-bold text-lg">Personnel Portal</h1>
-                        <p class="text-[#D4AF37] text-xs font-medium">Personal History Statement System</p>
+                        <a href="{{ route('personnel.dashboard') }}" class="hover:opacity-80 transition-opacity">
+                            <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
+                            <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
+                        </a>
                     </div>
                 </div>
                 <!-- Right Section -->
@@ -684,26 +686,21 @@
             </div>
             <!-- Navigation -->
             <div class="tab-container">
-                <div class="space-y-1">
-                    <li>
-                        <a href="{{ route('personnel.dashboard') }}" class="nav-link {{ request()->routeIs('personnel.dashboard') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-line"></i>
-                            <span class="ml-3">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('personnel.phs') }}" class="nav-link {{ request()->routeIs('personnel.phs') ? 'active' : '' }}">
-                            <i class="fa-regular fa-folder"></i>
-                            <span class="ml-3">PHS</span>
-                        </a>
-                    </li>
-                    <li>
-                        <span class="nav-link disabled" title="Coming soon">
-                            <i class="fa-regular fa-folder"></i>
-                            <span class="ml-3">PDS</span>
-                        </span>
-                    </li>
-                </div>
+                <ul class="space-y-1">
+                    <li><a href="{{ route('personnel.phs.personal-details') }}" class="nav-link {{ request()->routeIs('personnel.phs.personal-details') ? 'active' : '' }}"><i class="fa-regular fa-id-card"></i> <span class="ml-3">I: Personal Details</span></a></li>
+                    <li><a href="{{ route('personnel.phs.personal-characteristics') }}" class="nav-link {{ request()->routeIs('personnel.phs.personal-characteristics') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> <span class="ml-3">II: Personal Characteristics</span></a></li>
+                    <li><a href="{{ route('personnel.phs.marital-status') }}" class="nav-link {{ request()->routeIs('personnel.phs.marital-status') ? 'active' : '' }}"><i class="fa-solid fa-ring"></i> <span class="ml-3">III: Marital Status</span></a></li>
+                    <li><a href="{{ route('personnel.phs.family-background') }}" class="nav-link {{ request()->routeIs('personnel.phs.family-background') ? 'active' : '' }}"><i class="fa-solid fa-users"></i> <span class="ml-3">IV: Family Background</span></a></li>
+                    <li><a href="{{ route('personnel.phs.educational-background') }}" class="nav-link {{ request()->routeIs('personnel.phs.educational-background') ? 'active' : '' }}"><i class="fa-solid fa-graduation-cap"></i> <span class="ml-3">V: Educational Background</span></a></li>
+                    <li><a href="{{ route('personnel.phs.military-history') }}" class="nav-link {{ request()->routeIs('personnel.phs.military-history') ? 'active' : '' }}"><i class="fa-solid fa-medal"></i> <span class="ml-3">VI: Military History</span></a></li>
+                    <li><a href="{{ route('personnel.phs.employment-history') }}" class="nav-link {{ request()->routeIs('personnel.phs.employment-history') ? 'active' : '' }}"><i class="fa-solid fa-briefcase"></i> <span class="ml-3">VII: Employment History</span></a></li>
+                    <li><a href="{{ route('personnel.phs.credit-reputation') }}" class="nav-link {{ request()->routeIs('personnel.phs.credit-reputation') ? 'active' : '' }}"><i class="fa-solid fa-credit-card"></i> <span class="ml-3">VIII: Credit Reputation</span></a></li>
+                    <li><a href="{{ route('personnel.phs.arrest-record') }}" class="nav-link {{ request()->routeIs('personnel.phs.arrest-record') ? 'active' : '' }}"><i class="fa-solid fa-gavel"></i> <span class="ml-3">IX: Arrest Record</span></a></li>
+                    <li><a href="{{ route('personnel.phs.organization') }}" class="nav-link {{ request()->routeIs('personnel.phs.organization') ? 'active' : '' }}"><i class="fa-solid fa-users-rectangle"></i> <span class="ml-3">X: Organization</span></a></li>
+                    <li><a href="{{ route('personnel.phs.places-of-residence') }}" class="nav-link {{ request()->routeIs('personnel.phs.places-of-residence') ? 'active' : '' }}"><i class="fa-solid fa-house"></i> <span class="ml-3">XI: Places of Residence</span></a></li>
+                    <li><a href="{{ route('personnel.phs.foreign-countries') }}" class="nav-link {{ request()->routeIs('personnel.phs.foreign-countries') ? 'active' : '' }}"><i class="fa-solid fa-globe"></i> <span class="ml-3">XII: Foreign Countries</span></a></li>
+                    <li><a href="{{ route('personnel.phs.review') }}" class="nav-link {{ request()->routeIs('personnel.phs.review') ? 'active' : '' }}"><i class="fa-solid fa-clipboard-check"></i> <span class="ml-3">Review & Submit</span></a></li>
+                </ul>
             </div>
         </aside>
 

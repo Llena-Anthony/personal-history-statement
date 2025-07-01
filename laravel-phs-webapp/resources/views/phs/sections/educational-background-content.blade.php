@@ -1,3 +1,9 @@
+@php
+    $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
+    $formAction = $isPersonnel ? route('personnel.phs.educational-background.store') : route('phs.educational-background.store');
+    $nextSectionRoute = $isPersonnel ? route('personnel.phs.military-history') : route('phs.military-history.create');
+@endphp
+
 <div class="max-w-4xl mx-auto">
     <!-- Header -->
     <div class="mb-8">
@@ -13,7 +19,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.educational-background.store') }}" class="space-y-8">
+    <form method="POST" action="{{ $formAction }}" class="space-y-8">
         @csrf
         
         <!-- Elementary Education -->
@@ -294,7 +300,7 @@
                 <i class="fas fa-arrow-left mr-2"></i>
                 Previous Section
             </button>
-            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'educational-background')">
+            <button type="submit" class="btn-primary" formaction="{{ $nextSectionRoute }}">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>

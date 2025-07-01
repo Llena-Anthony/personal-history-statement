@@ -49,7 +49,7 @@
     <!-- Form Sections -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Personal Information -->
-        <a href="{{ route('phs.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.personal-details') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-blue-100 rounded-lg mr-3">
@@ -83,7 +83,7 @@
         </a>
 
         <!-- Family Background -->
-        <a href="{{ route('phs.family-background.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.family-background') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-green-100 rounded-lg mr-3">
@@ -117,7 +117,7 @@
         </a>
 
         <!-- Educational Background -->
-        <a href="{{ route('phs.educational-background') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.educational-background') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-purple-100 rounded-lg mr-3">
@@ -151,7 +151,7 @@
         </a>
 
         <!-- Military History -->
-        <a href="{{ route('phs.military-history.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.military-history') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-red-100 rounded-lg mr-3">
@@ -185,7 +185,7 @@
         </a>
 
         <!-- Civil Service -->
-        <a href="{{ route('phs.employment-history.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.employment-history') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-orange-100 rounded-lg mr-3">
@@ -219,7 +219,7 @@
         </a>
 
         <!-- Character References -->
-        <a href="{{ route('phs.credit-reputation') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.credit-reputation') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-teal-100 rounded-lg mr-3">
@@ -253,7 +253,7 @@
         </a>
 
         <!-- Legal Information -->
-        <a href="{{ route('phs.arrest-record') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.arrest-record') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-indigo-100 rounded-lg mr-3">
@@ -287,7 +287,7 @@
         </a>
 
         <!-- Miscellaneous -->
-        <a href="{{ route('phs.organization') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.organization') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-pink-100 rounded-lg mr-3">
@@ -321,7 +321,7 @@
         </a>
 
         <!-- Personal Characteristics -->
-        <a href="{{ route('phs.personal-characteristics.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.personal-characteristics') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-yellow-100 rounded-lg mr-3">
@@ -351,7 +351,7 @@
         </a>
 
         <!-- Places of Residence -->
-        <a href="{{ route('phs.places-of-residence.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.places-of-residence') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-cyan-100 rounded-lg mr-3">
@@ -381,7 +381,7 @@
         </a>
 
         <!-- Foreign Countries Visited -->
-        <a href="{{ route('phs.foreign-countries.create') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.foreign-countries') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-lime-100 rounded-lg mr-3">
@@ -411,7 +411,7 @@
         </a>
 
         <!-- Credit Reputation -->
-        <a href="{{ route('phs.credit-reputation') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.credit-reputation') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-fuchsia-100 rounded-lg mr-3">
@@ -441,7 +441,7 @@
         </a>
 
         <!-- Review & Submit -->
-        <a href="{{ route('phs.review') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
+        <a href="{{ route('personnel.phs.review') }}" class="group bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow block cursor-pointer">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center">
                     <div class="p-3 bg-gray-200 rounded-lg mr-3">

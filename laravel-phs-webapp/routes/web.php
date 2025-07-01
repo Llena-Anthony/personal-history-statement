@@ -75,9 +75,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/picture', [App\Http\Controllers\ProfileController::class, 'updatePicture'])->name('profile.picture');
 
-    // Client Routes
-    Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
-    
     // Return to Admin Route (for admins who switched to client view)
     Route::get('/return-to-admin', function() {
         // Clear the admin switch session
@@ -96,78 +93,64 @@ Route::middleware('auth')->group(function () {
         
         return redirect()->route('admin.dashboard')->with('success', 'Returned to admin view.');
     })->name('return.to.admin');
+});
 
+// Client Routes - Only accessible by users with 'client' role
+Route::middleware(['auth', 'client'])->group(function () {
+    Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
     // PHS Routes - Personal Details
     Route::get('/phs/personal-details', [PHSController::class, 'create'])->name('phs.create');
     Route::post('/phs/personal-details', [PHSController::class, 'store'])->name('phs.store');
-
     // PHS Routes - Family Background
     Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
     Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');
-
     // PHS Routes - Educational Background
     Route::get('/phs/educational-background', [EducationalBackgroundController::class, 'create'])->name('phs.educational-background');
     Route::post('/phs/educational-background', [EducationalBackgroundController::class, 'store'])->name('phs.educational-background.store');
-
     // PHS Routes - Marital Status
     Route::get('/phs/marital-status', [MaritalStatusController::class, 'create'])->name('phs.marital-status.create');
     Route::post('/phs/marital-status', [MaritalStatusController::class, 'store'])->name('phs.marital-status.store');
-
     // PHS Routes - Military History
     Route::get('/phs/military-history', [MilitaryHistoryController::class, 'create'])->name('phs.military-history.create');
     Route::post('/phs/military-history', [MilitaryHistoryController::class, 'store'])->name('phs.military-history.store');
-
     // PHS Routes - Places of Residence Since Birth
     Route::get('/phs/places-of-residence-since-birth', [PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence.create');
     Route::post('/phs/places-of-residence-since-birth', [PlacesOfResidenceController::class, 'store'])->name('phs.places-of-residence.store');
-
     // PHS Routes - Employment History
     Route::get('/phs/employment-history', [EmploymentHistoryController::class, 'create'])->name('phs.employment-history.create');
     Route::post('/phs/employment-history', [EmploymentHistoryController::class, 'store'])->name('phs.employment-history.store');
-
     // PHS Routes - Foreign Countries
     Route::get('/phs/foreign-countries', [ForeignCountriesController::class, 'create'])->name('phs.foreign-countries.create');
     Route::post('/phs/foreign-countries', [ForeignCountriesController::class, 'store'])->name('phs.foreign-countries.store');
-
     // PHS Routes - Personal Characteristics
     Route::get('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'create'])->name('phs.personal-characteristics.create');
     Route::post('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'store'])->name('phs.personal-characteristics.store');
-
     // PHS Routes - Family History (redirected to Family Background)
     Route::get('/phs/family-history', [FamilyBackgroundController::class, 'create'])->name('phs.family-history.create');
     Route::post('/phs/family-history', [FamilyBackgroundController::class, 'store'])->name('phs.family-history.store');
-
     // PHS Routes - Credit Reputation
     Route::get('/phs/credit-reputation', [CreditReputationController::class, 'create'])->name('phs.credit-reputation');
     Route::post('/phs/credit-reputation', [CreditReputationController::class, 'store'])->name('phs.credit-reputation.store');
-
     // PHS Routes - Arrest Record
     Route::get('/phs/arrest-record', [ArrestRecordController::class, 'create'])->name('phs.arrest-record');
     Route::post('/phs/arrest-record', [ArrestRecordController::class, 'store'])->name('phs.arrest-record.store');
-
     // PHS Routes - Organization
     Route::get('/phs/organization', [OrganizationController::class, 'create'])->name('phs.organization');
     Route::post('/phs/organization', [OrganizationController::class, 'store'])->name('phs.organization.store');
-
     // PHS Routes - Character and Reputation
     Route::get('/phs/character-and-reputation', [CharacterReputationController::class, 'create'])->name('phs.character-and-reputation');
     Route::post('/phs/character-and-reputation', [CharacterReputationController::class, 'store'])->name('phs.character-and-reputation.store');
-
     // PHS Routes - Miscellaneous
     Route::get('/phs/miscellaneous', [MiscellaneousController::class, 'create'])->name('phs.miscellaneous');
     Route::post('/phs/miscellaneous', [MiscellaneousController::class, 'store'])->name('phs.miscellaneous.store');
-
     // Dashboard Route
     Route::get('/dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
-
     // PHS Routes - Send Credentials
     Route::post('/phs/send-credentials/{user}', [CredentialController::class, 'sendEmail'])->name('phs.send-credentials');
-
     // PHS Routes - Test Autofill
     Route::get('/phs/test-autofill', function() {
         return view('phs.test-autofill');
     })->name('phs.test-autofill');
-
     // PHS Review Routes
     Route::get('/phs/review', [PHSReviewController::class, 'review'])->name('phs.review');
     Route::post('/phs/review/finalize', [PHSReviewController::class, 'finalize'])->name('phs.review.finalize');
@@ -224,11 +207,65 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth', 'personnel'])->prefix('personnel')->name('personnel.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\PersonnelDashboardController::class, 'index'])->name('dashboard');
     Route::get('/phs', [App\Http\Controllers\PersonnelDashboardController::class, 'phs'])->name('phs');
-    
-    // Personnel Profile Routes
     Route::get('/profile/edit', [App\Http\Controllers\PersonnelDashboardController::class, 'editProfile'])->name('profile.edit');
     Route::put('/profile', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/picture', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfilePicture'])->name('profile.picture');
-    
+    // PHS Section Routes
+    Route::get('/phs/personal-details', [PHSController::class, 'create'])->name('phs.personal-details');
+    Route::post('/phs/personal-details', [PHSController::class, 'store'])->name('phs.personal-details.store');
+    Route::get('/phs/family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'create'])->name('phs.family-background');
+    Route::get('/phs/educational-background', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])->name('phs.educational-background');
+    Route::get('/phs/military-history', [App\Http\Controllers\MilitaryHistoryController::class, 'create'])->name('phs.military-history');
+    Route::get('/phs/employment-history', [App\Http\Controllers\EmploymentHistoryController::class, 'create'])->name('phs.employment-history');
+    Route::get('/phs/credit-reputation', [App\Http\Controllers\CreditReputationController::class, 'create'])->name('phs.credit-reputation');
+    Route::get('/phs/arrest-record', [App\Http\Controllers\ArrestRecordController::class, 'create'])->name('phs.arrest-record');
+    Route::get('/phs/organization', [App\Http\Controllers\OrganizationController::class, 'create'])->name('phs.organization');
+    Route::get('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'create'])->name('phs.personal-characteristics');
+    Route::post('/phs/personal-characteristics', [PersonalCharacteristicsController::class, 'store'])->name('phs.personal-characteristics.store');
+    Route::get('/phs/places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence');
+    Route::get('/phs/foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])->name('phs.foreign-countries');
+    Route::get('/phs/review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('phs.review');
     // PDS route is not accessible yet
+});
+
+// Consolidated Personnel PHS Routes
+Route::middleware(['auth', 'personnel'])->prefix('personnel/phs')->name('personnel.phs.')->group(function () {
+    Route::get('personal-details', [App\Http\Controllers\PHSController::class, 'create'])->name('personal-details');
+    Route::post('personal-details', [App\Http\Controllers\PHSController::class, 'store'])->name('personal-details.store');
+
+    Route::get('family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'create'])->name('family-background');
+    // Add POST if needed
+
+    Route::get('educational-background', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])->name('educational-background');
+    // Add POST if needed
+
+    Route::get('marital-status', [App\Http\Controllers\MaritalStatusController::class, 'create'])->name('marital-status');
+    // Add POST if needed
+
+    Route::get('military-history', [App\Http\Controllers\MilitaryHistoryController::class, 'create'])->name('military-history');
+    // Add POST if needed
+
+    Route::get('employment-history', [App\Http\Controllers\EmploymentHistoryController::class, 'create'])->name('employment-history');
+    // Add POST if needed
+
+    Route::get('credit-reputation', [App\Http\Controllers\CreditReputationController::class, 'create'])->name('credit-reputation');
+    // Add POST if needed
+
+    Route::get('arrest-record', [App\Http\Controllers\ArrestRecordController::class, 'create'])->name('arrest-record');
+    // Add POST if needed
+
+    Route::get('organization', [App\Http\Controllers\OrganizationController::class, 'create'])->name('organization');
+    // Add POST if needed
+
+    Route::get('personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'create'])->name('personal-characteristics');
+    Route::post('personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'store'])->name('personal-characteristics.store');
+
+    Route::get('places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'create'])->name('places-of-residence');
+    // Add POST if needed
+
+    Route::get('foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])->name('foreign-countries');
+    // Add POST if needed
+
+    Route::get('review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('review');
+    // Add POST if needed
 });

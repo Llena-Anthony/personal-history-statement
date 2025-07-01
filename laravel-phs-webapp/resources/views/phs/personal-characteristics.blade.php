@@ -1,4 +1,12 @@
-@extends('layouts.phs-new')
+@php
+    $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
+    $layout = $isPersonnel ? 'layouts.personnel' : 'layouts.phs-new';
+    $dashboardRoute = $isPersonnel ? route('personnel.dashboard') : route('client.dashboard');
+    $formAction = $isPersonnel ? route('personnel.phs.personal-characteristics.store') : route('phs.personal-characteristics.store');
+    $nextSectionRoute = $isPersonnel ? route('personnel.phs.marital-status') : route('phs.marital-status.create');
+@endphp
+
+@extends($layout)
 
 @section('title', 'II: Personal Characteristics')
 
@@ -18,7 +26,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ route('phs.personal-characteristics.store') }}" method="POST" class="space-y-8">
+    <form action="{{ $formAction }}" method="POST" class="space-y-8">
         @csrf
         
         <!-- Section 1: Physical Attributes -->
@@ -247,11 +255,13 @@
         
         <!-- Navigation -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('personal-characteristics')" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </button>
-            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'personal-characteristics')">
-                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
+            <a href="{{ $dashboardRoute }}" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Dashboard
+            </a>
+            <button type="submit" class="btn-primary" formaction="{{ $nextSectionRoute }}">
+                Save & Continue
+                <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
     </form>
