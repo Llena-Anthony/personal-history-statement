@@ -675,32 +675,73 @@
     <!-- Main Content Wrapper -->
     <div class="main-content-wrapper">
         <!-- Sidebar -->
-        <aside class="sidebar text-white flex flex-col">
-            <div class="profile-container">
-                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
-                <div class="user-info">
-                    <span class="user-name">{{ Auth::user()->name }}</span>
-                    <div class="user-username">{{ '@' . Auth::user()->username }}</div>
-                    <div class="user-role">Personnel</div>
-                </div>
+        <aside class="sidebar text-white flex flex-col items-center pt-10">
+            <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="w-28 h-28 rounded-full border-4 border-blue-600 shadow mb-2 object-cover">
+            <div class="mt-2 text-center w-full">
+                <span class="block text-lg font-bold text-white drop-shadow">{{ Auth::user()->name }}</span>
+                <span class="block text-xs text-blue-200 font-semibold mb-2">{{ Auth::user()->organic_role ?? 'Personnel' }}</span>
             </div>
-            <!-- Navigation -->
-            <div class="tab-container">
-                <ul class="space-y-1">
-                    <li><a href="{{ route('personnel.phs.personal-details') }}" class="nav-link {{ request()->routeIs('personnel.phs.personal-details') ? 'active' : '' }}"><i class="fa-regular fa-id-card"></i> <span class="ml-3">I: Personal Details</span></a></li>
-                    <li><a href="{{ route('personnel.phs.personal-characteristics') }}" class="nav-link {{ request()->routeIs('personnel.phs.personal-characteristics') ? 'active' : '' }}"><i class="fa-solid fa-user-check"></i> <span class="ml-3">II: Personal Characteristics</span></a></li>
-                    <li><a href="{{ route('personnel.phs.marital-status') }}" class="nav-link {{ request()->routeIs('personnel.phs.marital-status') ? 'active' : '' }}"><i class="fa-solid fa-ring"></i> <span class="ml-3">III: Marital Status</span></a></li>
-                    <li><a href="{{ route('personnel.phs.family-background') }}" class="nav-link {{ request()->routeIs('personnel.phs.family-background') ? 'active' : '' }}"><i class="fa-solid fa-users"></i> <span class="ml-3">IV: Family Background</span></a></li>
-                    <li><a href="{{ route('personnel.phs.educational-background') }}" class="nav-link {{ request()->routeIs('personnel.phs.educational-background') ? 'active' : '' }}"><i class="fa-solid fa-graduation-cap"></i> <span class="ml-3">V: Educational Background</span></a></li>
-                    <li><a href="{{ route('personnel.phs.military-history') }}" class="nav-link {{ request()->routeIs('personnel.phs.military-history') ? 'active' : '' }}"><i class="fa-solid fa-medal"></i> <span class="ml-3">VI: Military History</span></a></li>
-                    <li><a href="{{ route('personnel.phs.employment-history') }}" class="nav-link {{ request()->routeIs('personnel.phs.employment-history') ? 'active' : '' }}"><i class="fa-solid fa-briefcase"></i> <span class="ml-3">VII: Employment History</span></a></li>
-                    <li><a href="{{ route('personnel.phs.credit-reputation') }}" class="nav-link {{ request()->routeIs('personnel.phs.credit-reputation') ? 'active' : '' }}"><i class="fa-solid fa-credit-card"></i> <span class="ml-3">VIII: Credit Reputation</span></a></li>
-                    <li><a href="{{ route('personnel.phs.arrest-record') }}" class="nav-link {{ request()->routeIs('personnel.phs.arrest-record') ? 'active' : '' }}"><i class="fa-solid fa-gavel"></i> <span class="ml-3">IX: Arrest Record</span></a></li>
-                    <li><a href="{{ route('personnel.phs.organization') }}" class="nav-link {{ request()->routeIs('personnel.phs.organization') ? 'active' : '' }}"><i class="fa-solid fa-users-rectangle"></i> <span class="ml-3">X: Organization</span></a></li>
-                    <li><a href="{{ route('personnel.phs.places-of-residence') }}" class="nav-link {{ request()->routeIs('personnel.phs.places-of-residence') ? 'active' : '' }}"><i class="fa-solid fa-house"></i> <span class="ml-3">XI: Places of Residence</span></a></li>
-                    <li><a href="{{ route('personnel.phs.foreign-countries') }}" class="nav-link {{ request()->routeIs('personnel.phs.foreign-countries') ? 'active' : '' }}"><i class="fa-solid fa-globe"></i> <span class="ml-3">XII: Foreign Countries</span></a></li>
-                    <li><a href="{{ route('personnel.phs.review') }}" class="nav-link {{ request()->routeIs('personnel.phs.review') ? 'active' : '' }}"><i class="fa-solid fa-clipboard-check"></i> <span class="ml-3">Review & Submit</span></a></li>
-                </ul>
+            <div class="mt-4 w-full max-w-xs px-4">
+                <dl class="space-y-3 text-left">
+                    <div>
+                        <dt class="text-xs text-gray-300 font-semibold">Employee/Personnel ID</dt>
+                        <dd class="text-sm text-white font-medium">{{ Auth::user()->username }}</dd>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Sex/Gender</dt>
+                            <dd class="text-sm text-white font-medium">{{ Auth::user()->personalChar->sex ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Civil Status</dt>
+                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->civil_status ?? 'N/A' }}</dd>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Date of Birth</dt>
+                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->birthDetails->b_date ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Age</dt>
+                            <dd class="text-sm text-white font-medium">
+                                @if(Auth::user()->userDetails && Auth::user()->userDetails->birthDetails && Auth::user()->userDetails->birthDetails->b_date)
+                                    {{ \Carbon\Carbon::parse(Auth::user()->userDetails->birthDetails->b_date)->age }}
+                                @else
+                                    N/A
+                                @endif
+                            </dd>
+                        </div>
+                    </div>
+                    <div>
+                        <dt class="text-xs text-gray-300 font-semibold">Place of Birth</dt>
+                        <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->birthDetails->addressDetails->full_address ?? 'N/A' }}</dd>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Nationality</dt>
+                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->nationality ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Religion</dt>
+                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->religion ?? 'N/A' }}</dd>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Contact Number</dt>
+                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->mobile_num ?? 'N/A' }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs text-gray-300 font-semibold">Email Address</dt>
+                            <dd class="text-sm text-white font-medium break-all">{{ Auth::user()->userDetails->email_addr ?? Auth::user()->email }}</dd>
+                        </div>
+                    </div>
+                    <div>
+                        <dt class="text-xs text-gray-300 font-semibold">Blood Type</dt>
+                        <dd class="text-sm text-white font-medium">{{ Auth::user()->personalChar->blood_type ?? 'N/A' }}</dd>
+                    </div>
+                </dl>
             </div>
         </aside>
 
