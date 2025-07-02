@@ -16,7 +16,7 @@
         </div>
     </div>
     
-    <form method="POST" action="{{ route('phs.organization.store') }}" class="space-y-8">
+    <form method="POST" action="{{ route('personnel.phs.organization.store') }}" class="space-y-8">
         @csrf
         
         <!-- Organization Entries -->

@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <form method="POST" action="{{ route('phs.arrest-record.store') }}" class="space-y-8">
+    <form method="POST" action="{{ route('personnel.phs.arrest-record.store') }}" class="space-y-8">
         @csrf
         <!-- Arrest Record and Conduct Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

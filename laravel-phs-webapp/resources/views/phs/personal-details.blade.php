@@ -1,8 +1,8 @@
 @php
-    $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
-    $layout = $isPersonnel ? 'layouts.personnel' : 'layouts.phs-new';
-    $dashboardRoute = $isPersonnel ? route('personnel.dashboard') : route('client.dashboard');
-    $nextSectionRoute = $isPersonnel ? route('personnel.phs.personal-characteristics') : route('phs.personal-characteristics.create');
+    // Always use the client PHS layout for identical UI
+    $layout = 'layouts.phs-new';
+    $dashboardRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard');
+    $nextSectionRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.personal-characteristics') : route('phs.personal-characteristics.create');
 @endphp
 
 @extends($layout)
@@ -11,12 +11,6 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <!-- Back to Dashboard Button -->
-    <div class="mb-4">
-        <a href="{{ $dashboardRoute }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
-        </a>
-    </div>
     <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center space-x-4 mb-4">
@@ -30,10 +24,8 @@
         </div>
     </div>
 
-    <div class="mb-2 text-xs text-red-600">DEBUG: Form action = {{ $isPersonnel ? route('personnel.phs.personal-details.store') : route('phs.store') }}, Role = {{ Auth::user()->role ?? 'none' }}</div>
-
     <!-- Form -->
-    <form method="POST" action="{{ $isPersonnel ? route('personnel.phs.personal-details.store') : route('phs.store') }}" class="space-y-8">
+    <form method="POST" action="{{ route('personnel.phs.personal-details.store') }}" class="space-y-8">
         @csrf
         
         <!-- Personal Information -->
@@ -588,10 +580,7 @@
                 Back to Dashboard
             </a>
             
-            <button type="submit" class="btn-primary">
-                Save & Continue
-                <i class="fas fa-arrow-right ml-2"></i>
-            </button>
+            <button type="submit" class="btn-primary">Save & Continue</button>
         </div>
     </form>
 </div>
@@ -990,4 +979,38 @@
         });
     }
 </script>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{{ route('personnel.phs.personal-characteristics') }}";
+                } else if (data.errors) {
+                    alert('Please fill in all required fields.');
+                }
+            })
+            .catch(error => {
+                alert('An error occurred. Please try again.');
+            });
+        });
+    }
+});
+</script>
+@endpush
 @endsection 

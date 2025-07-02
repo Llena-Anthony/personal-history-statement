@@ -175,6 +175,7 @@
             z-index: 30;
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(27, 54, 93, 0.15);
+            font-size: 1rem;
         }
 
         .sidebar::before {
@@ -630,6 +631,22 @@
             from { transform: translateY(0); opacity: 1; }
             to { transform: translateY(-100%); opacity: 0; }
         }
+
+        .pma-gold-underline {
+            border-bottom: 3px solid #D4AF37;
+            padding-bottom: 2px;
+            display: inline-block;
+        }
+
+        .sidebar .block.text-xl {
+            font-size: 1.5rem !important;
+        }
+        .sidebar .font-bold.text-base, .sidebar .text-white.font-semibold, .sidebar .text-white.font-bold {
+            font-size: 1.1rem !important;
+        }
+        .sidebar .text-sm, .sidebar .text-white\/80 {
+            font-size: 1rem !important;
+        }
     </style>
 </head>
 <body>
@@ -675,73 +692,30 @@
     <!-- Main Content Wrapper -->
     <div class="main-content-wrapper">
         <!-- Sidebar -->
-        <aside class="sidebar text-white flex flex-col items-center pt-10">
-            <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="w-28 h-28 rounded-full border-4 border-blue-600 shadow mb-2 object-cover">
-            <div class="mt-2 text-center w-full">
-                <span class="block text-lg font-bold text-white drop-shadow">{{ Auth::user()->name }}</span>
-                <span class="block text-xs text-blue-200 font-semibold mb-2">{{ Auth::user()->organic_role ?? 'Personnel' }}</span>
+        <aside class="sidebar text-white flex flex-col items-start pt-10 px-6">
+            <!-- Profile Section -->
+            <div class="w-full flex flex-col items-center mb-4">
+                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="w-24 h-24 rounded-full border-4 border-blue-600 shadow-lg mb-2 object-cover bg-white">
+                <div class="mt-1 w-full text-center">
+                    <span class="block text-xl font-extrabold text-white drop-shadow pma-gold-underline">{{ Auth::user()->name }}</span>
+                    <span class="block text-xs text-blue-200 font-semibold mb-1 tracking-wide">{{ Auth::user()->organic_role ?? 'Personnel' }}</span>
+                </div>
             </div>
-            <div class="mt-4 w-full max-w-xs px-4">
-                <dl class="space-y-3 text-left">
-                    <div>
-                        <dt class="text-xs text-gray-300 font-semibold">Employee/Personnel ID</dt>
-                        <dd class="text-sm text-white font-medium">{{ Auth::user()->username }}</dd>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Sex/Gender</dt>
-                            <dd class="text-sm text-white font-medium">{{ Auth::user()->personalChar->sex ?? 'N/A' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Civil Status</dt>
-                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->civil_status ?? 'N/A' }}</dd>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Date of Birth</dt>
-                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->birthDetails->b_date ?? 'N/A' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Age</dt>
-                            <dd class="text-sm text-white font-medium">
-                                @if(Auth::user()->userDetails && Auth::user()->userDetails->birthDetails && Auth::user()->userDetails->birthDetails->b_date)
-                                    {{ \Carbon\Carbon::parse(Auth::user()->userDetails->birthDetails->b_date)->age }}
-                                @else
-                                    N/A
-                                @endif
-                            </dd>
-                        </div>
-                    </div>
-                    <div>
-                        <dt class="text-xs text-gray-300 font-semibold">Place of Birth</dt>
-                        <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->birthDetails->addressDetails->full_address ?? 'N/A' }}</dd>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Nationality</dt>
-                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->nationality ?? 'N/A' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Religion</dt>
-                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->religion ?? 'N/A' }}</dd>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Contact Number</dt>
-                            <dd class="text-sm text-white font-medium">{{ Auth::user()->userDetails->mobile_num ?? 'N/A' }}</dd>
-                        </div>
-                        <div>
-                            <dt class="text-xs text-gray-300 font-semibold">Email Address</dt>
-                            <dd class="text-sm text-white font-medium break-all">{{ Auth::user()->userDetails->email_addr ?? Auth::user()->email }}</dd>
-                        </div>
-                    </div>
-                    <div>
-                        <dt class="text-xs text-gray-300 font-semibold">Blood Type</dt>
-                        <dd class="text-sm text-white font-medium">{{ Auth::user()->personalChar->blood_type ?? 'N/A' }}</dd>
-                    </div>
-                </dl>
+            <!-- Action Buttons -->
+            <div class="w-full flex flex-row gap-3 mb-4">
+                <a href="#" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg shadow text-center transition focus:outline-none focus:ring-2 focus:ring-[#D4AF37] border-2 border-[#D4AF37]">PHS</a>
+                <a href="#" class="flex-1 bg-gray-400 text-white font-semibold py-2 rounded-lg shadow text-center transition cursor-not-allowed opacity-70 border-2 border-gray-300">PDS</a>
+            </div>
+            <!-- Divider -->
+            <div class="w-full flex justify-center mb-4">
+                <div class="border-t border-blue-900 w-full"></div>
+            </div>
+            <!-- PHS Sections Navigation -->
+            <div class="w-full mb-4">
+                <div class="text-xs text-[#D4AF37] font-bold uppercase tracking-wider mb-2 pl-2">PHS Sections</div>
+                <ul class="tab-container">
+                    <!-- Remove all <li><a href="{{ route('personnel.phs.*') }}">...</a></li> and similar links -->
+                </ul>
             </div>
         </aside>
 

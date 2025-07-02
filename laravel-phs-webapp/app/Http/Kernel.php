@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'client' => \App\Http\Middleware\ClientMiddleware::class,
         'login.throttle' => \App\Http\Middleware\LoginThrottle::class,
         'complete.personal' => \App\Http\Middleware\EnsurePersonalDetailsCompleted::class,
+        'role' => \App\Http\Middleware\CheckRole::class,
     ];
 }

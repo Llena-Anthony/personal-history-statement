@@ -859,13 +859,13 @@
                         {{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}
                     </div>
                     <div class="pma-switch-btn-wrapper absolute top-0 right-0" style="margin-top:2px; margin-right:2px; z-index:2;">
-                        <a href="{{ route('admin.switch.to.client') }}"
+                        <a href="/personnel/phs/personal-details"
                            class="pma-switch-btn"
                            id="pmaSwitchBtn"
                            tabindex="0">
                             <i class="fas fa-repeat" style="font-size: 1rem;"></i>
                         </a>
-                        <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Switch to Client View<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Preview your PHS as a client</span></div>
+                        <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Go to PHS Personal Details<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Direct to Personnel PHS</span></div>
                     </div>
                 </div>
                 </div>
@@ -888,12 +888,6 @@
                         <li><a href="#" class="nav-link">
                             <i class="fa-regular fa-folder"></i>
                             <span class="ml-3">PDS Submissions</span>
-                        </a></li>
-                        <li><a href="{{ route('admin.users.index') }}" 
-                               data-route="admin.users.index"
-                               class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }} dynamic-nav">
-                            <i class="fa-regular fa-address-book"></i>
-                            <span class="ml-3">User Management</span>
                         </a></li>
                         <li><a href="{{ route('admin.activity-logs.index') }}" 
                                data-route="admin.activity-logs.index"

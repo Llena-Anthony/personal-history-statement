@@ -300,7 +300,7 @@
                 <i class="fas fa-arrow-left mr-2"></i>
                 Previous Section
             </button>
-            <button type="submit" class="btn-primary" formaction="{{ $nextSectionRoute }}">
+            <button type="submit" class="btn-primary" formaction="{{ route('personnel.phs.military-history') }}">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>

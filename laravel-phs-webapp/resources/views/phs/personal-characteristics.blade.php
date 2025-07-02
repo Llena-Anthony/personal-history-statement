@@ -1,9 +1,8 @@
 @php
-    $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
-    $layout = $isPersonnel ? 'layouts.personnel' : 'layouts.phs-new';
-    $dashboardRoute = $isPersonnel ? route('personnel.dashboard') : route('client.dashboard');
-    $formAction = $isPersonnel ? route('personnel.phs.personal-characteristics.store') : route('phs.personal-characteristics.store');
-    $nextSectionRoute = $isPersonnel ? route('personnel.phs.marital-status') : route('phs.marital-status.create');
+    $layout = 'layouts.phs-new';
+    $dashboardRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard');
+    $formAction = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.personal-characteristics.store') : route('phs.personal-characteristics.store');
+    $nextSectionRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.marital-status') : route('phs.marital-status.create');
 @endphp
 
 @extends($layout)
@@ -26,7 +25,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ $formAction }}" method="POST" class="space-y-8">
+    <form action="{{ route('personnel.phs.personal-characteristics.store') }}" method="POST" class="space-y-8">
         @csrf
         
         <!-- Section 1: Physical Attributes -->
@@ -259,7 +258,7 @@
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Dashboard
             </a>
-            <button type="submit" class="btn-primary" formaction="{{ $nextSectionRoute }}">
+            <button type="submit" class="btn-primary" formaction="{{ route('personnel.phs.marital-status') }}">
                 Save & Continue
                 <i class="fas fa-arrow-right ml-2"></i>
             </button>

@@ -195,6 +195,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Accessor for role to return organic_role for compatibility with middleware and checks
+     */
+    public function getRoleAttribute()
+    {
+        return $this->organic_role;
+    }
+
+    /**
      * Boot method to handle model events
      */
     protected static function boot()
