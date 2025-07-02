@@ -15,7 +15,10 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role === 'client') {
+        if (
+            auth()->check() &&
+            (auth()->user()->usertype === 'client' || session('admin_switched_to_client'))
+        ) {
             return $next($request);
         }
         abort(403, 'Unauthorized');

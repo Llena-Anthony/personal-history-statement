@@ -172,7 +172,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+               
                 {{-- Page 2 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -343,7 +343,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+                
                 {{-- Page 3 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     <div class="w-full left-0 right-0 top-0 z-[1000] text-center bg-white absolute">
@@ -485,7 +485,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+                
                 {{-- Page 4 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -732,7 +732,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+                
                 {{-- Page 5 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -851,7 +851,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+                
                 {{-- Page 6 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -994,7 +994,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+                
                 {{-- Page 7 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -1150,7 +1150,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+               
                 {{-- Page 8 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -1327,7 +1327,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+               
                 {{-- Page 9 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -1432,7 +1432,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+                
                 {{-- Page 10 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
@@ -1517,7 +1517,7 @@
                         <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
                     </div>
                 </div>
-                <br>
+              
                 {{-- Page 11 --}}
                 <div class="h-[10.5in] w-[7.5in] border-dashed border-gray border-[1px] relative">
                     {{-- Header --}}
