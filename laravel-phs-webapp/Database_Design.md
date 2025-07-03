@@ -1,146 +1,176 @@
 DATABASE DESIGN
 
-USER (username, password, usertype, organic role, branch, created_by, is_active, phs_stat)
-
-USERDETAILS (username, name, profile_pic, home_addr, birth, nationality, tin, religion, mobile_num, email_addr, passport_num, passport_exp, change_in_name)
+ACTIVITYLOGDETAIL (act_id, changes_made_by, action, act_desc, act_stat, ip_addr, user_agent, act_date_time, old_value, new_value)
+FK	changes_made_by REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+ADDRESSDETAIL (addr_id, country, region, province, city, municipality, barangay, street, zip_code)
+ARRESTDETAIL (arrest_detail_id, court_name, nature_of_offense, disposition_of_case)
+ARRESTRECORDDETAIL (username, arr_desc, fam_arr_desc, admin_case_desc, vilolation_desc, extent_of_intoxication)
 FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		home_addr REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+	FK	arr_desc REFERENCES ARRESTDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		name REFERENCES NAMEDETAILS NULLS NOT ALLOWED
+	FK	fam_arr_desc REFERENCES ARRESTDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		birth REFERENCES BIRTHDETAILS NULLS NOT ALLOWED
+	FK	violation_desc REFERENCES ARRESTDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-NAMEDETAILS (name_id, last_name, first_name, middle_name, nickname, name_extension)
-
-BIRTHDETAILS (birth_id, b_date, b_month, b_year, b_place)
-FK	b_place REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
-			DELETE RESTRICT, UPDATE CASCADE
-
-JOBDETAILS (username, present_job, job_addr, rank, afpsn, been_dismissed, reason_for_dismissal)
+ASSIGNMENTDETAIL (assign_id, start_date, end_date, assign_unit, assign_chief, username)
 FK	username REFERENCES USER NULLS NOT ALLOWED
-		DELETE RESTRICT, UPDATE CASCADE
-job_addr REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		rank REFERENCES MILITARYRANK NULLS NOT ALLOWED
+AWARDDETAIL (award_id, award_desc, username)
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-ADDRESSDETAILS (addr_id, street, barangay, municipality, province, city, country, zip_code)
-
-
-PERSONALCHAR (username, sex, age, height, weight, body_build, complexion, eye_color, hair_color, other_features, health_state, recent_illness, blood_type, shoesize, headsize)
-	FK	username REFERENCES USER NULLS NOT ALLOWED
+BANKACCOUNTDETAIL (account_id, bank, username)
+FK	bank REFERENCES BANKDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-MARITALSTATUS (username, marital_status)
-  FK 	username REFERENCES USER NULLS NOT ALLOWED
- DELETE RESTRICT, UPDATE CASCADE
-
-SPOUSEDETAILS (username, spouse_name, date_of_marriage, place_of_marriage, spouse_dob, spouse_birthplace, spouse_occupation, spouse_employer, contact_number, citizenship, ual_citizenship)
-	FK	 username REFERENCES USER NULLS NOT ALLOWED 
-DELETE RESTRICT, UPDATE CASCADE
-
-CHILDRENDETAILS (child_id, username, child_name, child_dob, child_citizenship_address, parent_name)
-	FK	 username REFERENCES USER NULLS NOT ALLOWED 
-DELETE RESTRICT, UPDATE CASCADE
-
-FAMILYHISTORY (fam_id, username, name, role, birthdate, occupation, employer, employment_addr, citizenship, isnaturalized, naturalized_details)
-	FK	username REFERENCES USERDETAILS NULLS NOT ALLOWED 
-DELETE RESTRICT, UPDATE CASCADE
-name REFERENCES NAMEDETAILS NULLS NOT ALLOWED
-	DELETE RESTRICT, UPDATE CASCADE
-birthdate REFERENCES BIRTHDETAILS NULLS NOT ALLOWED
-	DELETE RESTRICT, UPDATE CASCADE
-		employment_addr REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-EDUCATIONALBACKGROUND (username, educ_details, other_training_attended, other_training_date, civil_service qualification)
-	FK	username REFERENCES USER NULLS NOT ALLOWED
+BANKDETAIL (bank_id, bank, bank_addr)
+FK	bank_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		educ_details REFERENCES EEDUCATIONDETAILS NULLS NOT ALLOWED
+CITIZENSHIPDETAIL (cit_id, cit_description)
+CHILDRENDETAIL (child_id, child_name, birth_date, citizenship, addr, other_parent, username)
+FK	child_name REFERENCES NAMEDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-EDUCATIONDETAILS (educ_id, username, school, date_attended, year_grad)
-
-SCHOOLDETAILS (school_id, location, level)
-	FK	location REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+FK	citizenship REFERENCES CITIZENSHIPDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-MILITARYHISTORY (username, date_enlisted_afp, start_date_of_commision, end_date_of_commision, source_of_commision, military_assign)
-	FK	username REFERENCES USER NULLS NOT ALLOWED
+FK	addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		military_assign REFERENCES MILITARYASSIGNMENTS NULLS NOT ALLOWED
+FK	other_parent REFERENCES NAMEDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-MILITARYASSIGNMENTS (assign_id, inclusive_dates, unit_office, co_or_chief_of_office)
-	FK	 username REFERENCES MILITARY HISTORY NULLS NOT ALLOWED
-			DEELETE RESTRICT, UPDATE CASCADE	
-
-MILITARYSCHOOLATTENDED (history_id, school_location, date_attended, nature_of_training, rating)
-	FK 	username REFERENCES MILITARYHISTORY NULLS NOT ALLOWED 
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		school_location REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+CREDITDETAIL (username, other_income_src, saln_detail, amount_paid)
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-MILITARYAWARDS (history_id, decoration_award_or_commendation)
-	FK 	history_id REFERENCES MILITARYHISTORY NULLS NOT ALLOWED	
+CREDITREFERENCEDETAIL (account_id, bank, username)
+FK	bank REFERENCES BANKDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-RESIDENCEHISTORY(username, address_id, from_year, to_year)
-	FK	username REFERENCES USER NULLS NOT ALLOWED
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-	FK	address_id REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+DESCRIPTIONDETAIL (username, sex, age, height, weight, body_build, complexion, eye_color, hair_color, other_marks)
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-EMPLOYMENTHISTORY(username, inclusive_dates, employment_type, employment_address, employment_reason_for_leaving, employer_name, employer_addr)
-	FK	username REFERENCES USER NULLS NOT ALLOWED
+EDUCATIONDETAIL (educ_id, school, educ_level, attend_date, year_grad, other_training, civil_service, username)
+FK	school REFERENCES SCHOOLDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-	FK	employer_addr REFERENCES USER NULLS NOT ALLOWED
-			DELETE RESTRCT, UPDATE CASCADE
-
-FOREIGNVISITS (foreign_id, username, date_of_visit, country_visited, purpose_of_visit, foreign_address)
-	FK	username REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
-			DELETE RESRICT, UPDATE CASCADE
-
-CREDITREP (username, is_dependent, income_source, credit_inst_detail, has_filed_saln, agency, date_filed, amount-paid, credit_ref_detail)
-	FK	username REFERENCES USER NULLS NOT ALLOWED
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		credit_inst_detail REFERENCES CREDITINSTITUTION NULLS NOT ALLOWED
+EMPLOYMENTDETAIL (employ_id, start_date, end_date, employ_type, employer, employ_addr, reason_for_leaving, dismissal_desc, username)
+FK	employ_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		credit_ref_detail REFERENCES CREDITINSTITUTION NULLS NOT ALLOWED
+FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-ARRESTRECORD (record_id, has_record, personal_arrest, fam_has_record, family_arrest, has_admin_case, admin_case_detail, violated_pd_1081, 1081_detail, use_narcotics_take_liqour, extent)
-	FK	personal_arrest REFERENCES ARRESTDETAILS NULLS NOT ALLOWED
+FAMILYDETAIL (fam_id, fam_name, birth_date, birth_place, fam_addr, occupation, citizenship, dual, date_naturalized, place_naturalized)
+FK	fam_name REFERENCES NAMEDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		family_arrest REFERENCES ARRESTDETAILS NULLS NOT ALLOWED
+FK	birth_place REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		1081_detail REFERENCES ARRESTDETAILS NULLS NOT ALLOWED
-		DELETE RESTRICT, UPDATE CASCADE
-
-ARRESTDETAILS (arrest_id, name_of_court, nature_of_offense, case_disposition)
-
-CHARANDREP (reference_id, name, role, addr, username)
-	FK	name REFERENCES NAMEDETAILS NULLS NOT ALLOWED
+	FK	fam_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		addr REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+FK	occupation REFERENCES OCCUPATIONDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		username REFERENCES USER NULLS NOT ALLOWED
+FK	citizenship REFERENCES CITIZENSHIPDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-ORGANIZATION (org_id, org_name, org_addr)
-	FK	org_addr REFERENCES ADDRESSDETAILS NULLS NOT ALLOWED
+	FK	dual REFERENCES CITIZENSHIPDETAIL NULLS ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-MEMBERSHIPDETAILS (org_id, username, position, membership_date)
-	FK	org_id REFERENCES ORGANIZATION NULLS NOT ALLOWED
+FK	place_naturalized REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-		username REFERENCES USER NULLS NOT ALLOWED
+FAMILYHISTORYDETAIL (username, father, mother, guardian, father_in_law, mother_in_law)
+FK	father REFERENCES FAMILYDETAIL NULLS ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-
-MISCELLANEOUS (misc_id, hobbies, language_dialect, speak_fluency, read_fluency, write_fluency, undergo_lie_detection)
-
-CREDITINSTITUTION (inst_id, inst_name, inst_addr)
-
-HISTORYLOGS (log_id, username, logged_date, logged_time, activity)
-
-MILITARYRANK (rank_id, rank, rank_desc, branch)
+FK	mother REFERENCES FAMILYDETAIL NULLS ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	guardian REFERENCES FAMILYDETAIL NULLS ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	father_in_law REFERENCES FAMILYDETAIL NULLS ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	mother_in_law REFERENCES FAMILYDETAIL NULLS ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FLUENCYDETAIL (username, lang, speak_fluency, read_fluency, write_fluency)
+FK	lang REFERENCES LANGUAGEDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FOREIGNVISITDETAIL (visit_id, visit_date, visit_purpose, visit_addr, username)
+FK	visit_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+GOVERNMENTIDDETAIL(username, tin_num, pass_num, pass_exp)
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+JOBDETAIL (username, service_branch, rank, afpsn, job_addr)
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	job_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+LANGUAGEDETAIL (lang_id, lang_desc)
+MARITALDETAIL (username, marital_stat, spouse)
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	spouse REFERENCES SPOUSEDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+MEMBERSHIPDETAIL (username, org, mem_date, position)
+FK	org REFERENCES ORGANIZATIONDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+MILITARYHISTORYDETAIL (username, enlist_date, start_comm, end_comm, comm_src)
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+MILITARYSCHOOLDETAIL (mil_school_id, school, attend_date, train_nature, rating, username)
+FK	school REFERENCES SCHOOLDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+NAMEDETAIL (name_id, last_name, first_name, middle_name, name_extension, nickname, change_in_name)
+ORGANIZATIONDETAIL (org_id, org_name, org_addr)
+FK	org_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+OCCUPATIONDETAIL (occupation_id, occupation_desc, employer, occupation_addr)
+FK	occupation_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+PERSONALDETAIL (username, health_state, illness, blood_type, cap_size, shoe_size, hobbies, undergo_lie_detection)
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+REFERENCEDETAIL (ref_id, ref_name, ref_addr, ref_type, username)
+FK	ref_name REFERENCES NAMEDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+	FK	ref_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+SIBLINGDETAIL (sib_id, sib_detail, username)
+FK	sib_detail REFERENCES FAMILYDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+SCHOOLDETAIL (school_id, school_name, school_addr)
+FK	school_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+SPOUSEDETAIL (spouse_id, spouse_name, marr_date, marr_place, birth_date, birth_place, occupation, mobile_num, citizenship, dual)
+FK	spouse_name REFERENCES NAMEDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	marr_place REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	birth_place REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	occupation  REFERENCES OCCUPATIONDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	citizenship REFERENCES CITIZENSHIPDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	dual REFERENCES CITIZENSHIPDETAIL NULLS ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+USER (username, password, usertype, organic_role, is_active, phs_status)
+USERDETAIL (username, full_name, profile_path, home_addr, birth_date, birth_place, nationality, religion, mobile_num, email_addr)
+FK	username REFERENCES USER NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	full_name REFERENCES NAMEDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	home_addr REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	birth_place REFERENCES ADDRESSDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
+FK	nationality  REFERENCES CITIZENSHIPDETAIL NULLS NOT ALLOWED
+			DELETE RESTRICT, UPDATE CASCADE
