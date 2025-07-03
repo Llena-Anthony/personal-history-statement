@@ -2,6 +2,7 @@
     $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
     $formAction = $isPersonnel ? route('personnel.phs.educational-background.store') : route('phs.educational-background.store');
     $nextSectionRoute = $isPersonnel ? route('personnel.phs.military-history') : route('phs.military-history.create');
+    $dashboardRoute = route('personnel.dashboard');
 @endphp
 
 <div class="max-w-4xl mx-auto">

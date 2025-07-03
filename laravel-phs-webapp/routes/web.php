@@ -206,7 +206,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // Personnel Routes
 Route::middleware(['auth', 'personnel'])->prefix('personnel')->name('personnel.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\PersonnelDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/phs', [App\Http\Controllers\PersonnelDashboardController::class, 'phs'])->name('phs');
+    Route::get('/phs', [App\Http\Controllers\Personnel\PHSController::class, 'index'])->name('phs.index');
+    Route::get('/pds', [App\Http\Controllers\Personnel\PDSController::class, 'index'])->name('pds.index');
     Route::get('/profile/edit', [App\Http\Controllers\PersonnelDashboardController::class, 'editProfile'])->name('profile.edit');
     Route::put('/profile', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfile'])->name('profile.update');
     Route::post('/profile/picture', [App\Http\Controllers\PersonnelDashboardController::class, 'updateProfilePicture'])->name('profile.picture');

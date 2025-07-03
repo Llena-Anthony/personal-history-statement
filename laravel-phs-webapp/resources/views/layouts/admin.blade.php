@@ -873,12 +873,29 @@
             <!-- Navigation -->
                 <div class="tab-container">
                     <div class="space-y-1">
+                        <!-- Dashboard -->
                         <li><a href="{{ route('admin.dashboard') }}" 
                                data-route="admin.dashboard"
                                class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} dynamic-nav">
                             <i class="fa-solid fa-chart-line"></i>
                             <span class="ml-3">Dashboard</span>
                         </a></li>
+
+                        <!-- User Management -->
+                        <li><a href="{{ route('admin.users.index') }}" 
+                               data-route="admin.users.index"
+                               class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }} dynamic-nav">
+                            <i class="fas fa-users-cog"></i>
+                            <span class="ml-3">Manage Users</span>
+                        </a></li>
+                        <li><a href="{{ route('admin.users.create') }}" 
+                               data-route="admin.users.create"
+                               class="nav-link {{ request()->routeIs('admin.users.create') ? 'active' : '' }} dynamic-nav">
+                            <i class="fas fa-user-plus"></i>
+                            <span class="ml-3">Add New User</span>
+                        </a></li>
+
+                        <!-- Submissions -->
                         <li><a href="{{ route('admin.phs.index') }}" 
                                data-route="admin.phs.index"
                                class="nav-link {{ request()->routeIs('admin.phs.*') ? 'active' : '' }} dynamic-nav">
@@ -889,6 +906,8 @@
                             <i class="fa-regular fa-folder"></i>
                             <span class="ml-3">PDS Submissions</span>
                         </a></li>
+
+                        <!-- System Management -->
                         <li><a href="{{ route('admin.activity-logs.index') }}" 
                                data-route="admin.activity-logs.index"
                                class="nav-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }} dynamic-nav">

@@ -17,6 +17,7 @@
         $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
         $formAction = $isPersonnel ? route('personnel.phs.marital-status.store') : route('phs.marital-status.store');
         $nextSectionRoute = $isPersonnel ? route('personnel.phs.family-background') : route('phs.family-background.create');
+        $dashboardRoute = route('personnel.dashboard');
     @endphp
 
     <form method="POST" action="{{ $formAction }}" class="space-y-8">

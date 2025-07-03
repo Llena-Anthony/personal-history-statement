@@ -1598,14 +1598,12 @@
         // Dashboard transition function
         function goToDashboard() {
             const transitionOverlay = document.getElementById('dashboard-transition-overlay');
-            
-            // Show overlay
-            transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            transitionOverlay.classList.add('opacity-100');
-            
-            // Navigate after brief delay
-            setTimeout(() => {
-                window.location.href = '{{ route("client.dashboard") }}';
+            if (transitionOverlay) {
+                transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                transitionOverlay.classList.add('opacity-100');
+            }
+            setTimeout(function() {
+                window.location.href = '{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}';
             }, 400);
         }
 

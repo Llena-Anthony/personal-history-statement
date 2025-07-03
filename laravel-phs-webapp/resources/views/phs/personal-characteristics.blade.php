@@ -1,6 +1,6 @@
 @php
     $layout = 'layouts.phs-new';
-    $dashboardRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard');
+    $dashboardRoute = route('personnel.dashboard');
     $formAction = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.personal-characteristics.store') : route('phs.personal-characteristics.store');
     $nextSectionRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.marital-status') : route('phs.marital-status.create');
 @endphp

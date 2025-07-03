@@ -1,7 +1,7 @@
 @php
     // Always use the client PHS layout for identical UI
     $layout = 'layouts.phs-new';
-    $dashboardRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard');
+    $dashboardRoute = route('personnel.dashboard');
     $nextSectionRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.personal-characteristics') : route('phs.personal-characteristics.create');
 @endphp
 

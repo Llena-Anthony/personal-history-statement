@@ -133,7 +133,7 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
-            <a href="{{ route('phs.credit-reputation') }}" class="btn-secondary">
+            <a href="{{ $dashboardRoute }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i> Previous Section
             </a>
             <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'arrest-record')">

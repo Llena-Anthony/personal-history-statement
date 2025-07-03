@@ -15,6 +15,7 @@
         $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
         $formAction = $isPersonnel ? route('personnel.phs.family-background.store') : route('phs.family-background.store');
         $nextSectionRoute = $isPersonnel ? route('personnel.phs.educational-background') : route('phs.educational-background');
+        $dashboardRoute = route('personnel.dashboard');
     @endphp
 
     <form method="POST" action="{{ $formAction }}" autocomplete="off" class="space-y-10" id="phs-form">

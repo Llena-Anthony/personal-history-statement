@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.personnel')
 
 @section('title', 'Personnel Dashboard')
 
@@ -36,19 +36,32 @@
         </div>
     </div>
 
+    <!-- Go to PHS Personal Details Button -->
+    <div class="flex justify-end mt-4">
+        <a href="{{ url('/personnel/phs/personal-details') }}" class="flex items-center bg-[#1B365D] border border-[#D4AF37] rounded-full px-6 py-3 shadow hover:shadow-lg transition-all duration-200 group">
+            <span class="flex items-center justify-center w-10 h-10 bg-[#1B365D] rounded-full mr-3">
+                <i class="fas fa-sync-alt text-[#D4AF37] text-2xl"></i>
+            </span>
+            <div class="text-left">
+                <span class="block text-white font-bold text-lg leading-tight">Go to PHS Personal Details</span>
+                <span class="block text-xs text-[#D4AF37] font-medium">Direct to Personnel PHS</span>
+            </div>
+        </a>
+    </div>
+
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <button disabled class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 cursor-not-allowed">
+        <a href="#" class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
             <div class="flex items-center">
-                <div class="p-3 bg-gray-100 rounded-xl">
-                    <i class="fas fa-file-alt text-gray-400 text-xl"></i>
+                <div class="p-3 bg-[#1B365D]/10 rounded-xl">
+                    <i class="fas fa-file-alt text-[#1B365D] text-xl"></i>
                 </div>
                 <div class="ml-4">
-                    <h3 class="font-semibold text-gray-400">Start/Continue PHS</h3>
-                    <p class="text-sm text-gray-400">Coming Soon</p>
+                    <h3 class="font-semibold text-gray-900">Start/Continue PHS</h3>
+                    <p class="text-sm text-gray-500">Fill out your PHS form</p>
                 </div>
             </div>
-        </button>
+        </a>
         <a href="{{ route('personnel.profile.edit') }}" class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
             <div class="flex items-center">
                 <div class="p-3 bg-green-100 rounded-xl">
@@ -60,33 +73,73 @@
                 </div>
             </div>
         </a>
-        <button disabled class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 cursor-not-allowed">
+        <a href="#" class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-1">
             <div class="flex items-center">
-                <div class="p-3 bg-gray-100 rounded-xl">
-                    <i class="fas fa-file-signature text-gray-400 text-xl"></i>
+                <div class="p-3 bg-[#D4AF37]/10 rounded-xl">
+                    <i class="fas fa-file-signature text-[#D4AF37] text-xl"></i>
                 </div>
                 <div class="ml-4">
-                    <h3 class="font-semibold text-gray-400">PDS Status</h3>
-                    <p class="text-sm text-gray-400">Coming Soon</p>
+                    <h3 class="font-semibold text-gray-900">PDS Status</h3>
+                    <p class="text-sm text-gray-500">Check your PDS status</p>
                 </div>
             </div>
-        </button>
+        </a>
     </div>
 
-    <!-- PHS Progress Card -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-        <div class="p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">PHS Progress</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">0%</p>
+    <!-- PHS and PDS Status Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- PHS Progress Card -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">PHS Progress</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">0%</p>
+                    </div>
+                    <div class="p-4 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-xl">
+                        <i class="fas fa-file-alt text-white text-2xl"></i>
+                    </div>
                 </div>
-                <div class="p-4 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-xl">
-                    <i class="fas fa-file-alt text-white text-2xl"></i>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-sm">
+                    <span class="text-[#1B365D]">Status: Not Started</span>
+                    <span class="text-[#2B4B7D]">Last Updated: Never</span>
                 </div>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
-                <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+            <div class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10 px-6 py-3">
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-[#1B365D]">Sections Completed: 0/14</span>
+                    <span class="text-[#2B4B7D]">Estimated Time: 2-3 hours</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDS Status Card -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">PDS Status</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">Not Available</p>
+                    </div>
+                    <div class="p-4 bg-gradient-to-br from-[#D4AF37] to-[#B38F2A] rounded-xl">
+                        <i class="fas fa-file-pdf text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center">
+                    <span class="text-sm font-semibold text-[#D4AF37] flex items-center">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        PDS System Coming Soon
+                    </span>
+                </div>
+            </div>
+            <div class="bg-gradient-to-r from-[#D4AF37]/10 to-[#B38F2A]/10 px-6 py-3">
+                <div class="flex items-center justify-between text-sm">
+                    <span class="text-[#B38F2A]">Status: Not Available</span>
+                    <span class="text-[#D4AF37]">Expected: Q1 2024</span>
+                </div>
             </div>
         </div>
     </div>

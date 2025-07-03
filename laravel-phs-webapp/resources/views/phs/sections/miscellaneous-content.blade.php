@@ -174,4 +174,7 @@
     if (typeof window.initializeMiscellaneous === 'function') {
         window.initializeMiscellaneous();
     }
+
+    // Set the dashboard route
+    var $dashboardRoute = "{{ route('personnel.dashboard') }}";
 </script> 
