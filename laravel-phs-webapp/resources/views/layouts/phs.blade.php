@@ -71,18 +71,18 @@
         </nav>
 
         <!-- Sidebar -->
-        <aside class="fixed top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-slate-900/80 backdrop-blur-md border-r border-white/10 overflow-y-auto">
+        <aside class="fixed top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-gradient-to-b from-[#1B365D] via-[#2B4B7D] to-[#1B365D] backdrop-blur-md border-r-4 border-[#D4AF37] shadow-xl overflow-y-auto">
             <!-- User Profile Section -->
-            <div class="p-6 border-b border-white/10 flex flex-col items-center">
+            <div class="p-6 border-b border-[#D4AF37]/40 flex flex-col items-center">
                 <div class="relative mb-3">
-                    <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-400/50 hover:border-blue-400 transition-colors">
+                    <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-[#D4AF37] shadow-lg">
                         <img src="/images/profile-placeholder.png" alt="User Photo" class="w-full h-full object-cover object-center transform scale-110">
                     </div>
-                    <div class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-slate-900"></div>
+                    <div class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-[#1B365D]"></div>
                 </div>
                 <div class="text-center">
-                    <h3 class="text-base font-semibold text-slate-200">{{ auth()->user()->name }}</h3>
-                    <p class="text-xs text-slate-400">Civilian</p>
+                    <h3 class="text-base font-semibold text-white">{{ auth()->user()->name }}</h3>
+                    <p class="text-xs text-[#D4AF37] font-medium tracking-wide">Civilian</p>
                 </div>
             </div>
             <!-- Navigation -->
@@ -90,17 +90,17 @@
                 <ul class="space-y-2">
                     <template x-for="section in sections" :key="section.route">
                         <li>
-                            <a :href="section.url" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-all duration-200"
+                            <a :href="section.url" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-all duration-200 group"
                                :class="{
-                                   'bg-green-100 text-green-700 font-bold': section.status === 'complete',
-                                   'bg-yellow-100 text-yellow-700 font-bold': section.status === 'incomplete',
-                                   'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 group': section.status === 'default'
+                                   'bg-[#D4AF37]/90 text-[#1B365D] font-bold shadow': section.status === 'complete',
+                                   'bg-yellow-100 text-yellow-800 font-bold': section.status === 'incomplete',
+                                   'text-white hover:text-[#D4AF37] hover:bg-[#1B365D]/80': section.status === 'default'
                                }">
-                                <span class="w-7 h-7 flex items-center justify-center rounded-full"
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full border-2 border-[#D4AF37] bg-[#1B365D] group-hover:bg-[#D4AF37] group-hover:text-[#1B365D] transition-all"
                                       :class="{
-                                          'bg-green-500 text-white': section.status === 'complete',
+                                          'bg-[#D4AF37] text-[#1B365D]': section.status === 'complete',
                                           'bg-yellow-400 text-white': section.status === 'incomplete',
-                                          'bg-slate-800 text-slate-400': section.status === 'default'
+                                          'bg-[#1B365D] text-white': section.status === 'default'
                                       }">
                                     <span class="text-xs font-bold" x-text="section.label"></span>
                                 </span>

@@ -4,7 +4,7 @@
     <style>[x-cloak] { display: none !important; }</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Personnel Portal</title>
+    <title>@yield('title') - Personal History Statement</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/pma_logo.svg') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -63,7 +63,7 @@
         }
 
         /* Main Layout Structure */
-        .admin-layout {
+        .personnel-layout {
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -72,7 +72,7 @@
             overflow: hidden;
         }
 
-        .admin-layout::before {
+        .personnel-layout::before {
             content: '';
             position: absolute;
             top: 0;
@@ -86,7 +86,7 @@
         }
 
         /* Header Styles - Modern Design */
-        .admin-header {
+        .personnel-header {
             background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%);
             border-bottom: 3px solid transparent;
             background-clip: padding-box;
@@ -96,7 +96,7 @@
             box-shadow: 0 8px 32px rgba(27, 54, 93, 0.15);
         }
 
-        .admin-header::before {
+        .personnel-header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -106,7 +106,7 @@
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%);
         }
 
-        .admin-header::after {
+        .personnel-header::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -374,7 +374,7 @@
             background: linear-gradient(180deg, #B38F2A, #D4AF37);
         }
 
-        .tab-container li a, .tab-container li span {
+        .tab-container li a {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -413,7 +413,7 @@
             border-color: rgba(212, 175, 55, 0.3);
         }
 
-        .tab-container li a i, .tab-container li span i {
+        .tab-container li a i {
             font-size: 16px;
             transition: all 0.3s ease;
             width: 18px;
@@ -448,45 +448,21 @@
             border-bottom: 4px solid transparent;
         }
 
-        .tab-container li a.active i {
-            color: #D4AF37;
-        }
-
-        .tab-container li span.disabled {
-            background: rgba(156, 163, 175, 0.1);
-            color: #9ca3af !important;
-            cursor: not-allowed;
-            pointer-events: none;
-            opacity: 0.6;
-        }
-
-        .tab-container li span.disabled i {
-            color: #9ca3af !important;
-        }
-        
-        .space-y-1 li a.active{
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
-        }
-
         /* Content Area */
         .content-area {
             flex: 1;
             background: white;
             border-radius: 1.5rem;
-            margin-left: 0.25rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(27, 54, 93, 0.15);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            max-width: calc(100vw - 300px - 1rem);
+            position: relative;
+            margin-left: 0.5rem;
         }
 
         .content-scroll {
-            flex: 1;
+            height: 100%;
             overflow-y: auto;
-            padding: 1.25rem;
-            padding-bottom: 0;
+            padding: 2rem;
         }
 
         .content-scroll::-webkit-scrollbar {
@@ -507,76 +483,24 @@
             background: linear-gradient(180deg, #B38F2A, #D4AF37);
         }
 
-        /* Footer Styles - Content Footer */
-        .content-footer {
-            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%);
-            border-top: 3px solid transparent;
-            background-clip: padding-box;
-            position: relative;
-            margin-top: 2rem;
-            border-radius: 0 0 1.5rem 1.5rem;
-            box-shadow: 0 -8px 32px rgba(27, 54, 93, 0.15);
-        }
-
-        .content-footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%);
-            border-radius: 0 0 1.5rem 1.5rem;
-        }
-
-        .content-footer::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37);
-            border-radius: 0 0 1.5rem 1.5rem;
-        }
-
-        .footer-pattern {
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
-            border-radius: 0 0 1.5rem 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Responsive Design */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
                 left: -100%;
                 top: 0;
                 height: 100vh;
-                transition: left 0.3s ease;
-                border-radius: 0 1.5rem 1.5rem 0;
                 z-index: 50;
+                transition: left 0.3s ease;
             }
-            
+
             .sidebar.open {
                 left: 0;
             }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .header-title {
-                font-size: 1.125rem;
-            }
 
             .content-area {
-                margin: 0.25rem;
-                border-radius: 1rem;
-                max-width: calc(100vw - 0.5rem);
+                margin-left: 0;
+                border-radius: 0;
             }
 
             .content-scroll {
@@ -584,206 +508,427 @@
             }
         }
 
-        @media (min-width: 769px) {
-            .mobile-menu-btn {
-                display: none;
-            }
+        /* Notification Button */
+        .notification-btn {
+            position: relative;
+            padding: 0.75rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        /* PMA Theme Enhancements */
-        .pma-gold {
-            color: #D4AF37;
+        .notification-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: scale(1.05);
         }
 
-        .pma-navy {
-            background-color: #1B365D;
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 1.25rem;
+            height: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
 
-        .pma-gradient {
-            background: linear-gradient(135deg, #1B365D 0%, #1B365D 100%);
-        }
-
-        .pma-border {
-            border-color: #D4AF37;
-        }
-
-        .pma-shadow {
-            box-shadow: 0 4px 12px rgba(27, 54, 93, 0.15);
-        }
-
-        /* Success Message Auto-hide */
-        .alert-success {
-            animation: slideDown 0.5s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .alert-success.auto-hide {
-            animation: slideUp 0.5s ease-in forwards;
-            animation-delay: 3s;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(-100%); opacity: 0; }
+        #header-breadcrumb:hover {
+            box-shadow: 0 4px 16px rgba(212,175,55,0.13);
+            background: linear-gradient(90deg, rgba(212,175,55,0.18) 0%, rgba(27,54,93,0.15) 100%);
         }
     </style>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body>
-<div class="admin-layout">
-    <!-- Header -->
-    <header class="admin-header">
-        <div class="header-content">
-            <div class="flex items-center justify-between px-6 py-4">
-                <!-- Left Section -->
-                <div class="flex items-center space-x-4">
-                    <a href="{{ route('personnel.dashboard') }}" class="hover:opacity-80 transition-opacity">
-                        <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest select-none" draggable="false">
-                    </a>
-                    <div class="hidden sm:block">
-                        <h1 class="header-title text-white font-bold text-lg">Personnel Portal</h1>
-                        <p class="text-[#D4AF37] text-xs font-medium">Personal History Statement System</p>
-                    </div>
-                </div>
-                <!-- Right Section -->
-                <div class="flex items-center space-x-4">
-                    <!-- Philippine Standard Time -->
-                    <a href="https://oras.pagasa.dost.gov.ph/index.shtml" target="_blank" rel="noopener noreferrer" class="hidden md:block text-xs text-right hover:underline focus:underline outline-none">
-                        <div class="font-bold text-white">Philippine Standard Time:</div>
-                        <div id="ph-time-value-personnel" class="text-yellow-400"></div>
-                    </a>
-                    <div class="text-white text-xs">
-                        <span class="font-semibold">{{ Auth::user()->name }}</span> &bull; <span class="text-[#D4AF37]">Personnel</span>
-                    </div>
-                    <!-- Logout Icon Button -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
-                            <i class="fas fa-power-off text-lg"></i>
+    <div class="personnel-layout">
+        <!-- Header -->
+        <header class="personnel-header">
+            <div class="header-content">
+                <div class="flex items-center justify-between px-6 py-4">
+                    <!-- Left Section -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Mobile Menu Button -->
+                        <button class="mobile-menu-btn lg:hidden text-white hover:text-[#D4AF37] transition-colors" onclick="toggleSidebar()">
+                            <i class="fas fa-bars text-lg"></i>
                         </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Wrapper -->
-    <div class="main-content-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar text-white flex flex-col">
-            <div class="profile-container">
-                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
-                <div class="user-info">
-                    <span class="user-name">{{ Auth::user()->name }}</span>
-                    <div class="user-username">{{ '@' . Auth::user()->username }}</div>
-                    <div class="user-role">Personnel</div>
-                </div>
-            </div>
-            <!-- Navigation -->
-            <div class="tab-container">
-                <div class="space-y-1">
-                    <li>
-                        <a href="{{ route('personnel.dashboard') }}" class="nav-link {{ request()->routeIs('personnel.dashboard') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-line"></i>
-                            <span class="ml-3">Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('personnel.phs') }}" class="nav-link {{ request()->routeIs('personnel.phs') ? 'active' : '' }}">
-                            <i class="fa-regular fa-folder"></i>
-                            <span class="ml-3">PHS</span>
-                        </a>
-                    </li>
-                    <li>
-                        <span class="nav-link disabled" title="Coming soon">
-                            <i class="fa-regular fa-folder"></i>
-                            <span class="ml-3">PDS</span>
-                        </span>
-                    </li>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Content Area -->
-        <div class="content-area">
-            <div class="content-scroll">
-                @yield('content')
-            </div>
-            <div class="content-footer">
-                <div class="footer-pattern">
-                    <div class="px-6 py-4">
-                        <div class="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
-                            <!-- Left Section -->
-                            <div class="flex items-center space-x-3">
-                                <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="w-8 h-8 opacity-80">
-                                <div class="text-white text-xs">
-                                    <p class="font-medium">Philippine Military Academy</p>
-                                    <p class="text-[#D4AF37] text-xs">Personal History Statement System</p>
-                                </div>
-                            </div>
-                            <!-- Center Section -->
-                            <div class="text-center text-white text-xs">
-                                <p class="text-[#D4AF37] font-medium">"Character, Excellence, Service"</p>
-                                <a href="https://www.google.com/maps/place/Philippine+Military+Academy+(PMA)/@16.3595363,120.6175352,17z/data=!4m10!1m2!2m1!1sPMA!3m6!1s0x3391a140001b5169:0x3e6e8c0c41cfb35a!8m2!3d16.360888!4d120.619414!15sCgNQTUGSAQ9taWxpdGFyeV9zY2hvb2yqASoQATIdEAEiGVhxt5fJUUiIqeZ8vr3CUEe_6KFeKT8HghAyBxACIgNwbWHgAQA!16zL20vMDhwbmY1?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D" 
-                                   target="_blank" 
-                                   class="mt-1 hover:text-[#D4AF37] transition-colors duration-200 cursor-pointer">
-                                    Fort Del Pilar, Baguio City, Philippines
-                                </a>
-                            </div>
-                            <!-- Right Section -->
-                            <div class="flex items-center space-x-4 text-white text-xs">
-                                <div class="text-center">
-                                    <p class="text-[#D4AF37] font-medium">System Status</p>
-                                    <div class="flex items-center space-x-1 mt-1">
-                                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                                        <span>Online</span>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-[#D4AF37] font-medium">Version</p>
-                                    <p>v1.0.0</p>
-                                </div>
+                        
+                        <!-- PMA Logo/Crest -->
+                        <div class="flex items-center space-x-3">
+                            <a href="{{ route('personnel.dashboard') }}" class="hover:opacity-80 transition-opacity">
+                                <img src="{{ asset('images/pma_logo.svg') }}" 
+                                     alt="PMA Logo" 
+                                     class="pma-crest select-none" draggable="false">
+                            </a>
+                            <div class="hidden sm:block">
+                                <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
+                                <p class="text-[#D4AF37] text-xs font-medium">Personnel Portal</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Right Section -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Philippine Standard Time -->
+                        <a href="https://oras.pagasa.dost.gov.ph/index.shtml" target="_blank" rel="noopener noreferrer" class="hidden md:block text-xs text-right hover:underline focus:underline outline-none">
+                            <div class="font-bold text-white">Philippine Standard Time:</div>
+                            <div id="ph-time-value-personnel" class="text-yellow-400"></div>
+                        </a>
+                        <!-- Notifications -->
+                        <button class="notification-btn text-white hover:text-[#D4AF37] transition-colors">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <!-- Breadcrumb -->
+                        <div class="hidden lg:block text-white text-xs">
+                            <span class="text-[#D4AF37]">Personnel</span>
+                            <span class="mx-2">/</span>
+                            <span id="header-breadcrumb" style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                min-width: 140px;
+                                max-width: 220px;
+                                width: 180px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                text-align: center;
+                                vertical-align: middle;
+                                background: linear-gradient(90deg, rgba(212,175,55,0.13) 0%, rgba(27,54,93,0.10) 100%);
+                                border: 1.5px solid #D4AF37;
+                                box-shadow: 0 2px 8px rgba(27,54,93,0.07);
+                                border-radius: 0.75rem;
+                                padding: 4px 18px 4px 14px;
+                                font-weight: 700;
+                                font-size: 1.05rem;
+                                color: #fffbe8;
+                                letter-spacing: 0.02em;
+                                transition: box-shadow 0.2s, background 0.2s;
+                            ">
+                                @yield('header', 'Dashboard')
+                            </span>
+                        </div>
+                        <!-- Logout Icon Button -->
+                        <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
+                            <i class="fas fa-power-off text-lg"></i>
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </header>
+
+        <!-- Main Content Wrapper -->
+        <div class="main-content-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar text-white flex flex-col">
+                <!-- Profile Section -->
+                <div class="profile-container relative">
+                    <a href="{{ route('personnel.profile.edit') }}" class="block">
+                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
+                    </a>
+                    <div class="user-info">
+                        <a href="{{ route('personnel.profile.edit') }}" class="user-name">
+                            {{ Auth::user()->name }}
+                        </a>
+                        <div class="user-username">{{ Auth::user()->username }}</div>
+                        <div class="user-role">{{ Auth::user()->role }}</div>
+                    </div>
+                </div>
+
+                <!-- Navigation Menu -->
+                <ul class="tab-container">
+                    <li>
+                        <a href="{{ route('personnel.dashboard') }}" class="dynamic-nav {{ request()->routeIs('personnel.dashboard') ? 'active' : '' }}" data-route="personnel.dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('personnel.profile.edit') }}" class="dynamic-nav {{ request()->routeIs('personnel.profile.*') ? 'active' : '' }}" data-route="personnel.profile.edit">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="dynamic-nav" data-route="personnel.phs">
+                            <i class="fas fa-file-alt"></i>
+                            <span>PHS Form</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="dynamic-nav" data-route="personnel.pds">
+                            <i class="fas fa-file-signature"></i>
+                            <span>PDS Status</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="dynamic-nav" data-route="personnel.documents">
+                            <i class="fas fa-folder"></i>
+                            <span>Documents</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="dynamic-nav" data-route="personnel.settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content-area">
+                <div id="mainContent" class="content-scroll">
+                    @yield('content')
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div id="logoutModalContent" class="bg-white rounded-lg p-6 max-w-sm w-full mx-4 scale-95 opacity-0 transition-all duration-300">
+            <div class="flex items-center mb-4">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-sign-out-alt text-red-600 text-2xl"></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-lg font-medium text-gray-900">Confirm Logout</h3>
+                </div>
+            </div>
+            <p class="text-gray-600 text-center mb-6">Are you sure you want to log out of your account?</p>
+            <div class="flex space-x-3">
+                <button onclick="hideLogoutConfirmation()" class="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
+                    Cancel
+                </button>
+                <form method="POST" action="{{ route('logout') }}" class="flex-1">
+                    @csrf
+                    <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                        Logout
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-// Auto-hide success messages
-document.addEventListener('DOMContentLoaded', function() {
-    const successMessages = document.querySelectorAll('.alert-success');
-    successMessages.forEach(function(message) {
-        message.classList.add('auto-hide');
-    });
-});
+    <script>
+        // Update current time and date
+        function updateDateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('current-time');
+            const dateElement = document.getElementById('current-date');
+            
+            if (timeElement) {
+                timeElement.textContent = now.toLocaleTimeString('en-US', { 
+                    hour12: true, 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+            }
+            
+            if (dateElement) {
+                dateElement.textContent = now.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+        }
 
-// Philippine Standard Time for personnel (full date and time)
-function updatePHTimeHeaderPersonnel() {
-    const now = new Date();
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
-        timeZone: 'Asia/Manila'
-    };
-    const dateTime = now.toLocaleString('en-US', options);
-    const el = document.getElementById('ph-time-value-personnel');
-    if (el) el.textContent = dateTime;
-}
-setInterval(updatePHTimeHeaderPersonnel, 1000);
-updatePHTimeHeaderPersonnel();
-</script>
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (window.innerWidth <= 768) {
+                if (!sidebar.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Logout confirmation functions
+        function showLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideLogoutConfirmation() {
+            const modal = document.getElementById('logoutModal');
+            const modalContent = document.getElementById('logoutModalContent');
+            
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                hideLogoutConfirmation();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideLogoutConfirmation();
+            }
+        });
+
+        // Update date and time every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // Dynamic Navigation System
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.dynamic-nav');
+            const mainContent = document.getElementById('mainContent');
+            let currentRoute = '{{ request()->route()->getName() }}';
+
+            // Add click event listeners to navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const route = this.getAttribute('data-route');
+                    const url = this.getAttribute('href');
+                    
+                    if (route && route !== currentRoute) {
+                        loadContent(url, route);
+                    }
+                });
+            });
+
+            // Function to load content dynamically
+            function loadContent(url, route) {
+                // Fade out current content
+                mainContent.style.opacity = '0';
+                mainContent.style.transform = 'translateY(10px)';
+
+                // Fetch new content
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'text/html, application/xhtml+xml'
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    // Create a temporary div to parse the HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+                    
+                    // Extract the content from the yield('content') section
+                    const newContent = tempDiv.querySelector('#mainContent') || tempDiv.querySelector('.content-scroll') || tempDiv;
+                    
+                    // Update the content immediately
+                    mainContent.innerHTML = newContent.innerHTML;
+                    
+                    // Update active navigation
+                    updateActiveNav(route);
+                    
+                    // Update browser URL without reload
+                    window.history.pushState({route: route}, '', url);
+                    currentRoute = route;
+                    
+                    // Fade in new content
+                    mainContent.style.opacity = '1';
+                    mainContent.style.transform = 'translateY(0)';
+                    
+                    // Update page title if available
+                    const titleElement = tempDiv.querySelector('title');
+                    if (titleElement) {
+                        document.title = titleElement.textContent;
+                    }
+
+                    // Update header breadcrumb if available
+                    const newHeader = tempDiv.querySelector('#header-breadcrumb');
+                    if (newHeader) {
+                        const headerBreadcrumb = document.getElementById('header-breadcrumb');
+                        if (headerBreadcrumb) {
+                            headerBreadcrumb.textContent = newHeader.textContent;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading content:', error);
+                    mainContent.style.opacity = '1';
+                    mainContent.style.transform = 'translateY(0)';
+                });
+            }
+
+            // Function to update active navigation
+            function updateActiveNav(route) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-route') === route) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function(event) {
+                if (event.state && event.state.route) {
+                    const link = document.querySelector(`[data-route="${event.state.route}"]`);
+                    if (link) {
+                        loadContent(link.getAttribute('href'), event.state.route);
+                    }
+                }
+            });
+
+            // Initialize content transition styles
+            mainContent.style.transition = 'all 0.3s ease-in-out';
+        });
+
+        // Philippine Standard Time for personnel (full date and time)
+        function updatePHTimeHeaderPersonnel() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Manila'
+            };
+            const dateTime = now.toLocaleString('en-US', options);
+            const el = document.getElementById('ph-time-value-personnel');
+            if (el) el.textContent = dateTime;
+        }
+        setInterval(updatePHTimeHeaderPersonnel, 1000);
+        updatePHTimeHeaderPersonnel();
+    </script>
 </body>
 </html> 

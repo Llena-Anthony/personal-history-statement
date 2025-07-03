@@ -256,6 +256,58 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+
+        /* Switch/Return Loading Overlay Styles */
+        .switch-loading-overlay {
+            display: flex;
+            position: fixed;
+            z-index: 2147483647;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(27,54,93,0.55);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+        .switch-loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .switch-loading-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: scaleInSpinner 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .switch-spinner {
+            border: 6px solid #FFD700;
+            border-top: 6px solid #1B365D;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            animation: spin 1.2s cubic-bezier(0.4,0,0.2,1) infinite;
+            margin-bottom: 22px;
+            box-shadow: 0 0 24px 4px #fffbe8, 0 4px 24px 0 rgba(27,54,93,0.18);
+            background: transparent;
+        }
+        .switch-loading-text {
+            color: #fffbe8;
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-shadow: 0 2px 12px #1B365D, 0 0 8px #fff;
+            letter-spacing: 0.01em;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes scaleInSpinner {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -303,6 +355,7 @@
                         <!-- Return to Admin Button (only show if admin switched to client) -->
                         @if(session('admin_switched_to_client'))
                         <a href="{{ route('return.to.admin') }}" 
+                           id="returnToAdminBtn"
                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-sm font-medium rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Return to Admin
@@ -419,6 +472,14 @@
         </div>
     </div>
     
+    <!-- Unified Switch/Return Loading Overlay -->
+    <div id="switchLoadingOverlay" class="switch-loading-overlay">
+        <div class="switch-loading-content">
+            <div class="switch-spinner"></div>
+            <span class="switch-loading-text" id="switchLoadingText">Switching...</span>
+        </div>
+    </div>
+    
     <script>
         function updateDateTime() {
             const now = new Date();
@@ -513,6 +574,27 @@
         }
         setInterval(updatePHTimeHeaderClient, 1000);
         updatePHTimeHeaderClient();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var returnBtn = document.getElementById('returnToAdminBtn');
+            var overlay = document.getElementById('switchLoadingOverlay');
+            var loadingText = document.getElementById('switchLoadingText');
+            if (returnBtn && overlay && loadingText) {
+                returnBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loadingText.textContent = 'Returning to Admin View...';
+                    overlay.style.opacity = '1';
+                    overlay.style.pointerEvents = 'all';
+                    overlay.classList.add('active');
+                    var href = returnBtn.getAttribute('href');
+                    setTimeout(function() {
+                        overlay.style.opacity = '0';
+                        overlay.style.pointerEvents = 'none';
+                        window.location.href = href;
+                    }, 700);
+                });
+            }
+        });
     </script>
 </body>
 </html> 

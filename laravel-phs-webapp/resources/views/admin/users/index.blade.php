@@ -104,7 +104,7 @@
     @endif
 
     <!-- Enhanced Statistics Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -153,7 +153,7 @@
                     <p class="text-2xl font-bold text-gray-900">{{ $users->where('usertype', 'admin')->count() }}</p>
                     <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-shield-alt mr-1"></i>
-                        System access
+                        {{ number_format(($users->where('usertype', 'admin')->count() / max($users->count(), 1)) * 100, 1) }}% of total
                     </p>
                 </div>
             </div>
@@ -171,7 +171,25 @@
                     <p class="text-2xl font-bold text-gray-900">{{ $users->where('usertype', 'personnel')->count() }}</p>
                     <p class="text-xs text-[#D4AF37] mt-1">
                         <i class="fas fa-user-tie mr-1"></i>
-                        Total personnel
+                        {{ number_format(($users->where('usertype', 'personnel')->count() / max($users->count(), 1)) * 100, 1) }}% of total
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-[#1B365D]/20 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user text-[#1B365D] text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Clients</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $users->where('usertype', 'client')->count() }}</p>
+                    <p class="text-xs text-[#1B365D] mt-1">
+                        <i class="fas fa-users mr-1"></i>
+                        {{ number_format(($users->where('usertype', 'client')->count() / max($users->count(), 1)) * 100, 1) }}% of total
                     </p>
                 </div>
             </div>

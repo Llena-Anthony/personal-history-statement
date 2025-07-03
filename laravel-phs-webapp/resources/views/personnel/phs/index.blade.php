@@ -1,8 +1,8 @@
-@extends('layouts.admin')
+@extends('layouts.personnel')
 
-@section('title', 'PHS Submissions')
+@section('title', 'PHS Form')
 
-@section('header', 'PHS Submissions')
+@section('header', 'PHS Form')
 
 @section('content')
 <div class="space-y-6">
@@ -13,24 +13,20 @@
                 <div class="bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] text-white p-3 rounded-xl shadow-lg">
                     <i class="fas fa-file-alt text-xl"></i>
                 </div>
-                PHS Submissions
+                Personal History Statement (PHS) Form
             </h1>
-            <p class="text-gray-600 mt-2">Manage Personal History Statement submissions and review applicant data</p>
+            <p class="text-gray-600 mt-2">Fill out and track your Personal History Statement</p>
         </div>
         <div class="flex items-center gap-4">
             <div class="text-right bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                <div class="text-sm text-gray-500 font-medium">Total Submissions</div>
-                <div class="text-3xl font-bold text-[#1B365D]">{{ $submissions->total() }}</div>
+                <div class="text-sm text-gray-500 font-medium">Your Submissions</div>
+                <div class="text-3xl font-bold text-[#1B365D]">{{ $submissions->total() ?? 0 }}</div>
                 <div class="text-xs text-green-600 mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>
-                    {{ $submissions->where('created_at', '>=', now()->subDays(30))->count() }} this month
+                    {{ $submissions->where('created_at', '>=', now()->subDays(30))->count() ?? 0 }} this month
                 </div>
             </div>
-            <a href="{{ route('admin.phs.preview') }}" 
-               class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                <i class="fas fa-print mr-2"></i>
-                Print Template
-            </a>
+            <!-- Print button removed for personnel -->
         </div>
     </div>
 
@@ -50,8 +46,8 @@
 
     <!-- Enhanced Search Bar with Filter Dropdowns -->
     <x-admin.search-bar
-        :route="route('admin.phs.index')"
-        placeholder="Search by name, username, status, notes, or any field..."
+        :route="route('personnel.phs.index')"
+        placeholder="Search by section, status, or any field..."
         :filters="[
             'status' => [
                 'pending' => 'Pending',
@@ -74,7 +70,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Today</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $submissions->where('created_at', '>=', now()->startOfDay())->count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $submissions->where('created_at', '>=', now()->startOfDay())->count() ?? 0 }}</p>
                     <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-clock mr-1"></i>
                         {{ now()->format('M d, Y') }}
@@ -82,7 +78,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="bg-gradient-to-br from-[#D4AF37]/10 to-[#B38F2A]/10 rounded-xl shadow-sm p-6 border border-[#D4AF37]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -92,7 +87,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">This Week</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $submissions->where('created_at', '>=', now()->startOfWeek())->count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $submissions->where('created_at', '>=', now()->startOfWeek())->count() ?? 0 }}</p>
                     <p class="text-xs text-[#D4AF37] mt-1">
                         <i class="fas fa-calendar mr-1"></i>
                         Week {{ now()->weekOfYear }}
@@ -100,7 +95,6 @@
                 </div>
             </div>
         </div>
-        
         <div class="bg-gradient-to-br from-[#1B365D]/10 to-[#2B4B7D]/10 rounded-xl shadow-sm p-6 border border-[#1B365D]/20 hover:shadow-md transition-all duration-200">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -110,7 +104,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">This Month</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $submissions->where('created_at', '>=', now()->startOfMonth())->count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $submissions->where('created_at', '>=', now()->startOfMonth())->count() ?? 0 }}</p>
                     <p class="text-xs text-[#1B365D] mt-1">
                         <i class="fas fa-calendar mr-1"></i>
                         {{ now()->format('M Y') }}
@@ -118,8 +112,6 @@
                 </div>
             </div>
         </div>
-        
-
     </div>
 
     <!-- Enhanced Results Count and Actions -->
@@ -128,7 +120,7 @@
             <div class="text-sm text-gray-600">
                 <span class="font-medium">{{ $submissions->firstItem() ?? 0 }}</span> to 
                 <span class="font-medium">{{ $submissions->lastItem() ?? 0 }}</span> of 
-                <span class="font-medium">{{ $submissions->total() }}</span> results
+                <span class="font-medium">{{ $submissions->total() ?? 0 }}</span> results
             </div>
             @if($submissions->total() > 0)
             <div class="flex items-center gap-2">
@@ -150,7 +142,7 @@
             <table class="w-full">
                 <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Applicant</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Section</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Submitted Date</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Last Updated</th>
@@ -197,84 +189,24 @@
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end space-x-2">
-                                <a href="{{ route('admin.phs.show', $submission->id) }}" 
-                                   class="inline-flex items-center p-2 text-[#1B365D] hover:text-[#2B4B7D] hover:bg-[#1B365D]/10 rounded-lg transition-colors" 
-                                   title="View Details">
-                                    <i class="fas fa-eye"></i>
+                                <a href="{{ route('personnel.phs.show', $submission->id) }}" 
+                                   class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] text-white rounded-lg hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow">
+                                    <i class="fas fa-eye mr-1"></i> View
                                 </a>
-                                <a href="{{ route('admin.phs.edit', $submission->id) }}" 
-                                   class="inline-flex items-center p-2 text-[#1B365D] hover:text-[#2B4B7D] hover:bg-[#1B365D]/10 rounded-lg transition-colors" 
-                                   title="Edit Submission">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="{{ route('admin.phs.print', $submission->id) }}" 
-                                   class="inline-flex items-center p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors" 
-                                   title="Print PHS" 
-                                   target="_blank">
-                                    <i class="fas fa-print"></i>
-                                </a>
-                                <button type="button" 
-                                        onclick="confirmPHSDelete('{{ $submission->id }}', '{{ $submission->user->name }}')" 
-                                        class="inline-flex items-center p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors" 
-                                        title="Delete Submission">
-                                    <i class="fas fa-trash"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center">
-                            <div class="flex flex-col items-center">
-                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                                    <i class="fas fa-file-alt text-gray-400 text-2xl"></i>
-                                </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">No PHS Submissions Found</h3>
-                                <p class="text-gray-500">No submissions match your current search criteria.</p>
-                            </div>
+                        <td colspan="5" class="text-center py-8 text-gray-500">
+                            <i class="fas fa-inbox text-4xl mb-4"></i>
+                            <div>No PHS submissions found.</div>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
-        <!-- Enhanced Pagination -->
-        @if($submissions->hasPages())
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-            {{ $submissions->links() }}
-        </div>
-        @endif
     </div>
 </div>
-
-<!-- Confirmation Modal for PHS Delete -->
-<x-confirmation-modal
-    id="phsDeleteModal"
-    title="Confirm PHS Deletion"
-    message="Are you sure you want to delete this PHS submission? This action cannot be undone."
-    confirmText="Delete Submission"
-    cancelText="Cancel"
-    confirmClass="bg-red-600 hover:bg-red-700"
-/>
-
-<!-- Hidden form for delete -->
-<form id="delete-phs-form" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
-</form>
-
-<script>
-function confirmPHSDelete(submissionId, userName) {
-    showConfirmationModal(
-        'phsDeleteModal',
-        `Are you sure you want to delete the PHS submission for "${userName}"? This action cannot be undone and will permanently remove all associated data.`,
-        function() {
-            const form = document.getElementById('delete-phs-form');
-            form.action = '{{ route("admin.phs.destroy", ":id") }}'.replace(':id', submissionId);
-            form.submit();
-        }
-    );
-}
-</script>
-@endsection
+@endsection 

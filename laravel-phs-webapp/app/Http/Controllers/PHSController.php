@@ -235,7 +235,10 @@ class PHSController extends Controller
                 return response()->json(['success' => true, 'message' => 'Personal details saved successfully']);
             }
 
-            return redirect()->route('phs.personal-characteristics.create')
+            $isPersonnel = auth()->check() && auth()->user()->role === 'personnel';
+            \Log::info('Redirecting after personal details save', ['user_id' => auth()->id(), 'role' => auth()->user()->role ?? null, 'isPersonnel' => $isPersonnel]);
+            $nextRoute = $isPersonnel ? route('personnel.phs.personal-characteristics') : route('phs.personal-characteristics.create');
+            return redirect($nextRoute)
                 ->with('success', 'Personal details saved successfully. Please continue with your personal characteristics.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('PHS validation error:', ['errors' => $e->errors()]);
@@ -348,7 +351,9 @@ class PHSController extends Controller
             return response()->json(['success' => true, 'message' => 'Educational background saved successfully']);
         }
 
-        return redirect()->route('phs.military-history.create')->with('success', 'Educational background saved successfully!');
+        $isPersonnel = auth()->check() && auth()->user()->role === 'personnel';
+        $nextRoute = $isPersonnel ? route('personnel.phs.military-history') : route('phs.military-history.create');
+        return redirect($nextRoute)->with('success', 'Educational background saved successfully!');
     }
 
     /**

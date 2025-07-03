@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <form method="POST" action="{{ route('phs.credit-reputation.store') }}" class="space-y-8">
+    <form method="POST" action="{{ route('personnel.phs.credit-reputation.store') }}" class="space-y-8">
         @csrf
         <!-- Combined Section for A-D -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

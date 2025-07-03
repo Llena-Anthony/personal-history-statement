@@ -18,7 +18,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10">
+    <form method="POST" action="{{ route('personnel.phs.miscellaneous.store') }}" class="space-y-10">
         @csrf
         
         <!-- Hobbies, Sports, and Pastimes Section -->

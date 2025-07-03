@@ -117,7 +117,11 @@ class PersonalCharacteristicsController extends Controller
                 return response()->json(['success' => true, 'message' => 'Personal characteristics saved successfully']);
             }
 
-            return redirect()->route('phs.marital-status.create')
+            $nextRoute = auth()->user()->role === 'personnel'
+                ? 'personnel.phs.marital-status.create'
+                : 'phs.marital-status.create';
+
+            return redirect()->route($nextRoute)
                 ->with('success', 'Personal characteristics saved successfully. Please continue with your marital status.');
         } catch (\Exception $e) {
             \Log::error('PersonalCharacteristics save error:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);

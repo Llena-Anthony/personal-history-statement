@@ -1,4 +1,11 @@
-@extends('layouts.phs-new')
+@php
+    // Always use the client PHS layout for identical UI
+    $layout = 'layouts.phs-new';
+    $dashboardRoute = route('personnel.dashboard');
+    $nextSectionRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.personal-characteristics') : route('phs.personal-characteristics.create');
+@endphp
+
+@extends($layout)
 
 @section('title', 'I: Personal Details')
 
@@ -18,7 +25,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.store') }}" class="space-y-8">
+    <form method="POST" action="{{ route('personnel.phs.personal-details.store') }}" class="space-y-8">
         @csrf
         
         <!-- Personal Information -->
@@ -568,15 +575,12 @@
         <input type="hidden" name="business_barangay_name" id="business_barangay_name">
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <a href="{{ route('client.dashboard') }}" class="btn-secondary">
+            <a href="{{ $dashboardRoute }}" class="btn-secondary">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Dashboard
             </a>
             
-            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'personal-details')">
-                Save & Continue
-                <i class="fas fa-arrow-right ml-2"></i>
-            </button>
+            <button type="submit" class="btn-primary">Save & Continue</button>
         </div>
     </form>
 </div>
@@ -975,4 +979,38 @@
         });
     }
 </script>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "{{ route('personnel.phs.personal-characteristics') }}";
+                } else if (data.errors) {
+                    alert('Please fill in all required fields.');
+                }
+            })
+            .catch(error => {
+                alert('An error occurred. Please try again.');
+            });
+        });
+    }
+});
+</script>
+@endpush
 @endsection 

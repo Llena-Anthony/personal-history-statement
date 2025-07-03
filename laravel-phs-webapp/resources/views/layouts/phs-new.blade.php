@@ -113,7 +113,7 @@
 
         .phs-sidebar { 
             background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%); 
-            border: 2px solid transparent; 
+            border: 4px solid #D4AF37; 
             background-clip: padding-box; 
             position: relative; 
             overflow: hidden; 
@@ -587,11 +587,11 @@
                             <i class="fas fa-bars text-lg"></i>
                         </button>
                         <div class="flex items-center space-x-3">
-                            <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
+                            <a href="{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
                                 <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
                             </a>
                             <div class="hidden sm:block">
-                                <a href="{{ route('client.dashboard') }}" onclick="event.preventDefault(); if(window.location.pathname === '{{ url('/dashboard') }}'){ window.location.reload(); } else { window.location.href='{{ route('client.dashboard') }}'; }" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                <a href="{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}" onclick="event.preventDefault(); if(window.location.pathname === '{{ Auth::user() && Auth::user()->role === 'personnel' ? url('/personnel/dashboard') : url('/dashboard') }}'){ window.location.reload(); } else { window.location.href='{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}'; }" class="hover:opacity-80 transition-opacity cursor-pointer">
                                     <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
                                     <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
                                 </a>
@@ -605,7 +605,13 @@
                             <div id="ph-time-value"></div>
                         </div>
                         <div class="hidden lg:block text-white text-xs">
-                            <span class="text-[#D4AF37]">Client</span>
+                            <span class="text-[#D4AF37]">
+                                @if(Auth::user() && Auth::user()->role === 'personnel')
+                                    Personnel
+                                @else
+                                    Client
+                                @endif
+                            </span>
                             <span class="mx-2">/</span>
                             <span>PHS Form</span>
                         </div>
@@ -637,7 +643,13 @@
                         </div>
                         <div class="flex-1">
                             <h3 class="font-bold text-lg text-white">{{ Auth::user()->name }}</h3>
-                            <p class="text-[#D4AF37] text-sm">Client</p>
+                            <p class="text-[#D4AF37] text-sm">
+                                @if(Auth::user() && Auth::user()->role === 'personnel')
+                                    Personnel
+                                @else
+                                    Client
+                                @endif
+                            </p>
                         </div>
                     </div>
                     
@@ -817,7 +829,23 @@
             'miscellaneous'
         ];
 
-        const PHSSectionRoutes = {
+        const isPersonnel = {{ (Auth::user() && Auth::user()->role === 'personnel') ? 'true' : 'false' }};
+        const PHSSectionRoutes = isPersonnel ? {
+            'personal-details': '{{ route("personnel.phs.personal-details") }}',
+            'personal-characteristics': '{{ route("personnel.phs.personal-characteristics") }}',
+            'marital-status': '{{ route("personnel.phs.marital-status") }}',
+            'family-background': '{{ route("personnel.phs.family-background") }}',
+            'educational-background': '{{ route("personnel.phs.educational-background") }}',
+            'military-history': '{{ route("personnel.phs.military-history") }}',
+            'places-of-residence': '{{ route("personnel.phs.places-of-residence") }}',
+            'employment-history': '{{ route("personnel.phs.employment-history") }}',
+            'foreign-countries': '{{ route("personnel.phs.foreign-countries") }}',
+            'credit-reputation': '{{ route("personnel.phs.credit-reputation") }}',
+            'arrest-record': '{{ route("personnel.phs.arrest-record") }}',
+            'character-and-reputation': '#', // Add personnel route if exists
+            'organization': '{{ route("personnel.phs.organization") }}',
+            'miscellaneous': '#', // Add personnel route if exists
+        } : {
             'personal-details': '{{ route("phs.create") }}',
             'personal-characteristics': '{{ route("phs.personal-characteristics.create") }}',
             'marital-status': '{{ route("phs.marital-status.create") }}',
@@ -831,7 +859,7 @@
             'arrest-record': '{{ route("phs.arrest-record") }}',
             'character-and-reputation': '{{ route("phs.character-and-reputation") }}',
             'organization': '{{ route("phs.organization") }}',
-            'miscellaneous': '{{ route("phs.miscellaneous") }}'
+            'miscellaneous': '{{ route("phs.miscellaneous") }}',
         };
 
         function getNextSection(currentSection) {
@@ -1035,7 +1063,7 @@
                         title: 'I: Personal Details',
                         description: 'Basic information',
                         icon: 'fas fa-user',
-                        route: '{{ route("phs.create") }}',
+                        route: PHSSectionRoutes['personal-details'],
                         status: '{{ $sectionStatus['personal-details'] ?? 'not-started' }}'
                     },
                     {
@@ -1043,7 +1071,7 @@
                         title: 'II: Personal Characteristics',
                         description: 'Physical attributes',
                         icon: 'fas fa-user-tag',
-                        route: '{{ route("phs.personal-characteristics.create") }}',
+                        route: PHSSectionRoutes['personal-characteristics'],
                         status: '{{ $sectionStatus['personal-characteristics'] ?? 'not-started' }}'
                     },
                     {
@@ -1051,7 +1079,7 @@
                         title: 'III: Marital Status',
                         description: 'Marriage information',
                         icon: 'fas fa-heart',
-                        route: '{{ route("phs.marital-status.create") }}',
+                        route: PHSSectionRoutes['marital-status'],
                         status: '{{ $sectionStatus['marital-status'] ?? 'not-started' }}'
                     },
                     {
@@ -1059,7 +1087,7 @@
                         title: 'IV: Family Background',
                         description: 'Extended family',
                         icon: 'fas fa-tree',
-                        route: '{{ route("phs.family-background.create") }}',
+                        route: PHSSectionRoutes['family-background'],
                         status: '{{ $sectionStatus['family-background'] ?? 'not-started' }}'
                     },
                     {
@@ -1067,7 +1095,7 @@
                         title: 'V: Educational Background',
                         description: 'Academic history',
                         icon: 'fas fa-graduation-cap',
-                        route: '{{ route("phs.educational-background") }}',
+                        route: PHSSectionRoutes['educational-background'],
                         status: '{{ $sectionStatus['educational-background'] ?? 'not-started' }}'
                     },
                     {
@@ -1075,7 +1103,7 @@
                         title: 'VI: Military History',
                         description: 'Military service',
                         icon: 'fas fa-medal',
-                        route: '{{ route("phs.military-history.create") }}',
+                        route: PHSSectionRoutes['military-history'],
                         status: '{{ $sectionStatus['military-history'] ?? 'not-started' }}'
                     },
                     {
@@ -1083,7 +1111,7 @@
                         title: 'VII: Places of Residence',
                         description: 'Residential history',
                         icon: 'fas fa-home',
-                        route: '{{ route("phs.places-of-residence.create") }}',
+                        route: PHSSectionRoutes['places-of-residence'],
                         status: '{{ $sectionStatus['places-of-residence'] ?? 'not-started' }}'
                     },
                     {
@@ -1091,7 +1119,7 @@
                         title: 'VIII: Employment History',
                         description: 'Work experience',
                         icon: 'fas fa-briefcase',
-                        route: '{{ route("phs.employment-history.create") }}',
+                        route: PHSSectionRoutes['employment-history'],
                         status: '{{ $sectionStatus['employment-history'] ?? 'not-started' }}'
                     },
                     {
@@ -1099,7 +1127,7 @@
                         title: 'IX: Foreign Countries Visited',
                         description: 'International travel',
                         icon: 'fas fa-globe',
-                        route: '{{ route("phs.foreign-countries.create") }}',
+                        route: PHSSectionRoutes['foreign-countries'],
                         status: '{{ $sectionStatus['foreign-countries'] ?? 'not-started' }}'
                     },
                     {
@@ -1107,7 +1135,7 @@
                         title: 'X: Credit Reputation',
                         description: 'Credit standing',
                         icon: 'fas fa-credit-card',
-                        route: '{{ route("phs.credit-reputation") }}',
+                        route: PHSSectionRoutes['credit-reputation'],
                         status: '{{ $sectionStatus['credit-reputation'] ?? 'not-started' }}'
                     },
                     {
@@ -1115,7 +1143,7 @@
                         title: 'XI: Arrest Record and Conduct',
                         description: 'Legal and conduct history',
                         icon: 'fas fa-gavel',
-                        route: '{{ route("phs.arrest-record") }}',
+                        route: PHSSectionRoutes['arrest-record'],
                         status: '{{ $sectionStatus['arrest-record'] ?? 'not-started' }}'
                     },
                     {
@@ -1123,7 +1151,7 @@
                         title: 'XII: Character and Reputation',
                         description: 'Character and reputation information',
                         icon: 'fas fa-user-shield',
-                        route: '{{ route("phs.character-and-reputation") }}',
+                        route: PHSSectionRoutes['character-and-reputation'],
                         status: '{{ $sectionStatus['character-and-reputation'] ?? 'not-started' }}'
                     },
                     {
@@ -1131,7 +1159,7 @@
                         title: 'XIII: Organization',
                         description: 'Memberships',
                         icon: 'fas fa-users-cog',
-                        route: '{{ route("phs.organization") }}',
+                        route: PHSSectionRoutes['organization'],
                         status: '{{ $sectionStatus['organization'] ?? 'not-started' }}'
                     },
                     {
@@ -1139,7 +1167,7 @@
                         title: 'XIV: Miscellaneous',
                         description: 'Additional information',
                         icon: 'fas fa-puzzle-piece',
-                        route: '{{ route("phs.miscellaneous") }}',
+                        route: PHSSectionRoutes['miscellaneous'],
                         status: '{{ $sectionStatus['miscellaneous'] ?? 'not-started' }}'
                     }
                 ],
@@ -1570,14 +1598,12 @@
         // Dashboard transition function
         function goToDashboard() {
             const transitionOverlay = document.getElementById('dashboard-transition-overlay');
-            
-            // Show overlay
-            transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            transitionOverlay.classList.add('opacity-100');
-            
-            // Navigate after brief delay
-            setTimeout(() => {
-                window.location.href = '{{ route("client.dashboard") }}';
+            if (transitionOverlay) {
+                transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                transitionOverlay.classList.add('opacity-100');
+            }
+            setTimeout(function() {
+                window.location.href = '{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}';
             }, 400);
         }
 

@@ -7,3 +7,5 @@
 @endsection
 
 @php($currentSection = 'educational-background')
+
+<form method="POST" action="{{ route('personnel.phs.educational-background.store') }}">
