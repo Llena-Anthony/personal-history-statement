@@ -1,6 +1,6 @@
 DATABASE DESIGN
 
-ACTIVITYLOGDETAIL (act_id, changes_made_by, action, act_desc, act_stat, ip_addr, user_agent, act_date_time, old_value, new_value)
+ACTIVITYLOGDETAIL (act_id, changes_made_by, action, act_desc, act_stat, ip_addr, user_agent, created_at, updated_at, old_value, new_value)
 FK	changes_made_by REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
 ADDRESSDETAIL (addr_id, country, region, province, city, municipality, barangay, street, zip_code)
@@ -162,7 +162,7 @@ FK	citizenship REFERENCES CITIZENSHIPDETAIL NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
 FK	dual REFERENCES CITIZENSHIPDETAIL NULLS ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
-USER (username, password, usertype, organic_role, is_active, phs_status)
+USER (username, password, usertype, organic_role, is_active, phs_status, last_login_at)
 USERDETAIL (username, full_name, profile_path, home_addr, birth_date, birth_place, nationality, religion, mobile_num, email_addr)
 FK	username REFERENCES USER NULLS NOT ALLOWED
 			DELETE RESTRICT, UPDATE CASCADE
