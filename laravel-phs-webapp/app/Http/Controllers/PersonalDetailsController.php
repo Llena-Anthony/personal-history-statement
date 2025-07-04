@@ -4,18 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+Use App\Models\User;
+use App\Models\UserDetail;
+
+Use App\Traits\PHSSectionTracking;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 class PersonalDetailsController extends Controller
 {
     public function create()
     {
-        $data = []; // Add any data you need to pass to the view
+        $user = User::find(auth()->id());
+
+        $data = UserDetail::with('nameDetail')
+        ->where('username',auth()->user()->username)
+        ->first();
+
+        $viewData = $this->getCommonViewData('personal-details');
+        $viewData['personalDetails'] = $user;
+        $viewData['userDetails'] = $data;
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.personal-details', $data)->render();
+            return view('phs.personal-details', $viewData)->render();
         }
 
-        return view('phs.personal-details', $data);
+        return view('phs.personal-details', $viewData);
     }
 
     public function store(Request $request)
@@ -52,4 +68,15 @@ class PersonalDetailsController extends Controller
         return redirect()->route('phs.marital-status.create')
             ->with('success', 'Personal details saved successfully.');
     }
-} 
+
+    private function getCommonViewData($currentSection)
+    {
+        // Mark current section as visited
+        session(["phs_sections.{$currentSection}" => 'visited']);
+
+        return [
+            'currentSection' => $currentSection,
+            // 'sectionStatus' => $this->getSectionStatus()
+        ];
+    }
+}

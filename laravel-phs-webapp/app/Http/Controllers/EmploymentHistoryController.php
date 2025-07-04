@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\EmploymentHistory;
+use App\Models\User;
 
 class EmploymentHistoryController extends Controller
 {
@@ -18,8 +18,8 @@ class EmploymentHistoryController extends Controller
     public function create()
     {
         // Load existing employment history data for autofill
-        $employmentHistory = EmploymentHistory::where('user_id', auth()->id())->first();
-        
+        $employmentHistory = User::where('username', auth()->id())->first();
+
         $data = $this->getCommonViewData('employment-history');
         $data['employmentHistory'] = $employmentHistory;
 
@@ -41,7 +41,7 @@ class EmploymentHistoryController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
@@ -120,4 +120,4 @@ class EmploymentHistoryController extends Controller
             'miscellaneous'
         ];
     }
-} 
+}

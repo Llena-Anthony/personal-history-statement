@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\Miscellaneous;
+
+use App\Models\UserDetail;
+
 use Illuminate\Support\Facades\Auth;
 
 class MiscellaneousController extends Controller
@@ -18,16 +20,15 @@ class MiscellaneousController extends Controller
      */
     public function create()
     {
-        $miscellaneous = Miscellaneous::where('user_id', Auth::id())
-            ->where('misc_type', 'general-miscellaneous')
+        $miscellaneous = UserDetail::where('username', Auth::id())
             ->first();
-        
+
         // Decode languages data if it exists
         $languages = [];
         if ($miscellaneous && $miscellaneous->languages_dialects) {
             $languages = json_decode($miscellaneous->languages_dialects, true) ?: [];
         }
-        
+
         $viewData = $this->getCommonViewData('miscellaneous');
         $viewData['miscellaneous'] = $miscellaneous;
         $viewData['languages'] = $languages;
@@ -49,7 +50,7 @@ class MiscellaneousController extends Controller
     public function store(Request $request)
     {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         try {
             // Check if this is a save-only request (for dynamic navigation)
             if ($isSaveOnly) {
@@ -107,12 +108,12 @@ class MiscellaneousController extends Controller
 
             // Mark miscellaneous section as completed
             $this->markSectionAsCompleted('miscellaneous');
-            
+
             // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
             }
-            
+
             return redirect()->route('phs.review')->with('success', 'Miscellaneous information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
@@ -149,4 +150,4 @@ class MiscellaneousController extends Controller
             'miscellaneous',
         ];
     }
-} 
+}

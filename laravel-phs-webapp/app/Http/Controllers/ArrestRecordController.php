@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ArrestRecord;
+use App\Models\ArrestRecordDetail;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\PHSSectionTracking;
@@ -13,11 +14,11 @@ class ArrestRecordController extends Controller
 
     public function create()
     {
-        $arrestRecord = ArrestRecord::where('user_id', Auth::id())->first();
-        
+        $arrestRecord = ArrestRecordDetail::where('username', Auth::id())->first();
+
         $data = $this->getCommonViewData('arrest-record');
         $data['arrestRecord'] = $arrestRecord;
-        
+
         if (request()->ajax()) {
             return view('phs.sections.arrest-record-content', $data);
         }
@@ -29,7 +30,7 @@ class ArrestRecordController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
@@ -76,12 +77,12 @@ class ArrestRecordController extends Controller
 
             // Mark section as completed using trait method
             $this->markSectionAsCompleted('arrest-record');
-            
+
             // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Arrest record and conduct information saved successfully']);
             }
-            
+
             return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record and conduct saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {

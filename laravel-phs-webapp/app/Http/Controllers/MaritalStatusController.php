@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MaritalStatus;
+use App\Models\MaritalDetail;
 use App\Models\FamilyBackground;
 use App\Models\Child;
 use Illuminate\Http\Request;
@@ -19,10 +19,10 @@ class MaritalStatusController extends Controller
         $data = $this->getCommonViewData('marital-status');
 
         // Load existing marital status data
-        $maritalStatus = MaritalStatus::where('user_id', auth()->id())->first();
+        $maritalStatus = MaritalDetail::where('username', auth()->id())->first();
         if ($maritalStatus) {
             $data['maritalStatus'] = $maritalStatus;
-            
+
             // Load existing children data
             $children = Child::where('marital_status_id', $maritalStatus->id)
                            ->with('nameDetails')
@@ -44,36 +44,36 @@ class MaritalStatusController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         \Log::info('MaritalStatusController store() called');
-        
+
         try {
             DB::beginTransaction();
-            
+
             // Get all request data without strict validation (like Section II)
             $data = $request->all();
-            
+
             // Extract children data before processing marital status data
             $childrenData = $data['children'] ?? [];
-            
+
             // Remove CSRF token and other non-database fields
             unset($data['_token'], $data['children']);
-            
+
             // Filter out null and empty values to avoid NOT NULL constraint violations
             $data = array_filter($data, function($value) {
                 return $value !== null && $value !== '';
             });
-            
+
             // Add user_id to data
             $data['user_id'] = auth()->id();
-            
+
             // Capitalize spouse name fields
             foreach (['spouse_first_name', 'spouse_middle_name', 'spouse_last_name'] as $field) {
                 if (isset($data[$field]) && $data[$field]) {
                     $data[$field] = ucwords(strtolower($data[$field]));
                 }
             }
-            
+
             // Process marriage date based on date type
             if (isset($data['marriage_date_type'])) {
                 if ($data['marriage_date_type'] === 'month_year') {
@@ -85,12 +85,12 @@ class MaritalStatusController extends Controller
                     $data['marriage_year'] = null;
                 }
             }
-            
+
             // Add default values for required fields if they're missing (like Section II)
             $defaults = [
                 'marital_status' => 'Single',
             ];
-            
+
             // Only add defaults for fields that are missing
             foreach ($defaults as $field => $defaultValue) {
                 if (!isset($data[$field]) || empty($data[$field])) {
@@ -112,13 +112,13 @@ class MaritalStatusController extends Controller
             if (!empty($childrenData)) {
                 // Delete existing children for this marital status
                 Child::where('marital_status_id', $maritalStatus->id)->delete();
-                
+
                 foreach ($childrenData as $childData) {
                     // Skip if child name is empty
                     if (empty($childData['name'])) {
                         continue;
                     }
-                    
+
                     // Create name_details record for the child
                     $childNameId = DB::table('name_details')->insertGetId([
                         'first_name' => $childData['name'] ?? '',
@@ -129,7 +129,7 @@ class MaritalStatusController extends Controller
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
-                    
+
                     // Create child record
                     Child::create([
                         'marital_status_id' => $maritalStatus->id,
@@ -141,7 +141,7 @@ class MaritalStatusController extends Controller
                         'mother_name' => $childData['mother_name'] ?? null,
                     ]);
                 }
-                
+
                 \Log::info('Children saved:', ['count' => count($childrenData)]);
             }
 
@@ -160,12 +160,12 @@ class MaritalStatusController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('MaritalStatusController error: ' . $e->getMessage(), ['exception' => $e]);
-            
+
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving: ' . $e->getMessage()], 500);
             }
-            
+
             return back()->with('error', 'An error occurred while saving your marital status information. Please try again.');
         }
     }
-} 
+}

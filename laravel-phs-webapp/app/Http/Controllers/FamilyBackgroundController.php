@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
 use App\Services\NameService;
-use App\Models\FamilyBackground;
+use App\Models\FamilyHistoryDetail;
 use App\Models\FamilyMember;
 
 class FamilyBackgroundController extends Controller
@@ -21,34 +21,34 @@ class FamilyBackgroundController extends Controller
     {
         // Determine which section is being accessed
         $currentSection = request()->routeIs('phs.family-history.create') ? 'family-history' : 'family-background';
-        
+
         $data = $this->getCommonViewData($currentSection);
 
         // Load existing family background data for autofill
-        $familyBackground = FamilyBackground::where('user_id', auth()->id())
+        $familyBackground = FamilyHistoryDetail::where('username', auth()->id())
             ->with(['fatherName', 'motherName', 'spouseName', 'stepParentGuardianName', 'fatherInLawName', 'motherInLawName'])
             ->first();
-            
+
         \Log::info('FamilyBackground create method called', [
             'user_id' => auth()->id(),
             'family_background_found' => $familyBackground ? true : false,
             'is_ajax' => request()->ajax()
         ]);
-            
+
         if ($familyBackground) {
             $data['familyBackground'] = $familyBackground;
-            
+
             // Load family members from the family_members table
             $familyMembers = FamilyMember::where('user_id', auth()->id())
                 ->with('nameDetails')
                 ->get()
                 ->keyBy('role');
-            
+
             \Log::info('Family members loaded', [
                 'count' => $familyMembers->count(),
                 'roles' => $familyMembers->keys()->toArray()
             ]);
-            
+
             // Set the name data for each family member
             $data['fatherName'] = $familyMembers->get('father')?->nameDetails;
             $data['motherName'] = $familyMembers->get('mother')?->nameDetails;
@@ -56,11 +56,11 @@ class FamilyBackgroundController extends Controller
             $data['stepParentGuardianName'] = $familyMembers->get('step_parent_guardian')?->nameDetails;
             $data['fatherInLawName'] = $familyMembers->get('father_in_law')?->nameDetails;
             $data['motherInLawName'] = $familyMembers->get('mother_in_law')?->nameDetails;
-            
+
             // Load related data
             $data['siblings'] = $familyBackground->siblings()->with('name')->get();
             $data['family_members'] = $familyMembers;
-            
+
             \Log::info('Data loaded for form', [
                 'father_name' => $data['fatherName'] ? $data['fatherName']->first_name : null,
                 'mother_name' => $data['motherName'] ? $data['motherName']->first_name : null,
@@ -78,7 +78,7 @@ class FamilyBackgroundController extends Controller
             $data['motherInLawName'] = null;
             $data['siblings'] = collect();
             $data['family_members'] = collect();
-            
+
             \Log::info('No family background found, using empty data');
         }
 
@@ -106,7 +106,7 @@ class FamilyBackgroundController extends Controller
         ]);
 
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         try {
             // Validation (same as before)
             $validated = $request->validate([
@@ -462,13 +462,13 @@ class FamilyBackgroundController extends Controller
                 foreach ($validated['siblings'] as $index => $sibling) {
                     if (!empty($sibling['first_name']) || !empty($sibling['last_name'])) {
                         \Log::info('Processing sibling', ['index' => $index, 'sibling_data' => $sibling]);
-                        
+
                         $siblingName = \App\Services\NameService::createOrFindName(
                             $sibling['first_name'] ?? null,
                             $sibling['last_name'] ?? null,
                             $sibling['middle_name'] ?? null
                         );
-                        
+
                         $siblingData = [
                             'name_id' => $siblingName ? $siblingName->name_id : null,
                             'first_name' => $sibling['first_name'] ?? null,
@@ -482,11 +482,11 @@ class FamilyBackgroundController extends Controller
                             'employer' => $sibling['employer'] ?? null,
                             'employer_address' => $sibling['employer_address'] ?? null,
                         ];
-                        
+
                         \Log::info('Creating sibling with data', ['sibling_data' => $siblingData]);
-                        
+
                         $createdSibling = $familyBackground->siblings()->create($siblingData);
-                        
+
                         \Log::info('Sibling created', ['sibling_id' => $createdSibling->id, 'date_of_birth' => $createdSibling->date_of_birth]);
                     }
                 }
@@ -540,4 +540,4 @@ class FamilyBackgroundController extends Controller
             'family-history',
         ];
     }
-} 
+}

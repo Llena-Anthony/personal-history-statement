@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\CreditReputation;
-use App\Models\OtherIncome;
-use App\Models\BankAccount;
-use App\Models\CharacterReference;
+
+use App\Models\CreditDetail;
+use App\Models\CreditReferenceDetail;
+
 use Illuminate\Support\Facades\Auth;
 
 class CreditReputationController extends Controller
@@ -16,17 +16,22 @@ class CreditReputationController extends Controller
 
     public function create()
     {
-        $user = Auth::user();
-        $creditReputation = CreditReputation::with(['otherIncomes', 'bankAccounts', 'characterReferences'])->firstOrNew(['user_id' => $user->id]);
+        $creditReputation = CreditDetail::where('username', auth()->id())->first();
+
+        // $creditReputation = CreditDetail::with(['otherIncomes', 'bankAccounts', 'characterReferences'])->firstOrNew(['user_id' => $user->id]);
 
         $commonData = $this->getCommonViewData('credit-reputation');
-        
+
         $viewData = array_merge($commonData, [
             'creditReputation' => $creditReputation,
-            'otherIncomes' => $creditReputation->otherIncomes->isEmpty() ? collect([new OtherIncome()]) : $creditReputation->otherIncomes,
-            'bankAccounts' => $creditReputation->bankAccounts->isEmpty() ? collect([new BankAccount()]) : $creditReputation->bankAccounts,
-            'characterReferences' => $creditReputation->characterReferences->isEmpty() ? collect(array_fill(0, 3, new CharacterReference())) : $creditReputation->characterReferences,
+            'otherIncomes' => '$creditReputation->otherIncomes->isEmpty() ? collect([new OtherIncome()]) : $creditReputation->otherIncomes',
+            'bankAccounts' => null,
+            'characterReferences' => $creditReputation && $creditReputation->characterReferences
+                ? $creditReputation->characterReferences
+                : collect([new CreditReferenceDetail()]),
         ]);
+
+        // $viewData = $commonData;
 
         if (request()->ajax()) {
             return view('phs.sections.credit-reputation-content', $viewData);
@@ -38,7 +43,7 @@ class CreditReputationController extends Controller
     public function store(Request $request)
     {
         $this->markSectionAsCompleted('credit-reputation');
-        
+
         // Validation can be added here as needed
         $user = Auth::user();
 
@@ -71,7 +76,7 @@ class CreditReputationController extends Controller
                     }
                 }
             }
-            
+
             // Clear and create BankAccounts
             $creditReputation->bankAccounts()->delete();
             if ($request->has('bank_accounts')) {
@@ -113,7 +118,7 @@ class CreditReputationController extends Controller
             return back()->with('error', 'An error occurred while saving your credit reputation. Please try again.');
         }
     }
-    
+
     protected function getSections()
     {
         // Define all sections for progress tracking

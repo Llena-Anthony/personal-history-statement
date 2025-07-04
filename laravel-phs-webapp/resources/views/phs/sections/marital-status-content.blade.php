@@ -22,14 +22,14 @@
 
     <form method="POST" action="{{ $formAction }}" class="space-y-8">
         @csrf
-        
+
         <!-- Marital Status -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-user-friends mr-3 text-[#D4AF37]"></i>
                 Marital Status
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Marital Status -->
                 <div>
@@ -54,7 +54,7 @@
                 <i class="fas fa-user mr-3 text-[#D4AF37]"></i>
                 Spouse Information
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="spouse_first_name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -219,7 +219,7 @@
                 <i class="fas fa-child mr-3 text-[#D4AF37]"></i>
                 Children Information
             </h3>
-            
+
             <div id="children-container" class="space-y-4">
                 @if(isset($children) && $children->count() > 0)
                     @foreach($children as $index => $child)
@@ -227,41 +227,41 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
-                                    <input type="text" name="children[{{ $index }}][name]" 
+                                    <input type="text" name="children[{{ $index }}][name]"
                                            value="{{ $child->nameDetails ? $child->nameDetails->first_name : '' }}"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                            placeholder="Enter child's name">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                                    <input type="date" name="children[{{ $index }}][birth_date]" 
+                                    <input type="date" name="children[{{ $index }}][birth_date]"
                                            value="{{ $child->birth_date ? $child->birth_date->format('Y-m-d') : '' }}"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                                    <input type="text" name="children[{{ $index }}][citizenship]" 
+                                    <input type="text" name="children[{{ $index }}][citizenship]"
                                            value="{{ $child->citizenship ?? '' }}"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                            placeholder="Enter citizenship">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                                    <input type="text" name="children[{{ $index }}][address]" 
+                                    <input type="text" name="children[{{ $index }}][address]"
                                            value="{{ $child->address ?? '' }}"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                            placeholder="Enter address">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father</label>
-                                    <input type="text" name="children[{{ $index }}][father_name]" 
+                                    <input type="text" name="children[{{ $index }}][father_name]"
                                            value="{{ $child->father_name ?? '' }}"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                            placeholder="Enter father's name">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Name of Mother</label>
-                                    <input type="text" name="children[{{ $index }}][mother_name]" 
+                                    <input type="text" name="children[{{ $index }}][mother_name]"
                                            value="{{ $child->mother_name ?? '' }}"
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                            placeholder="Enter mother's name">
@@ -280,36 +280,36 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
-                            <input type="text" name="children[0][name]" 
+                            <input type="text" name="children[0][name]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                    placeholder="Enter child's name">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                            <input type="date" name="children[0][birth_date]" 
+                            <input type="date" name="children[0][birth_date]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
-                            <input type="text" name="children[0][citizenship]" 
+                            <input type="text" name="children[0][citizenship]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                    placeholder="Enter citizenship">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                            <input type="text" name="children[0][address]" 
+                            <input type="text" name="children[0][address]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                    placeholder="Enter address">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father</label>
-                            <input type="text" name="children[0][father_name]" 
+                            <input type="text" name="children[0][father_name]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                    placeholder="Enter father's name">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Name of Mother</label>
-                            <input type="text" name="children[0][mother_name]" 
+                            <input type="text" name="children[0][mother_name]"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                                    placeholder="Enter mother's name">
                         </div>
@@ -317,7 +317,7 @@
                 </div>
                 @endif
             </div>
-            
+
             <button type="button" id="add-child" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
                 <i class="fas fa-plus mr-1"></i> Add Another Child
             </button>
@@ -344,11 +344,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const marriageMonthSelect = document.querySelector('select[name="marriage_month"]');
     const marriageYearInput = document.querySelector('input[name="marriage_year"]');
     const marriageDateHidden = document.querySelector('input[name="marriage_date"]');
-    
+
     function updateMarriageDate() {
         const month = marriageMonthSelect ? marriageMonthSelect.value : '';
         const year = marriageYearInput ? marriageYearInput.value : '';
-        
+
         if (month && year) {
             // Set to first day of the month for month/year format
             const date = new Date(year, month - 1, 1);
@@ -357,17 +357,17 @@ document.addEventListener('DOMContentLoaded', function() {
             marriageDateHidden.value = '';
         }
     }
-    
+
     if (marriageMonthSelect) {
         marriageMonthSelect.addEventListener('change', updateMarriageDate);
     }
-    
+
     if (marriageYearInput) {
         marriageYearInput.addEventListener('change', updateMarriageDate);
         marriageYearInput.addEventListener('input', updateMarriageDate);
     }
-    
+
     // Initialize on page load
     updateMarriageDate();
 });
-</script> 
+</script>

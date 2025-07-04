@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MilitaryHistory;
+use App\Models\MilitaryHistoryDetail;
 use App\Models\MilitaryAssignment;
 use App\Models\MilitarySchool;
 use App\Models\MilitaryAward;
@@ -19,7 +19,7 @@ class MilitaryHistoryController extends Controller
         $data = $this->getCommonViewData('military-history');
 
         // Load existing military history data
-        $militaryHistory = MilitaryHistory::where('user_id', auth()->id())->first();
+        $militaryHistory = MilitaryHistoryDetail::where('username', auth()->id())->first();
         if ($militaryHistory) {
             $data['militaryHistory'] = $militaryHistory;
             $data['assignments'] = MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get();
@@ -39,7 +39,7 @@ class MilitaryHistoryController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
@@ -130,7 +130,7 @@ class MilitaryHistoryController extends Controller
             if (isset($validated['assignments'])) {
                 // Clear existing assignments
                 MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->delete();
-                
+
                 foreach ($validated['assignments'] as $assignmentData) {
                     if (!empty($assignmentData['unit_office'])) {
                         $assignment = MilitaryAssignment::create([
@@ -150,7 +150,7 @@ class MilitaryHistoryController extends Controller
             if (isset($validated['schools'])) {
                 // Clear existing schools
                 MilitarySchool::where('user_id', $userId)->delete();
-                
+
                 foreach ($validated['schools'] as $schoolData) {
                     if (!empty($schoolData['school'])) {
                         $school = MilitarySchool::create([
@@ -172,7 +172,7 @@ class MilitaryHistoryController extends Controller
             if (isset($validated['awards'])) {
                 // Clear existing awards
                 MilitaryAward::whereIn('history_id', MilitarySchool::where('user_id', $userId)->pluck('history_id'))->delete();
-                
+
                 foreach ($validated['awards'] as $awardData) {
                     if (!empty($awardData['name'])) {
                         // For simplicity, associate awards with the first school or create a dummy school
@@ -183,7 +183,7 @@ class MilitaryHistoryController extends Controller
                                 'date_attended' => null,
                             ]);
                         }
-                        
+
                         MilitaryAward::create([
                             'history_id' => $school->history_id,
                             'decoration_award_or_commendation' => $awardData['name'],
@@ -287,4 +287,4 @@ class MilitaryHistoryController extends Controller
             }
         }
     }
-} 
+}

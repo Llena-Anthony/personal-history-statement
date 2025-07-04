@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\ForeignVisit;
+use App\Models\User;
 
 class ForeignCountriesController extends Controller
 {
@@ -13,8 +13,8 @@ class ForeignCountriesController extends Controller
     public function create()
     {
         // Load existing foreign visits data for autofill
-        $foreignVisits = ForeignVisit::where('user_id', auth()->id())->get();
-        
+        $foreignVisits = User::where('username', auth()->id())->first();
+
         $data = $this->getCommonViewData('foreign-countries');
         $data['foreignVisits'] = $foreignVisits;
 
@@ -30,7 +30,7 @@ class ForeignCountriesController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
@@ -123,4 +123,4 @@ class ForeignCountriesController extends Controller
             'miscellaneous',
         ];
     }
-} 
+}

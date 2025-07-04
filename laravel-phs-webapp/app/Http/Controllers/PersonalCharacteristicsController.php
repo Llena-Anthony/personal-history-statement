@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PersonalCharacteristic;
+use App\Models\DescriptionDetail;
 use App\Traits\PHSSectionTracking;
 
 class PersonalCharacteristicsController extends Controller
@@ -13,8 +13,8 @@ class PersonalCharacteristicsController extends Controller
     public function create()
     {
         // Load existing personal characteristics data for autofill
-        $personalCharacteristics = PersonalCharacteristic::where('user_id', auth()->id())->first();
-        
+        $personalCharacteristics = DescriptionDetail::where('username', auth()->id())->first();
+
         $data = $this->getCommonViewData('personal-characteristics');
         $data['personalCharacteristics'] = $personalCharacteristics;
 
@@ -34,25 +34,25 @@ class PersonalCharacteristicsController extends Controller
         try {
             // Get all request data without validation
             $data = $request->all();
-            
+
             // Remove CSRF token and other non-database fields
             unset($data['_token']);
-            
+
             // Filter out null and empty values to avoid NOT NULL constraint violations
             $data = array_filter($data, function($value) {
                 return $value !== null && $value !== '';
             });
-            
+
             // Add user_id to data
             $data['user_id'] = auth()->id();
-            
+
             // Simple check for height to fit database decimal(3,2) constraint
             if (isset($data['height'])) {
                 $height = floatval($data['height']);
                 // Limit height to 9.99 to fit decimal(3,2) constraint
                 $data['height'] = min(9.99, $height);
             }
-            
+
             // Convert and validate numeric fields (except height - save as provided)
             if (isset($data['weight'])) {
                 $weight = floatval($data['weight']);
@@ -63,19 +63,19 @@ class PersonalCharacteristicsController extends Controller
                 // Ensure weight is within valid range (20 to 300 kg)
                 $data['weight'] = max(20, min(300, $weight));
             }
-            
+
             if (isset($data['age'])) {
                 $data['age'] = intval($data['age']);
                 // Ensure age is within valid range (1 to 120)
                 $data['age'] = max(1, min(120, $data['age']));
             }
-            
+
             if (isset($data['shoe_size'])) {
                 $data['shoe_size'] = floatval($data['shoe_size']);
                 // Ensure shoe size is within valid range (1 to 20)
                 $data['shoe_size'] = max(1, min(20, $data['shoe_size']));
             }
-            
+
             // Add default values for required fields if they're missing
             $defaults = [
                 'sex' => 'male',
@@ -91,7 +91,7 @@ class PersonalCharacteristicsController extends Controller
                 'shoe_size' => 9.0,
                 'cap_size' => 'M'
             ];
-            
+
             // Only add defaults for fields that are missing
             foreach ($defaults as $field => $defaultValue) {
                 if (!isset($data[$field]) || empty($data[$field])) {
@@ -125,11 +125,11 @@ class PersonalCharacteristicsController extends Controller
                 ->with('success', 'Personal characteristics saved successfully. Please continue with your marital status.');
         } catch (\Exception $e) {
             \Log::error('PersonalCharacteristics save error:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            
+
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving: ' . $e->getMessage()], 500);
             }
             return back()->with('error', 'An error occurred while saving your personal characteristics. Please try again.');
         }
     }
-} 
+}

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\ResidenceHistory;
+
+use App\Models\User;
 
 class PlacesOfResidenceController extends Controller
 {
@@ -13,8 +14,8 @@ class PlacesOfResidenceController extends Controller
     public function create()
     {
         // Load existing residence history data for autofill
-        $residenceHistory = ResidenceHistory::where('user_id', auth()->id())->get();
-        
+        $residenceHistory = User::where('username', auth()->id())->first();
+
         $data = $this->getCommonViewData('places-of-residence');
         $data['residenceHistory'] = $residenceHistory;
 
@@ -30,7 +31,7 @@ class PlacesOfResidenceController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
@@ -110,4 +111,4 @@ class PlacesOfResidenceController extends Controller
             'miscellaneous',
         ];
     }
-} 
+}

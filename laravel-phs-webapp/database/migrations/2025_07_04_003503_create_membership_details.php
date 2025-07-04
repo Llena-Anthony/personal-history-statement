@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('membership__details', function (Blueprint $table) {
+        Schema::create('membership_details', function (Blueprint $table) {
             $table->string('username');
 
             $table->foreignId('org')

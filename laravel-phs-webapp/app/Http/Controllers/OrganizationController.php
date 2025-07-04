@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\Organization;
-use App\Models\MembershipDetails;
+use App\Models\OrganizationDetail;
+use App\Models\MembershipDetail;
 use App\Models\AddressDetails;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,18 +21,16 @@ class OrganizationController extends Controller
     public function create()
     {
         // Load existing organization data for autofill
-        $organizations = Organization::with(['membershipDetails' => function($query) {
-            $query->where('user_id', Auth::id());
-        }])->get();
-        
+        $organizations = MembershipDetail::where('username', auth()->user()->username)->get();
+
         $viewData = $this->getCommonViewData('organization');
         $viewData['organizations'] = $organizations;
-        
+
         // Return partial for AJAX requests, full view for normal requests
         if (request()->ajax()) {
             return view('phs.sections.organization-content', $viewData);
         }
-        
+
         return view('phs.organization', $viewData);
     }
 
@@ -45,7 +43,7 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         try {
             // Check if this is a save-only request (for dynamic navigation)
             if ($isSaveOnly) {
@@ -149,12 +147,12 @@ class OrganizationController extends Controller
 
             // Mark organization section as completed
             $this->markSectionAsCompleted('organization');
-            
+
             // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
             }
-            
+
             return redirect()->route('phs.miscellaneous')->with('success', 'Organization information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
@@ -191,4 +189,4 @@ class OrganizationController extends Controller
             'miscellaneous',
         ];
     }
-} 
+}

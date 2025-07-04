@@ -67,12 +67,12 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .phs-layout { 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; 
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%); 
-            position: relative; 
+        .phs-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+            position: relative;
             overflow: hidden;
             opacity: 0;
             animation: fadeInLayout 0.5s ease-out forwards;
@@ -89,13 +89,13 @@
             }
         }
 
-        .phs-header { 
-            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%); 
-            border-bottom: 3px solid transparent; 
-            background-clip: padding-box; 
-            position: relative; 
-            flex-shrink: 0; 
-            z-index: 40; 
+        .phs-header {
+            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%);
+            border-bottom: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            flex-shrink: 0;
+            z-index: 40;
             box-shadow: 0 8px 32px rgba(27, 54, 93, 0.2);
             animation: slideInHeader 0.4s ease-out 0.1s both;
         }
@@ -111,16 +111,16 @@
             }
         }
 
-        .phs-sidebar { 
-            background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%); 
-            border: 4px solid #D4AF37; 
-            background-clip: padding-box; 
-            position: relative; 
-            overflow: hidden; 
-            width: 320px; 
-            flex-shrink: 0; 
-            z-index: 30; 
-            border-radius: 1.5rem; 
+        .phs-sidebar {
+            background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 30%, #1B365D 70%, #2B4B7D 100%);
+            border: 4px solid #D4AF37;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+            width: 320px;
+            flex-shrink: 0;
+            z-index: 30;
+            border-radius: 1.5rem;
             box-shadow: 0 8px 32px rgba(27, 54, 93, 0.2);
             animation: slideInSidebar 0.4s ease-out 0.2s both;
         }
@@ -136,16 +136,16 @@
             }
         }
 
-        .phs-content { 
-            flex: 1; 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px); 
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); 
-            margin-left: 0.25rem; 
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
+        .phs-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            margin-left: 0.25rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             border: 1px solid rgba(212, 175, 55, 0.1);
             animation: fadeInContent 0.4s ease-out 0.3s both;
         }
@@ -161,73 +161,73 @@
             }
         }
 
-        .phs-layout::before { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; 
-            background: radial-gradient(circle at 20% 20%, rgba(27, 54, 93, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%), radial-gradient(circle at 40% 60%, rgba(27, 54, 93, 0.02) 0%, transparent 50%); 
-            pointer-events: none; 
+        .phs-layout::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(27, 54, 93, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%), radial-gradient(circle at 40% 60%, rgba(27, 54, 93, 0.02) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        .phs-header::before { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; 
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%); 
+        .phs-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.05) 100%);
         }
 
-        .phs-header::after { 
-            content: ''; 
-            position: absolute; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            height: 3px; 
-            background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37); 
-            border-radius: 0 0 2rem 2rem; 
+        .phs-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #D4AF37, #B38F2A, #D4AF37);
+            border-radius: 0 0 2rem 2rem;
         }
 
-        .header-content { 
-            border-radius: 0 0 2rem 2rem; 
-            position: relative; 
-            z-index: 1; 
+        .header-content {
+            border-radius: 0 0 2rem 2rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .pma-crest { 
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)); 
-            transition: all 0.3s ease; 
-            position: relative; 
-            width: 3.5rem; 
-            height: 3.5rem; 
+        .pma-crest {
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+            transition: all 0.3s ease;
+            position: relative;
+            width: 3.5rem;
+            height: 3.5rem;
         }
 
-        .phs-main { 
-            flex: 1; 
-            display: flex; 
-            overflow: hidden; 
-            position: relative; 
-            margin: 0.25rem; 
+        .phs-main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            margin: 0.25rem;
         }
 
-        .phs-scroll { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 1.25rem 1.5rem; 
+        .phs-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem 1.5rem;
         }
 
-        .phs-footer { 
-            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%); 
-            border-top: 3px solid transparent; 
-            background-clip: padding-box; 
-            position: relative; 
-            flex-shrink: 0; 
-            z-index: 40; 
+        .phs-footer {
+            background: linear-gradient(135deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%);
+            border-top: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            flex-shrink: 0;
+            z-index: 40;
             box-shadow: 0 -8px 32px rgba(27, 54, 93, 0.15);
             animation: slideInFooter 0.4s ease-out 0.4s both;
         }
@@ -243,16 +243,16 @@
             }
         }
 
-        .phs-footer::before { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; 
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%); 
+        .phs-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%);
         }
-        
+
         /* Section Navigation Styles */
         .section-nav-item {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -288,7 +288,7 @@
             background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(249, 115, 22, 0.05) 100%);
             border-left: 4px solid #f97316;
         }
-        
+
         /* Progress Bar */
         .progress-bar {
             background: rgba(255, 255, 255, 0.15);
@@ -301,23 +301,23 @@
             background-size: 200% 100%;
             animation: shimmer 2s ease-in-out infinite;
         }
-        
+
         @keyframes shimmer {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
-        
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .phs-sidebar { 
-                transform: translateX(-100%); 
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            .phs-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            .phs-sidebar.open { 
-                transform: translateX(0); 
+            .phs-sidebar.open {
+                transform: translateX(0);
             }
-            .phs-content { 
-                margin-left: 0; 
+            .phs-content {
+                margin-left: 0;
                 border-radius: 1rem;
             }
             .content-scroll {
@@ -623,7 +623,7 @@
                 </div>
             </div>
         </header>
-        
+
         <!-- Main Content -->
         <div class="phs-main">
             <!-- Sidebar -->
@@ -652,7 +652,7 @@
                             </p>
                         </div>
                     </div>
-                    
+
                     <!-- Progress Bar -->
                     <div class="w-full">
                         <div class="flex justify-between text-xs mb-2 text-white">
@@ -664,13 +664,13 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Section Navigation -->
                 <nav class="flex-1 p-6 overflow-y-auto">
                     <h4 class="text-[#D4AF37] font-semibold mb-4 text-sm uppercase tracking-wide">Form Sections</h4>
                     <div class="space-y-2">
                         <template x-for="section in sections" :key="section.id">
-                            <div class="section-nav-item p-3 cursor-pointer" 
+                            <div class="section-nav-item p-3 cursor-pointer"
                                  :class="getSectionClass(section)"
                                  @click="navigateToSection(section)"
                                  :data-route="section.route">
@@ -691,7 +691,7 @@
                         </template>
                     </div>
                 </nav>
-                
+
                 <!-- Action Buttons -->
                 <div class="p-6 border-t border-[#2B4B7D] space-y-3">
                     <button onclick="goToDashboard()" class="w-full inline-flex items-center justify-center px-4 py-2 btn-secondary rounded-lg transition-all duration-300">
@@ -700,7 +700,7 @@
                     </button>
                 </div>
             </aside>
-            
+
             <!-- Content Area -->
             <div class="phs-content">
                 <div class="phs-scroll" id="phsContent">
@@ -708,7 +708,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Footer -->
         <footer class="phs-footer">
             <div class="px-6 py-4">
@@ -733,8 +733,8 @@
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="text-white text-center">
                 <div class="mb-4">
-                    <img src="{{ asset('images/pma_logo.svg') }}" 
-                         alt="PMA Logo" 
+                    <img src="{{ asset('images/pma_logo.svg') }}"
+                         alt="PMA Logo"
                          class="w-16 h-16 mx-auto">
                 </div>
                 <h3 class="text-xl font-semibold">Returning to Dashboard...</h3>
@@ -758,7 +758,7 @@
                             <li>Type, print, or write carefully; illegible or incomplete forms will not receive due consideration.</li>
                         </ol>
                     </div>
-                    
+
                     <div class="mb-6">
                         <h4 class="text-lg font-semibold text-red-600 mb-3">WARNING</h4>
                         <ol class="list-decimal list-inside text-base text-gray-700 space-y-3">
@@ -800,7 +800,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Add this helper at the top of your main JS block or before any fetch calls
         function getCsrfToken() {
@@ -814,7 +814,7 @@
         // PHS Section Navigation Utility
         const PHSSectionOrder = [
             'personal-details',
-            'personal-characteristics', 
+            'personal-characteristics',
             'marital-status',
             'family-background',
             'educational-background',
@@ -846,7 +846,7 @@
             'organization': '{{ route("personnel.phs.organization") }}',
             'miscellaneous': '#', // Add personnel route if exists
         } : {
-            'personal-details': '{{ route("phs.create") }}',
+            'personal-details': '{{ route("phs.personal-details.create") }}',
             'personal-characteristics': '{{ route("phs.personal-characteristics.create") }}',
             'marital-status': '{{ route("phs.marital-status.create") }}',
             'family-background': '{{ route("phs.family-background.create") }}',
@@ -885,16 +885,16 @@
         // Global function for dynamic navigation
         window.navigateToNextSection = async function(sectionId) {
             console.log('navigateToNextSection called with sectionId:', sectionId);
-            
+
             // Save current section data without validation
             const saveSuccess = await saveCurrentSectionData(sectionId);
             console.log('Save success:', saveSuccess);
-            
+
             if (saveSuccess) {
                 // Navigate to next section
                 const nextSection = getNextSection(sectionId);
                 console.log('Next section:', nextSection);
-                
+
                 if (nextSection) {
                     const nextRoute = getSectionRoute(nextSection);
                     console.log('Next route:', nextRoute);
@@ -910,7 +910,7 @@
                     }
                 }
             }
-            
+
             return false; // Always return false to prevent form submission
         };
 
@@ -936,13 +936,13 @@
         window.handleFormSubmit = async function(event) {
             console.log('Form submit event triggered');
             event.preventDefault();
-            
+
             const form = event.target.form;
             const currentSection = window.currentSection || 'family-background'; // Use the section set by the global function
-            
+
             console.log('Current section:', currentSection);
             console.log('Form action:', form.action);
-            
+
             // Check if this is the last section (miscellaneous)
             if (currentSection === 'miscellaneous') {
                 console.log('Last section - allowing normal submission');
@@ -950,7 +950,7 @@
                 event.target.form.submit();
                 return;
             }
-            
+
             console.log('Intermediate section - using dynamic navigation');
             // For intermediate sections, use dynamic navigation
             // The navigateToNextSection function now handles both saving and navigation
@@ -969,7 +969,7 @@
         // Save current section data without validation
         async function saveCurrentSectionData(sectionId) {
             console.log('saveCurrentSectionData called with sectionId:', sectionId);
-            
+
             const form = document.querySelector('form');
             if (!form) {
                 console.log('No form found, allowing navigation');
@@ -991,7 +991,7 @@
             const formData = new FormData(form);
             let saveSuccess = false;
             let errorMsg = '';
-            
+
             console.log('Sending AJAX request...');
             try {
                 const response = await fetch(form.action, {
@@ -1171,47 +1171,47 @@
                         status: '{{ $sectionStatus['miscellaneous'] ?? 'not-started' }}'
                     }
                 ],
-                
+
                 get progressPercentage() {
                     const completed = this.sections.filter(s => s.status === 'completed').length;
                     return Math.round((completed / this.sections.length) * 100);
                 },
-                
+
                 getSectionClass(section) {
                     if (section.id === this.currentSection) return 'active';
                     if (section.status === 'completed') return 'completed';
                     if (section.status === 'visited') return 'visited';
                     return '';
                 },
-                
+
                 getSectionIconClass(section) {
                     if (section.id === this.currentSection) return 'bg-[#D4AF37] text-white';
                     if (section.status === 'completed') return 'bg-green-500 text-white';
                     if (section.status === 'visited') return 'bg-orange-500 text-white';
                     return 'bg-gray-600 text-white';
                 },
-                
+
                 getSectionStatusClass(section) {
                     if (section.status === 'completed') return 'bg-green-500';
                     if (section.status === 'visited') return 'bg-orange-500';
                     return 'bg-gray-400';
                 },
-                
+
                 async navigateToSection(section) {
                     this.currentSection = section.id;
                     if (section.status === 'not-started') {
                         section.status = 'visited';
                     }
-                    
+
                     // Check if route is available
                     if (section.route === '#') {
                         return;
                     }
-                    
+
                     // Load content dynamically
                     await this.loadContent(section.route, section.id);
                 },
-                
+
                 async loadContent(url, sectionId) {
                     const contentArea = document.getElementById('phsContent');
                     if (!contentArea) {
@@ -1222,36 +1222,36 @@
                     try {
                         // Update current section immediately and trigger Alpine.js reactivity
                         this.currentSection = sectionId;
-                        
+
                         // Force Alpine.js to update by dispatching a custom event
-                        window.dispatchEvent(new CustomEvent('phs-section-changed', { 
-                            detail: { sectionId: sectionId } 
+                        window.dispatchEvent(new CustomEvent('phs-section-changed', {
+                            detail: { sectionId: sectionId }
                         }));
-                        
+
                         // Mark that this is not the initial load (prevents modal from showing)
                         window.isInitialLoad = false;
-                        
+
                         // Fade out current content
                         contentArea.style.opacity = '0.5';
                         contentArea.style.transform = 'translateY(10px)';
-                        
+
                         // Fetch new content
                         const response = await fetch(url, {
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest'
                             }
                         });
-                        
+
                         if (!response.ok) {
                             throw new Error('Failed to load content');
                         }
-                        
+
                         const html = await response.text();
-                        
+
                         // Create a temporary div to parse the HTML
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = html;
-                        
+
                         // Extract the content from the yield('content') section
                         // The AJAX response contains the full layout, so we need to find the content within it
                         let newContent = tempDiv.querySelector('#phsContent');
@@ -1259,7 +1259,7 @@
                             // If we can't find phsContent, look for the content directly
                             newContent = tempDiv.querySelector('.max-w-4xl') || tempDiv.querySelector('main') || tempDiv.querySelector('form');
                         }
-                        
+
                         // Update the content
                         if (newContent && newContent.innerHTML) {
                             // If we found phsContent, extract its inner content
@@ -1273,20 +1273,20 @@
                             // Fallback: use the entire response
                             contentArea.innerHTML = html;
                         }
-                        
+
                         // Update browser URL without reload
                         window.history.pushState({section: sectionId}, '', url);
-                        
+
                         // Fade in new content
                         contentArea.style.opacity = '1';
                         contentArea.style.transform = 'translateY(0)';
-                        
+
                         // Update page title if available
                         const titleElement = tempDiv.querySelector('title');
                         if (titleElement) {
                             document.title = titleElement.textContent;
                         }
-                        
+
                         // Initialize section-specific functionality
                         if (sectionId === 'personal-details' && window.initializePersonalDetails) {
                             // Small delay to ensure DOM is ready
@@ -1294,7 +1294,7 @@
                                 window.initializePersonalDetails();
                             }, 100);
                         }
-                        
+
                         // Initialize marital status functionality
                         if (sectionId === 'marital-status') {
                             setTimeout(() => {
@@ -1302,7 +1302,7 @@
                                 window.initializeMaritalStatus();
                             }, 100);
                         }
-                        
+
                         // Initialize family background functionality
                         if (sectionId === 'family-background') {
                             setTimeout(() => {
@@ -1310,7 +1310,7 @@
                                 window.initializeFamilyBackground();
                             }, 100);
                         }
-                        
+
                         // Initialize educational background functionality
                         if (sectionId === 'educational-background') {
                             setTimeout(() => {
@@ -1318,7 +1318,7 @@
                                 window.initializeEducationalBackground();
                             }, 100);
                         }
-                        
+
                         // Initialize military history functionality
                         if (sectionId === 'military-history') {
                             setTimeout(() => {
@@ -1326,7 +1326,7 @@
                                 window.initializeMilitaryHistory();
                             }, 100);
                         }
-                        
+
                         // Initialize employment history functionality
                         if (sectionId === 'employment-history') {
                             setTimeout(() => {
@@ -1334,7 +1334,7 @@
                                 window.initializeEmploymentHistory();
                             }, 100);
                         }
-                        
+
                         // Initialize foreign countries functionality
                         if (sectionId === 'foreign-countries') {
                             setTimeout(() => {
@@ -1342,7 +1342,7 @@
                                 window.initializeForeignCountries();
                             }, 100);
                         }
-                        
+
                         // Initialize credit reputation functionality
                         if (sectionId === 'credit-reputation') {
                             setTimeout(() => {
@@ -1350,7 +1350,7 @@
                                 window.initializeCreditReputation();
                             }, 100);
                         }
-                        
+
                         // Initialize arrest record functionality
                         if (sectionId === 'arrest-record') {
                             setTimeout(() => {
@@ -1358,7 +1358,7 @@
                                 window.initializeArrestRecord();
                             }, 100);
                         }
-                        
+
                         // Initialize character reputation functionality
                         if (sectionId === 'character-and-reputation') {
                             setTimeout(() => {
@@ -1366,7 +1366,7 @@
                                 window.initializeCharacterReputation();
                             }, 100);
                         }
-                        
+
                         // Initialize organization functionality
                         if (sectionId === 'organization') {
                             setTimeout(() => {
@@ -1374,7 +1374,7 @@
                                 window.initializeOrganization();
                             }, 100);
                         }
-                        
+
                         // Initialize miscellaneous functionality
                         if (sectionId === 'miscellaneous') {
                             setTimeout(() => {
@@ -1382,7 +1382,7 @@
                                 window.initializeMiscellaneous();
                             }, 100);
                         }
-                        
+
                         // Initialize places of residence functionality
                         if (sectionId === 'places-of-residence') {
                             setTimeout(() => {
@@ -1390,43 +1390,43 @@
                                 window.initializePlacesOfResidence();
                             }, 100);
                         }
-                        
+
                         // Close sidebar on mobile
                         if (window.innerWidth <= 768) {
                             this.sidebarOpen = false;
                         }
-                        
+
                     } catch (error) {
                         // Fallback to regular navigation
                         window.location.href = url;
                     }
                 },
-                
+
                 toggleSidebar() {
                     this.sidebarOpen = !this.sidebarOpen;
                 },
-                
+
                 markSectionAsCompleted(sectionId) {
                     const section = this.sections.find(s => s.id === sectionId);
                     if (section) {
                         section.status = 'completed';
                     }
                 },
-                
+
                 markSectionAsVisited(sectionId) {
                     const section = this.sections.find(s => s.id === sectionId);
                     if (section && section.status === 'not-started') {
                         section.status = 'visited';
                     }
                 },
-                
+
                 init() {
                     // Initialize content transition styles
                     const contentArea = document.getElementById('phsContent');
                     if (contentArea) {
                         contentArea.style.transition = 'all 0.3s ease-in-out';
                     }
-                    
+
                     // Handle browser back/forward buttons
                     window.addEventListener('popstate', (event) => {
                         if (event.state && event.state.section) {
@@ -1436,7 +1436,7 @@
                             }
                         }
                     });
-                    
+
                     // Listen for section changes from AJAX navigation
                     window.addEventListener('phs-section-changed', (event) => {
                         if (event.detail && event.detail.sectionId) {
@@ -1445,24 +1445,24 @@
                             this.markSectionAsVisited(event.detail.sectionId);
                         }
                     });
-                    
+
                     // Mark current section as visited
                     this.markSectionAsVisited(this.currentSection);
                 }
             }
         }
-        
+
         // Initialize global navigation instance
         window.phsNavigationInstance = phsNavigation('{{ $currentSection ?? 'personal-details' }}');
-        
+
         // Initialize the navigation instance
         document.addEventListener('DOMContentLoaded', function() {
             if (window.phsNavigationInstance) {
                 window.phsNavigationInstance.init();
             }
-            
+
             // Only show instructions on initial page load for personal-details
-            @if(Route::currentRouteName() === 'phs.create')
+            @if(Route::currentRouteName() === 'phs.personal-details.create')
                 // Set a flag to indicate this is the initial load
                 window.isInitialLoad = true;
                 setTimeout(showInstructions, 500);
@@ -1474,20 +1474,20 @@
             const now = new Date();
             const timeElement = document.getElementById('current-time');
             const dateElement = document.getElementById('current-date');
-            if (timeElement) { 
-                timeElement.textContent = now.toLocaleTimeString('en-US', { 
-                    hour12: true, 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                }); 
+            if (timeElement) {
+                timeElement.textContent = now.toLocaleTimeString('en-US', {
+                    hour12: true,
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
             }
-            if (dateElement) { 
-                dateElement.textContent = now.toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                }); 
+            if (dateElement) {
+                dateElement.textContent = now.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
             }
         }
 
@@ -1508,14 +1508,14 @@
             if (!window.isInitialLoad) {
                 return;
             }
-            
+
             const instructionsModal = document.getElementById('instructionsModal');
             const instructionsModalContent = document.getElementById('instructionsModalContent');
-            
+
             if (instructionsModal) {
                 instructionsModal.classList.remove('hidden');
                 instructionsModal.classList.add('flex');
-                
+
                 // Trigger animation
                 setTimeout(() => {
                     instructionsModalContent.classList.remove('scale-95', 'opacity-0');
@@ -1528,12 +1528,12 @@
             // Hide instructions modal with animation
             const instructionsModal = document.getElementById('instructionsModal');
             const instructionsModalContent = document.getElementById('instructionsModalContent');
-            
+
             if (instructionsModalContent) {
                 instructionsModalContent.classList.remove('scale-100', 'opacity-100');
                 instructionsModalContent.classList.add('scale-95', 'opacity-0');
             }
-            
+
             setTimeout(() => {
                 if (instructionsModal) {
                     instructionsModal.classList.add('hidden');
@@ -1553,10 +1553,10 @@
         function showLogoutConfirmation() {
             const modal = document.getElementById('logoutModal');
             const modalContent = document.getElementById('logoutModalContent');
-            
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            
+
             // Trigger animation
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
@@ -1567,10 +1567,10 @@
         function hideLogoutConfirmation() {
             const modal = document.getElementById('logoutModal');
             const modalContent = document.getElementById('logoutModalContent');
-            
+
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
@@ -1749,7 +1749,7 @@
                 const type = selectElement.value;
                 const dateInput = container.querySelector('input[type="date"]');
                 const monthYearGroup = container.querySelector('.flex.space-x-2.hidden, .flex.space-x-2:not(.hidden)');
-                
+
                 if (type === 'exact') {
                     dateInput.classList.remove('hidden');
                     monthYearGroup.classList.add('hidden');
@@ -1764,7 +1764,7 @@
                 const isFrom = selectElement.name.includes('from');
                 const dateInput = assignmentEntry.querySelector(`input[name="assignments[${assignmentEntry.dataset.index}][${isFrom ? 'from' : 'to'}"]`);
                 const monthYearGroup = assignmentEntry.querySelector(`#assignment-${isFrom ? 'from' : 'to'}-month-year-group-${assignmentEntry.dataset.index}`);
-                
+
                 if (type === 'exact') {
                     dateInput.classList.remove('hidden');
                     monthYearGroup.classList.add('hidden');
@@ -1779,7 +1779,7 @@
                 const isFrom = selectElement.name.includes('from');
                 const dateInput = schoolEntry.querySelector(`input[name="schools[${schoolEntry.dataset.index}][date_attended_${isFrom ? 'from' : 'to'}"]`);
                 const monthYearGroup = schoolEntry.querySelector(`#school-date-${isFrom ? 'from' : 'to'}-month-year-group-${schoolEntry.dataset.index}`);
-                
+
                 if (type === 'exact') {
                     dateInput.classList.remove('hidden');
                     monthYearGroup.classList.add('hidden');
@@ -1802,13 +1802,13 @@
             document.querySelectorAll('.assignment-entry').forEach(entry => {
                 const fromTypeSelect = entry.querySelector('select[name*="from_type"]');
                 const toTypeSelect = entry.querySelector('select[name*="to_type"]');
-                
+
                 if (fromTypeSelect) {
                     fromTypeSelect.addEventListener('change', function() {
                         synchronizeAssignmentDateTypes(entry, this);
                     });
                 }
-                
+
                 if (toTypeSelect) {
                     toTypeSelect.addEventListener('change', function() {
                         synchronizeAssignmentDateTypes(entry, this);
@@ -1820,13 +1820,13 @@
             document.querySelectorAll('.school-entry').forEach(entry => {
                 const fromTypeSelect = entry.querySelector('select[name*="from_type"]');
                 const toTypeSelect = entry.querySelector('select[name*="to_type"]');
-                
+
                 if (fromTypeSelect) {
                     fromTypeSelect.addEventListener('change', function() {
                         synchronizeSchoolDateTypes(entry, this);
                     });
                 }
-                
+
                 if (toTypeSelect) {
                     toTypeSelect.addEventListener('change', function() {
                         synchronizeSchoolDateTypes(entry, this);
@@ -2025,11 +2025,11 @@
                 // Add event listeners for the new school date type selects
                 const newSchoolFromTypeSelect = schoolEntry.querySelector(`select[name="schools[${idx}][date_attended_from_type]"]`);
                 const newSchoolToTypeSelect = schoolEntry.querySelector(`select[name="schools[${idx}][date_attended_to_type]"]`);
-                
+
                 newSchoolFromTypeSelect.addEventListener('change', function() {
                     synchronizeSchoolDateTypes(schoolEntry, this);
                 });
-                
+
                 newSchoolToTypeSelect.addEventListener('change', function() {
                     synchronizeSchoolDateTypes(schoolEntry, this);
                 });
@@ -2139,7 +2139,7 @@
                 const index = entry.getAttribute('data-index');
                 const dateInput = entry.querySelector(`input[name="employment[${index}][${isFrom ? 'from' : 'to'}"]`);
                 const monthYearGroup = entry.querySelector(`#employment-${isFrom ? 'from' : 'to'}-month-year-group-${index}`);
-                
+
                 if (selectElement.value === 'exact') {
                     dateInput.classList.remove('hidden');
                     monthYearGroup.classList.add('hidden');
@@ -2154,13 +2154,13 @@
                 const index = entry.getAttribute('data-index');
                 const fromSelect = entry.querySelector(`select[name="employment[${index}][from_type]"]`);
                 const toSelect = entry.querySelector(`select[name="employment[${index}][to_type]"]`);
-                
+
                 console.log('Synchronizing employment dates for entry', index, ':', {
                     changedSelect: changedSelect.name,
                     fromSelectValue: fromSelect.value,
                     toSelectValue: toSelect.value
                 });
-                
+
                 if (changedSelect === fromSelect) {
                     toSelect.value = fromSelect.value;
                     console.log('Updated "to" select to:', toSelect.value);
@@ -2168,13 +2168,13 @@
                     fromSelect.value = toSelect.value;
                     console.log('Updated "from" select to:', fromSelect.value);
                 }
-                
+
                 // Always update both UI states after synchronization
                 const fromDateInput = entry.querySelector(`input[name="employment[${index}][from]"]`);
                 const fromMonthYearGroup = entry.querySelector(`#employment-from-month-year-group-${index}`);
                 const toDateInput = entry.querySelector(`input[name="employment[${index}][to]"]`);
                 const toMonthYearGroup = entry.querySelector(`#employment-to-month-year-group-${index}`);
-                
+
                 if (fromSelect.value === 'exact') {
                     fromDateInput.classList.remove('hidden');
                     fromMonthYearGroup.classList.add('hidden');
@@ -2192,7 +2192,7 @@
             const initialEmploymentFromTypeSelect = document.querySelector('select[name="employment[0][from_type]"]');
             const initialEmploymentToTypeSelect = document.querySelector('select[name="employment[0][to_type]"]');
             const initialEmploymentEntry = document.querySelector('.employment-entry[data-index="0"]');
-            
+
             if (initialEmploymentFromTypeSelect && initialEmploymentEntry) {
                 initialEmploymentFromTypeSelect.removeEventListener('change', function() {
                     synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
@@ -2201,7 +2201,7 @@
                     synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
                 });
             }
-            
+
             if (initialEmploymentToTypeSelect && initialEmploymentEntry) {
                 initialEmploymentToTypeSelect.removeEventListener('change', function() {
                     synchronizeEmploymentDateTypes(initialEmploymentEntry, this);
@@ -2325,7 +2325,7 @@
                 const index = entry.getAttribute('data-index');
                 const dateInput = entry.querySelector(`input[name="countries[${index}][${isFrom ? 'from' : 'to'}"]`);
                 const monthYearGroup = entry.querySelector(`#country-${isFrom ? 'from' : 'to'}-month-year-group-${index}`);
-                
+
                 if (selectElement.value === 'exact') {
                     dateInput.classList.remove('hidden');
                     monthYearGroup.classList.add('hidden');
@@ -2340,13 +2340,13 @@
                 const index = entry.getAttribute('data-index');
                 const fromSelect = entry.querySelector(`select[name="countries[${index}][from_type]"]`);
                 const toSelect = entry.querySelector(`select[name="countries[${index}][to_type]"]`);
-                
+
                 console.log('Synchronizing country dates for entry', index, ':', {
                     changedSelect: changedSelect.name,
                     fromSelectValue: fromSelect.value,
                     toSelectValue: toSelect.value
                 });
-                
+
                 if (changedSelect === fromSelect) {
                     toSelect.value = fromSelect.value;
                     console.log('Updated "to" select to:', toSelect.value);
@@ -2354,13 +2354,13 @@
                     fromSelect.value = toSelect.value;
                     console.log('Updated "from" select to:', fromSelect.value);
                 }
-                
+
                 // Always update both UI states after synchronization
                 const fromDateInput = entry.querySelector(`input[name="countries[${index}][from]"]`);
                 const fromMonthYearGroup = entry.querySelector(`#country-from-month-year-group-${index}`);
                 const toDateInput = entry.querySelector(`input[name="countries[${index}][to]"]`);
                 const toMonthYearGroup = entry.querySelector(`#country-to-month-year-group-${index}`);
-                
+
                 if (fromSelect.value === 'exact') {
                     fromDateInput.classList.remove('hidden');
                     fromMonthYearGroup.classList.add('hidden');
@@ -2378,7 +2378,7 @@
             const initialCountryFromTypeSelect = document.querySelector('select[name="countries[0][from_type]"]');
             const initialCountryToTypeSelect = document.querySelector('select[name="countries[0][to_type]"]');
             const initialCountryEntry = document.querySelector('.country-entry[data-index="0"]');
-            
+
             if (initialCountryFromTypeSelect && initialCountryEntry) {
                 initialCountryFromTypeSelect.removeEventListener('change', function() {
                     synchronizeCountryDateTypes(initialCountryEntry, this);
@@ -2387,7 +2387,7 @@
                     synchronizeCountryDateTypes(initialCountryEntry, this);
                 });
             }
-            
+
             if (initialCountryToTypeSelect && initialCountryEntry) {
                 initialCountryToTypeSelect.removeEventListener('change', function() {
                     synchronizeCountryDateTypes(initialCountryEntry, this);
@@ -2502,11 +2502,11 @@
                 // Add event listeners for the new country date type selects
                 const newCountryFromTypeSelect = countryEntry.querySelector(`select[name="countries[${idx}][from_type]"]`);
                 const newCountryToTypeSelect = countryEntry.querySelector(`select[name="countries[${idx}][to_type]"]`);
-                
+
                 newCountryFromTypeSelect.addEventListener('change', function() {
                     synchronizeCountryDateTypes(countryEntry, this);
                 });
-                
+
                 newCountryToTypeSelect.addEventListener('change', function() {
                     synchronizeCountryDateTypes(countryEntry, this);
                 });
@@ -2655,15 +2655,15 @@
             try {
                 const response = await fetch('https://psgc.gitlab.io/api/regions/');
                 const regions = await response.json();
-                
+
                 const homeRegionSelect = document.getElementById('home_region');
                 const businessRegionSelect = document.getElementById('business_region');
-                
+
                 if (homeRegionSelect && businessRegionSelect) {
                     // Clear existing options except the first one
                     homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                     businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
-                    
+
                     regions.forEach(region => {
                         const homeOption = new Option(region.name, region.code);
                         const businessOption = new Option(region.name, region.code);
@@ -2693,15 +2693,15 @@
                     'Caraga (Region XIII)',
                     'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)'
                 ];
-                
+
                 const homeRegionSelect = document.getElementById('home_region');
                 const businessRegionSelect = document.getElementById('business_region');
-                
+
                 if (homeRegionSelect && businessRegionSelect) {
                     // Clear existing options except the first one
                     homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                     businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
-                    
+
                     commonRegions.forEach(region => {
                         const homeOption = new Option(region, region);
                         const businessOption = new Option(region, region);
@@ -2717,20 +2717,20 @@
             const provinceSelect = document.getElementById(`${type}_province`);
             const citySelect = document.getElementById(`${type}_city`);
             const barangaySelect = document.getElementById(`${type}_barangay`);
-            
+
             if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect) return;
-            
+
             // Reset dependent dropdowns
             provinceSelect.innerHTML = '<option value="">Select Province</option>';
             citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
             barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-            
+
             if (!regionSelect.value) return;
-            
+
             try {
                 const response = await fetch(`https://psgc.gitlab.io/api/regions/${regionSelect.value}/provinces/`);
                 const provinces = await response.json();
-                
+
                 provinces.forEach(province => {
                     const option = new Option(province.name, province.code);
                     provinceSelect.add(option);
@@ -2744,7 +2744,7 @@
                     provinceSelect.add(option);
                 });
             }
-            
+
             updateCompleteAddress(type);
         }
 
@@ -2752,19 +2752,19 @@
             const provinceSelect = document.getElementById(`${type}_province`);
             const citySelect = document.getElementById(`${type}_city`);
             const barangaySelect = document.getElementById(`${type}_barangay`);
-            
+
             if (!provinceSelect || !citySelect || !barangaySelect) return;
-            
+
             // Reset dependent dropdowns
             citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
             barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-            
+
             if (!provinceSelect.value) return;
-            
+
             try {
                 const response = await fetch(`https://psgc.gitlab.io/api/provinces/${provinceSelect.value}/cities-municipalities/`);
                 const cities = await response.json();
-                
+
                 cities.forEach(city => {
                     const option = new Option(city.name, city.code);
                     citySelect.add(option);
@@ -2778,25 +2778,25 @@
                     citySelect.add(option);
                 });
             }
-            
+
             updateCompleteAddress(type);
         }
 
         async function loadBarangays(type) {
             const citySelect = document.getElementById(`${type}_city`);
             const barangaySelect = document.getElementById(`${type}_barangay`);
-            
+
             if (!citySelect || !barangaySelect) return;
-            
+
             // Reset barangay dropdown
             barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-            
+
             if (!citySelect.value) return;
-            
+
             try {
                 const response = await fetch(`https://psgc.gitlab.io/api/cities-municipalities/${citySelect.value}/barangays/`);
                 const barangays = await response.json();
-                
+
                 barangays.forEach(barangay => {
                     const option = new Option(barangay.name, barangay.code);
                     barangaySelect.add(option);
@@ -2810,7 +2810,7 @@
                     barangaySelect.add(option);
                 });
             }
-            
+
             updateCompleteAddress(type);
         }
 
@@ -2874,7 +2874,7 @@
                 'Caraga (Region XIII)': ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'],
                 'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)': ['Basilan', 'Lanao del Sur', 'Maguindanao', 'Sulu', 'Tawi-Tawi']
             };
-            
+
             return provinceMap[region] || ['Province 1', 'Province 2', 'Province 3'];
         }
 
@@ -2887,7 +2887,7 @@
                     streetInput.removeEventListener('input', () => updateCompleteAddress(type));
                     streetInput.addEventListener('input', () => updateCompleteAddress(type));
                 }
-                
+
                 const barangaySelect = document.getElementById(`${type}_barangay`);
                 if (barangaySelect) {
                     // Remove existing listeners to prevent duplicates
@@ -3008,12 +3008,12 @@
         // Function to toggle citizenship fields based on citizenship type
         function toggleCitizenshipFields(person) {
             const type = document.getElementById(`${person}_citizenship_type`).value;
-            
+
             // Hide all citizenship groups first
             document.querySelectorAll(`#${person}_citizenship_single, #${person}_citizenship_dual, #${person}_citizenship_naturalized`).forEach(group => {
                 if (group) group.classList.add('hidden');
             });
-            
+
             // Show the appropriate group based on selection
             if (type === 'Single') {
                 const singleGroup = document.getElementById(`${person}_citizenship_single`);
@@ -3038,4 +3038,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

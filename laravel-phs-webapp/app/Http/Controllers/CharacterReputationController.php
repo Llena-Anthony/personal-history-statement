@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\CharacterReference;
+use App\Models\User;
+use App\Models\ReferenceDetail;
 use App\Models\Miscellaneous;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\PHSSectionTracking;
@@ -15,29 +16,29 @@ class CharacterReputationController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
+
         // Get character references for this user
-        $characterReferences = CharacterReference::where('user_id', $user->id)
-            ->where('ref_relationship', 'character_reference')
+        $characterReferences = ReferenceDetail::where('username', $user->id)
+            ->where('ref_type', 'character')
             ->get();
-            
+
         // If no character references exist, create 5 empty ones
         if ($characterReferences->isEmpty()) {
-            $characterReferences = collect(array_fill(0, 5, new CharacterReference()));
+            $characterReferences = collect(array_fill(0, 5, new ReferenceDetail()));
         }
-        
+
         // Get neighbors (stored as miscellaneous with type 'neighbor')
-        $neighbors = Miscellaneous::where('user_id', $user->id)
-            ->where('misc_type', 'neighbor')
+        $neighbors = ReferenceDetail::where('username', $user->id)
+            ->where('ref_type', 'neighbor')
             ->get();
-            
+
         // If no neighbors exist, create 3 empty ones
         if ($neighbors->isEmpty()) {
-            $neighbors = collect(array_fill(0, 3, new Miscellaneous()));
+            $neighbors = collect(array_fill(0, 3, new ReferenceDetail()));
         }
 
         $commonData = $this->getCommonViewData('character-and-reputation');
-        
+
         return view('phs.character-reputation', array_merge($commonData, [
             'characterReferences' => $characterReferences,
             'neighbors' => $neighbors,
@@ -47,16 +48,16 @@ class CharacterReputationController extends Controller
     public function store(Request $request)
     {
         $this->markSectionAsCompleted('character-and-reputation');
-        
+
         $user = Auth::user();
-        
+
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // Validation rules
         $characterRefRules = $isSaveOnly ? 'nullable|string|max:255' : 'required|string|max:255';
         $neighborRules = $isSaveOnly ? 'nullable|string|max:255' : 'required|string|max:255';
-        
+
         try {
             $validated = $request->validate([
                 'character_references.*.name' => $characterRefRules,
@@ -156,4 +157,4 @@ class CharacterReputationController extends Controller
             'miscellaneous'
         ];
     }
-} 
+}

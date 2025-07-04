@@ -166,7 +166,7 @@
     </form>
 </div>
 
-<script>
+{{-- <script>
     function creditReputationForm() {
         return {
             dependent_on_salary: '{{ old('dependent_on_salary', $creditReputation->dependent_on_salary) }}',
@@ -176,14 +176,14 @@
 
             other_incomes: @json(old('other_incomes', $otherIncomes->map->only(['source']))),
             bank_accounts: @json(old('bank_accounts', $bankAccounts->map->only(['bank_name', 'address']))),
-            
+
             addIncome() { this.other_incomes.push({ source: '' }); },
             removeIncome(index) { if (this.other_incomes.length > 1) this.other_incomes.splice(index, 1); },
             addAccount() { this.bank_accounts.push({ bank_name: '', address: '' }); },
             removeAccount(index) { if (this.bank_accounts.length > 1) this.bank_accounts.splice(index, 1); },
         }
     }
-</script>
+</script> --}}
 
 @push('styles')
 <style>
@@ -249,4 +249,4 @@
 </style>
 @endpush
 @endsection
-@php($currentSection = 'credit-reputation') 
+@php($currentSection = 'credit-reputation')

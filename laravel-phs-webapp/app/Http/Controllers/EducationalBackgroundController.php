@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-use App\Models\EducationalBackground;
+
+use App\Models\User;
 
 class EducationalBackgroundController extends Controller
 {
@@ -13,16 +14,16 @@ class EducationalBackgroundController extends Controller
     public function create()
     {
         // Load existing educational background data for autofill
-        $educationalBackground = EducationalBackground::where('user_id', auth()->id())->first();
-        
+        $educationalBackground = User::where('username', auth()->id())->first();
+
         $viewData = $this->getCommonViewData('educational-background');
         $viewData['educationalBackground'] = $educationalBackground;
-        
+
         // Return partial for AJAX requests, full view for normal requests
         if (request()->ajax()) {
             return view('phs.sections.educational-background-content', $viewData);
         }
-        
+
         return view('phs.educational-background', $viewData);
     }
 
@@ -35,7 +36,7 @@ class EducationalBackgroundController extends Controller
     {
         // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        
+
         // For save-only mode, use minimal validation
         if ($isSaveOnly) {
             $validated = $request->validate([
@@ -161,4 +162,4 @@ class EducationalBackgroundController extends Controller
             'family-history',
         ];
     }
-} 
+}
