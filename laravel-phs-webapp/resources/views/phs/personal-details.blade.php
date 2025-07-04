@@ -27,14 +27,14 @@
     <!-- Form -->
     <form method="POST" action="{{ route('personnel.phs.personal-details.store') }}" class="space-y-8">
         @csrf
-        
+
         <!-- Personal Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-id-card mr-3 text-[#D4AF37]"></i>
                 Personal Information
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- First Name -->
                 <div>
@@ -44,12 +44,12 @@
                     <input type="text" name="first_name" id="first_name"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your first name"
-                           value="{{ $phs ? $phs->first_name : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->first_name : '') }}">
+                           value="{{ $personalDetails ? $personalDetails->first_name : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->first_name : '') }}">
                     @error('first_name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-    
+
                 <!-- Middle Name -->
                 <div>
                     <label for="middle_name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -58,12 +58,12 @@
                     <input type="text" name="middle_name" id="middle_name"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your middle name"
-                           value="{{ $phs ? $phs->middle_name : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->middle_name : '') }}">
+                           value="{{ $personalDetails ? $personalDetails->middle_name : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->middle_name : '') }}">
                     @error('middle_name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-    
+
                 <!-- Last Name -->
                 <div>
                     <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -72,13 +72,13 @@
                     <input type="text" name="last_name" id="last_name"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your last name"
-                           value="{{ $phs ? $phs->last_name : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->last_name : '') }}">
+                           value="{{ $personalDetails ? $personalDetails->last_name : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->last_name : '') }}">
                     @error('last_name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
-    
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <!-- Suffix -->
                 <div>
@@ -88,9 +88,9 @@
                     <input type="text" name="suffix" id="suffix"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="e.g., Jr., Sr., III"
-                           value="{{ $phs ? $phs->suffix : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->name_extension : '') }}">
+                           value="{{ $personalDetails ? $personalDetails->suffix : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->name_extension : '') }}">
                 </div>
-    
+
                 <!-- Nickname -->
                 <div>
                     <label for="nickname" class="block text-sm font-medium text-gray-700 mb-2">
@@ -99,18 +99,18 @@
                     <input type="text" name="nickname" id="nickname"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your nickname"
-                           value="{{ $phs ? $phs->nickname : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->nickname : '') }}">
+                           value="{{ $personalDetails ? $personalDetails->nickname : ($userDetails && $userDetails->nameDetails ? $userDetails->nameDetails->nickname : '') }}">
                 </div>
             </div>
         </div>
-    
+
         <!-- Birth Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-birthday-cake mr-3 text-[#D4AF37]"></i>
                 Birth Information
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Date of Birth -->
                 <div>
@@ -119,12 +119,12 @@
                     </label>
                     <input type="date" name="date_of_birth" id="date_of_birth"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           value="{{ isset($phs->date_of_birth) ? (\Illuminate\Support\Str::length($phs->date_of_birth) === 10 ? $phs->date_of_birth : (new \Carbon\Carbon($phs->date_of_birth))->format('Y-m-d')) : '' }}">
+                           value="{{ isset($personalDetails->date_of_birth) ? (\Illuminate\Support\Str::length($personalDetails->date_of_birth) === 10 ? $personalDetails->date_of_birth : (new \Carbon\Carbon($personalDetails->date_of_birth))->format('Y-m-d')) : '' }}">
                     @error('date_of_birth')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-    
+
                 <!-- Place of Birth -->
                 <div>
                     <label for="place_of_birth" class="block text-sm font-medium text-gray-700 mb-2">
@@ -133,7 +133,7 @@
                     <input type="text" name="place_of_birth" id="place_of_birth"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="City, Province"
-                           value="{{ $phs->place_of_birth ?? '' }}">
+                           value="{{ $personalDetails->place_of_birth ?? '' }}">
                     @error('place_of_birth')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -149,8 +149,8 @@
                     <select name="gender" id="gender"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Gender</option>
-                        <option value="Male" {{ ($phs->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ ($phs->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
+                        <option value="Male" {{ ($personalDetails->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ ($personalDetails->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
                     </select>
                     @error('gender')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -165,10 +165,10 @@
                     <select name="civil_status" id="civil_status"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Civil Status</option>
-                        <option value="Single" {{ ($phs->civil_status ?? '') == 'Single' ? 'selected' : '' }}>Single</option>
-                        <option value="Married" {{ ($phs->civil_status ?? '') == 'Married' ? 'selected' : '' }}>Married</option>
-                        <option value="Widowed" {{ ($phs->civil_status ?? '') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
-                        <option value="Separated" {{ ($phs->civil_status ?? '') == 'Separated' ? 'selected' : '' }}>Separated</option>
+                        <option value="Single" {{ ($personalDetails->civil_status ?? '') == 'Single' ? 'selected' : '' }}>Single</option>
+                        <option value="Married" {{ ($personalDetails->civil_status ?? '') == 'Married' ? 'selected' : '' }}>Married</option>
+                        <option value="Widowed" {{ ($personalDetails->civil_status ?? '') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                        <option value="Separated" {{ ($personalDetails->civil_status ?? '') == 'Separated' ? 'selected' : '' }}>Separated</option>
                     </select>
                     @error('civil_status')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -185,8 +185,8 @@
                     <select name="citizenship" id="citizenship"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Citizenship</option>
-                        <option value="Filipino" {{ ($phs->citizenship ?? '') == 'Filipino' ? 'selected' : '' }}>Filipino</option>
-                        <option value="Dual Citizenship" {{ ($phs->citizenship ?? '') == 'Dual Citizenship' ? 'selected' : '' }}>Dual Citizenship</option>
+                        <option value="Filipino" {{ ($personalDetails->citizenship ?? '') == 'Filipino' ? 'selected' : '' }}>Filipino</option>
+                        <option value="Dual Citizenship" {{ ($personalDetails->citizenship ?? '') == 'Dual Citizenship' ? 'selected' : '' }}>Dual Citizenship</option>
                     </select>
                     @error('citizenship')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -201,18 +201,18 @@
                     <input type="text" name="nationality" id="nationality"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your nationality"
-                           value="{{ $phs->nationality ?? '' }}">
+                           value="{{ $personalDetails->nationality ?? '' }}">
                 </div>
             </div>
         </div>
-    
+
         <!-- Military Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-medal mr-3 text-[#D4AF37]"></i>
                 Military Information
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Rank -->
                 <div>
@@ -222,7 +222,7 @@
                     <input type="text" name="rank" id="rank"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your military rank"
-                           value="{{ $phs->rank ?? '' }}">
+                           value="{{ $personalDetails->rank ?? '' }}">
                 </div>
 
                 <!-- AFPSN -->
@@ -233,7 +233,7 @@
                     <input type="text" name="afpsn" id="afpsn"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your AFPSN"
-                           value="{{ $phs->afpsn ?? '' }}">
+                           value="{{ $personalDetails->afpsn ?? '' }}">
                 </div>
             </div>
 
@@ -246,7 +246,7 @@
                     <input type="text" name="branch_of_service" id="branch_of_service"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="e.g., Army, Navy, Air Force"
-                           value="{{ $phs->branch_of_service ?? '' }}">
+                           value="{{ $personalDetails->branch_of_service ?? '' }}">
                 </div>
 
                 <!-- Present Job/Assignment -->
@@ -257,7 +257,7 @@
                     <input type="text" name="present_job" id="present_job"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your current job or assignment"
-                           value="{{ $phs->present_job ?? '' }}">
+                           value="{{ $personalDetails->present_job ?? '' }}">
                 </div>
             </div>
         </div>
@@ -268,7 +268,7 @@
                 <i class="fas fa-home mr-3 text-[#D4AF37]"></i>
                 Home Address
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <!-- Region -->
                 <div>
@@ -279,9 +279,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadProvinces('home')">
                         <option value="">Select Region</option>
-                        @if(isset($phs->home_region) && $phs->home_region)
-                            <option value="{{ $phs->home_region }}" selected>
-                                {{ $phs->home_region_name ?? $phs->home_region }}
+                        @if(isset($personalDetails->home_region) && $personalDetails->home_region)
+                            <option value="{{ $personalDetails->home_region }}" selected>
+                                {{ $personalDetails->home_region_name ?? $personalDetails->home_region }}
                             </option>
                         @endif
                     </select>
@@ -296,9 +296,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadCities('home')">
                         <option value="">Select Province</option>
-                        @if(isset($phs->home_province) && $phs->home_province)
-                            <option value="{{ $phs->home_province }}" selected>
-                                {{ $phs->home_province_name ?? $phs->home_province }}
+                        @if(isset($personalDetails->home_province) && $personalDetails->home_province)
+                            <option value="{{ $personalDetails->home_province }}" selected>
+                                {{ $personalDetails->home_province_name ?? $personalDetails->home_province }}
                             </option>
                         @endif
                     </select>
@@ -313,9 +313,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadBarangays('home')">
                         <option value="">Select City/Municipality</option>
-                        @if(isset($phs->home_city) && $phs->home_city)
-                            <option value="{{ $phs->home_city }}" selected>
-                                {{ $phs->home_city_name ?? $phs->home_city }}
+                        @if(isset($personalDetails->home_city) && $personalDetails->home_city)
+                            <option value="{{ $personalDetails->home_city }}" selected>
+                                {{ $personalDetails->home_city_name ?? $personalDetails->home_city }}
                             </option>
                         @endif
                     </select>
@@ -331,9 +331,9 @@
                     <select name="home_barangay" id="home_barangay"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Barangay</option>
-                        @if(isset($phs->home_barangay) && $phs->home_barangay)
-                            <option value="{{ $phs->home_barangay }}" selected>
-                                {{ $phs->home_barangay_name ?? $phs->home_barangay }}
+                        @if(isset($personalDetails->home_barangay) && $personalDetails->home_barangay)
+                            <option value="{{ $personalDetails->home_barangay }}" selected>
+                                {{ $personalDetails->home_barangay_name ?? $personalDetails->home_barangay }}
                             </option>
                         @endif
                     </select>
@@ -347,7 +347,7 @@
                     <input type="text" name="home_street" id="home_street"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="House/Unit No., Street Name"
-                           value="{{ $phs->home_street ?? '' }}">
+                           value="{{ $personalDetails->home_street ?? '' }}">
                 </div>
             </div>
 
@@ -355,10 +355,10 @@
             <div class="bg-gray-50 p-4 rounded-lg">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Home Address</label>
                 <div id="home_complete_address" class="text-gray-600 text-sm">
-                    {{ $phs->home_street ?? '' }}{{ ($phs && $phs->home_street) ? ', ' : '' }}{{ $phs->home_barangay_name ?? '' }}{{ ($phs && $phs->home_barangay_name) ? ', ' : '' }}{{ $phs->home_city_name ?? '' }}{{ ($phs && $phs->home_city_name) ? ', ' : '' }}{{ $phs->home_province_name ?? '' }}{{ ($phs && $phs->home_province_name) ? ', ' : '' }}{{ $phs->home_region_name ?? '' }}
+                    {{ $personalDetails->home_street ?? '' }}{{ ($personalDetails && $personalDetails->home_street) ? ', ' : '' }}{{ $personalDetails->home_barangay_name ?? '' }}{{ ($personalDetails && $personalDetails->home_barangay_name) ? ', ' : '' }}{{ $personalDetails->home_city_name ?? '' }}{{ ($personalDetails && $personalDetails->home_city_name) ? ', ' : '' }}{{ $personalDetails->home_province_name ?? '' }}{{ ($personalDetails && $personalDetails->home_province_name) ? ', ' : '' }}{{ $personalDetails->home_region_name ?? '' }}
                 </div>
-                <input type="hidden" name="home_complete_address" id="home_complete_address_input" 
-                       value="{{ $phs->home_complete_address ?? '' }}">
+                <input type="hidden" name="home_complete_address" id="home_complete_address_input"
+                       value="{{ $personalDetails->home_complete_address ?? '' }}">
             </div>
         </div>
 
@@ -368,7 +368,7 @@
                 <i class="fas fa-briefcase mr-3 text-[#D4AF37]"></i>
                 Business Address
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <!-- Region -->
                 <div>
@@ -379,9 +379,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadProvinces('business')">
                         <option value="">Select Region</option>
-                        @if(isset($phs->business_region) && $phs->business_region)
-                            <option value="{{ $phs->business_region }}" selected>
-                                {{ $phs->business_region_name ?? $phs->business_region }}
+                        @if(isset($personalDetails->business_region) && $personalDetails->business_region)
+                            <option value="{{ $personalDetails->business_region }}" selected>
+                                {{ $personalDetails->business_region_name ?? $personalDetails->business_region }}
                             </option>
                         @endif
                     </select>
@@ -396,9 +396,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadCities('business')">
                         <option value="">Select Province</option>
-                        @if(isset($phs->business_province) && $phs->business_province)
-                            <option value="{{ $phs->business_province }}" selected>
-                                {{ $phs->business_province_name ?? $phs->business_province }}
+                        @if(isset($personalDetails->business_province) && $personalDetails->business_province)
+                            <option value="{{ $personalDetails->business_province }}" selected>
+                                {{ $personalDetails->business_province_name ?? $personalDetails->business_province }}
                             </option>
                         @endif
                     </select>
@@ -413,9 +413,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                             onchange="loadBarangays('business')">
                         <option value="">Select City/Municipality</option>
-                        @if(isset($phs->business_city) && $phs->business_city)
-                            <option value="{{ $phs->business_city }}" selected>
-                                {{ $phs->business_city_name ?? $phs->business_city }}
+                        @if(isset($personalDetails->business_city) && $personalDetails->business_city)
+                            <option value="{{ $personalDetails->business_city }}" selected>
+                                {{ $personalDetails->business_city_name ?? $personalDetails->business_city }}
                             </option>
                         @endif
                     </select>
@@ -431,9 +431,9 @@
                     <select name="business_barangay" id="business_barangay"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                         <option value="">Select Barangay</option>
-                        @if(isset($phs->business_barangay) && $phs->business_barangay)
-                            <option value="{{ $phs->business_barangay }}" selected>
-                                {{ $phs->business_barangay_name ?? $phs->business_barangay }}
+                        @if(isset($personalDetails->business_barangay) && $personalDetails->business_barangay)
+                            <option value="{{ $personalDetails->business_barangay }}" selected>
+                                {{ $personalDetails->business_barangay_name ?? $personalDetails->business_barangay }}
                             </option>
                         @endif
                     </select>
@@ -447,7 +447,7 @@
                     <input type="text" name="business_street" id="business_street"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Building/Office No., Street Name"
-                           value="{{ $phs->business_street ?? '' }}">
+                           value="{{ $personalDetails->business_street ?? '' }}">
                 </div>
             </div>
 
@@ -455,10 +455,10 @@
             <div class="bg-gray-50 p-4 rounded-lg">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Business Address</label>
                 <div id="business_complete_address" class="text-gray-600 text-sm">
-                    {{ $phs->business_street ?? '' }}{{ ($phs && $phs->business_street) ? ', ' : '' }}{{ $phs->business_barangay_name ?? '' }}{{ ($phs && $phs->business_barangay_name) ? ', ' : '' }}{{ $phs->business_city_name ?? '' }}{{ ($phs && $phs->business_city_name) ? ', ' : '' }}{{ $phs->business_province_name ?? '' }}{{ ($phs && $phs->business_province_name) ? ', ' : '' }}{{ $phs->business_region_name ?? '' }}
+                    {{ $personalDetails->business_street ?? '' }}{{ ($personalDetails && $personalDetails->business_street) ? ', ' : '' }}{{ $personalDetails->business_barangay_name ?? '' }}{{ ($personalDetails && $personalDetails->business_barangay_name) ? ', ' : '' }}{{ $personalDetails->business_city_name ?? '' }}{{ ($personalDetails && $personalDetails->business_city_name) ? ', ' : '' }}{{ $personalDetails->business_province_name ?? '' }}{{ ($personalDetails && $personalDetails->business_province_name) ? ', ' : '' }}{{ $personalDetails->business_region_name ?? '' }}
                 </div>
                 <input type="hidden" name="business_complete_address" id="business_complete_address_input"
-                       value="{{ $phs->business_complete_address ?? '' }}">
+                       value="{{ $personalDetails->business_complete_address ?? '' }}">
             </div>
         </div>
 
@@ -468,7 +468,7 @@
                 <i class="fas fa-phone mr-3 text-[#D4AF37]"></i>
                 Contact Information
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Email -->
                 <div>
@@ -478,9 +478,9 @@
                     <input type="email" name="email" id="email"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your email address"
-                           value="{{ $phs ? $phs->email : ($userDetails && $userDetails->email_addr ? $userDetails->email_addr : '') }}">
+                           value="{{ $personalDetails ? $personalDetails->email : ($userDetails && $userDetails->email_addr ? $userDetails->email_addr : '') }}">
                 </div>
-    
+
                 <!-- Mobile -->
                 <div>
                     <label for="mobile" class="block text-sm font-medium text-gray-700 mb-2">
@@ -489,7 +489,7 @@
                     <input type="tel" name="mobile" id="mobile"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="+63 9XX XXX XXXX"
-                           value="{{ $phs->mobile ?? '' }}">
+                           value="{{ $personalDetails->mobile ?? '' }}">
                 </div>
             </div>
         </div>
@@ -500,7 +500,7 @@
                 <i class="fas fa-info-circle mr-3 text-[#D4AF37]"></i>
                 Additional Information
             </h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Religion -->
                 <div>
@@ -510,9 +510,9 @@
                     <input type="text" name="religion" id="religion"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter your religion"
-                           value="{{ $phs->religion ?? '' }}">
+                           value="{{ $personalDetails->religion ?? '' }}">
                 </div>
-    
+
                 <!-- TIN -->
                 <div>
                     <label for="tin" class="block text-sm font-medium text-gray-700 mb-2">
@@ -521,10 +521,10 @@
                     <input type="text" name="tin" id="tin"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="XXX-XXX-XXX-XXX"
-                           value="{{ $phs->tin_no ?? '' }}">
+                           value="{{ $personalDetails->tin_no ?? '' }}">
                 </div>
             </div>
-    
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <!-- Passport Number with Expiration -->
                 <div>
@@ -534,7 +534,7 @@
                     <input type="text" name="passport_number" id="passport_number"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            placeholder="Enter passport number"
-                           value="{{ $phs->passport_number ?? '' }}">
+                           value="{{ $personalDetails->passport_number ?? '' }}">
                 </div>
             </div>
 
@@ -546,7 +546,7 @@
                     </label>
                     <input type="date" name="passport_expiry" id="passport_expiry"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           value="{{ isset($phs->passport_expiry) ? (\Illuminate\Support\Str::length($phs->passport_expiry) === 10 ? $phs->passport_expiry : (new \Carbon\Carbon($phs->passport_expiry))->format('Y-m-d')) : '' }}">
+                           value="{{ isset($personalDetails->passport_expiry) ? (\Illuminate\Support\Str::length($personalDetails->passport_expiry) === 10 ? $personalDetails->passport_expiry : (new \Carbon\Carbon($personalDetails->passport_expiry))->format('Y-m-d')) : '' }}">
                 </div>
             </div>
 
@@ -558,11 +558,11 @@
                     </label>
                     <textarea name="name_change" id="name_change" rows="3"
                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                              placeholder="If you have legally changed your name, please provide details including court case number, date, and reason">{{ ($phs && $phs->change_in_name) ? $phs->change_in_name : (($phs && $phs->name_change) ? $phs->name_change : '') }}</textarea>
+                              placeholder="If you have legally changed your name, please provide details including court case number, date, and reason">{{ ($personalDetails && $personalDetails->change_in_name) ? $personalDetails->change_in_name : (($personalDetails && $personalDetails->name_change) ? $personalDetails->name_change : '') }}</textarea>
                 </div>
             </div>
         </div>
-    
+
         <!-- Home Address Section -->
         <input type="hidden" name="home_region_name" id="home_region_name">
         <input type="hidden" name="home_province_name" id="home_province_name">
@@ -579,7 +579,7 @@
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Dashboard
             </a>
-            
+
             <button type="submit" class="btn-primary">Save & Continue</button>
         </div>
     </form>
@@ -621,10 +621,10 @@
         try {
             const response = await fetch('https://psgc.gitlab.io/api/regions/');
             const regions = await response.json();
-            
+
             const homeRegionSelect = document.getElementById('home_region');
             const businessRegionSelect = document.getElementById('business_region');
-            
+
             if (homeRegionSelect && businessRegionSelect) {
                 // Store current values
                 const homeSelected = homeRegionSelect.value;
@@ -632,7 +632,7 @@
                 // Clear existing options except the first one
                 homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                 businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
-                
+
                 regions.forEach(region => {
                     const homeOption = new Option(region.name, region.code);
                     const businessOption = new Option(region.name, region.code);
@@ -691,15 +691,15 @@
                 'Caraga (Region XIII)',
                 'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)'
             ];
-            
+
             const homeRegionSelect = document.getElementById('home_region');
             const businessRegionSelect = document.getElementById('business_region');
-            
+
             if (homeRegionSelect && businessRegionSelect) {
                 // Clear existing options except the first one
                 homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                 businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
-                
+
                 commonRegions.forEach(region => {
                     const homeOption = new Option(region, region);
                     const businessOption = new Option(region, region);
@@ -715,20 +715,20 @@
         const provinceSelect = document.getElementById(`${type}_province`);
         const citySelect = document.getElementById(`${type}_city`);
         const barangaySelect = document.getElementById(`${type}_barangay`);
-        
+
         if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect) return;
-        
+
         // Reset dependent dropdowns
         provinceSelect.innerHTML = '<option value="">Select Province</option>';
         citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
         barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
+
         if (!regionSelect.value) return;
-        
+
         try {
             const response = await fetch(`https://psgc.gitlab.io/api/regions/${regionSelect.value}/provinces/`);
             const provinces = await response.json();
-            
+
             provinces.forEach(province => {
                 const option = new Option(province.name, province.code);
                 provinceSelect.add(option);
@@ -742,7 +742,7 @@
                 provinceSelect.add(option);
             });
         }
-        
+
         updateCompleteAddress(type);
     }
 
@@ -750,19 +750,19 @@
         const provinceSelect = document.getElementById(`${type}_province`);
         const citySelect = document.getElementById(`${type}_city`);
         const barangaySelect = document.getElementById(`${type}_barangay`);
-        
+
         if (!provinceSelect || !citySelect || !barangaySelect) return;
-        
+
         // Reset dependent dropdowns
         citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
         barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
+
         if (!provinceSelect.value) return;
-        
+
         try {
             const response = await fetch(`https://psgc.gitlab.io/api/provinces/${provinceSelect.value}/cities-municipalities/`);
             const cities = await response.json();
-            
+
             cities.forEach(city => {
                 const option = new Option(city.name, city.code);
                 citySelect.add(option);
@@ -776,25 +776,25 @@
                 citySelect.add(option);
             });
         }
-        
+
         updateCompleteAddress(type);
     }
 
     async function loadBarangays(type) {
         const citySelect = document.getElementById(`${type}_city`);
         const barangaySelect = document.getElementById(`${type}_barangay`);
-        
+
         if (!citySelect || !barangaySelect) return;
-        
+
         // Reset barangay dropdown
         barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-        
+
         if (!citySelect.value) return;
-        
+
         try {
             const response = await fetch(`https://psgc.gitlab.io/api/cities-municipalities/${citySelect.value}/barangays/`);
             const barangays = await response.json();
-            
+
             barangays.forEach(barangay => {
                 const option = new Option(barangay.name, barangay.code);
                 barangaySelect.add(option);
@@ -808,7 +808,7 @@
                 barangaySelect.add(option);
             });
         }
-        
+
         updateCompleteAddress(type);
     }
 
@@ -872,7 +872,7 @@
             'Caraga (Region XIII)': ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'],
             'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)': ['Basilan', 'Lanao del Sur', 'Maguindanao', 'Sulu', 'Tawi-Tawi']
         };
-        
+
         return provinceMap[region] || ['Province 1', 'Province 2', 'Province 3'];
     }
 
@@ -885,7 +885,7 @@
                 streetInput.removeEventListener('input', () => updateCompleteAddress(type));
                 streetInput.addEventListener('input', () => updateCompleteAddress(type));
             }
-            
+
             const barangaySelect = document.getElementById(`${type}_barangay`);
             if (barangaySelect) {
                 // Remove existing listeners to prevent duplicates
@@ -948,13 +948,13 @@
         const provinceSelect = document.getElementById(`${type}_province`);
         const citySelect = document.getElementById(`${type}_city`);
         const barangaySelect = document.getElementById(`${type}_barangay`);
-        
+
         // Get hidden input elements with null checking
         const regionNameInput = document.getElementById(`${type}_region_name`);
         const provinceNameInput = document.getElementById(`${type}_province_name`);
         const cityNameInput = document.getElementById(`${type}_city_name`);
         const barangayNameInput = document.getElementById(`${type}_barangay_name`);
-        
+
         // Set values only if elements exist
         if (regionNameInput) {
             regionNameInput.value = regionSelect && regionSelect.selectedIndex > 0 ? regionSelect.options[regionSelect.selectedIndex].text : '';
@@ -1013,4 +1013,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
-@endsection 
+@endsection

@@ -84,8 +84,9 @@ class LoginController extends Controller
             if ($user->usertype === 'personnel') {
                 return redirect()->intended(route('personnel.dashboard'));
             }
-            return redirect()->intended(route('client.dashboard'));
-
+            if ($user->usertype === 'client') {
+                return redirect()->intended(route('client.dashboard'));
+            }
         }
 
         // Log failed login attempt for incorrect password

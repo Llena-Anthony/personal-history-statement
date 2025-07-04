@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientHomeController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\PersonalDetailsController;
 use App\Http\Controllers\FamilyBackgroundController;
 use App\Http\Controllers\PersonalCharacteristicsController;
 use App\Http\Controllers\MaritalStatusController;
@@ -16,7 +17,6 @@ use App\Http\Controllers\ForeignCountriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\PHSController;
-use App\Http\Controllers\FamilyHistoryController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\CreditReputationController;
 use App\Models\Miscellaneous;
@@ -103,8 +103,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/client/dashboard', [ClientHomeController::class, 'index'])->name('client.dashboard');
     // PHS Routes - Personal Details
-    Route::get('/phs/personal-details', [PHSController::class, 'create'])->name('phs.create');
-    Route::post('/phs/personal-details', [PHSController::class, 'store'])->name('phs.store');
+    Route::get('/phs/personal-details', [PersonalDetailsController::class, 'create'])->name('phs.personal-details.create');
+    Route::post('/phs/personal-details', [PersonalDetailsController::class, 'store'])->name('phs.personal-details.store');
     // PHS Routes - Family Background
     Route::get('/phs/family-background', [FamilyBackgroundController::class, 'create'])->name('phs.family-background.create');
     Route::post('/phs/family-background', [FamilyBackgroundController::class, 'store'])->name('phs.family-background.store');

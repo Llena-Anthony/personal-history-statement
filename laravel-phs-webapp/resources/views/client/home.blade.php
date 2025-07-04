@@ -9,15 +9,15 @@
     <div class="relative rounded-2xl overflow-hidden shadow-2xl">
         <!-- PMA Banner Background -->
         <div class="absolute inset-0">
-            <img src="{{ asset('images/pma_banner.jpg') }}" 
-                 alt="PMA Banner" 
+            <img src="{{ asset('images/pma_banner.jpg') }}"
+                 alt="PMA Banner"
                  class="w-full h-full object-cover">
             <!-- Dark overlay for better text readability -->
             <div class="absolute inset-0 bg-gradient-to-r from-[#1B365D]/90 via-[#1B365D]/80 to-[#1B365D]/70"></div>
             <!-- Additional overlay for depth -->
             <div class="absolute inset-0 bg-black/20"></div>
         </div>
-        
+
         <!-- Content -->
         <div class="relative z-10 p-8 md:p-12">
             <div class="flex flex-col md:flex-row items-center justify-between">
@@ -31,13 +31,13 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- Profile Picture (Direct Link) -->
                 <a href="{{ route('profile.edit') }}" class="relative group focus:outline-none" title="Edit Profile">
                     <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
                         @if(auth()->user()->profile_picture)
-                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
-                                 alt="Profile" 
+                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                                 alt="Profile"
                                  class="w-full h-full object-cover rounded-full">
                         @else
                             <i class="fas fa-user text-[#1B365D] text-3xl md:text-4xl"></i>
@@ -48,7 +48,7 @@
                 </a>
             </div>
         </div>
-        
+
         <!-- Decorative elements -->
         <div class="absolute top-4 right-4 w-20 h-20 bg-[#D4AF37]/20 rounded-full blur-xl"></div>
         <div class="absolute bottom-4 left-4 w-16 h-16 bg-[#D4AF37]/20 rounded-full blur-xl"></div>
@@ -58,7 +58,7 @@
     <!-- Progress Overview -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- PHS Progress Card -->
-        <a href="{{ route('phs.create') }}" class="block group cursor-pointer bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
+        <a href="{{ route('phs.personal-details.create') }}" class="block group cursor-pointer bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
                         @if($phsStatus == 'completed') bg-green-100 text-green-800
                         @elseif($phsStatus == 'in_progress') bg-yellow-100 text-yellow-800
                         @else bg-gray-100 text-gray-800 @endif">
@@ -78,7 +78,7 @@
                     </span>
                 </div>
             </div>
-            
+
             <!-- Progress Bar -->
             <div class="mb-4">
                 <div class="flex justify-between text-sm text-gray-600 mb-2">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="flex justify-between items-center">
                 <div class="text-sm text-gray-500">
                     <i class="fas fa-clock mr-1"></i>
@@ -128,7 +128,7 @@
                     </span>
                 </div>
             </div>
-            
+
             <!-- Progress Bar -->
             <div class="mb-4">
                 <div class="flex justify-between text-sm text-gray-400 mb-2">
@@ -139,7 +139,7 @@
                     <div class="h-2 rounded-full bg-gray-400 w-0"></div>
                 </div>
             </div>
-            
+
             <div class="flex justify-between items-center">
                 <div class="text-sm text-gray-400">
                     <i class="fas fa-clock mr-1"></i>
@@ -159,11 +159,11 @@
             <i class="fas fa-bolt mr-3 text-[#D4AF37]"></i>
             Quick Actions
         </h2>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- PHS Action -->
             <div class="group relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
-                <a href="{{ route('phs.create') }}" class="absolute inset-0 z-10" aria-label="Go to PHS"></a>
+                <a href="{{ route('phs.personal-details.create') }}" class="absolute inset-0 z-10" aria-label="Go to PHS"></a>
                 <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-4 mx-auto group-hover:bg-[#2B4B7D] transition-colors duration-300">
                     <i class="fas fa-file-alt text-2xl text-white"></i>
                 </div>
@@ -224,7 +224,7 @@
                 <h2 class="text-3xl font-bold mb-2">Philippine Military Academy</h2>
                 <p class="text-[#D4AF37] text-lg">The Premier Military School in the Philippines</p>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="text-center group">
                     <div class="w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -233,7 +233,7 @@
                     <h3 class="text-xl font-semibold mb-2">Military Education</h3>
                     <p class="text-gray-200 text-sm">Training future leaders of the Armed Forces of the Philippines</p>
                 </div>
-                
+
                 <div class="text-center group">
                     <div class="w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                         <i class="fas fa-medal text-[#1B365D] text-2xl"></i>
@@ -241,7 +241,7 @@
                     <h3 class="text-xl font-semibold mb-2">Excellence</h3>
                     <p class="text-gray-200 text-sm">Producing distinguished military officers since 1905</p>
                 </div>
-                
+
                 <div class="text-center group">
                     <a href="https://www.google.com/maps/place/Philippine+Military+Academy+(PMA)/@16.3448472,120.6101311,14.18z/data=!4m10!1m2!2m1!1sPMA!3m6!1s0x3391a140001b5169:0x3e6e8c0c41cfb35a!8m2!3d16.360888!4d120.619414!15sCgNQTUGSAQ9taWxpdGFyeV9zY2hvb2yqASoQATIdEAEiGVhxt5fJUUiIqeZ8vr3CUEe_6KFeKT8HghAyBxACIgNwbWHgAQA!16zL20vMDhwbmY1?entry=ttu&g_ep=EgoyMDI1MDYyMy4yIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="block group cursor-pointer hover:shadow-lg transition-shadow duration-300">
                         <div class="w-16 h-16 bg-[#D4AF37] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -252,10 +252,10 @@
                     </a>
                 </div>
             </div>
-            
+
             <div class="mt-8 text-center">
                 <div class="inline-flex items-center space-x-6">
-                    <a href="https://www.pma.edu.ph/" target="_blank" 
+                    <a href="https://www.pma.edu.ph/" target="_blank"
                        class="flex items-center space-x-2 text-[#D4AF37] hover:text-white transition-colors duration-200">
                         <i class="fas fa-globe text-lg"></i>
                         <span>Official Website</span>
@@ -272,7 +272,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Decorative elements -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37] opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
         <div class="absolute bottom-0 left-0 w-24 h-24 bg-[#D4AF37] opacity-10 rounded-full translate-y-12 -translate-x-12"></div>
@@ -284,8 +284,8 @@
     <div class="absolute inset-0 flex items-center justify-center">
         <div class="text-white text-center">
             <div class="mb-4">
-                <img src="{{ asset('images/pma_logo.svg') }}" 
-                     alt="PMA Logo" 
+                <img src="{{ asset('images/pma_logo.svg') }}"
+                     alt="PMA Logo"
                      class="w-16 h-16 mx-auto">
             </div>
             <h3 class="text-xl font-semibold">Loading PHS Form...</h3>
@@ -298,15 +298,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const phsButtons = document.querySelectorAll('#start-phs-btn, #phs-action-btn');
     const transitionOverlay = document.getElementById('transition-overlay');
-    
+
     phsButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
-            
+
             // Show overlay
             transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
             transitionOverlay.classList.add('opacity-100');
-            
+
             // Navigate after brief delay
             setTimeout(() => {
                 window.location.href = this.href;
@@ -315,4 +315,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endsection 
+@endsection
