@@ -424,16 +424,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // PHS Submission Management Routes
     Route::get('print-preview', [App\Http\Controllers\PrintController::class, 'preview'])->name('phs.preview');
 
-    Route::resource('phs', App\Http\Controllers\Admin\PHSController::class)->names([
-        'index' => 'phs.index',
-        'show' => 'phs.show',
-        'edit' => 'phs.edit',
-        'update' => 'phs.update',
-        'destroy' => 'phs.destroy',
-    ]);
+    Route::get('phs', [App\Http\Controllers\Admin\PHSController::class, 'index'])->name('phs.index');
+    Route::get('phs/{username}', [App\Http\Controllers\Admin\PHSController::class, 'show'])->name('phs.show');
+    Route::get('phs/{username}/edit', [App\Http\Controllers\Admin\PHSController::class, 'edit'])->name('phs.edit');
+    Route::put('phs/{username}', [App\Http\Controllers\Admin\PHSController::class, 'update'])->name('phs.update');
+    Route::delete('phs/{username}', [App\Http\Controllers\Admin\PHSController::class, 'destroy'])->name('phs.destroy');
 
     // Print PHS Submission
-    Route::get('phs/{submission}/print', [PrintController::class, 'printPHSSubmission'])->name('phs.print');
+    Route::get('phs/{username}/print', [PrintController::class, 'printPHSSubmission'])->name('phs.print');
 
     // Activity Logs Management
     Route::get('activity-logs', [App\Http\Controllers\Admin\ActivityLogsController::class, 'index'])->name('activity-logs.index');

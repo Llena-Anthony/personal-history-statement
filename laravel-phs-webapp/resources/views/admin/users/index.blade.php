@@ -23,7 +23,7 @@
                 <div class="text-3xl font-bold text-[#1B365D]">{{ $users->total() }}</div>
                 <div class="text-xs text-[#D4AF37] mt-1">
                     <i class="fas fa-arrow-up mr-1"></i>
-                    {{ $users->where('created_at', '>=', now()->subDays(30))->count() }} this month
+                    {{ $users->count() }} total users
                 </div>
             </div>
             <a href="{{ route('admin.users.create') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
@@ -50,7 +50,7 @@
     <!-- Enhanced Search Bar with Filter Dropdowns -->
     <x-admin.search-bar 
         :route="route('admin.users.index')"
-        placeholder="Search by name, username, email, or any field..."
+        placeholder="Search by username, email, user type, or organic role..."
         :filters="[
             'status' => [
                 'active' => 'Active',
@@ -230,6 +230,7 @@
                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Contact</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">User Type</th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Organic Group</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">Status</th>
                         <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-white uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
@@ -240,7 +241,9 @@
                             <div class="flex items-center">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-12 w-12 relative">
-                                        <img class="h-12 w-12 rounded-full object-cover ring-2 ring-white shadow-sm" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}">
+                                        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] flex items-center justify-center text-white font-semibold text-lg ring-2 ring-white shadow-sm">
+                                            {{ strtoupper(substr($user->username, 0, 1)) }}
+                                        </div>
                                         @if($user->is_active)
                                         <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
                                         @else
@@ -248,9 +251,9 @@
                                         @endif
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-semibold text-gray-900">{{ $user->name }}</div>
+                                        <div class="text-sm font-semibold text-gray-900">{{ ucfirst($user->usertype) }} User</div>
                                         <div class="text-sm text-gray-500 font-mono">{{ '@' . $user->username }}</div>
-                                        @if($user->is_admin)
+                                        @if($user->usertype === 'admin')
                                         <div class="text-xs text-[#1B365D] font-medium mt-1">
                                             <i class="fas fa-crown mr-1"></i>Admin Access
                                         </div>
@@ -260,10 +263,10 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900 font-medium">{{ $user->email }}</div>
+                            <div class="text-sm text-gray-900 font-medium">{{ $user->username }}</div>
                             <div class="text-xs text-gray-400 mt-1">
-                                <i class="fas fa-calendar mr-1"></i>
-                                Joined {{ $user->created_at->format('M Y') }}
+                                <i class="fas fa-envelope mr-1"></i>
+                                {{ $user->userDetail->email_addr ?? 'No email' }}
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -279,6 +282,13 @@
                                 <span class="align-middle">{{ ucfirst($user->organic_role) }}</span>
                             </span>
                         </td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full 
+                                {{ $user->is_active ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
+                                <i class="fas fa-circle mr-1 text-xs"></i>
+                                <span class="align-middle">{{ $user->is_active ? 'Active' : 'Disabled' }}</span>
+                            </span>
+                        </td>
                         <td class="px-6 py-4 text-center">
                             <div class="flex items-center justify-center gap-1">
                                 <a href="{{ route('admin.users.edit', $user) }}" 
@@ -291,7 +301,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-12 text-center">
+                        <td colspan="6" class="px-6 py-12 text-center">
                             <div class="flex flex-col items-center">
                                 <div class="w-20 h-20 bg-[#1B365D]/10 rounded-full flex items-center justify-center mb-4">
                                     <i class="fas fa-users text-[#1B365D] text-3xl"></i>

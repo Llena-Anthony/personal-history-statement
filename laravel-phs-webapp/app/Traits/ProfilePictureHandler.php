@@ -13,10 +13,10 @@ trait ProfilePictureHandler
      *
      * @param UploadedFile $file
      * @param string $oldPicturePath
-     * @param int $userId
+     * @param int|string $userId
      * @return string
      */
-    protected function handleProfilePictureUpload(UploadedFile $file, ?string $oldPicturePath, int $userId): string
+    protected function handleProfilePictureUpload(UploadedFile $file, ?string $oldPicturePath, int|string $userId): string
     {
         try {
             // Generate a unique filename with user ID and timestamp

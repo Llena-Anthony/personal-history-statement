@@ -55,8 +55,8 @@
                 <div class="text-center">
                     <div class="relative inline-block">
                         <div class="w-32 h-32 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center mb-4 overflow-hidden">
-                            @if($user->profile_picture)
-                                <img src="{{ asset('storage/' . $user->profile_picture) }}" 
+                            @if($user->userDetail && $user->userDetail->profile_path)
+                                <img src="{{ asset('storage/' . $user->userDetail->profile_path) }}" 
                                      alt="Profile Picture" 
                                      class="w-full h-full object-cover">
                             @else
@@ -187,7 +187,7 @@
             @method('PUT')
 
             <!-- Name Field (Read-only) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-user mr-2 text-[#1B365D]"></i>
@@ -201,7 +201,9 @@
                            readonly>
                     <p class="text-xs text-gray-500 mt-1">Name cannot be here. Edit your full name in the PHS Form</p>
                 </div>
+            </div> -->
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-envelope mr-2 text-[#1B365D]"></i>
@@ -210,7 +212,7 @@
                     <input type="email" 
                            name="email" 
                            id="email" 
-                           value="{{ old('email', $user->email) }}"
+                           value="{{ old('email', $user->userDetail->email_addr ?? '') }}"
                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors duration-200 @error('email') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
                            placeholder="Enter your email address">
                     @error('email')

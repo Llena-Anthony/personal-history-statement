@@ -80,4 +80,85 @@ class User extends Authenticatable
             return 'First Login';
         }
     }
+
+    /**
+     * Get searchable fields for User model
+     */
+    public function getSearchableFields()
+    {
+        return [
+            'username' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Username'
+            ],
+            'usertype' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'User Type'
+            ],
+            'organic_role' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Organic Role'
+            ],
+            'phs_status' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'PHS Status'
+            ],
+            'is_active' => [
+                'type' => 'boolean',
+                'searchable' => true,
+                'label' => 'Status'
+            ],
+            'email_addr' => [
+                'type' => 'string',
+                'searchable' => true,
+                'label' => 'Email Address',
+                'relationship' => 'userDetail'
+            ],
+        ];
+    }
+
+    /**
+     * Override the status field handling for User model
+     */
+    protected function getStatusField()
+    {
+        return 'is_active';
+    }
+
+    /**
+     * Override the status filtering for User model to handle boolean values
+     */
+    public function scopeFilterByStatus($query, $status)
+    {
+        if ($status === null || $status === '' || $status === []) {
+            return $query;
+        }
+
+        // Convert string status to boolean
+        $booleanStatus = null;
+        if ($status === 'active' || $status === '1' || $status === 1 || $status === true) {
+            $booleanStatus = true;
+        } elseif ($status === 'disabled' || $status === '0' || $status === 0 || $status === false) {
+            $booleanStatus = false;
+        }
+
+        if ($booleanStatus !== null) {
+            return $query->where('is_active', $booleanStatus);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Override the date range filtering for User model since it doesn't have timestamps
+     */
+    public function scopeFilterByDateRange($query, $dateFrom = null, $dateTo = null)
+    {
+        // User model doesn't have timestamps, so we'll skip date filtering
+        return $query;
+    }
 }

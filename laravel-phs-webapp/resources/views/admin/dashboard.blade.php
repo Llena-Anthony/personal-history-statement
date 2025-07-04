@@ -17,7 +17,7 @@
         <div class="relative p-8 text-white z-10 welcome-banner-content">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, {{ auth()->user()->name ?? 'Administrator' }}! 👋</h1>
+                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, Administrator! 👋</h1>
                     <p class="text-white/80 text-lg welcome-banner-subtitle">Here's what's happening with your system today</p>
                     <div class="flex items-center mt-4 space-x-6 text-sm welcome-banner-stats">
                         <div class="flex items-center">
@@ -304,12 +304,12 @@
                     <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                         <div class="flex-shrink-0">
                             <div class="w-10 h-10 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center text-white font-semibold">
-                                        {{ strtoupper(substr($activity->user->username ?? 'U', 0, 1)) }}
+                                        {{ strtoupper(substr($activity->changes_made_by ?? 'U', 0, 1)) }}
                                     </div>
                                 </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between">
-                                <p class="text-sm font-medium text-gray-900">{{ $activity->user->username ?? 'Unknown User' }}</p>
+                                <p class="text-sm font-medium text-gray-900">{{ $activity->changes_made_by ?? 'Unknown User' }}</p>
                                 <span class="text-xs text-gray-500">{{ $activity->act_date_time ? $activity->act_date_time->diffForHumans() : 'Unknown' }}</span>
                             </div>
                             <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ $activity->act_desc ?? 'No description' }}</p>
@@ -612,7 +612,7 @@
         const welcomeTitle = document.querySelector('.welcome-banner-title');
         if (welcomeTitle) {
             console.log('Welcome title found:', welcomeTitle.textContent);
-            const userName = '{{ auth()->user()->name ?? "" }}';
+            const userName = 'Administrator';
             if (userName && userName.trim() !== '') {
                 console.log('User name is set:', userName);
             } else {

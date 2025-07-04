@@ -34,7 +34,7 @@ class ActivityLogDetail extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'changes_made_by','username');
+        return $this->belongsTo(\App\Models\User::class, 'changes_made_by', 'username')->with('userDetail.nameDetail');
     }
 
     /**

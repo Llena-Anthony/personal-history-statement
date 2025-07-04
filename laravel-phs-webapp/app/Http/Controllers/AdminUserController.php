@@ -40,13 +40,13 @@ class AdminUserController extends Controller
         Log::info('User Management SQL:', ['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
         // Handle sorting
-        $sort = $request->get('sort', 'created_at');
-        $direction = $request->get('direction', 'desc');
+        $sort = $request->get('sort', 'username');
+        $direction = $request->get('direction', 'asc');
         
-        if (in_array($sort, ['name', 'username', 'email', 'usertype', 'organic_role', 'is_active', 'created_at'])) {
+        if (in_array($sort, ['username', 'usertype', 'organic_role', 'is_active'])) {
             $query->orderBy($sort, $direction);
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('username', 'asc');
         }
 
         // Get pagination per page from request or default to 10
@@ -79,7 +79,7 @@ class AdminUserController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'user_type' => ['required', 'string', 'in:admin,personnel,client'],
             'organic_group' => ['required', 'string', 'in:civilian,enlisted,officer'],
         ]);
