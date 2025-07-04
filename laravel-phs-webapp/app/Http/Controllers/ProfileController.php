@@ -52,13 +52,14 @@ class ProfileController extends Controller
 
         // Log profile update activity
         if (!empty($changes)) {
-            \App\Models\ActivityLog::create([
-                'user_id' => $user->id,
+            \App\Models\ActivityLogDetail::create([
+                'changes_made_by' => $user->username,
                 'action' => 'update',
-                'description' => 'Profile updated: ' . implode(', ', $changes),
-                'status' => 'success',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'act_desc' => 'Profile updated: ' . implode(', ', $changes),
+                'act_stat' => 'success',
+                'ip_addr' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
         }
 
@@ -85,13 +86,14 @@ class ProfileController extends Controller
             $user->save();
 
             // Log profile picture update activity
-            \App\Models\ActivityLog::create([
-                'user_id' => $user->id,
+            \App\Models\ActivityLogDetail::create([
+                'changes_made_by' => $user->username,
                 'action' => 'update',
-                'description' => 'Profile picture updated',
-                'status' => 'success',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'act_desc' => 'Profile picture updated',
+                'act_stat' => 'success',
+                'ip_addr' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
 
             return back()->with('success', 'Profile picture updated successfully.');

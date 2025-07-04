@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\PHSSubmission;
-use App\Models\PDSSubmission;
-use App\Models\ActivityLog;
+use App\Models\ActivityLogDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -18,57 +16,28 @@ class AdminHomeController extends Controller
         // User Statistics
         $totalUsers = User::count();
         $enabledUsers = User::where('is_active', true)->count();
-        $newUsersThisMonth = User::whereMonth('created_at', now()->month)->count();
+        $newUsersThisMonth = 0; // Since users table doesn't have timestamps, we'll set this to 0 for now
 
-        // Submission Statistics
-        $totalPHSSubmissions = PHSSubmission::count();
-        $newPHSSubmissionsThisMonth = PHSSubmission::whereMonth('created_at', now()->month)->count();
-        $totalPDSSubmissions = PDSSubmission::count();
-        $newPDSSubmissionsThisMonth = PDSSubmission::whereMonth('created_at', now()->month)->count();
+        // For now, we'll set these to 0 since PHS/PDS submissions are not implemented yet
+        $totalPHSSubmissions = 0;
+        $newPHSSubmissionsThisMonth = 0;
+        $totalPDSSubmissions = 0;
+        $newPDSSubmissionsThisMonth = 0;
 
-        // Submission Status Distribution
+        // Submission Status Distribution (placeholder for now)
         $submissionStats = [
-            'pending' => PHSSubmission::where('status', 'pending')->count(),
-            'reviewed' => PHSSubmission::where('status', 'reviewed')->count(),
-            'approved' => PHSSubmission::where('status', 'approved')->count(),
-            'rejected' => PHSSubmission::where('status', 'rejected')->count(),
+            'pending' => 0,
+            'reviewed' => 0,
+            'approved' => 0,
+            'rejected' => 0,
         ];
 
-        // Monthly Statistics
-        $monthlyStats = DB::table('phs_submissions')
-            ->select(
-                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
-                DB::raw('COUNT(*) as phs_count')
-            )
-            ->whereYear('created_at', now()->year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get()
-            ->map(function ($item) {
-                $item->month = Carbon::createFromFormat('Y-m', $item->month)->format('M Y');
-                return $item;
-            });
+        // Monthly Statistics (placeholder for now)
+        $monthlyStats = collect();
 
-        $pdsMonthlyStats = DB::table('pds_submissions')
-            ->select(
-                DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'),
-                DB::raw('COUNT(*) as pds_count')
-            )
-            ->whereYear('created_at', now()->year)
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        // Merge PDS stats with PHS stats
-        $monthlyStats = $monthlyStats->map(function ($item) use ($pdsMonthlyStats) {
-            $pdsMonth = $pdsMonthlyStats->firstWhere('month', Carbon::createFromFormat('M Y', $item->month)->format('Y-m'));
-            $item->pds_count = $pdsMonth ? $pdsMonth->pds_count : 0;
-            return $item;
-        });
-
-        // Recent Activity
-        $recentActivities = ActivityLog::with('user')
-            ->latest()
+        // Recent Activity using ActivityLogDetail
+        $recentActivities = ActivityLogDetail::with('user')
+            ->orderBy('act_date_time', 'desc')
             ->take(10)
             ->get();
 
@@ -104,16 +73,16 @@ class AdminHomeController extends Controller
         session()->put('admin_original_route', request()->headers->get('referer'));
         
         // Log the activity
-        ActivityLog::create([
-            'user_id' => auth()->id(),
-            'description' => 'Admin accessed their own PHS as an Academy member',
-            'status' => 'success',
+        ActivityLogDetail::create([
+            'changes_made_by' => auth()->user()->username,
             'action' => 'access_own_phs',
-            'ip_address' => request()->ip(),
+            'act_desc' => 'Admin accessed their own PHS as an Academy member',
+            'act_stat' => 'success',
+            'ip_addr' => request()->ip(),
             'user_agent' => request()->userAgent()
         ]);
 
         // Redirect to client dashboard
-        return redirect()->route('client.dashboard')->with('success', 'Welcome to your PHS! You can now fill out and manage your Personal History Statement as an Academy member.');
+        return redirect()->route('dashboard')->with('success', 'Welcome to your PHS! You can now fill out and manage your Personal History Statement as an Academy member.');
     }
 } 

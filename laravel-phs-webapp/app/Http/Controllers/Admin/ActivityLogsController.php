@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
+use App\Models\ActivityLogDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,15 +12,15 @@ class ActivityLogsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ActivityLog::with('user')
+        $query = ActivityLogDetail::with('user')
             ->applyFilters($request->all())
-            ->orderBy('created_at', 'desc');
+            ->orderBy('act_date_time', 'desc');
 
         // Handle sorting
-        $sort = $request->get('sort', 'created_at');
+        $sort = $request->get('sort', 'act_date_time');
         $direction = $request->get('direction', 'desc');
         
-        if (in_array($sort, ['created_at', 'action', 'status'])) {
+        if (in_array($sort, ['act_date_time', 'action', 'act_stat'])) {
             $query->orderBy($sort, $direction);
         }
 
@@ -40,29 +40,29 @@ class ActivityLogsController extends Controller
             'disable' => 'Disable',
             'password_reset' => 'Reset',
         ];
-        $actions = ActivityLog::distinct()->pluck('action')->filter()->sort()->mapWithKeys(function ($action) use ($actionLabels) {
+        $actions = ActivityLogDetail::distinct()->pluck('action')->filter()->sort()->mapWithKeys(function ($action) use ($actionLabels) {
             return [$action => $actionLabels[$action] ?? ucfirst(explode('_', $action)[0])];
         })->toArray();
         
-        $statuses = ActivityLog::distinct()->pluck('status')->filter()->sort()->mapWithKeys(function ($status) {
+        $statuses = ActivityLogDetail::distinct()->pluck('act_stat')->filter()->sort()->mapWithKeys(function ($status) {
             return [$status => ucfirst($status)];
         })->toArray();
 
         // Get searchable fields for the search bar
-        $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+        $searchFields = collect((new ActivityLogDetail())->getSearchableFields())->mapWithKeys(function ($config, $field) {
             return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
         })->toArray();
 
         // Get statistics
         $stats = [
-            'total' => ActivityLog::count(),
-            'today' => ActivityLog::whereDate('created_at', today())->count(),
-            'this_week' => ActivityLog::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
-            'this_month' => ActivityLog::whereMonth('created_at', now()->month)->count(),
+            'total' => ActivityLogDetail::count(),
+            'today' => ActivityLogDetail::whereDate('act_date_time', today())->count(),
+            'this_week' => ActivityLogDetail::whereBetween('act_date_time', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+            'this_month' => ActivityLogDetail::whereMonth('act_date_time', now()->month)->count(),
         ];
 
         // Get activity distribution by action
-        $actionStats = ActivityLog::select('action', DB::raw('count(*) as count'))
+        $actionStats = ActivityLogDetail::select('action', DB::raw('count(*) as count'))
             ->groupBy('action')
             ->orderBy('count', 'desc')
             ->limit(10)
@@ -85,7 +85,7 @@ class ActivityLogsController extends Controller
         return view('admin.activity-logs.index', $data);
     }
 
-    public function show(ActivityLog $activityLog)
+    public function show(ActivityLogDetail $activityLog)
     {
         $activityLog->load('user');
         
@@ -94,21 +94,21 @@ class ActivityLogsController extends Controller
 
     public function export(Request $request)
     {
-        $query = ActivityLog::with('user')
+        $query = ActivityLogDetail::with('user')
             ->applyFilters($request->all())
-            ->orderBy('created_at', 'desc');
+            ->orderBy('act_date_time', 'desc');
 
         // Check if this is a preview request
         if ($request->has('preview')) {
             $totalRecords = $query->count();
             $previewData = $query->limit(10)->get()->map(function ($log) {
                 return [
-                    'user_name' => $log->user->name ?? 'N/A',
+                    'user_name' => $log->user->username ?? 'N/A',
                     'username' => $log->user->username ?? 'N/A',
                     'action' => ucfirst(str_replace('_', ' ', $log->action)),
-                    'description' => $log->description,
-                    'status' => $log->status,
-                    'created_at' => $log->created_at->format('M d, Y h:i A')
+                    'description' => $log->act_desc,
+                    'status' => $log->act_stat,
+                    'created_at' => $log->act_date_time ? $log->act_date_time->format('M d, Y h:i A') : 'N/A'
                 ];
             });
 
@@ -135,28 +135,26 @@ class ActivityLogsController extends Controller
                 'ID',
                 'User',
                 'Username',
-                'Email',
                 'Action',
                 'Description',
                 'Status',
                 'IP Address',
                 'User Agent',
-                'Created At'
+                'Date Time'
             ]);
 
             // Add data
             foreach ($activityLogs as $log) {
                 fputcsv($file, [
-                    $log->id,
-                    $log->user->name ?? 'N/A',
+                    $log->act_id,
                     $log->user->username ?? 'N/A',
-                    $log->user->email ?? 'N/A',
+                    $log->user->username ?? 'N/A',
                     $log->action,
-                    $log->description,
-                    $log->status,
-                    $log->ip_address,
+                    $log->act_desc,
+                    $log->act_stat,
+                    $log->ip_addr,
                     $log->user_agent,
-                    $log->created_at->format('Y-m-d H:i:s')
+                    $log->act_date_time ? $log->act_date_time->format('Y-m-d H:i:s') : 'N/A'
                 ]);
             }
 
@@ -178,7 +176,7 @@ class ActivityLogsController extends Controller
             ]);
         }
 
-        $deletedCount = ActivityLog::where('created_at', '<', now()->subDays($days))->delete();
+        $deletedCount = ActivityLogDetail::where('act_date_time', '<', now()->subDays($days))->delete();
 
         return redirect()->route('admin.activity-logs.index')
             ->with('success', "Successfully deleted {$deletedCount} activity logs older than {$days} days.");

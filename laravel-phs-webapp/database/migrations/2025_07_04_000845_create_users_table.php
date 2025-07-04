@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phs_status')->default('pending');
             $table->string('is_active')->nullable();
             $table->timestamp('last_login_at')->nullable();
+            $table->rememberToken();
         });
     }
 

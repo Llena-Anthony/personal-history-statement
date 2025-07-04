@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\PHS;
-use App\Models\PHSSubmission;
 
 class ClientHomeController extends Controller
 {
@@ -13,12 +11,8 @@ class ClientHomeController extends Controller
     {
         $user = Auth::user();
         
-        // Get PHS status
-        $phsStatus = null;
-        $phsSubmission = PHSSubmission::where('user_id', $user->id)->first();
-        if ($phsSubmission) {
-            $phsStatus = $phsSubmission->status;
-        }
+        // Get PHS status - for now, we'll set it to pending since PHS submissions aren't implemented yet
+        $phsStatus = 'pending';
         
         $data = [
             'user' => $user,

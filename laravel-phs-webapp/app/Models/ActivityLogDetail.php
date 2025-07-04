@@ -14,6 +14,8 @@ class ActivityLogDetail extends Model
     public $incrementing = true;
     public $keyType = 'int';
 
+    public $timestamps = false;
+    
     protected $fillable = [
         'changes_made_by',
         'action',
@@ -21,15 +23,13 @@ class ActivityLogDetail extends Model
         'act_stat',
         'ip_addr',
         'user_agent',
-        'created_at',
-        'updated_at',
+        'act_date_time',
         'old_value',
         'new_value',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at'=> 'datetime',
+        'act_date_time' => 'datetime',
     ];
 
     public function user()
