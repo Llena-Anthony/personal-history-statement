@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 Use App\Models\User;
 use App\Models\UserDetail;
+use App\Models\ActivityLogDetail;
+use App\Models\NameDetail;
+use App\Models\AddressDetail;
+use App\Models\JobDetail;
+use App\Models\GovernmentIdDetail;
 
 Use App\Traits\PHSSectionTracking;
 
@@ -41,32 +46,42 @@ class PersonalDetailsController extends Controller
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
+            'suffix' => 'nullable|string|max:255',
+            'nickname' => 'nullable|string|max:255',
             'date_of_birth' => 'required|date',
-            'place_of_birth' => 'required|string|max:255',
-            'gender' => 'required|in:male,female',
-            'civil_status' => 'required|in:single,married,widowed,separated',
-            'citizenship' => 'required|string|max:255',
-            'height' => 'required|numeric',
-            'weight' => 'required|numeric',
-            'blood_type' => 'required|string|max:10',
-            'gsis_id' => 'nullable|string|max:255',
-            'pagibig_id' => 'nullable|string|max:255',
-            'philhealth_id' => 'nullable|string|max:255',
-            'sss_id' => 'nullable|string|max:255',
+            'birth_region' => 'nullable|string|max:255',
+            'birth_province' => 'nullable|string|max:255',
+            'birth_city' => 'nullable|string|max:255',
+            'birth_barangay' => 'nullable|string|max:255',
+            'birth_street' => 'nullable|string|max:255',
+            'nationality' => 'required|string|max:255',
+            'rank' => 'nullable|string|max:255',
+            'afpsn' => 'nullable|string|max:255',
+            'branch_of_service' => 'nullable|string|max:255',
+            'present_job' => 'nullable|string|max:255',
+            'home_region' => 'nullable|string|max:255',
+            'home_province' => 'required|string|max:255',
+            'home_city' => 'required|string|max:255',
+            'home_barangay' => 'nullable|string|max:255',
+            'home_street' => 'nullable|string|max:255',
+            'business_region' => 'nullable|string|max:255',
+            'business_province' => 'nullable|string|max:255',
+            'business_city' => 'nullable|string|max:255',
+            'business_barangay' => 'nullable|string|max:255',
+            'business_street' => 'nullable|string|max:255',
+            'email' => 'nullable|string|max:255',
+            'mobile' => 'nullable|string|max:255',
+            'religion' => 'nullable|string|max:255',
             'tin' => 'nullable|string|max:255',
-            'agency_employee_no' => 'nullable|string|max:255',
-            'residential_address' => 'required|string|max:255',
-            'permanent_address' => 'required|string|max:255',
-            'telephone_no' => 'nullable|string|max:255',
-            'mobile_no' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'passport_number' => 'nullable|string|max:255',
+            'passport_expiry' => 'nullable|string|max:255',
+            'name_change' => 'nullable|string|max:255',
         ]);
 
         // Store the personal details
-        // TODO: Implement the storage logic
 
-        return redirect()->route('phs.marital-status.create')
-            ->with('success', 'Personal details saved successfully.');
+        return redirect()->route('phs.personal-characteristics.create');
+            // ->with('success', 'Personal details saved successfully.');
     }
 
     private function getCommonViewData($currentSection)

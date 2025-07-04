@@ -2,7 +2,7 @@
     // Always use the client PHS layout for identical UI
     $layout = 'layouts.phs-new';
     $dashboardRoute = route('personnel.dashboard');
-    $nextSectionRoute = Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.phs.personal-characteristics') : route('phs.personal-characteristics.create');
+    $nextSectionRoute = Auth::user() && Auth::user()->role === 'client' ? route('phs.personal-characteristics') : route('phs.personal-characteristics.create');
 @endphp
 
 @extends($layout)
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('personnel.phs.personal-details.store') }}" class="space-y-8">
+    <form method="POST" action="{{ route('phs.personal-details.store') }}" class="space-y-8">
         @csrf
 
         <!-- Personal Information -->
@@ -111,7 +111,7 @@
                 Birth Information
             </h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Date of Birth -->
                 <div>
                     <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">
@@ -121,74 +121,6 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
                            value="{{ isset($personalDetails->date_of_birth) ? (\Illuminate\Support\Str::length($personalDetails->date_of_birth) === 10 ? $personalDetails->date_of_birth : (new \Carbon\Carbon($personalDetails->date_of_birth))->format('Y-m-d')) : '' }}">
                     @error('date_of_birth')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Place of Birth -->
-                <div>
-                    <label for="place_of_birth" class="block text-sm font-medium text-gray-700 mb-2">
-                        Place of Birth
-                    </label>
-                    <input type="text" name="place_of_birth" id="place_of_birth"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                           placeholder="City, Province"
-                           value="{{ $personalDetails->place_of_birth ?? '' }}">
-                    @error('place_of_birth')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Gender -->
-                <div>
-                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">
-                        Gender
-                    </label>
-                    <select name="gender" id="gender"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                        <option value="">Select Gender</option>
-                        <option value="Male" {{ ($personalDetails->gender ?? '') == 'Male' ? 'selected' : '' }}>Male</option>
-                        <option value="Female" {{ ($personalDetails->gender ?? '') == 'Female' ? 'selected' : '' }}>Female</option>
-                    </select>
-                    @error('gender')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Civil Status -->
-                <div>
-                    <label for="civil_status" class="block text-sm font-medium text-gray-700 mb-2">
-                        Civil Status
-                    </label>
-                    <select name="civil_status" id="civil_status"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                        <option value="">Select Civil Status</option>
-                        <option value="Single" {{ ($personalDetails->civil_status ?? '') == 'Single' ? 'selected' : '' }}>Single</option>
-                        <option value="Married" {{ ($personalDetails->civil_status ?? '') == 'Married' ? 'selected' : '' }}>Married</option>
-                        <option value="Widowed" {{ ($personalDetails->civil_status ?? '') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
-                        <option value="Separated" {{ ($personalDetails->civil_status ?? '') == 'Separated' ? 'selected' : '' }}>Separated</option>
-                    </select>
-                    @error('civil_status')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Citizenship -->
-                <div>
-                    <label for="citizenship" class="block text-sm font-medium text-gray-700 mb-2">
-                        Citizenship
-                    </label>
-                    <select name="citizenship" id="citizenship"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
-                        <option value="">Select Citizenship</option>
-                        <option value="Filipino" {{ ($personalDetails->citizenship ?? '') == 'Filipino' ? 'selected' : '' }}>Filipino</option>
-                        <option value="Dual Citizenship" {{ ($personalDetails->citizenship ?? '') == 'Dual Citizenship' ? 'selected' : '' }}>Dual Citizenship</option>
-                    </select>
-                    @error('citizenship')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -203,6 +135,98 @@
                            placeholder="Enter your nationality"
                            value="{{ $personalDetails->nationality ?? '' }}">
                 </div>
+            </div>
+            <!-- Place of Birth -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- Region -->
+                <div>
+                    <label for="birth_region" class="block text-sm font-medium text-gray-700 mb-2">
+                        Region
+                    </label>
+                    <select name="birth_region" id="birth_region"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                            onchange="loadProvinces('birth')">
+                        <option value="">Select Region</option>
+                        @if(isset($personalDetails->birth_region) && $personalDetails->birth_region)
+                            <option value="{{ $personalDetails->birth_region }}" selected>
+                                {{ $personalDetails->birth_region_name ?? $personalDetails->birth_region }}
+                            </option>
+                        @endif
+                    </select>
+                </div>
+
+                <!-- Province -->
+                <div>
+                    <label for="birth_province" class="block text-sm font-medium text-gray-700 mb-2">
+                        Province
+                    </label>
+                    <select name="birth_province" id="birth_province"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                            onchange="loadCities('birth')">
+                        <option value="">Select Province</option>
+                        @if(isset($personalDetails->birth_province) && $personalDetails->birth_province)
+                            <option value="{{ $personalDetails->birth_province }}" selected>
+                                {{ $personalDetails->birth_province_name ?? $personalDetails->birth_province }}
+                            </option>
+                        @endif
+                    </select>
+                </div>
+
+                <!-- City/Municipality -->
+                <div>
+                    <label for="birth_city" class="block text-sm font-medium text-gray-700 mb-2">
+                        City/Municipality
+                    </label>
+                    <select name="birth_city" id="birth_city"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                            onchange="loadBarangays('birth')">
+                        <option value="">Select City/Municipality</option>
+                        @if(isset($personalDetails->birth_city) && $personalDetails->birth_city)
+                            <option value="{{ $personalDetails->birth_city }}" selected>
+                                {{ $personalDetails->birth_city_name ?? $personalDetails->birth_city }}
+                            </option>
+                        @endif
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Barangay -->
+                <div>
+                    <label for="birth_barangay" class="block text-sm font-medium text-gray-700 mb-2">
+                        Barangay
+                    </label>
+                    <select name="birth_barangay" id="birth_barangay"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                        <option value="">Select Barangay</option>
+                        @if(isset($personalDetails->birth_barangay) && $personalDetails->birth_barangay)
+                            <option value="{{ $personalDetails->birth_barangay }}" selected>
+                                {{ $personalDetails->birth_barangay_name ?? $personalDetails->birth_barangay }}
+                            </option>
+                        @endif
+                    </select>
+                </div>
+
+                <!-- Street Address -->
+                <div>
+                    <label for="birth_street" class="block text-sm font-medium text-gray-700 mb-2">
+                        Street Address
+                    </label>
+                    <input type="text" name="birth_street" id="birth_street"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                           placeholder="Building/Office No., Street Name"
+                           value="{{ $personalDetails->birth_street ?? '' }}">
+                </div>
+            </div>
+
+            <!-- Complete Address Display -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Complete Birth Address</label>
+                <div id="birth_complete_address" class="text-gray-600 text-sm">
+                    {{ $personalDetails->birth_street ?? '' }}{{ ($personalDetails && $personalDetails->birth_street) ? ', ' : '' }}{{ $personalDetails->business_barangay_name ?? '' }}{{ ($personalDetails && $personalDetails->business_barangay_name) ? ', ' : '' }}{{ $personalDetails->business_city_name ?? '' }}{{ ($personalDetails && $personalDetails->business_city_name) ? ', ' : '' }}{{ $personalDetails->business_province_name ?? '' }}{{ ($personalDetails && $personalDetails->business_province_name) ? ', ' : '' }}{{ $personalDetails->business_region_name ?? '' }}
+                </div>
+                <input type="hidden" name="birth_complete_address" id="birth_complete_address_input"
+                       value="{{ $personalDetails->birth_complete_address ?? '' }}">
             </div>
         </div>
 
@@ -563,6 +587,11 @@
             </div>
         </div>
 
+        <!-- Birth Address Section -->
+        <input type="hidden" name="birth_region_name" id="birth_region_name">
+        <input type="hidden" name="birth_province_name" id="birth_province_name">
+        <input type="hidden" name="birth_city_name" id="birth_city_name">
+        <input type="hidden" name="birth_barangay_name" id="birth_barangay_name">
         <!-- Home Address Section -->
         <input type="hidden" name="home_region_name" id="home_region_name">
         <input type="hidden" name="home_province_name" id="home_province_name">
@@ -624,22 +653,42 @@
 
             const homeRegionSelect = document.getElementById('home_region');
             const businessRegionSelect = document.getElementById('business_region');
+            const birthRegionSelect = document.getElementById('birth_region');
 
-            if (homeRegionSelect && businessRegionSelect) {
+
+            if (homeRegionSelect && businessRegionSelect && birthRegionSelect) {
                 // Store current values
                 const homeSelected = homeRegionSelect.value;
                 const businessSelected = businessRegionSelect.value;
+                const birthSelected = birthRegionSelect.value
                 // Clear existing options except the first one
                 homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                 businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
 
                 regions.forEach(region => {
                     const homeOption = new Option(region.name, region.code);
                     const businessOption = new Option(region.name, region.code);
                     homeRegionSelect.add(homeOption);
                     businessRegionSelect.add(businessOption);
+                    birthRegionSelect.add(birthOption);
                 });
                 // Restore selected value
+
+                if (birthSelected) {
+                    let found = false;
+                    for (let i = 0; i < birthRegionSelect.options.length; i++) {
+                        if (birthRegionSelect.options[i].value === birthSelected) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found && window.phsBirthRegionName) {
+                        const opt = new Option(window.phsBirthRegionName, birthSelected, true, true);
+                        birthRegionSelect.add(opt);
+                    }
+                    birthRegionSelect.value = birthSelected;
+                }
                 if (homeSelected) {
                     let found = false;
                     for (let i = 0; i < homeRegionSelect.options.length; i++) {
@@ -692,19 +741,23 @@
                 'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)'
             ];
 
+            const birthRegionSelect = document.getElementById('birth_region');
             const homeRegionSelect = document.getElementById('home_region');
             const businessRegionSelect = document.getElementById('business_region');
 
-            if (homeRegionSelect && businessRegionSelect) {
+            if (birthRegionSelect && homeRegionSelect && businessRegionSelect) {
                 // Clear existing options except the first one
                 homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                 businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
 
                 commonRegions.forEach(region => {
                     const homeOption = new Option(region, region);
                     const businessOption = new Option(region, region);
+                    const birthOption = new Option(region, region);
                     homeRegionSelect.add(homeOption);
                     businessRegionSelect.add(businessOption);
+                    birthRegionSelect.add(birthOption);
                 });
             }
         }
@@ -878,7 +931,7 @@
 
     // Setup event listeners for address functionality
     function setupAddressEventListeners() {
-        ['home', 'business'].forEach(type => {
+        ['birth', 'home', 'business'].forEach(type => {
             const streetInput = document.getElementById(`${type}_street`);
             if (streetInput) {
                 // Remove existing listeners to prevent duplicates
@@ -899,7 +952,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         window.initializePersonalDetails();
         // For each address type, if a code is set, fetch the name and set the option text
-        ['home', 'business'].forEach(type => {
+        ['birth', 'home', 'business'].forEach(type => {
             let fetches = [];
             ['region', 'province', 'city', 'barangay'].forEach(level => {
                 const select = document.getElementById(`${type}_${level}`);
@@ -976,6 +1029,7 @@
         form.addEventListener('submit', function() {
             setAddressNameHiddenFields('home');
             setAddressNameHiddenFields('business');
+            setAddressNameHiddenFields('birth');
         });
     }
 </script>
@@ -1000,7 +1054,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = "{{ route('personnel.phs.personal-characteristics') }}";
+                    window.location.href = "{{ route('phs.personal-characteristics.create') }}";
                 } else if (data.errors) {
                     alert('Please fill in all required fields.');
                 }
