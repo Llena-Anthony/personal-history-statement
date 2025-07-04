@@ -154,10 +154,10 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-base font-bold border border-gray-300 shadow-sm">
-                                    {{ strtoupper(substr($log->user->name ?? ($log->user->username ?? 'N/A'), 0, 1)) }}
+                                    {{ strtoupper(substr(optional(optional($log->user->userDetail)->nameDetail)->first_name ?? $log->user->username ?? 'N/A', 0, 1)) }}
                                 </div>
                                 <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900">{{ $log->user->name ?? 'N/A' }}</div>
+                                    <div class="text-sm font-medium text-gray-900">{{ optional(optional($log->user->userDetail)->nameDetail)->first_name }} {{ optional(optional($log->user->userDetail)->nameDetail)->last_name }}</div>
                                     <div class="text-sm text-gray-500">{{ $log->user->username ?? 'N/A' }}</div>
                                 </div>
                             </div>
@@ -188,32 +188,32 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900 max-w-xs truncate" title="{{ $log->summary }}">
-                                {{ $log->summary }}
+                            <div class="text-sm text-gray-900 max-w-xs truncate" title="{{ $log->act_desc }}">
+                                {{ $log->act_desc }}
                             </div>
                         </td>
                         <td class="px-6 py-4">
                             <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                @if($log->status === 'success') bg-green-100 text-green-800
-                                @elseif($log->status === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
+                                @if($log->act_stat === 'success') bg-green-100 text-green-800
+                                @elseif($log->act_stat === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
                                 @else bg-red-100 text-red-800
                                 @endif">
-                                {{ ucfirst($log->status) }}
+                                {{ ucfirst($log->act_stat) }}
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-sm font-mono text-gray-500" title="{{ $log->ip_address ?? 'N/A' }}">
-                                {{ $log->ip_address ?? 'N/A' }}
+                            <span class="text-sm font-mono text-gray-500" title="{{ $log->ip_addr ?? 'N/A' }}">
+                                {{ $log->ip_addr ?? 'N/A' }}
                             </span>
                         </td>
                         <td class="px-6 py-4">
                             <div class="text-sm text-gray-900">
-                                <div class="font-medium">{{ $log->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}</div>
-                                <div class="text-gray-500">{{ $log->created_at->setTimezone('Asia/Manila')->format('h:i A') }}</div>
+                                <div class="font-medium">{{ $log->act_date_time ? $log->act_date_time->setTimezone('Asia/Manila')->format('M d, Y') : 'N/A' }}</div>
+                                <div class="text-gray-500">{{ $log->act_date_time ? $log->act_date_time->setTimezone('Asia/Manila')->format('h:i A') : 'N/A' }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{{ route('admin.activity-logs.show', $log->id) }}" 
+                            <a href="{{ route('admin.activity-logs.show', $log->act_id) }}" 
                                class="inline-flex items-center text-sm text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
                                 <i class="fas fa-eye mr-1"></i>
                                 View

@@ -45,7 +45,7 @@ class ReportsController extends Controller
 
         // Get filter options
         $userTypes = User::distinct()->pluck('usertype')->filter()->sort();
-        $statuses = ['pending', 'reviewed', 'approved', 'rejected'];
+        $statuses = ['pending', 'in_progress', 'completed', 'reviewed', 'approved', 'rejected'];
         $reportTypes = [
             'activity' => 'Activity Logs',
             'submissions' => 'Submissions Report',
@@ -57,18 +57,14 @@ class ReportsController extends Controller
         $searchFields = [];
         switch ($reportType) {
             case 'activity':
-                $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                $searchFields = collect((new ActivityLogDetail())->getSearchableFields())->mapWithKeys(function ($config, $field) {
                     return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
                 })->toArray();
                 break;
             case 'submissions':
-                $phsFields = collect((new PHSSubmission())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                $searchFields = collect((new User())->getSearchableFields())->mapWithKeys(function ($config, $field) {
                     return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
                 })->toArray();
-                $pdsFields = collect((new PDSSubmission())->getSearchableFields())->mapWithKeys(function ($config, $field) {
-                    return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
-                })->toArray();
-                $searchFields = array_merge($phsFields, $pdsFields);
                 break;
             case 'users':
                 $searchFields = collect((new User())->getSearchableFields())->mapWithKeys(function ($config, $field) {
@@ -76,7 +72,7 @@ class ReportsController extends Controller
                 })->toArray();
                 break;
             case 'system':
-                $searchFields = collect((new ActivityLog())->getSearchableFields())->mapWithKeys(function ($config, $field) {
+                $searchFields = collect((new ActivityLogDetail())->getSearchableFields())->mapWithKeys(function ($config, $field) {
                     return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
                 })->toArray();
                 break;
@@ -117,12 +113,25 @@ class ReportsController extends Controller
 
     private function getSubmissionsReport(Request $request)
     {
-        // Since PHSSubmission and PDSSubmission models don't exist in the new schema,
-        // we'll return empty collections for now
-        return [
-            'phs' => collect()->paginate(10),
-            'pds' => collect()->paginate(10)
-        ];
+        $query = User::with(['userDetail.nameDetail'])
+            ->whereNotNull('phs_status')
+            ->when($request->search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('username', 'like', "%{$search}%")
+                      ->orWhereHas('userDetail.nameDetail', function ($q2) use ($search) {
+                          $q2->where('first_name', 'like', "%{$search}%")
+                             ->orWhere('last_name', 'like', "%{$search}%");
+                      });
+                });
+            })
+            ->when($request->status, function ($query, $status) {
+                $query->where('phs_status', $status);
+            })
+            ->when($request->user_type, function ($query, $userType) {
+                $query->where('usertype', $userType);
+            });
+
+        return $query->orderBy('phs_status')->orderBy('username')->paginate(20)->withQueryString();
     }
 
     private function getUsersReport(Request $request)
@@ -190,15 +199,23 @@ class ReportsController extends Controller
 
     private function getSubmissionsSummary($dateFrom, $dateTo)
     {
-        // Since PHSSubmission and PDSSubmission models don't exist in the new schema,
-        // we'll return zeros for now
+        $query = User::whereNotNull('phs_status');
+        
+        if ($dateFrom) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
         return [
-            'total_phs' => 0,
-            'total_pds' => 0,
-            'phs_pending' => 0,
-            'phs_approved' => 0,
-            'pds_pending' => 0,
-            'pds_approved' => 0,
+            'total_phs' => $query->count(),
+            'phs_pending' => $query->where('phs_status', 'pending')->count(),
+            'phs_in_progress' => $query->where('phs_status', 'in_progress')->count(),
+            'phs_completed' => $query->where('phs_status', 'completed')->count(),
+            'phs_reviewed' => $query->where('phs_status', 'reviewed')->count(),
+            'phs_approved' => $query->where('phs_status', 'approved')->count(),
+            'phs_rejected' => $query->where('phs_status', 'rejected')->count(),
         ];
     }
 

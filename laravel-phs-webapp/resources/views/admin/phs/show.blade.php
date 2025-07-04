@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'View PHS Submission')
+@section('title', 'PHS Submission Details')
 
-@section('header', 'View PHS Submission')
+@section('header', 'PHS Submission Details')
 
 @section('content')
 <div class="space-y-6">
@@ -11,31 +11,23 @@
         <div>
             <h1 class="text-3xl font-bold text-[#1B365D] flex items-center gap-3">
                 <div class="bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] text-white p-3 rounded-xl shadow-lg">
-                    <i class="fas fa-eye text-xl"></i>
+                    <i class="fas fa-file-alt text-xl"></i>
                 </div>
-                View PHS Submission
+                PHS Submission Details
             </h1>
-            <p class="text-gray-600 mt-2">Review Personal History Statement details and applicant information</p>
+            <p class="text-gray-600 mt-2">View and manage Personal History Statement submission</p>
         </div>
-        <div class="flex items-center gap-4">
-            <div class="text-right bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                <div class="text-sm text-gray-500 font-medium">Submission ID</div>
-                <div class="text-2xl font-bold text-[#1B365D]">#{{ $submission->id }}</div>
-                <div class="text-xs text-gray-500 mt-1">Created {{ $submission->created_at->diffForHumans() }}</div>
-            </div>
-            <div class="flex items-center gap-3">
-                <a href="{{ route('admin.phs.print', $submission->id) }}" 
-                   class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow-lg"
-                   target="_blank">
-                    <i class="fas fa-print mr-2"></i>
-                    Print PHS
-                </a>
-                <a href="{{ route('admin.phs.edit', $submission->id) }}" 
-                   class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] text-white rounded-xl hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                    <i class="fas fa-edit mr-2"></i>
-                    Edit Status
-                </a>
-            </div>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.phs.print', $user->username) }}" 
+               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                <i class="fas fa-print mr-2"></i>
+                Print PHS
+            </a>
+            <a href="{{ route('admin.phs.edit', $user->username) }}" 
+               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] text-white rounded-xl hover:from-[#2B4B7D] hover:to-[#1B365D] focus:outline-none focus:ring-2 focus:ring-[#1B365D] focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
+                <i class="fas fa-edit mr-2"></i>
+                Edit Status
+            </a>
         </div>
     </div>
 
@@ -334,5 +326,4 @@
         </a>
     </div>
 </div>
-@endsection 
 @endsection 

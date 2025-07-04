@@ -163,58 +163,60 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center text-white text-base font-bold border border-[#1B365D] shadow-sm">
-                                    {{ strtoupper(substr($submission->user->name, 0, 1)) }}
+                                    {{ strtoupper(substr(optional(optional($submission->userDetail)->nameDetail)->first_name ?? $submission->username, 0, 1)) }}
                                 </div>
                                 <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900">{{ $submission->user->name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $submission->user->username }}</div>
+                                    <div class="text-sm font-medium text-gray-900">
+                                        {{ optional(optional($submission->userDetail)->nameDetail)->first_name }} {{ optional(optional($submission->userDetail)->nameDetail)->last_name }}
+                                    </div>
+                                    <div class="text-sm text-gray-500">{{ $submission->username }}</div>
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
                             <span class="px-3 py-1 text-xs font-semibold rounded-full
-                                @if($submission->status === 'pending') bg-yellow-100 text-yellow-800 border border-yellow-200
-                                @elseif($submission->status === 'reviewed') bg-blue-100 text-blue-800 border border-blue-200
-                                @elseif($submission->status === 'approved') bg-green-100 text-green-800 border border-green-200
+                                @if($submission->phs_status === 'pending') bg-yellow-100 text-yellow-800 border border-yellow-200
+                                @elseif($submission->phs_status === 'reviewed') bg-blue-100 text-blue-800 border border-blue-200
+                                @elseif($submission->phs_status === 'approved') bg-green-100 text-green-800 border border-green-200
                                 @else bg-red-100 text-red-800 border border-red-200
                                 @endif">
                                 <i class="fas 
-                                    @if($submission->status === 'pending') fa-clock
-                                    @elseif($submission->status === 'reviewed') fa-eye
-                                    @elseif($submission->status === 'approved') fa-check-circle
+                                    @if($submission->phs_status === 'pending') fa-clock
+                                    @elseif($submission->phs_status === 'reviewed') fa-eye
+                                    @elseif($submission->phs_status === 'approved') fa-check-circle
                                     @else fa-times-circle
                                     @endif mr-1"></i>
-                                {{ ucfirst($submission->status) }}
+                                {{ ucfirst($submission->phs_status) }}
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900">{{ $submission->created_at->format('M d, Y') }}</div>
-                            <div class="text-sm text-gray-500">{{ $submission->created_at->format('h:i A') }}</div>
+                            <div class="text-sm text-gray-900">{{ $submission->last_login_at ? $submission->last_login_at->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $submission->last_login_at ? $submission->last_login_at->format('h:i A') : 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900">{{ $submission->updated_at->format('M d, Y') }}</div>
-                            <div class="text-sm text-gray-500">{{ $submission->updated_at->format('h:i A') }}</div>
+                            <div class="text-sm text-gray-900">{{ $submission->last_login_at ? $submission->last_login_at->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $submission->last_login_at ? $submission->last_login_at->format('h:i A') : 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end space-x-2">
-                                <a href="{{ route('admin.phs.show', $submission->id) }}" 
+                                <a href="{{ route('admin.phs.show', $submission->username) }}" 
                                    class="inline-flex items-center p-2 text-[#1B365D] hover:text-[#2B4B7D] hover:bg-[#1B365D]/10 rounded-lg transition-colors" 
                                    title="View Details">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('admin.phs.edit', $submission->id) }}" 
+                                <a href="{{ route('admin.phs.edit', $submission->username) }}" 
                                    class="inline-flex items-center p-2 text-[#1B365D] hover:text-[#2B4B7D] hover:bg-[#1B365D]/10 rounded-lg transition-colors" 
                                    title="Edit Submission">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="{{ route('admin.phs.print', $submission->id) }}" 
+                                <a href="{{ route('admin.phs.print', $submission->username) }}" 
                                    class="inline-flex items-center p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors" 
                                    title="Print PHS" 
                                    target="_blank">
                                     <i class="fas fa-print"></i>
                                 </a>
                                 <button type="button" 
-                                        onclick="confirmPHSDelete('{{ $submission->id }}', '{{ $submission->user->name }}')" 
+                                        onclick="confirmPHSDelete('{{ $submission->username }}', '{{ optional(optional($submission->userDetail)->nameDetail)->first_name }} {{ optional(optional($submission->userDetail)->nameDetail)->last_name }}')" 
                                         class="inline-flex items-center p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors" 
                                         title="Delete Submission">
                                     <i class="fas fa-trash"></i>
@@ -265,13 +267,13 @@
 </form>
 
 <script>
-function confirmPHSDelete(submissionId, userName) {
+function confirmPHSDelete(username, userName) {
     showConfirmationModal(
         'phsDeleteModal',
         `Are you sure you want to delete the PHS submission for "${userName}"? This action cannot be undone and will permanently remove all associated data.`,
         function() {
             const form = document.getElementById('delete-phs-form');
-            form.action = '{{ route("admin.phs.destroy", ":id") }}'.replace(':id', submissionId);
+            form.action = '{{ route("admin.phs.destroy", ":username") }}'.replace(':username', username);
             form.submit();
         }
     );

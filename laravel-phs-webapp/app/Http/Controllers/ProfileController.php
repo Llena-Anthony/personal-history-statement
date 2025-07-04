@@ -21,32 +21,40 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
+        $userDetail = $user->userDetail;
 
         $validated = $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:user_details,email_addr,' . $user->username . ',username'],
             'current_password' => ['nullable', 'required_with:new_password'],
             'new_password' => ['nullable', 'min:8', 'confirmed'],
         ]);
 
         $changes = [];
-        $originalData = $user->only(['email']);
+        $originalEmail = $userDetail ? $userDetail->email_addr : null;
+        $originalUsername = $user->username;
 
+        // Update username if changed
+        if ($user->username !== $validated['username']) {
+            $user->username = $validated['username'];
+            $changes[] = 'Username updated from ' . $originalUsername . ' to ' . $validated['username'];
+        }
+
+        // Update password if requested
         if ($request->filled('current_password')) {
-            if (!Hash::check($request->current_password, $user->password)) {
+            if (!\Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'The provided password does not match your current password.']);
             }
-
-            $user->password = Hash::make($request->new_password);
+            $user->password = \Hash::make($request->new_password);
             $changes[] = 'Password changed';
         }
 
-        if ($user->email !== $validated['email']) {
-            $changes[] = 'Email updated from ' . $user->email . ' to ' . $validated['email'];
+        // Update email if changed
+        if ($userDetail && $originalEmail !== $validated['email']) {
+            $changes[] = 'Email updated from ' . $originalEmail . ' to ' . $validated['email'];
+            $userDetail->email_addr = $validated['email'];
+            $userDetail->save();
         }
-
-        $user->fill([
-            'email' => $validated['email'],
-        ]);
 
         $user->save();
 
@@ -74,16 +82,26 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
+        if (!$user->userDetail) {
+            \Log::error('Profile update failed: userDetail relation missing for user', ['username' => $user->username]);
+            return back()->withErrors(['profile_picture' => 'Profile details not found. Please contact admin.']);
+        }
+
         try {
             // Use the trait method for efficient profile picture handling
             $path = $this->handleProfilePictureUpload(
                 $request->file('profile_picture'),
-                $user->profile_picture,
+                $user->userDetail->profile_path ?? null,
                 $user->id
             );
             
-            $user->profile_picture = $path;
-            $user->save();
+            $user->userDetail->profile_path = $path;
+            $saved = $user->userDetail->save();
+            \Log::info('Profile picture path saved to user_details', [
+                'username' => $user->username,
+                'profile_path' => $path,
+                'save_result' => $saved
+            ]);
 
             // Log profile picture update activity
             \App\Models\ActivityLogDetail::create([

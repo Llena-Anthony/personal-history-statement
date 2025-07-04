@@ -83,6 +83,6 @@ class AdminHomeController extends Controller
         ]);
 
         // Redirect to client dashboard
-        return redirect()->route('dashboard')->with('success', 'Welcome to your PHS! You can now fill out and manage your Personal History Statement as an Academy member.');
+        return redirect()->route('client.dashboard')->with('success', 'Welcome to your PHS! You can now fill out and manage your Personal History Statement as an Academy member.');
     }
 } 

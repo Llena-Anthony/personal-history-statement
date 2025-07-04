@@ -12,7 +12,7 @@ class ActivityLogsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ActivityLogDetail::with('user')
+        $query = ActivityLogDetail::with(['user.userDetail.nameDetail'])
             ->applyFilters($request->all())
             ->orderBy('act_date_time', 'desc');
 

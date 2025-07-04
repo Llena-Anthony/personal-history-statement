@@ -12,7 +12,7 @@
             <div class="absolute inset-0 bg-black opacity-10"></div>
             <div class="relative flex items-center space-x-6">
                 <div class="relative group">
-                    <img src="{{ $user->profile_photo_url }}" 
+                    <img src="{{ $user->userDetail && $user->userDetail->profile_path ? asset('storage/' . $user->userDetail->profile_path) : asset('images/default-avatar.svg') }}" 
                          alt="Profile Picture" 
                          class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover transition-transform group-hover:scale-105">
                     <div class="absolute -bottom-2 -right-2 bg-[#D4AF37] rounded-full p-2 shadow-lg">

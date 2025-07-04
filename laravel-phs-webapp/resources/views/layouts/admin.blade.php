@@ -844,13 +844,21 @@
             <!-- Profile Section -->
             <div class="profile-container relative">
                     <a href="{{ route('admin.profile.edit') }}" class="block">
-                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile Picture" class="profile-picture">
+                        <img src="{{ Auth::user()->userDetail && Auth::user()->userDetail->profile_path ? asset('storage/' . Auth::user()->userDetail->profile_path) : asset('images/default-avatar.svg') }}" alt="Profile Picture" class="profile-picture">
                     </a>
                 <div class="user-info">
                         <a href="{{ route('admin.profile.edit') }}" 
                            class="user-name"
-                           title="{{ Auth::user()->username }} - {{ Auth::user()->name }}">
-                            {{ Auth::user()->name }}
+                           title="{{ Auth::user()->username }} - {{ optional(Auth::user()->userDetail->nameDetail)->first_name ?? Auth::user()->username }}">
+                            {{
+                                optional(Auth::user()->userDetail->nameDetail) ?
+                                    trim(
+                                        optional(Auth::user()->userDetail->nameDetail)->first_name . ' ' .
+                                        (optional(Auth::user()->userDetail->nameDetail)->middle_name ? substr(optional(Auth::user()->userDetail->nameDetail)->middle_name,0,1) . '. ' : '') .
+                                        optional(Auth::user()->userDetail->nameDetail)->last_name
+                                    ) :
+                                    Auth::user()->username
+                            }}
                         </a>
                     <div class="user-username">
                         {{ '@' . Auth::user()->username }}
@@ -887,12 +895,6 @@
                                class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }} dynamic-nav">
                             <i class="fas fa-users-cog"></i>
                             <span class="ml-3">Manage Users</span>
-                        </a></li>
-                        <li><a href="{{ route('admin.users.create') }}" 
-                               data-route="admin.users.create"
-                               class="nav-link {{ request()->routeIs('admin.users.create') ? 'active' : '' }} dynamic-nav">
-                            <i class="fas fa-user-plus"></i>
-                            <span class="ml-3">Add New User</span>
                         </a></li>
 
                         <!-- Submissions -->

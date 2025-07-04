@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PHSSubmission;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,94 +11,61 @@ class PHSController extends Controller
 {
     public function index(Request $request)
     {
-        $query = PHSSubmission::with('user')
+        $query = User::with(['userDetail.nameDetail'])
             ->when($request->search, function ($query, $search) {
-                $query->whereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('username', 'like', "%{$search}%");
+                $query->where(function ($q) use ($search) {
+                    $q->where('username', 'like', "%{$search}%")
+                      ->orWhereHas('userDetail.nameDetail', function ($q2) use ($search) {
+                          $q2->where('first_name', 'like', "%{$search}%")
+                             ->orWhere('last_name', 'like', "%{$search}%");
+                      });
                 });
             })
             ->when($request->status, function ($query, $status) {
-                $query->where('status', $status);
-            })
-            ->when($request->date_from, function ($query, $date) {
-                $query->whereDate('created_at', '>=', $date);
-            })
-            ->when($request->date_to, function ($query, $date) {
-                $query->whereDate('created_at', '<=', $date);
+                $query->where('phs_status', $status);
             });
 
-        // Handle sorting
-        if ($request->sort) {
-            $direction = $request->direction === 'asc' ? 'asc' : 'desc';
-            
-            switch ($request->sort) {
-                case 'name':
-                    $query->join('users', 'phs_submissions.user_id', '=', 'users.id')
-                          ->orderBy('users.name', $direction)
-                          ->select('phs_submissions.*');
-                    break;
-                case 'status':
-                    $query->orderBy('status', $direction);
-                    break;
-                case 'created_at':
-                    $query->orderBy('created_at', $direction);
-                    break;
-                case 'updated_at':
-                    $query->orderBy('updated_at', $direction);
-                    break;
-                default:
-                    $query->orderBy('created_at', 'desc');
-            }
-        } else {
-            $query->orderBy('created_at', 'desc');
-        }
-
+        $query->orderBy('phs_status')->orderBy('username');
         $submissions = $query->paginate(10)->withQueryString();
-
-        // Get searchable fields for the search bar
-        $searchFields = collect((new PHSSubmission())->getSearchableFields())->mapWithKeys(function ($config, $field) {
-            return [$field => $config['label'] ?? ucfirst(str_replace('_', ' ', $field))];
-        })->toArray();
-
-        $data = compact('submissions', 'searchFields');
-
-        // Check if it's an AJAX request
+        
+        $data = compact('submissions');
         if (request()->ajax()) {
             return view('admin.phs.index', $data)->render();
         }
-
         return view('admin.phs.index', $data);
     }
 
-    public function show(PHSSubmission $submission)
+    public function show($username)
     {
-        $submission->load(['user', 'personalInfo', 'familyHistory', 'educationalBackground', 'employmentHistory', 'militaryHistory']);
-        return view('admin.phs.show', compact('submission'));
+        $user = User::with(['userDetail.nameDetail'])->where('username', $username)->firstOrFail();
+        return view('admin.phs.show', compact('user'));
     }
 
-    public function edit(PHSSubmission $submission)
+    public function edit($username)
     {
-        $submission->load(['user', 'personalInfo', 'familyHistory', 'educationalBackground', 'employmentHistory', 'militaryHistory']);
-        return view('admin.phs.edit', compact('submission'));
+        $user = User::with(['userDetail.nameDetail'])->where('username', $username)->firstOrFail();
+        return view('admin.phs.edit', compact('user'));
     }
 
-    public function update(Request $request, PHSSubmission $submission)
+    public function update(Request $request, $username)
     {
+        $user = User::where('username', $username)->firstOrFail();
+        
         $validated = $request->validate([
-            'status' => 'required|in:pending,reviewed,approved,rejected',
+            'phs_status' => 'required|in:pending,in_progress,completed,reviewed,approved,rejected',
             'admin_notes' => 'nullable|string|max:1000',
         ]);
 
-        $submission->update($validated);
+        $user->update($validated);
 
         return redirect()->route('admin.phs.index')
             ->with('success', 'PHS submission status updated successfully.');
     }
 
-    public function destroy(PHSSubmission $submission)
+    public function destroy($username)
     {
-        $submission->delete();
+        $user = User::where('username', $username)->firstOrFail();
+        $user->delete();
 
         return redirect()->route('admin.phs.index')
             ->with('success', 'PHS submission deleted successfully.');
