@@ -8,6 +8,8 @@ use App\Traits\Searchable;
 
 class CitizenshipDetail extends Model
 {
+    public $timestamps = false;
+    
     protected $primaryKey = 'cit_id';
     public $incrementing = true;
     public $keyType = 'int';

@@ -9,6 +9,8 @@ class NameDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     protected $primaryKey = 'name_id';
     public $incrementing = true;
     public $keyType = 'int';

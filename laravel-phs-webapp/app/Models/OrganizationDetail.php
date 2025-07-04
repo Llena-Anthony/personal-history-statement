@@ -9,6 +9,8 @@ class OrganizationDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     protected $primaryKey = 'org_id';
     public $incrementing = true;
     public $keyType = 'int';

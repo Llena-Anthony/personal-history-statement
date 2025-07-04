@@ -9,6 +9,8 @@ class UserDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';

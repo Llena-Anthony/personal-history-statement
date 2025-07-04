@@ -9,6 +9,8 @@ class SchoolDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     protected $primaryKey = 'school_id';
     public $incrementing = true;
     public $keyType = 'int';
