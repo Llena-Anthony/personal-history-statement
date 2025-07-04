@@ -16,6 +16,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Searchable, LogsActivity;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,6 +35,7 @@ class User extends Authenticatable
         'phs_status',
         'is_active',
         'last_login_at',
+        'remember_token',
     ];
 
     /**
@@ -61,6 +64,11 @@ class User extends Authenticatable
      *
      * @return string
      */
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class, 'username', 'username');
+    }
+
     public function getLastLoginDisplayAttribute()
     {
         try {

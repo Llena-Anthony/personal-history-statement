@@ -9,6 +9,8 @@ class OccupationDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     protected $primaryKey = 'occupation_id';
     public $incrementing = true;
     public $keyType = 'int';

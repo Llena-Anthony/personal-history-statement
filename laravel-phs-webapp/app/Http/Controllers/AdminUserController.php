@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\ActivityLogDetail;
 
 class AdminUserController extends Controller
 {
@@ -165,19 +166,11 @@ class AdminUserController extends Controller
             // Create the user
             $userData = [
                 'username' => $validated['username'],
-                'name' => trim(
-                    ucwords(strtolower($sessionUserData['first_name'])) . ' ' .
-                    ($sessionUserData['middle_name'] ? ucwords(strtolower($sessionUserData['middle_name'])) . ' ' : '') .
-                    ucwords(strtolower($sessionUserData['last_name']))
-                ),
-                'email' => $sessionUserData['email'],
                 'password' => Hash::make($validated['password']),
                 'usertype' => $sessionUserData['user_type'],
                 'organic_role' => $sessionUserData['organic_group'],
-                'branch' => 'PMA',
-                'created_by' => auth()->user()->username,
-                'is_active' => true,
-                'is_admin' => $sessionUserData['user_type'] === 'admin',
+                'is_active' => '1',
+                'phs_status' => 'pending',
             ];
 
             Log::info('Attempting to create user with data', ['userData' => $userData]);
@@ -191,76 +184,72 @@ class AdminUserController extends Controller
             Log::info('User created successfully', ['user' => $user->toArray()]);
 
             // Log the user creation activity with detailed information
-            $userInfo = $user->name . ' (' . $user->username . ')';
+            $userInfo = $sessionUserData['first_name'] . ' ' . $sessionUserData['last_name'] . ' (' . $user->username . ')';
             $userDetails = 'Type: ' . ucfirst($user->usertype) . ' | Organic Group: ' . ucfirst($user->organic_role);
             $description = "Created new user: {$userInfo} | {$userDetails}";
             
-            \App\Models\ActivityLog::create([
-                'user_id' => auth()->id(),
+            ActivityLogDetail::create([
+                'changes_made_by' => auth()->user()->username,
                 'action' => 'create',
-                'description' => $description,
-                'status' => 'success',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'act_desc' => $description,
+                'act_stat' => 'success',
+                'ip_addr' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
 
-            // Create NameDetails record first
-            $nameDetailsId = DB::table('name_details')->insertGetId([
+            // Create NameDetail record first
+            $nameDetail = \App\Models\NameDetail::create([
                 'last_name' => $sessionUserData['last_name'],
                 'first_name' => $sessionUserData['first_name'],
                 'middle_name' => $sessionUserData['middle_name'],
-                'nickname' => null,
                 'name_extension' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'nickname' => null,
+                'change_in_name' => null,
             ]);
 
-            // Create AddressDetails record (default empty address)
-            $addressDetailsId = DB::table('address_details')->insertGetId([
-                'street' => 'Not specified',
-                'barangay' => 'Not specified',
-                'municipality' => 'Not specified',
+            // Create AddressDetail record (default empty address)
+            $homeAddress = \App\Models\AddressDetail::create([
+                'country' => 'Philippines',
+                'region' => 'Not specified',
                 'province' => 'Not specified',
                 'city' => 'Not specified',
-                'country' => 'Philippines',
+                'municipality' => 'Not specified',
+                'barangay' => 'Not specified',
+                'street' => 'Not specified',
                 'zip_code' => 'Not specified',
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
-            // Create BirthDetails record (default empty birth details)
-            $birthDetailsId = DB::table('birth_details')->insertGetId([
-                'b_date' => 1, // Default to January 1st
-                'b_month' => 1,
-                'b_year' => 1900, // Default year
-                'b_place' => $addressDetailsId, // Reference to address details
-                'created_at' => now(),
-                'updated_at' => now(),
+            // Create birth address (same as home address for now)
+            $birthAddress = \App\Models\AddressDetail::create([
+                'country' => 'Philippines',
+                'region' => 'Not specified',
+                'province' => 'Not specified',
+                'city' => 'Not specified',
+                'municipality' => 'Not specified',
+                'barangay' => 'Not specified',
+                'street' => 'Not specified',
+                'zip_code' => 'Not specified',
             ]);
 
-            // Create UserDetails record last (after all referenced records exist)
-            DB::table('user_details')->insert([
+            // Create UserDetail record
+            \App\Models\UserDetail::create([
                 'username' => $validated['username'],
-                'name' => $nameDetailsId,
-                'profile_pic' => null,
-                'home_addr' => $addressDetailsId,
-                'birth' => $birthDetailsId,
-                'nationality' => 'Filipino', // Default nationality
-                'tin' => null,
-                'religion' => null,
+                'full_name' => $nameDetail->name_id,
+                'profile_path' => null,
+                'home_addr' => $homeAddress->addr_id,
+                'birth_date' => '1990-01-01', // Default birth date
+                'birth_place' => $birthAddress->addr_id,
+                'nationality' => 1, // Filipino (from lookup data)
+                'religion' => 'Not specified',
                 'mobile_num' => null,
                 'email_addr' => $sessionUserData['email'],
-                'passport_num' => null,
-                'passport_exp' => null,
-                'change_in_name' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
 
             Log::info('User details created successfully', [
-                'name_details_id' => $nameDetailsId,
-                'address_details_id' => $addressDetailsId,
-                'birth_details_id' => $birthDetailsId
+                'name_detail_id' => $nameDetail->name_id,
+                'home_address_id' => $homeAddress->addr_id,
+                'birth_address_id' => $birthAddress->addr_id
             ]);
 
             DB::commit();
@@ -378,17 +367,19 @@ class AdminUserController extends Controller
 
             // Only log if there are actual changes
             if (!empty($changes)) {
-                $userInfo = $user->name . ' (' . $user->username . ')';
+                $userDetail = $user->userDetail;
+                $userInfo = $userDetail ? $userDetail->nameDetail->first_name . ' ' . $userDetail->nameDetail->last_name . ' (' . $user->username . ')' : $user->username;
                 $changesList = implode(' | ', $changes);
                 $description = "Updated user: {$userInfo} | Changes: {$changesList}";
                 
-                \App\Models\ActivityLog::create([
-                    'user_id' => auth()->id(),
+                ActivityLogDetail::create([
+                    'changes_made_by' => auth()->user()->username,
                     'action' => 'update',
-                    'description' => $description,
-                    'status' => 'success',
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent()
+                    'act_desc' => $description,
+                    'act_stat' => 'success',
+                    'ip_addr' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'act_date_time' => now(),
                 ]);
             }
 
@@ -429,16 +420,18 @@ class AdminUserController extends Controller
             $user->update(['is_active' => $validated['is_active']]);
 
             // Log the status change
-            $userInfo = $user->name . ' (' . $user->username . ')';
+            $userDetail = $user->userDetail;
+            $userInfo = $userDetail ? $userDetail->nameDetail->first_name . ' ' . $userDetail->nameDetail->last_name . ' (' . $user->username . ')' : $user->username;
             $description = "Changed user status: {$userInfo} | Status: {$oldStatus} → {$newStatus}";
             
-            \App\Models\ActivityLog::create([
-                'user_id' => auth()->id(),
+            ActivityLogDetail::create([
+                'changes_made_by' => auth()->user()->username,
                 'action' => 'update',
-                'description' => $description,
-                'status' => 'success',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'act_desc' => $description,
+                'act_stat' => 'success',
+                'ip_addr' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
 
             return response()->json([

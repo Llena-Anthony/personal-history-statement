@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
+use App\Models\ActivityLogDetail;
 use App\Models\User;
-use App\Models\PHSSubmission;
-use App\Models\PDSSubmission;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -108,28 +107,21 @@ class ReportsController extends Controller
 
     private function getActivityReport(Request $request)
     {
-        $query = ActivityLog::with('user');
+        $query = ActivityLogDetail::with('user');
         
         // Apply all filters using the Searchable trait
         $query->applyFilters($request->all());
 
-        return $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+        return $query->orderBy('act_date_time', 'desc')->paginate(20)->withQueryString();
     }
 
     private function getSubmissionsReport(Request $request)
     {
-        $phsQuery = PHSSubmission::with('user');
-        $pdsQuery = PDSSubmission::with('user');
-        
-        // Apply filters to PHS submissions
-        $phsQuery->applyFilters($request->all());
-        
-        // Apply filters to PDS submissions
-        $pdsQuery->applyFilters($request->all());
-
+        // Since PHSSubmission and PDSSubmission models don't exist in the new schema,
+        // we'll return empty collections for now
         return [
-            'phs' => $phsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString(),
-            'pds' => $pdsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString()
+            'phs' => collect()->paginate(10),
+            'pds' => collect()->paginate(10)
         ];
     }
 
@@ -140,7 +132,7 @@ class ReportsController extends Controller
         // Apply all filters using the Searchable trait
         $query->applyFilters($request->all());
 
-        return $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
+        return $query->orderBy('username', 'asc')->paginate(20)->withQueryString();
     }
 
     private function getSystemReport(Request $request)
@@ -149,28 +141,28 @@ class ReportsController extends Controller
         $dateTo = $request->date_to ? Carbon::parse($request->date_to) : now();
 
         return [
-            'daily_activities' => ActivityLog::select(
-                DB::raw('DATE(created_at) as date'),
+            'daily_activities' => ActivityLogDetail::select(
+                DB::raw('DATE(act_date_time) as date'),
                 DB::raw('COUNT(*) as count')
             )
-            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->whereBetween('act_date_time', [$dateFrom, $dateTo])
             ->groupBy('date')
             ->orderBy('date')
             ->get(),
             
-            'action_distribution' => ActivityLog::select('action', DB::raw('COUNT(*) as count'))
-                ->whereBetween('created_at', [$dateFrom, $dateTo])
+            'action_distribution' => ActivityLogDetail::select('action', DB::raw('COUNT(*) as count'))
+                ->whereBetween('act_date_time', [$dateFrom, $dateTo])
                 ->groupBy('action')
                 ->orderBy('count', 'desc')
                 ->get(),
                 
-            'user_activity' => ActivityLog::select(
-                'user_id',
+            'user_activity' => ActivityLogDetail::select(
+                'changes_made_by',
                 DB::raw('COUNT(*) as activity_count')
             )
-            ->with('user:id,name,username,usertype')
-            ->whereBetween('created_at', [$dateFrom, $dateTo])
-            ->groupBy('user_id')
+            ->with('user:username,usertype')
+            ->whereBetween('act_date_time', [$dateFrom, $dateTo])
+            ->groupBy('changes_made_by')
             ->orderBy('activity_count', 'desc')
             ->limit(10)
             ->get()
@@ -179,44 +171,34 @@ class ReportsController extends Controller
 
     private function getActivitySummary($dateFrom, $dateTo)
     {
-        $query = ActivityLog::query();
+        $query = ActivityLogDetail::query();
         
         if ($dateFrom) {
-            $query->whereDate('created_at', '>=', $dateFrom);
+            $query->whereDate('act_date_time', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->whereDate('created_at', '<=', $dateTo);
+            $query->whereDate('act_date_time', '<=', $dateTo);
         }
 
         return [
             'total_activities' => $query->count(),
-            'unique_users' => $query->distinct('user_id')->count(),
-            'success_rate' => $query->where('status', 'success')->count(),
-            'error_rate' => $query->where('status', 'error')->count(),
+            'unique_users' => $query->distinct('changes_made_by')->count(),
+            'success_rate' => $query->where('act_stat', 'success')->count(),
+            'error_rate' => $query->where('act_stat', 'error')->count(),
         ];
     }
 
     private function getSubmissionsSummary($dateFrom, $dateTo)
     {
-        $phsQuery = PHSSubmission::query();
-        $pdsQuery = PDSSubmission::query();
-        
-        if ($dateFrom) {
-            $phsQuery->whereDate('created_at', '>=', $dateFrom);
-            $pdsQuery->whereDate('created_at', '>=', $dateFrom);
-        }
-        if ($dateTo) {
-            $phsQuery->whereDate('created_at', '<=', $dateTo);
-            $pdsQuery->whereDate('created_at', '<=', $dateTo);
-        }
-
+        // Since PHSSubmission and PDSSubmission models don't exist in the new schema,
+        // we'll return zeros for now
         return [
-            'total_phs' => $phsQuery->count(),
-            'total_pds' => $pdsQuery->count(),
-            'phs_pending' => $phsQuery->where('status', 'pending')->count(),
-            'phs_approved' => $phsQuery->where('status', 'approved')->count(),
-            'pds_pending' => $pdsQuery->where('status', 'pending')->count(),
-            'pds_approved' => $pdsQuery->where('status', 'approved')->count(),
+            'total_phs' => 0,
+            'total_pds' => 0,
+            'phs_pending' => 0,
+            'phs_approved' => 0,
+            'pds_pending' => 0,
+            'pds_approved' => 0,
         ];
     }
 
@@ -228,27 +210,27 @@ class ReportsController extends Controller
             'admin_users' => User::where('usertype', 'admin')->count(),
             'personnel_users' => User::where('usertype', 'personnel')->count(),
             'regular_users' => User::where('usertype', 'regular')->count(),
-            'new_users_this_month' => User::whereMonth('created_at', now()->month)->count(),
+            'new_users_this_month' => 0, // Since users table doesn't have timestamps
         ];
     }
 
     private function getSystemSummary($dateFrom, $dateTo)
     {
-        $query = ActivityLog::query();
+        $query = ActivityLogDetail::query();
         
         if ($dateFrom) {
-            $query->whereDate('created_at', '>=', $dateFrom);
+            $query->whereDate('act_date_time', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->whereDate('created_at', '<=', $dateTo);
+            $query->whereDate('act_date_time', '<=', $dateTo);
         }
 
         return [
             'total_activities' => $query->count(),
-            'unique_users' => $query->distinct('user_id')->count(),
+            'unique_users' => $query->distinct('changes_made_by')->count(),
             'avg_activities_per_day' => $query->count() / max(1, $dateFrom ? $dateFrom->diffInDays($dateTo ?: now()) : 30),
-            'most_active_user' => $query->select('user_id', DB::raw('COUNT(*) as count'))
-                ->groupBy('user_id')
+            'most_active_user' => $query->select('changes_made_by', DB::raw('COUNT(*) as count'))
+                ->groupBy('changes_made_by')
                 ->orderBy('count', 'desc')
                 ->first(),
         ];
@@ -288,23 +270,22 @@ class ReportsController extends Controller
     private function exportActivityReport($file, Request $request)
     {
         fputcsv($file, [
-            'ID', 'User', 'Username', 'Email', 'User Type', 'Action', 'Description', 
+            'ID', 'User', 'Username', 'User Type', 'Action', 'Description', 
             'Status', 'IP Address', 'Date & Time'
         ]);
 
         $activities = $this->getActivityReport($request);
         foreach ($activities as $activity) {
             fputcsv($file, [
-                $activity->id,
-                $activity->user->name ?? 'N/A',
+                $activity->act_id,
                 $activity->user->username ?? 'N/A',
-                $activity->user->email ?? 'N/A',
+                $activity->user->username ?? 'N/A',
                 $activity->user->usertype ?? 'N/A',
                 $activity->action,
-                $activity->description,
-                $activity->status,
-                $activity->ip_address,
-                $activity->created_at->format('Y-m-d H:i:s')
+                $activity->act_desc,
+                $activity->act_stat,
+                $activity->ip_addr,
+                $activity->act_date_time ? $activity->act_date_time->format('Y-m-d H:i:s') : 'N/A'
             ]);
         }
     }
@@ -312,63 +293,37 @@ class ReportsController extends Controller
     private function exportSubmissionsReport($file, Request $request)
     {
         fputcsv($file, [
-            'Type', 'ID', 'User', 'Username', 'Email', 'User Type', 'Status', 
-            'Admin Notes', 'Submitted Date', 'Last Updated'
+            'Type', 'Status', 'Note'
         ]);
 
-        $submissions = $this->getSubmissionsReport($request);
+        // Since PHSSubmission and PDSSubmission models don't exist in the new schema,
+        // we'll add placeholder entries
+        fputcsv($file, [
+            'PHS',
+            'Not Available',
+            'PHS submissions not implemented in current schema'
+        ]);
         
-        foreach ($submissions['phs'] as $submission) {
-            fputcsv($file, [
-                'PHS',
-                $submission->id,
-                $submission->user->name ?? 'N/A',
-                $submission->user->username ?? 'N/A',
-                $submission->user->email ?? 'N/A',
-                $submission->user->usertype ?? 'N/A',
-                $submission->status,
-                $submission->admin_notes,
-                $submission->created_at->format('Y-m-d H:i:s'),
-                $submission->updated_at->format('Y-m-d H:i:s')
-            ]);
-        }
-
-        foreach ($submissions['pds'] as $submission) {
-            fputcsv($file, [
-                'PDS',
-                $submission->id,
-                $submission->user->name ?? 'N/A',
-                $submission->user->username ?? 'N/A',
-                $submission->user->email ?? 'N/A',
-                $submission->user->usertype ?? 'N/A',
-                $submission->status,
-                $submission->admin_notes ?? 'N/A',
-                $submission->created_at->format('Y-m-d H:i:s'),
-                $submission->updated_at->format('Y-m-d H:i:s')
-            ]);
-        }
+        fputcsv($file, [
+            'PDS',
+            'Not Available',
+            'PDS submissions not implemented in current schema'
+        ]);
     }
 
     private function exportUsersReport($file, Request $request)
     {
         fputcsv($file, [
-            'ID', 'Name', 'Username', 'Email', 'User Type', 'Organic Role', 
-            'Branch', 'Status', 'Created By', 'Created Date', 'Last Login'
+            'Username', 'User Type', 'Organic Role', 'Status', 'Last Login'
         ]);
 
         $users = $this->getUsersReport($request);
         foreach ($users as $user) {
             fputcsv($file, [
-                $user->id,
-                $user->name,
                 $user->username,
-                $user->email,
                 $user->usertype,
                 $user->organic_role ?? 'N/A',
-                $user->branch ?? 'N/A',
                 $user->is_active ? 'Active' : 'Inactive',
-                $user->created_by ?? 'N/A',
-                $user->created_at->format('Y-m-d H:i:s'),
                 $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'Never'
             ]);
         }

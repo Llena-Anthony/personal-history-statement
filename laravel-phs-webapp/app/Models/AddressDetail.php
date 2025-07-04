@@ -9,6 +9,8 @@ class AddressDetail extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     protected $primaryKey = 'addr_id';
     public $incrementing = true;
     protected $keyType = 'int';

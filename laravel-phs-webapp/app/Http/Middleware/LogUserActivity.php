@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\ActivityLog;
+use App\Models\ActivityLogDetail;
 use Illuminate\Support\Facades\Auth;
 
 class LogUserActivity
@@ -18,13 +18,14 @@ class LogUserActivity
             $description = $this->getActivityDescription($request);
             
             if ($description) {
-                ActivityLog::create([
-                    'user_id' => $user->id,
+                ActivityLogDetail::create([
+                    'changes_made_by' => $user->username,
                     'action' => $this->getActivityAction($request),
-                    'description' => $description,
-                    'status' => $this->getActivityStatus($response),
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent()
+                    'act_desc' => $description,
+                    'act_stat' => $this->getActivityStatus($response),
+                    'ip_addr' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'act_date_time' => now(),
                 ]);
 
                 // Update last login time

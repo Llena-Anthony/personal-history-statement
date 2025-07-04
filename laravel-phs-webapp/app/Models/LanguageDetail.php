@@ -8,6 +8,8 @@ use App\Traits\Searchable;
 
 class LanguageDetail extends Model
 {
+    public $timestamps = false;
+    
     protected $primaryKey = 'lang_id';
     public $incrementing = true;
     public $keyType = 'int';

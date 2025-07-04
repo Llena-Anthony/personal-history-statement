@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\ActivityLog;
+use App\Models\ActivityLogDetail;
 use Illuminate\Support\Facades\Auth;
 
 trait LogsActivity
@@ -60,13 +60,14 @@ trait LogsActivity
         if (!empty($changeDescriptions)) {
             $description = 'Updated ' . $this->getModelName() . ': ' . implode(' | ', $changeDescriptions);
             
-            ActivityLog::create([
-                'user_id' => Auth::id(),
+            ActivityLogDetail::create([
+                'changes_made_by' => Auth::user()->username,
                 'action' => 'update',
-                'description' => $description,
-                'status' => 'success',
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent()
+                'act_desc' => $description,
+                'act_stat' => 'success',
+                'ip_addr' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'act_date_time' => now(),
             ]);
         }
     }
@@ -84,13 +85,14 @@ trait LogsActivity
 
         $description = 'Created new ' . $this->getModelName();
         
-        ActivityLog::create([
-            'user_id' => Auth::id(),
+        ActivityLogDetail::create([
+            'changes_made_by' => Auth::user()->username,
             'action' => 'create',
-            'description' => $description,
-            'status' => 'success',
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent()
+            'act_desc' => $description,
+            'act_stat' => 'success',
+            'ip_addr' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'act_date_time' => now(),
         ]);
     }
 
@@ -107,13 +109,14 @@ trait LogsActivity
 
         $description = 'Deleted ' . $this->getModelName();
         
-        ActivityLog::create([
-            'user_id' => Auth::id(),
+        ActivityLogDetail::create([
+            'changes_made_by' => Auth::user()->username,
             'action' => 'delete',
-            'description' => $description,
-            'status' => 'success',
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent()
+            'act_desc' => $description,
+            'act_stat' => 'success',
+            'ip_addr' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'act_date_time' => now(),
         ]);
     }
 

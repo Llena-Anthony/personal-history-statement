@@ -304,25 +304,25 @@
                     <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                         <div class="flex-shrink-0">
                             <div class="w-10 h-10 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center text-white font-semibold">
-                                        {{ strtoupper(substr($activity->user->name, 0, 1)) }}
+                                        {{ strtoupper(substr($activity->user->username ?? 'U', 0, 1)) }}
                                     </div>
                                 </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between">
-                                <p class="text-sm font-medium text-gray-900">{{ $activity->user->name }}</p>
-                                <span class="text-xs text-gray-500">{{ $activity->created_at->diffForHumans() }}</span>
+                                <p class="text-sm font-medium text-gray-900">{{ $activity->user->username ?? 'Unknown User' }}</p>
+                                <span class="text-xs text-gray-500">{{ $activity->act_date_time ? $activity->act_date_time->diffForHumans() : 'Unknown' }}</span>
                             </div>
-                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ $activity->description }}</p>
+                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ $activity->act_desc ?? 'No description' }}</p>
                             <div class="flex items-center mt-2">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                @if($activity->status === 'success') bg-green-100 text-green-800
-                                @elseif($activity->status === 'warning') bg-yellow-100 text-yellow-800
+                                @if($activity->act_stat === 'success') bg-green-100 text-green-800
+                                @elseif($activity->act_stat === 'warning') bg-yellow-100 text-yellow-800
                                 @else bg-red-100 text-red-800
                                 @endif">
                                     <i class="fas fa-circle mr-1 text-xs"></i>
-                                {{ ucfirst($activity->status) }}
+                                {{ ucfirst($activity->act_stat ?? 'unknown') }}
                             </span>
-                                <span class="text-xs text-gray-500 ml-3">{{ $activity->created_at->format('M d, g:i A') }}</span>
+                                <span class="text-xs text-gray-500 ml-3">{{ $activity->act_date_time ? $activity->act_date_time->format('M d, g:i A') : 'Unknown' }}</span>
                             </div>
                         </div>
                     </div>

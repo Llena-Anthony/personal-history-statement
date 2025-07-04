@@ -27,7 +27,7 @@ use App\Http\Controllers\CharacterReputationController;
 use App\Http\Controllers\ArrestRecordController;
 use App\Models\AddressDetails;
 use App\Http\Controllers\CredentialController;
-use App\Http\Controllers\PHSReviewController;
+// use App\Http\Controllers\PHSReviewController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\MiscellaneousController;
 use App\Http\Controllers\Personnel\PersonalCharacteristicsController as PersonnelPersonalCharacteristicsController;
@@ -50,6 +50,8 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
+
+
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -83,13 +85,14 @@ Route::middleware('auth')->group(function () {
         session()->forget('admin_original_route');
 
         // Log the activity
-        \App\Models\ActivityLog::create([
-            'user_id' => auth()->id(),
-            'description' => 'Admin returned to admin view from PHS management',
-            'status' => 'success',
+        \App\Models\ActivityLogDetail::create([
+            'changes_made_by' => auth()->user()->username,
+            'act_desc' => 'Admin returned to admin view from PHS management',
+            'act_stat' => 'success',
             'action' => 'return_to_admin',
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent()
+            'ip_addr' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'act_date_time' => now(),
         ]);
 
         return redirect()->route('admin.dashboard')->with('success', 'Returned to admin view.');
@@ -391,8 +394,8 @@ Route::middleware(['auth', 'client'])->group(function () {
         return view('phs.test-autofill');
     })->name('phs.test-autofill');
     // PHS Review Routes
-    Route::get('/phs/review', [PHSReviewController::class, 'review'])->name('phs.review');
-    Route::post('/phs/review/finalize', [PHSReviewController::class, 'finalize'])->name('phs.review.finalize');
+    // Route::get('/phs/review', [PHSReviewController::class, 'review'])->name('phs.review');
+    // Route::post('/phs/review/finalize', [PHSReviewController::class, 'finalize'])->name('phs.review.finalize');
 });
 
 // Admin Routes
@@ -466,7 +469,7 @@ Route::middleware(['auth', 'personnel'])->prefix('personnel')->name('personnel.'
         ->name('personnel.phs.personal-characteristics.store');
     Route::get('/phs/places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'create'])->name('phs.places-of-residence');
     Route::get('/phs/foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])->name('phs.foreign-countries');
-    Route::get('/phs/review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('phs.review');
+    // Route::get('/phs/review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('phs.review');
     // PDS route is not accessible yet
 });
 
@@ -508,7 +511,7 @@ Route::middleware(['auth', 'personnel'])->prefix('personnel/phs')->name('personn
     Route::get('foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])->name('foreign-countries');
     // Add POST if needed
 
-    Route::get('review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('review');
+    // Route::get('review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('review');
     // Add POST if needed
 });
 

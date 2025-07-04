@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\ActivityLogDetail;
 
 class LoginController extends Controller
 {
@@ -26,10 +27,14 @@ class LoginController extends Controller
 
         if (!$user) {
             // Log failed login attempt for non-existent user
-            Log::warning('Failed login attempt for non-existent user', [
-                'username' => $credentials['username'],
-                'ip' => $request->ip(),
+            ActivityLogDetail::create([
+                'changes_made_by' => $credentials['username'],
+                'action' => 'login',
+                'act_desc' => 'Failed login attempt for non-existent user',
+                'act_stat' => 'warning',
+                'ip_addr' => $request->ip(),
                 'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
 
             throw ValidationException::withMessages([
@@ -38,12 +43,16 @@ class LoginController extends Controller
         }
 
         // Check if user is active
-        if (!$user->is_active) {
+        if ($user->is_active != '1' && $user->is_active != 1) {
             // Log failed login attempt for inactive user
-            Log::warning('Failed login attempt for inactive user', [
-                'username' => $credentials['username'],
-                'ip' => $request->ip(),
+            ActivityLogDetail::create([
+                'changes_made_by' => $credentials['username'],
+                'action' => 'login',
+                'act_desc' => 'Failed login attempt for inactive user',
+                'act_stat' => 'warning',
+                'ip_addr' => $request->ip(),
                 'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
 
             throw ValidationException::withMessages([
@@ -58,28 +67,36 @@ class LoginController extends Controller
             $user->update(['last_login_at' => now()]);
 
             // Log successful login
-            Log::info('Successful login', [
-                'username' => $credentials['username'],
-                'ip' => $request->ip(),
+            ActivityLogDetail::create([
+                'changes_made_by' => $credentials['username'],
+                'action' => 'login',
+                'act_desc' => 'Successful login',
+                'act_stat' => 'success',
+                'ip_addr' => $request->ip(),
                 'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
 
             // Redirect based on user type
             if ($user->usertype === 'admin') {
-                return redirect()->intended('admin/dashboard');
+                return redirect()->intended(route('admin.dashboard'));
             }
             if ($user->usertype === 'personnel') {
-                return redirect()->intended('personnel/dashboard');
+                return redirect()->intended(route('personnel.dashboard'));
             }
-            return redirect()->intended('client/dashboard');
+            return redirect()->intended(route('client.dashboard'));
 
         }
 
         // Log failed login attempt for incorrect password
-        Log::warning('Failed login attempt - incorrect password', [
-            'username' => $credentials['username'],
-            'ip' => $request->ip(),
+        ActivityLogDetail::create([
+            'changes_made_by' => $credentials['username'],
+            'action' => 'login',
+            'act_desc' => 'Failed login attempt - incorrect password',
+            'act_stat' => 'warning',
+            'ip_addr' => $request->ip(),
             'user_agent' => $request->userAgent(),
+            'act_date_time' => now(),
         ]);
 
         // Incorrect password prompt
@@ -92,13 +109,14 @@ class LoginController extends Controller
     {
         // Log logout activity before logging out
         if (Auth::check()) {
-            \App\Models\ActivityLog::create([
-                'user_id' => Auth::id(),
+            ActivityLogDetail::create([
+                'changes_made_by' => Auth::user()->username,
                 'action' => 'logout',
-                'description' => 'User logged out',
-                'status' => 'success',
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'act_desc' => 'User logged out',
+                'act_stat' => 'success',
+                'ip_addr' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'act_date_time' => now(),
             ]);
         }
 
