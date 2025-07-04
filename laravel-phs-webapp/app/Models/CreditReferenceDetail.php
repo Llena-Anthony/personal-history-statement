@@ -11,7 +11,6 @@ class CreditReferenceDetail extends Model
     protected $primaryKey = 'account_id';
     public $incrementing = true;
     public $keyType = 'int';
-    protected $table = 'credit_reference_detail';
     public $fillable = [
         'bank',
         'username'

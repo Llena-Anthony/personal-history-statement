@@ -19,8 +19,6 @@ class ForeignVisitDetail extends Model
         'username',
     ];
 
-    protected $table = 'foreign_visit_detail';
-
     public function addressDetail()
     {
         return $this->belongsTo(AddressDetail::class, 'visit_addr', 'addr_id');
@@ -29,4 +27,4 @@ class ForeignVisitDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

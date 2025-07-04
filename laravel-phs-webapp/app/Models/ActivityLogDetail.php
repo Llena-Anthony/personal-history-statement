@@ -10,7 +10,6 @@ class ActivityLogDetail extends Model
 {
     use HasFactory, Searchable;
 
-    protected $table = 'activity_log_detail';
     protected $primaryKey = 'act_id';
     public $incrementing = true;
     public $keyType = 'int';

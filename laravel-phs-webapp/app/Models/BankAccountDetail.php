@@ -11,7 +11,6 @@ class BankAccountDetail extends Model
     protected $primaryKey = 'account_id';
     public $incrementing = true;
     public $keyType = 'int';
-    protected $table = 'bank_account_detail';
     public $fillable = [
         'bank',
         'username'

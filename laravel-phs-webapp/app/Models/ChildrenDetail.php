@@ -11,7 +11,6 @@ class ChildrenDetail extends Model
     protected $primaryKey = 'child_id';
     public $incrementing = true;
     public $keyType = 'int';
-    protected $table = 'children_detail';
     public $fillable = [
         'child_name',
         'birth_date',

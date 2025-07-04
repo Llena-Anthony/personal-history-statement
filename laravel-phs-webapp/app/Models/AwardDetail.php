@@ -11,7 +11,6 @@ class AwardDetail extends Model
     protected $primaryKey = 'award_id';
     public $incrementing = true;
     public $keyType = 'int';
-    protected $table = 'award_detail';
     protected $fillable = [
         'award_desc',
         'username',

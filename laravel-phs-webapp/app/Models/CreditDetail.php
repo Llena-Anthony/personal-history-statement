@@ -11,7 +11,6 @@ class CreditDetail extends Model
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';
-    protected $table = 'credit_detail';
     public $fillable = [
         'username',
         'other_income_src',
