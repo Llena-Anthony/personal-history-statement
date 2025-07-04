@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('act_stat')->nullable();
             $table->string('ip_addr')->nullable();
             $table->string('user_agent')->nullable();
-            $table->timestamp('created_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('act_date_time')->nullable();
             $table->string('old_value')->nullable();
             $table->string('new_value')->nullable();
 
