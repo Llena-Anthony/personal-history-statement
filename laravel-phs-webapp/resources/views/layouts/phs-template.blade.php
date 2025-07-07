@@ -65,6 +65,10 @@
                 .phs-footer {
                     bottom: 0;
                 }
+                /* Strict print rule: only show header, footer, and page */
+                body > *:not(.phs-header):not(.phs-footer):not(.phs-page) {
+                    display: none !important;
+                }
             }
         </style>
     </head>
@@ -96,6 +100,7 @@
         @php
             $pages = collect([
                 'content',
+                'page1',
                 'page2',
                 'page3',
                 'page4',
@@ -105,6 +110,7 @@
                 'page8',
                 'page9',
                 'page10',
+                'page11',
             ])->filter(fn($section) => trim(View::getSection($section)) !== '')->values();
         @endphp
         @foreach ($pages as $i => $page)

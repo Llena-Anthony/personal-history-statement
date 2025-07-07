@@ -31,8 +31,7 @@
         </div>
     </div>
 
-
-    <div class="phs-page text-justify font-sans text-[11pt] bg-white">
+ <div class="phs-page text-justify font-sans text-[11pt] bg-white">
         {{-- Title --}}
         <p class="text-[9pt] text-right mt-[60pt]">File Nr:_______</p>
         <p class="text-[9pt] text-left">GHQ, OJ2</p>
@@ -134,7 +133,7 @@
             DATE OF EXPIRATION:<div id="app-pass-exp" class="border-b border-black text-[11pt] text-left ml-auto w-[1.9in] pl-2"></div>
         </div>
     </div>
-
+   
     
 @endsection
 
@@ -404,7 +403,843 @@
     </div>
 @endsection
 
-{{-- <script>
+@section('page4')
+ <div class="mt-[53pt] ml-[1.35in]">
+                    <div>Date and Place of Birth:
+                        <div id="mil-birth" class="text-[11pt] text-left border-b border-black ml-auto w-[4.4in]"></div>
+                    </div>
+                    <div>Complete Address:
+                        <div id="mil-addr" class="text-[11pt] text-left border-b border-black ml-auto w-[4.75in]"></div>
+                    </div>
+                    <div>Occupation/Employer/Place of Employment:
+                        <div id="mil-jobdetail" class="text-[11pt] text-left border-b border-black ml-auto w-[3in]"></div>
+                    </div>
+                    <div>Citizenship: <span id="mil-citizenship" class="inline-block border-b border-black w-32 align-bottom"> </span>
+                        If dual, write both citizenship. If naturalized, give date and place where naturalized:
+                        <span id="mil-dual" class="inline-block border-b border-black w-[3in] align-bottom"> </span>
+                    </div>
+                </div>
+
+                {{-- Section V-Educational Background --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">V.</span>EDUCATIONAL BACKGROUND:</div>
+
+                {{-- Education-Elementary --}}
+                <table id="elementary-table" class="table-auto border-collapse w-full text-normal">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="pr-[0.2in] font-normal"><span class="mr-[0.5in]">A.</span>Elementary</th>
+                            <th class="w-[2.5in] font-normal">Location</th>
+                            <th class="w-[1in] font-normal">Date of Attendance</th>
+                            <th class="w-[1in] font-normal">Year Graduated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <<tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {{-- Education-Highschool --}}
+                <table id="highschool-table" class="table-auto border-collapse w-full">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-left pl-[0.7in] font-normal"><span class="mr-[0.5in]">B.</span>High School</th>
+                            <th class="w-[2.5in] font-normal">Location</th>
+                            <th class="w-[1in] font-normal">Date of Attendance</th>
+                            <th class="w-[1in] font-normal">Year Graduated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {{-- Education-College --}}
+                <table id="college-table" class="table-auto border-collapse w-full">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="pr-[0.35in] font-normal"><span class="mr-[0.5in]">C.</span>College</th>
+                            <th class="w-[2.5in] font-normal">Location</th>
+                            <th class="w-[1in] font-normal">Date of Attendance</th>
+                            <th class="w-[1in] font-normal">Year Graduated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {{-- Education-Post Graduate --}}
+                <div class="ml-[0.75in]">
+                    <table id="postgrad-table" class="table-auto border-collapse w-full">
+                        <thead>
+                            <tr class="text-center">
+                                <th class="text-left font-normal"><span class="mr-[0.5in]">D.</span>Post Graduate</th>
+                                <th class="w-[2.5in] font-normal">Location</th>
+                                <th class="w-[1in] font-normal">Date of Attendance</th>
+                                <th class="w-[1in] font-normal">Year Graduated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                                <td class="border-[1px] border-black h-[12pt] p-2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Education-Other Schools --}}
+                <div class="mt-4 ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Other Schools/Training Attended and Date of Attendance: </div>
+                <div id="other-training" class="ml-[1.3in] text-[11pt] text-left">
+                    <hr class="h-[11pt] border-none border-t border-black">
+                    <hr class="h-[11pt] border-t border-black">
+                    <hr class="h-[11pt] border-b border-black">
+                </div>
+
+                {{-- Education-Civil Service --}}
+                <div class="mt-4 ml-[0.6in]"><span class="mr-[0.5in]">F.</span>Civil Service, If any and other Similar Qualification Acquired: </div>
+                <div id="civil-service" class="ml-[1.3in] text-[11pt] text-left border-b border-black h-[11.5pt] w-[4in]">
+                </div>
+
+                {{-- Signature --}}
+                <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
+@endsection
+
+@section('page5')
+    {{-- Section VI-Military History --}}
+                <div class="mt-[80pt] font-bold text-[12pt]"><span class="mr-[0.4in]">VI.</span>MILITARY HISTORY:</div>
+
+                    {{-- Military-Date Enlisted --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.5in]">A.</span>Date Enlisted in AFP:
+                        <span id="date-enlisted" class="inline-block text-[11pt] border-b-[1px] border-black w-[4.75in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+
+                    {{-- Military-Date Commissioned --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.5in]">B.</span>Date of Commision:
+                        <span id="start-comm" class="inline-block text-[11pt] border-b-[1px] border-black w-[2.3in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span> :
+                        <span id="end-comm" class="inline-block text-[11pt] border-b-[1px] border-black w-[2.4in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+
+                    {{-- Military-Source of Commission --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.5in]">C.</span>Source of Commission:
+                        <span id="comm-source" class="inline-block text-[11pt] border-b-[1px] border-black w-[4.6in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+
+                    {{-- Military-Unit Assignments --}}
+                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">D.</span>Important Unit Assignment since enlisted/CAD</div>
+                    <table id="assignment-table" class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-center border-black border-[1px]">INCLUSIVE DATES</th>
+                                <th class="text-center border-black border-[1px]">UNIT/OFFICE</th>
+                                <th class="text-center border-black border-[1px]">CO/CHIEF OF OFFICE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-5pt">(Use Separate Sheet for Additional Information)</div>
+
+                    {{-- Military-Military Schools --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Military Schools Attended</div>
+                    <div class="ml-14 mt-4">
+                        <table id="military-school-table" class="w-full border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="text-center border-black border-[1px]">School/Location</th>
+                                    <th class="text-center border-black border-[1px]">Date of Attendance</th>
+                                    <th  class="text-center border-black border-[1px]">Nature of Training</th>
+                                    <th  class="text-center border-black border-[1px]">Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[11pt]"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- Signature --}}
+                    <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                        (Signature of Applicant)
+                    </div>
+
+
+@endsection
+
+@section('page6')
+   {{-- Military-Decorations --}}
+                <div class="mt-[70pt]"><span class="mr-[0.5in]">F.</span>Decorations, Awards or Commendations Received: </div>
+                <table id="award-table" class="border-collapse w-full">
+                    <tbody>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                    </tbody>
+                </table>
+                <div class="text-center mb-[5pt]"><span>(Use Separate Sheet for Additional Information)</span></div>
+
+                {{-- Section VII-Residence --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">VII.</span>PLACES OF RESIDENCE SINCE BIRTH:</div>
+                <table id="residence-table" class="mb-[5pt] border-collapse w-full">
+                    <tbody>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                        <tr><td class="border-black border-b-[1px] h-[11pt]"></td></tr>
+                    </tbody>
+                </table>
+
+                {{-- Section VIII-Employment --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">VIII.</span>EMPLOYMENT:</div>
+                <div>
+                    <table id="employment table" class="ml-[0.5in] w-[7in] border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="text-center border-black border-[1px]">Inclusive Dates</th>
+                                <th class="text-center border-black border-[1px]">Type of Employment</th>
+                                <th class="text-center border-black border-[1px]">Name/Address</th>
+                                <th class="text-center border-black border-[1px]">Reason for Leaving</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Signature --}}
+                <div class="mt-[80pt] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
+
+
+@endsection
+
+@section('page7')
+   {{-- Employment-Forced Resignation --}}
+                <div class="mt-[60pt] ml-[1in]">Have you been dismissed or forced to resign from a position?
+                     No ( <span id="no-dismissal" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                     Yes (<span id="has-been-dismissed" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                     If Yes, explain:
+                </div>
+
+               <div id="dismissal-detail" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                {{-- Section IX-Visited Countries --}}
+                <div class="font-bold text[12pt]"><span class="mr-[0.4in]">IX.</span>FOREIGN COUNTRIES VISITED:</div>
+                    <table id="foreign-country-table" class="border-collapse w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-center border-black border-[1px]">Date of Visit</th>
+                                <th class="text-center border-black border-[1px]">Country Visited</th>
+                                <th class="text-center border-black border-[1px]">Purpose of visit</th>
+                                <th class="text-center border-black border-[1px]">Address Abroad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                                <td class="border-black border-[1px] h-[11pt]"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                {{-- Section X-Credit Reputation --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.4in]">X.</span>CREDIT REPUTATION:</div>
+
+                    {{-- Credit Rep-Salary Dependent --}}
+                    <div class="ml-[0.6in] text-[11pt] leading-tight">
+                        <span class="mr-[0.5in] inline-block">A.</span>Are you entirely dependent on your salary?
+                        Yes ( <span id="dependent" class="inline-block text-[11pt] h-[11pt] align-middle text-center"> </span> )
+                        No ( <span id="not-dependent" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        If no, State other source of income:
+                    </div>
+                    <div id="other-income" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                    {{-- Credit Rep-Banks --}}
+                    <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">B.</span>Name and address of Banks or other credit institutions with which you have accounts/loans:</div>
+                    <div id="bank-account" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                    {{-- Credit Rep-SALN --}}
+                    <div class="ml-[0.6in] leading-tight"><span class="mr-[0.4in]">C.</span>Have you filed a statement of your Assets and Liabilities with any government agency?</div>
+                    <div class="ml-[1.16in] leading-tight">
+                        Yes ( <span id="filed-saln" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        No ( <span id="not-filed-saln" class="inline-block text-[11pt] h-[11pt] align-middle text-center"> </span> )
+                        If so, what agency and when?
+                    </div>
+                    <div id="saln-detail" class="w-[6.5in] ml-[1in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                    {{-- Credit Rep-Income Tax --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Have you filed your latest Income Tax Returns?
+                        <span id="filed-itr" class="inline-block text-[11pt] border-b-[1px] border-black w-[2.9in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+                    <div class="ml-[1.2in]">Amount paid for last Calendar Year:
+                        <span id="amount-paid" class="inline-block text-[11pt] border-b-[1px] border-black w-[3.67in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+
+                    {{-- Credit Rep-Credit Reference --}}
+                    <div class="flex ml-[0.6in]"><span class="mr-[0.4in]">E.</span>Three (3) credit references in the Philippines:</div>
+                    <div class="ml-[0.6in]">
+                        <table id="credit-reference-table" class="border-collapse w-full">
+                            <thead>
+                                <tr>
+                                    <th class="text-center border-black border-[1px]">Name</th>
+                                    <th  class="text-center border-black border-[1px]">Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[22pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[22pt]"></td></tr>
+                                <tr><td class="border-black border-[1px] h-[11pt]"></td><td class="border-black border-[1px] h-[22pt]"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- Signature --}}
+                    <div class="mt-20pt border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                        (Signature of Applicant)
+                    </div>
+
+                {{-- Section XI-Arrest Record --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.4in]">XI.</span>ARREST RECORD AND CONDUCT:</div>
+
+                    {{-- Arrest Record-Self Investigation --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Have you ever been investigated/arrested, Indicted or convicted for any violation of law?
+                        No ( <span id="no-personal-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        Yes ( <span id="personal-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        If so, state name of court, nature of offense and disposition of case:
+                    </div>
+                    <div id="personal-arrest-detail" class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                    {{-- Arrest-Record-Family Investigation --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">B.</span>Has any member of your family ever been investigated/arrested, indicted or convicted for any violation of law?
+                        No ( <span id="no-fam-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                        Yes ( <span id="fam-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, state name of court, nature of offense and disposition of case:
+                    </div>
+                    <div id="fam-arrest-detail" class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+@endsection
+
+@section('page8')
+   {{-- Arrest-Record-Admin Case --}}
+                <div class="ml-[0.6in] mt-[90pt]"><span class="mr-[0.4in]">C.</span>Have you ever been charge of any administrative case?
+                    No ( <span id="no-admin-case" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                    Yes ( <span id="admin-case" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so explain:
+                </div>
+                <div id="admin-case-detail" class="w-[6.9in] ml-[0.6in] h-[34.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                {{-- Arrest Record-1081 --}}
+                <div class="mt-3.5 ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Have you ever been arrested or detained pursuant to the provisions of PD 1081 and its implementing orders
+                    (GO, PD, LOI)?
+                    No ( <span id="no-provison-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                    Yes ( <span id="provision-arrest" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )  If so, state the nature of offense and disposition of case.
+                </div>
+                <div id="provision-arrest-detail" class="w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                {{-- Arrest Record-Liquor --}}
+                <div class="mt-3.5 ml-[0.6in]"><span class="mr-[0.5in]">E.</span>Do you take/use intoxicating liquor or narcotics?
+                    No ( <span id="no-intake" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> )
+                    Yes ( <span id="do-intake" class="inline-block text-[11pt] h-[11pt] align-middle text-center"></span> ) If so, to what extent:
+                </div>
+                <div id="intake-extent" class="w-[6.9in] ml-[0.6in] h-[46pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                {{-- Section XII-Character --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">XII.</span>CHARACTER AND REPUTATION:</div>
+
+                    {{-- Character-Reference --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Give five (5) character references (known for three (3) years or longer except your relatives):</div>
+                    <table id="character-reference-table" class="border-collapse w-full mb-[5pt]">
+                        <thead>
+                            <tr>
+                                <th class="text-center">NAME</th>
+                                <th class="text-center">ADDRESS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {{-- Character-Neighbor --}}
+                    <div class="mb-3.5 ml-[0.6in]"><span class="mr-[0.5in]">B.</span>List down three (3) neighbors at your present residence:</div>
+                    <table id="neighbor-table" class="border-collapse w-full mb-[5pt]">
+                        <thead>
+                            <tr>
+                                <th class="text-center">NAME</th>
+                                <th class="text-center">ADDRESS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                {{-- Section XIII-Organization --}}
+                <div class="font-bold text-[12pt]"><span class="mr-[0.5in]">XIII.</span>ORGANIZATION: </div>
+
+                    {{-- Organization-Membership --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>List of organization or social groups, which you have been a member of:
+                        <table id="organization-table" class="border-collapse w-full mb-[5pt]">
+                            <thead>
+                                <tr class="border-b border-black">
+                                    <th class="text-center">Organization</th>
+                                    <th class="text-center">Address</th>
+                                    <th class="text-center">Date of Membership</th>
+                                    <th class="text-center">Position held</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                    <td class="border-black border-b-[1px] h-[12pt] p-2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                {{-- Signature --}}
+                <div class="mt-[70pt] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
+
+@endsection
+
+@section('page9')
+ <div class="mt-[60pt] w-[6.9in] ml-[0.6in] h-[23pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+
+                {{-- Section XIV-Miscellaneous --}}
+                <div class="mt-[55pt] font-bold text-[12pt]"><span class="mr-[0.3in]">XIV.</span>MISCELLANEOUS:</div>
+
+                    {{-- Miscellaneous-Hobbies --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">A.</span>Hobbies, Sport and past time:</div>
+                    <div id="hobbies" class="w-full h-[69pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                    {{-- Miscellaneous-Language --}}
+                    <div class="mt-[11pt]"><span class="mr-[0.5in]">B.</span>Language and Dialect (Indicate as <span class="underline">FLUENT</span>,
+                        <span class="underline">FAIR</span>, or <span class="underline">POOR</span>):
+
+                    </div>
+                    <table id="language-table" class="mt-[5pt] border-collapse w-full mb-[5pt]">
+                        <thead>
+                            <tr>
+                                <th class="text-bold text-center">Language/Dialect</th>
+                                <th class="text-bold text-center">Speak</th>
+                                <th class="text-bold text-center">Read</th>
+                                <th class="text-bold text-center">Write</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                                <td class="border-b-[1px] border-black p-2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {{-- Miscellaneous-Lie Detection Test --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">C.</span>Are you willing to undergo periodic lie detection test?
+                        <span  id="lie-detection" class="inline-block text-[11pt] border-b-[1px] border-black w-[2in] h-[11.5pt] align-middle text-center pl-[3px] leading-[11.5pt]"></span>
+                    </div>
+
+                    {{-- Miscellaneous-Text --}}
+                    <div class="ml-[0.6in]"><span class="mr-[0.4in]">D.</span>Copy exactly the following paragraph in your own handwriting:</div>
+
+                <p class="mt-[5pt] indent-[1.2in]">As Luis Repaso II of 105th Xavier Ave, guzzled his way through three bottles
+                of brandy. Josephine Z Quanzing, a partner in law firm of San Diego and Ballesteros
+                located at 2879 Valley Forge St., Quezon City turned to Richard Ting, a Chinese food
+                expert from Q.W. Kwantung Company, Ltd., 346 Hadji Jairula Hussin Blvd., and said.
+                “I can’t speak for my government but I’m quite sure your country and mine get together
+                for closer understanding”
+                </p>
+                <div class="w-full h-[110.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
+
+                {{-- Signature --}}
+                <div class="mt-[165pt] border-t-[2px] border-black w-[2.3in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
+
+
+@endsection
+
+@section('page10')
+      <p class="indent-[0.5in] mt-[110pt]">I certify that the foregoing answers are true and correct to the best of my
+                    knowledge and belief and I agree that any misstatement or omission as to a material fact
+                    will constitute ground for immediate denial of my application for clearance.
+                </p>
+                <p class="mt-[11pt] mb-[11pt]">Signed at <span class="border-b-[2px] w-[4.34in] border-black inline-block h-[11pt] align-text-bottom"></span>
+                    Date <span class="border-b-[2px] w-[2in] border-black inline-block h-[11pt] align-text-bottom"></span></p>
+                <div class="flex ">
+                    <div class="w-[2.5in] text-center border-t-[2px] border-black mt-[22pt]">(Witness)</div>
+                    <div class="w-[2.5in] text-center border-t-[2px] border-black mt-[22pt] ml-auto">(Signature of Applicant)</div>
+                </div>
+
+                {{-- Thumbmarks / Picture --}}
+                <div class="grid grid-cols-2">
+                    <div class="grid mr-auto items-center">
+                        <div class="w-[2.5in] text-center border-t-[2px] border-black mt-[22pt]">(Witness)</div>
+                        <div class="w-[2.36in] text-center mt-[18pt] mb-[7pt]">THUMBMARKS:</div>
+                        <div class="flex">
+                            <div class="border-[2px] border-black h-[1.55in] w-[1.07in] mr-[0.22in]"></div>
+                            <div class="border-[2px] border-black h-[1.55in] w-[1.07in]"></div>
+                        </div>
+                    </div>
+
+                    <div class="border-[2px] border-black w-[2in] h-[2in] flex justify-center items-center ml-auto text-[22pt] mt-[22pt]">2 X 2</div>
+                </div>
+
+                <div class="grid">
+                    <div class="flex">
+                        <div class="text-center text-[14pt] w-[1.07in] mr-[0.22in]">(Left)</div>
+                        <div class="text-center text-[14pt] w-[1.07in]">(Right)</div>
+                    </div>
+                </div>
+
+                <p class="mt-[20pt] indent-[0.5in]">SUBSCRIBED AND SWORN to before me this <span class="border-b-[2px] w-[1in] border-black inline-block align-baseline text-right leading-none">day</span> of
+                    <span class="border-b-[2px] w-[2in] border-black inline-block h-[11pt] align-text-bottom"></span> Philippines,
+                    Affiant exhibited to me his/her Community Tax Certificate Nr. <span class="border-b-[2px] w-[2in] border-black inline-block h-[11pt] align-baseline text-center leading-none"></span> Issued at
+                    <span class="border-b-[2px] w-[3.5in] border-black inline-block h-[11pt] align-text-bottom"></span> on
+                    <span class="border-b-[2px] w-[3in] border-black inline-block h-[11pt] align-text-bottom"></span>
+                </p>
+
+                <div class="flex mt-[30pt]">
+                    <div class="grid ml-auto w-[3in] text-center">
+                       x(Administering Officer)
+                    </div>
+                </div>
+
+                {{-- Signature --}}
+                <div class="mt-[110pt] border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
+
+@endsection
+
+@section('page11')
+     <p class="font-bold text-center text-[12pt] mt-[150pt] mb-[550pt]">SKETCH OF THE LOCATION OF RESIDENCE</p>
+
+                {{-- Signature --}}
+                <div class="border-t-[2px] border-black w-[2.37in] text-center text-[10pt] font-bold -rotate-90 origin-top-left">
+                    (Signature of Applicant)
+                </div>
+
+@endsection
+<script>
 let hasPrinted = false;
 function printPHSForm() {
     if (hasPrinted) return;
@@ -419,7 +1254,7 @@ function printPHSForm() {
         document.body.classList.remove('phs-printing');
     }, 500);
 }
-</script> --}}
+</script>
 
 <style>
 @media print {
