@@ -153,6 +153,9 @@
                             </option>
                         @endif
                     </select>
+                    <button type="button" onclick="loadRegions()" class="mt-2 text-sm text-blue-600 hover:text-blue-800">
+                        Reload Regions
+                    </button>
                 </div>
 
                 <!-- Province -->
@@ -223,7 +226,7 @@
             <div class="bg-gray-50 p-4 rounded-lg">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Complete Birth Address</label>
                 <div id="birth_complete_address" class="text-gray-600 text-sm">
-                    {{ $personalDetails->birth_street ?? '' }}{{ ($personalDetails && $personalDetails->birth_street) ? ', ' : '' }}{{ $personalDetails->business_barangay_name ?? '' }}{{ ($personalDetails && $personalDetails->business_barangay_name) ? ', ' : '' }}{{ $personalDetails->business_city_name ?? '' }}{{ ($personalDetails && $personalDetails->business_city_name) ? ', ' : '' }}{{ $personalDetails->business_province_name ?? '' }}{{ ($personalDetails && $personalDetails->business_province_name) ? ', ' : '' }}{{ $personalDetails->business_region_name ?? '' }}
+                    {{ $personalDetails->birth_street ?? '' }}{{ ($personalDetails && $personalDetails->birth_street) ? ', ' : '' }}{{ $personalDetails->birth_barangay_name ?? '' }}{{ ($personalDetails && $personalDetails->birth_barangay_name) ? ', ' : '' }}{{ $personalDetails->birth_city_name ?? '' }}{{ ($personalDetails && $personalDetails->birth_city_name) ? ', ' : '' }}{{ $personalDetails->birth_province_name ?? '' }}{{ ($personalDetails && $personalDetails->birth_province_name) ? ', ' : '' }}{{ $personalDetails->birth_region_name ?? '' }}
                 </div>
                 <input type="hidden" name="birth_complete_address" id="birth_complete_address_input"
                        value="{{ $personalDetails->birth_complete_address ?? '' }}">
@@ -615,22 +618,32 @@
 </div>
 
 <script>
-    // Global function that can be called from AJAX navigation
+        // Global function that can be called from AJAX navigation
     window.initializePersonalDetails = function() {
-        loadRegions();
+        console.log('initializePersonalDetails called');
+        // Use fallback regions since they work reliably
+        loadFallbackRegions();
         setupAddressEventListeners();
         window.phsHomeRegionName = document.getElementById('home_region_name')?.value || '';
         window.phsBusinessRegionName = document.getElementById('business_region_name')?.value || '';
+        window.phsBirthRegionName = document.getElementById('birth_region_name')?.value || '';
+
         // Always set hidden region name fields to the selected option's text
         const homeRegionSelect = document.getElementById('home_region');
         const businessRegionSelect = document.getElementById('business_region');
+        const birthRegionSelect = document.getElementById('birth_region');
         const homeRegionNameInput = document.getElementById('home_region_name');
         const businessRegionNameInput = document.getElementById('business_region_name');
+        const birthRegionNameInput = document.getElementById('birth_region_name');
+
         if (homeRegionSelect && homeRegionNameInput) {
             homeRegionNameInput.value = homeRegionSelect.options[homeRegionSelect.selectedIndex]?.text || '';
         }
         if (businessRegionSelect && businessRegionNameInput) {
             businessRegionNameInput.value = businessRegionSelect.options[businessRegionSelect.selectedIndex]?.text || '';
+        }
+        if (birthRegionSelect && birthRegionNameInput) {
+            birthRegionNameInput.value = birthRegionSelect.options[birthRegionSelect.selectedIndex]?.text || '';
         }
     };
 
@@ -647,20 +660,40 @@
 
     // Philippines Address API Integration
     async function loadRegions() {
+        console.log('Loading regions...');
+
+        // Add a timeout to the fetch request
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
         try {
-            const response = await fetch('https://psgc.gitlab.io/api/regions/');
+            const response = await fetch('https://psgc.gitlab.io/api/regions/', {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch regions');
+            }
             const regions = await response.json();
+            console.log('Regions loaded:', regions.length, 'regions found');
 
             const homeRegionSelect = document.getElementById('home_region');
             const businessRegionSelect = document.getElementById('business_region');
             const birthRegionSelect = document.getElementById('birth_region');
 
+            console.log('Found region selects:', {
+                home: !!homeRegionSelect,
+                business: !!businessRegionSelect,
+                birth: !!birthRegionSelect
+            });
 
             if (homeRegionSelect && businessRegionSelect && birthRegionSelect) {
                 // Store current values
                 const homeSelected = homeRegionSelect.value;
                 const businessSelected = businessRegionSelect.value;
-                const birthSelected = birthRegionSelect.value
+                const birthSelected = birthRegionSelect.value;
+
                 // Clear existing options except the first one
                 homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                 businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
@@ -669,97 +702,86 @@
                 regions.forEach(region => {
                     const homeOption = new Option(region.name, region.code);
                     const businessOption = new Option(region.name, region.code);
+                    const birthOption = new Option(region.name, region.code);
                     homeRegionSelect.add(homeOption);
                     businessRegionSelect.add(businessOption);
                     birthRegionSelect.add(birthOption);
                 });
-                // Restore selected value
+                console.log('Regions populated successfully. Counts:', {
+                    home: homeRegionSelect.options.length,
+                    business: businessRegionSelect.options.length,
+                    birth: birthRegionSelect.options.length
+                });
 
+                // Restore selected values
                 if (birthSelected) {
-                    let found = false;
-                    for (let i = 0; i < birthRegionSelect.options.length; i++) {
-                        if (birthRegionSelect.options[i].value === birthSelected) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found && window.phsBirthRegionName) {
-                        const opt = new Option(window.phsBirthRegionName, birthSelected, true, true);
-                        birthRegionSelect.add(opt);
-                    }
                     birthRegionSelect.value = birthSelected;
                 }
                 if (homeSelected) {
-                    let found = false;
-                    for (let i = 0; i < homeRegionSelect.options.length; i++) {
-                        if (homeRegionSelect.options[i].value === homeSelected) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found && window.phsHomeRegionName) {
-                        const opt = new Option(window.phsHomeRegionName, homeSelected, true, true);
-                        homeRegionSelect.add(opt);
-                    }
                     homeRegionSelect.value = homeSelected;
                 }
                 if (businessSelected) {
-                    let found = false;
-                    for (let i = 0; i < businessRegionSelect.options.length; i++) {
-                        if (businessRegionSelect.options[i].value === businessSelected) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found && window.phsBusinessRegionName) {
-                        const opt = new Option(window.phsBusinessRegionName, businessSelected, true, true);
-                        businessRegionSelect.add(opt);
-                    }
                     businessRegionSelect.value = businessSelected;
                 }
             }
         } catch (error) {
             console.error('Error loading regions:', error);
-            // Fallback: Add common regions manually
-            const commonRegions = [
-                'National Capital Region (NCR)',
-                'Cordillera Administrative Region (CAR)',
-                'Ilocos Region (Region I)',
-                'Cagayan Valley (Region II)',
-                'Central Luzon (Region III)',
-                'CALABARZON (Region IV-A)',
-                'MIMAROPA (Region IV-B)',
-                'Bicol Region (Region V)',
-                'Western Visayas (Region VI)',
-                'Central Visayas (Region VII)',
-                'Eastern Visayas (Region VIII)',
-                'Zamboanga Peninsula (Region IX)',
-                'Northern Mindanao (Region X)',
-                'Davao Region (Region XI)',
-                'SOCCSKSARGEN (Region XII)',
-                'Caraga (Region XIII)',
-                'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)'
-            ];
+            console.log('Using fallback regions...');
+            return loadFallbackRegions();
+        }
+    }
 
-            const birthRegionSelect = document.getElementById('birth_region');
-            const homeRegionSelect = document.getElementById('home_region');
-            const businessRegionSelect = document.getElementById('business_region');
+    // Separate function for fallback regions
+    function loadFallbackRegions() {
+        const commonRegions = [
+            { name: 'National Capital Region (NCR)', code: '130000000' },
+            { name: 'Cordillera Administrative Region (CAR)', code: '140000000' },
+            { name: 'Ilocos Region (Region I)', code: '010000000' },
+            { name: 'Cagayan Valley (Region II)', code: '020000000' },
+            { name: 'Central Luzon (Region III)', code: '030000000' },
+            { name: 'CALABARZON (Region IV-A)', code: '040000000' },
+            { name: 'MIMAROPA (Region IV-B)', code: '170000000' },
+            { name: 'Bicol Region (Region V)', code: '050000000' },
+            { name: 'Western Visayas (Region VI)', code: '060000000' },
+            { name: 'Central Visayas (Region VII)', code: '070000000' },
+            { name: 'Eastern Visayas (Region VIII)', code: '080000000' },
+            { name: 'Zamboanga Peninsula (Region IX)', code: '090000000' },
+            { name: 'Northern Mindanao (Region X)', code: '100000000' },
+            { name: 'Davao Region (Region XI)', code: '110000000' },
+            { name: 'SOCCSKSARGEN (Region XII)', code: '120000000' },
+            { name: 'Caraga (Region XIII)', code: '160000000' },
+            { name: 'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)', code: '150000000' }
+        ];
 
-            if (birthRegionSelect && homeRegionSelect && businessRegionSelect) {
-                // Clear existing options except the first one
-                homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
-                businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
-                birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
+        const birthRegionSelect = document.getElementById('birth_region');
+        const homeRegionSelect = document.getElementById('home_region');
+        const businessRegionSelect = document.getElementById('business_region');
 
-                commonRegions.forEach(region => {
-                    const homeOption = new Option(region, region);
-                    const businessOption = new Option(region, region);
-                    const birthOption = new Option(region, region);
-                    homeRegionSelect.add(homeOption);
-                    businessRegionSelect.add(businessOption);
-                    birthRegionSelect.add(birthOption);
-                });
-            }
+        console.log('Fallback - Found region selects:', {
+            home: !!homeRegionSelect,
+            business: !!businessRegionSelect,
+            birth: !!birthRegionSelect
+        });
+
+        if (birthRegionSelect && homeRegionSelect && businessRegionSelect) {
+            // Clear existing options except the first one
+            homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
+
+            commonRegions.forEach(region => {
+                const homeOption = new Option(region.name, region.code);
+                const businessOption = new Option(region.name, region.code);
+                const birthOption = new Option(region.name, region.code);
+                homeRegionSelect.add(homeOption);
+                businessRegionSelect.add(businessOption);
+                birthRegionSelect.add(birthOption);
+            });
+            console.log('Fallback regions loaded successfully. Counts:', {
+                home: homeRegionSelect.options.length,
+                business: businessRegionSelect.options.length,
+                birth: birthRegionSelect.options.length
+            });
         }
     }
 
@@ -950,33 +972,73 @@
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded event fired');
+
+        // Initialize personal details first
         window.initializePersonalDetails();
-        // For each address type, if a code is set, fetch the name and set the option text
-        ['birth', 'home', 'business'].forEach(type => {
-            let fetches = [];
-            ['region', 'province', 'city', 'barangay'].forEach(level => {
-                const select = document.getElementById(`${type}_${level}`);
-                if (select && select.value) {
-                    fetches.push(
-                        fetchPSGCName(level, select.value).then(name => {
-                            if (name) {
-                                // Update the text of the existing option with the matching value
-                                for (let i = 0; i < select.options.length; i++) {
-                                    if (select.options[i].value === select.value) {
-                                        select.options[i].text = name;
-                                        break;
+
+        // Use fallback regions by default since they work reliably
+        console.log('Loading fallback regions by default...');
+        loadFallbackRegions();
+
+        // Test API directly
+        fetch('https://psgc.gitlab.io/api/regions/')
+            .then(response => {
+                console.log('API test response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('API test successful, got', data.length, 'regions');
+            })
+            .catch(error => {
+                console.error('API test failed:', error);
+                // If API fails, load fallback regions immediately
+                console.log('Loading fallback regions due to API failure...');
+                loadFallbackRegions();
+            });
+
+        // Test birth region specifically
+        setTimeout(() => {
+            const birthRegionSelect = document.getElementById('birth_region');
+            console.log('Birth region select after 1s:', {
+                element: !!birthRegionSelect,
+                options: birthRegionSelect ? birthRegionSelect.options.length : 0,
+                value: birthRegionSelect ? birthRegionSelect.value : 'N/A'
+            });
+
+                        // Check final state
+            console.log('Final birth region options count:', birthRegionSelect.options.length);
+        }, 1000);
+
+        // Wait a bit for regions to load, then handle existing values
+        setTimeout(() => {
+            // For each address type, if a code is set, fetch the name and set the option text
+            ['birth', 'home', 'business'].forEach(type => {
+                let fetches = [];
+                ['region', 'province', 'city', 'barangay'].forEach(level => {
+                    const select = document.getElementById(`${type}_${level}`);
+                    if (select && select.value) {
+                        fetches.push(
+                            fetchPSGCName(level, select.value).then(name => {
+                                if (name) {
+                                    // Update the text of the existing option with the matching value
+                                    for (let i = 0; i < select.options.length; i++) {
+                                        if (select.options[i].value === select.value) {
+                                            select.options[i].text = name;
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                        })
-                    );
-                }
+                            })
+                        );
+                    }
+                });
+                // After all fetches, update the complete address display
+                Promise.all(fetches).then(() => {
+                    updateCompleteAddress(type);
+                });
             });
-            // After all fetches, update the complete address display
-            Promise.all(fetches).then(() => {
-                updateCompleteAddress(type);
-            });
-        });
+        }, 2000); // Wait 2 seconds for regions to load
     });
 
     // Helper to fetch PSGC name for a code
