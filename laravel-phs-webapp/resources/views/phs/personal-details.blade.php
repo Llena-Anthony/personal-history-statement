@@ -5,7 +5,7 @@
     $sectionDescription = 'Please provide your basic personal information';
     $sectionIcon = 'fas fa-user';
     $nextSection = 'personal-characteristics';
-    
+
     // Always use the client PHS layout for identical UI
     $layout = 'layouts.phs-new';
 @endphp

@@ -78,10 +78,55 @@ class PersonalDetailsController extends Controller
             'name_change' => 'nullable|string|max:255',
         ]);
 
-        // Store the personal details
+        $nameData = $request->only([
+                    'last_name', 'first_name', 'middle_name', 'suffix'
+                ]);
+
+        // Validate and store the personal details
+
+        $existingUserDetail = UserDetail::where('username', auth()->user()->username)->first();
+        if ($existingUserDetail) {
+            // Check if user
+            if (!is_null($existingUserDetail->full_name)) {
+
+
+            } else {
+                $recordedName = $this->nameExists($nameData);
+
+                if ($recordedName) {
+                    $existingUserDetail->update([
+                        'full_name' => $recordedName->id
+                    ]);
+                } else {
+                    $existingUserDetail->update([
+                        'full_name' => $this->createNewName($nameData)
+                    ]);
+                }
+            }
+        } else {
+            $newUserDetail = UserDetail::create([
+                'username' => auth() ->user()->username,
+            ]);
+        }
 
         return redirect()->route('phs.personal-characteristics.create');
             // ->with('success', 'Personal details saved successfully.');
+    }
+    private function nameExists($nameData):?NameDetail {
+        return NameDetail::where('last_name',$nameData['last_name'])
+                    ->where('first_name',$nameData['first_name'])
+                    ->where('middle_name',$nameData['middle_name'])
+                    ->where('name_extension',$nameData['suffix'])
+                    ->first();
+    }
+
+    private function createNewName($nameData):int {
+        return NameDetail::create([
+                        'last_name' => $nameData['last_name'],
+                        'first_name'=> $nameData['first_name'],
+                        'middle_name' => $nameData['middle_name'],
+                        'name_extension'=> $nameData['suffix'],
+                    ])->id;
     }
 
     private function getCommonViewData($currentSection)
@@ -94,4 +139,5 @@ class PersonalDetailsController extends Controller
             // 'sectionStatus' => $this->getSectionStatus()
         ];
     }
+
 }
