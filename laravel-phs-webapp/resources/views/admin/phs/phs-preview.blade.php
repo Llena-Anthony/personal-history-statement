@@ -404,7 +404,7 @@
     </div>
 @endsection
 
-{{-- <script>
+<script>
 let hasPrinted = false;
 function printPHSForm() {
     if (hasPrinted) return;
@@ -419,7 +419,7 @@ function printPHSForm() {
         document.body.classList.remove('phs-printing');
     }, 500);
 }
-</script> --}}
+</script>
 
 <style>
 @media print {
