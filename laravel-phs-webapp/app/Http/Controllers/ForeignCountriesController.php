@@ -86,7 +86,7 @@ class ForeignCountriesController extends Controller
                 return response()->json(['success' => true, 'message' => 'Foreign countries visited saved successfully']);
             }
 
-            return redirect()->route('phs.credit-reputation')
+            return redirect()->route('phs.credit-reputation.create')
                 ->with('success', 'Foreign countries visited saved successfully. Please continue with your credit reputation.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {

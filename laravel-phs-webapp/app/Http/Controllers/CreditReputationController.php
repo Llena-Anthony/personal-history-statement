@@ -104,7 +104,7 @@ class CreditReputationController extends Controller
             ]);
 
             // The next section is arrest-record
-            return redirect()->route('phs.arrest-record')
+            return redirect()->route('phs.arrest-record.create')
                 ->with('success', 'Credit reputation saved successfully.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($request->ajax()) {

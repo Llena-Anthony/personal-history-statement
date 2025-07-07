@@ -19,7 +19,7 @@ class MaritalStatusController extends Controller
         $data = $this->getCommonViewData('marital-status');
 
         // Load existing marital status data
-        $maritalStatus = MaritalDetail::where('username', auth()->id())->first();
+        $maritalStatus = MaritalDetail::where('username', auth()->user()->username)->first();
         if ($maritalStatus) {
             $data['maritalStatus'] = $maritalStatus;
 
@@ -30,13 +30,7 @@ class MaritalStatusController extends Controller
             $data['children'] = $children;
         }
 
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            // Return only the partial content for AJAX
-            return view('phs.sections.marital-status-content', $data);
-        }
-
-        // Return the full view (with layout) for normal requests
+        // For both AJAX and normal requests, return the full section view
         return view('phs.marital-status', $data);
     }
 
@@ -64,8 +58,8 @@ class MaritalStatusController extends Controller
                 return $value !== null && $value !== '';
             });
 
-            // Add user_id to data
-            $data['user_id'] = auth()->id();
+            // Add username to data
+            $data['username'] = auth()->user()->username;
 
             // Capitalize spouse name fields
             foreach (['spouse_first_name', 'spouse_middle_name', 'spouse_last_name'] as $field) {
@@ -101,8 +95,8 @@ class MaritalStatusController extends Controller
             \Log::info('MaritalStatus data with defaults:', $data);
 
             // Save or update marital status using updateOrCreate (like Section II)
-            $maritalStatus = MaritalStatus::updateOrCreate(
-                ['user_id' => auth()->id()],
+            $maritalStatus = MaritalDetail::updateOrCreate(
+                ['username' => auth()->user()->username],
                 $data
             );
 
@@ -151,8 +145,16 @@ class MaritalStatusController extends Controller
             $this->markSectionAsCompleted('marital-status');
 
             // Return appropriate response based on mode
-            if ($isSaveOnly) {
-                return response()->json(['success' => true, 'message' => 'Marital status saved successfully']);
+            if ($request->ajax()) {
+                $nextRoute = auth()->user()->role === 'personnel'
+                    ? route('personnel.phs.family-background.create')
+                    : route('phs.family-background.create');
+                
+                return response()->json([
+                    'success' => true, 
+                    'message' => 'Marital status saved successfully',
+                    'next_route' => $nextRoute
+                ]);
             }
 
             return redirect()->route('phs.family-background.create')

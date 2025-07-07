@@ -33,7 +33,7 @@ class FamilyBackgroundController extends Controller
             ['user_id' => auth()->id()],
             $validated
         );
-        return redirect()->route('personnel.phs.educational-background')
+        return redirect()->route('personnel.phs.educational-background.create')
             ->with('success', 'Family background saved successfully. Please continue with your educational background.');
     }
 }

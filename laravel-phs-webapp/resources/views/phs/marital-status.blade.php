@@ -1,9 +1,20 @@
-@extends('layouts.phs-new')
+@php
+    // Standardized section configuration
+    $sectionName = 'marital-status';
+    $sectionTitle = 'III: Marital Status';
+    $sectionDescription = 'Please provide your marital status information';
+    $sectionIcon = 'fas fa-heart';
+    $nextSection = 'family-background';
+    
+    // Always use the client PHS layout for identical UI
+    $layout = 'layouts.phs-new';
+@endphp
 
-@section('title', 'III: Marital Status')
+@extends('phs.sections.template-section-wrapper')
 
-@section('content')
-<form method="POST" action="{{ route('personnel.phs.marital-status.store') }}">
+@section('form-content')
 @include('phs.sections.marital-status-content')
-</form>
 @endsection
+
+{{-- Pass currentSection to layout --}}
+@php($currentSection = 'marital-status')

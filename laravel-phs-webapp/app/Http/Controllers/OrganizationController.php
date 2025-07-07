@@ -153,7 +153,7 @@ class OrganizationController extends Controller
                 return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
             }
 
-            return redirect()->route('phs.miscellaneous')->with('success', 'Organization information saved successfully!');
+            return redirect()->route('phs.miscellaneous.create')->with('success', 'Organization information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $e->errors()], 422);

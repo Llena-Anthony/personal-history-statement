@@ -29,7 +29,7 @@ class EducationalBackgroundController extends Controller
             ['user_id' => auth()->id()],
             $validated
         );
-        return redirect()->route('personnel.phs.military-history')
+        return redirect()->route('personnel.phs.military-history.create')
             ->with('success', 'Educational background saved successfully. Please continue with your military history.');
     }
 }

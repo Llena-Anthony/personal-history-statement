@@ -63,7 +63,7 @@
                     <a href="{{ route('phs.personal-characteristics.create') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                         Test Personal Characteristics
                     </a>
-                    <a href="{{ route('phs.educational-background') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    <a href="{{ route('phs.educational-background.create') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
                         Test Educational Background
                     </a>
                     <a href="{{ route('phs.employment-history.create') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">

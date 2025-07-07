@@ -69,6 +69,34 @@ class User extends Authenticatable
         return $this->hasOne(UserDetail::class, 'username', 'username');
     }
 
+    /**
+     * Get the user's full name
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        if ($this->userDetail && $this->userDetail->nameDetail) {
+            $name = $this->userDetail->nameDetail;
+            $fullName = trim($name->first_name . ' ' . $name->middle_name . ' ' . $name->last_name);
+            if ($name->name_extension) {
+                $fullName .= ' ' . $name->name_extension;
+            }
+            return $fullName;
+        }
+        return $this->username; // Fallback to username if no name details
+    }
+
+    /**
+     * Get the user's email address
+     *
+     * @return string|null
+     */
+    public function getEmailAttribute()
+    {
+        return $this->userDetail ? $this->userDetail->email_addr : null;
+    }
+
     public function getLastLoginDisplayAttribute()
     {
         try {

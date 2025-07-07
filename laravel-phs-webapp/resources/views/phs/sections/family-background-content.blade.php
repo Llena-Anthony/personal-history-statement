@@ -1,27 +1,5 @@
-<div class="max-w-4xl mx-auto">
-    <div class="mb-8">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
-                <i class="fas fa-users text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">Family Background</h1>
-                <p class="text-gray-600">Please provide information about your family members</p>
-            </div>
-        </div>
-    </div>
-
-    @php
-        $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
-        $formAction = $isPersonnel ? route('personnel.phs.family-background.store') : route('phs.family-background.store');
-        $nextSectionRoute = $isPersonnel ? route('personnel.phs.educational-background') : route('phs.educational-background');
-        $dashboardRoute = route('personnel.dashboard');
-    @endphp
-
-    <form method="POST" action="{{ $formAction }}" autocomplete="off" class="space-y-10" id="phs-form">
-        @csrf
-        <!-- Father's Information -->
-        <div class="bg-white shadow-lg rounded-2xl border border-gray-200 p-8 mb-8">
+<!-- Father's Information -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center mb-6">
                 <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
                     <i class="fas fa-male text-yellow-600 text-2xl"></i>
@@ -775,18 +753,6 @@
                 </div>
             </div>
         </div>
-        <!-- Navigation Buttons -->
-        <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
-            <button type="button" onclick="window.navigateToPreviousSection('family-background')" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </button>
-            <button type="submit" class="btn-primary" formaction="{{ route('personnel.phs.educational-background') }}">
-                Save & Continue
-                <i class="fas fa-arrow-right ml-2"></i>
-            </button>
-        </div>
-    </form>
-</div>
 
 @if (request()->ajax())
     <script>

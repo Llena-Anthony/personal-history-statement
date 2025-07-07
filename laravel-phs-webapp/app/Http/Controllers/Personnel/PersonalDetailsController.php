@@ -50,7 +50,7 @@ class PersonalDetailsController extends Controller
                 return response()->json(['success' => true, 'message' => 'Personal details saved successfully']);
             }
 
-            return redirect()->route('personnel.phs.personal-characteristics')
+            return redirect()->route('personnel.phs.personal-characteristics.create')
                 ->with('success', 'Personal details saved successfully. Please continue with your personal characteristics.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {

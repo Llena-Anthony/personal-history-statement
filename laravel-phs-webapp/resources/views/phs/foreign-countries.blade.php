@@ -1,10 +1,17 @@
-@extends('layouts.phs-new')
+@php
+    // Standardized section configuration
+    $sectionName = 'foreign-countries';
+    $sectionTitle = 'IX: Foreign Countries Visited';
+    $sectionDescription = 'Please provide information about foreign countries you have visited';
+    $sectionIcon = 'fas fa-plane';
+    $nextSection = 'credit-reputation';
+    
+    // Always use the client PHS layout for identical UI
+    $layout = 'layouts.phs-new';
+@endphp
 
-@section('title', 'IX: Foreign Countries Visited')
+@extends('phs.sections.template-section-wrapper')
 
-@section('content')
+@section('form-content')
     @include('phs.sections.foreign-countries-content')
-    <form method="POST" action="{{ route('personnel.phs.foreign-countries.store') }}">
 @endsection
-
-@php($currentSection = 'foreign-countries') 

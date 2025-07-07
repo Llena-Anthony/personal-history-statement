@@ -19,7 +19,7 @@ class PlacesOfResidenceController extends Controller
     public function store(\Illuminate\Http\Request $request)
     {
         // Implement validation and saving logic for residence history as needed
-        return redirect()->route('personnel.phs.foreign-countries')
+        return redirect()->route('personnel.phs.foreign-countries.create')
             ->with('success', 'Places of residence saved successfully. Please continue with your foreign countries.');
     }
 }

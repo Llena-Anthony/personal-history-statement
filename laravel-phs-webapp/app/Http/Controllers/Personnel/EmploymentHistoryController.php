@@ -28,7 +28,7 @@ class EmploymentHistoryController extends Controller
             ['user_id' => auth()->id()],
             $validated
         );
-        return redirect()->route('personnel.phs.places-of-residence')
+        return redirect()->route('personnel.phs.places-of-residence.create')
             ->with('success', 'Employment history saved successfully. Please continue with your places of residence.');
     }
 }

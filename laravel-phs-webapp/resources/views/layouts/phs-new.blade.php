@@ -831,35 +831,35 @@
 
         const isPersonnel = {{ (Auth::user() && Auth::user()->role === 'personnel') ? 'true' : 'false' }};
         const PHSSectionRoutes = isPersonnel ? {
-            'personal-details': '{{ route("personnel.phs.personal-details") }}',
-            'personal-characteristics': '{{ route("personnel.phs.personal-characteristics") }}',
-            'marital-status': '{{ route("personnel.phs.marital-status") }}',
-            'family-background': '{{ route("personnel.phs.family-background") }}',
-            'educational-background': '{{ route("personnel.phs.educational-background") }}',
-            'military-history': '{{ route("personnel.phs.military-history") }}',
-            'places-of-residence': '{{ route("personnel.phs.places-of-residence") }}',
-            'employment-history': '{{ route("personnel.phs.employment-history") }}',
-            'foreign-countries': '{{ route("personnel.phs.foreign-countries") }}',
-            'credit-reputation': '{{ route("personnel.phs.credit-reputation") }}',
-            'arrest-record': '{{ route("personnel.phs.arrest-record") }}',
+            'personal-details': '{{ route("personnel.phs.personal-details.create") }}',
+            'personal-characteristics': '{{ route("personnel.phs.personal-characteristics.create") }}',
+            'marital-status': '{{ route("personnel.phs.marital-status.create") }}',
+            'family-background': '{{ route("personnel.phs.family-background.create") }}',
+            'educational-background': '{{ route("personnel.phs.educational-background.create") }}',
+            'military-history': '{{ route("personnel.phs.military-history.create") }}',
+            'places-of-residence': '{{ route("personnel.phs.places-of-residence.create") }}',
+            'employment-history': '{{ route("personnel.phs.employment-history.create") }}',
+            'foreign-countries': '{{ route("personnel.phs.foreign-countries.create") }}',
+            'credit-reputation': '{{ route("personnel.phs.credit-reputation.create") }}',
+            'arrest-record': '{{ route("personnel.phs.arrest-record.create") }}',
             'character-and-reputation': '#', // Add personnel route if exists
-            'organization': '{{ route("personnel.phs.organization") }}',
+            'organization': '{{ route("personnel.phs.organization.create") }}',
             'miscellaneous': '#', // Add personnel route if exists
         } : {
             'personal-details': '{{ route("phs.personal-details.create") }}',
             'personal-characteristics': '{{ route("phs.personal-characteristics.create") }}',
             'marital-status': '{{ route("phs.marital-status.create") }}',
             'family-background': '{{ route("phs.family-background.create") }}',
-            'educational-background': '{{ route("phs.educational-background") }}',
+            'educational-background': '{{ route("phs.educational-background.create") }}',
             'military-history': '{{ route("phs.military-history.create") }}',
             'places-of-residence': '{{ route("phs.places-of-residence.create") }}',
             'employment-history': '{{ route("phs.employment-history.create") }}',
             'foreign-countries': '{{ route("phs.foreign-countries.create") }}',
-            'credit-reputation': '{{ route("phs.credit-reputation") }}',
-            'arrest-record': '{{ route("phs.arrest-record") }}',
-            'character-and-reputation': '{{ route("phs.character-and-reputation") }}',
-            'organization': '{{ route("phs.organization") }}',
-            'miscellaneous': '{{ route("phs.miscellaneous") }}',
+            'credit-reputation': '{{ route("phs.credit-reputation.create") }}',
+            'arrest-record': '{{ route("phs.arrest-record.create") }}',
+            'character-and-reputation': '{{ route("phs.character-and-reputation.create") }}',
+            'organization': '{{ route("phs.organization.create") }}',
+            'miscellaneous': '{{ route("phs.miscellaneous.create") }}',
         };
 
         function getNextSection(currentSection) {

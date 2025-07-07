@@ -1,17 +1,4 @@
-<div class="max-w-4xl mx-auto" x-data="creditReputationForm()">
-    <div class="mb-8">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
-                <i class="fas fa-credit-card text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">Credit Reputation</h1>
-                <p class="text-gray-600">Please provide your credit reputation information</p>
-            </div>
-        </div>
-    </div>
-    <form method="POST" action="{{ route('phs.credit-reputation.store') }}" class="space-y-8">
-        @csrf
+<div x-data="creditReputationForm()">
         <!-- Combined Section for A-D -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
@@ -158,7 +145,6 @@
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>
         </div>
-    </form>
 </div>
 
 <script>
