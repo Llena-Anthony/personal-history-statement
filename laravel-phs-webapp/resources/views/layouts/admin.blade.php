@@ -762,7 +762,7 @@
 <body>
     <div class="admin-layout">
         <!-- Header -->
-        <header class="admin-header">
+        <header class="admin-header no-print">
             <div class="header-content">
                 <div class="flex items-center justify-between px-6 py-4">
                     <!-- Left Section -->
@@ -840,7 +840,7 @@
         <!-- Main Content Wrapper -->
         <div class="main-content-wrapper">
         <!-- Sidebar -->
-            <aside class="sidebar text-white flex flex-col">
+            <aside class="sidebar text-white flex flex-col no-print">
             <!-- Profile Section -->
             <div class="profile-container relative">
                     <a href="{{ route('admin.profile.edit') }}" class="block">
@@ -965,7 +965,7 @@
         </div>
 
         <!-- Footer -->
-        <footer class="admin-footer">
+        <footer class="admin-footer no-print">
             <div class="footer-pattern">
                 <div class="px-6 py-4">
                     <div class="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
