@@ -13,32 +13,32 @@ use App\Models\User;
 
 class PrintController extends Controller
 {
-    // public function preview() {
-    //     return view("admin.phs.phs-template");
-    // }
-
-    public function preview($username)
-    {
-
-        $applicant = User::where('username', $username)->first();
+    public function preview() {
         return view("admin.phs.phs-template");
     }
 
-    public function printPHSSubmission(PHSSubmission $submission)
-    {
-        // Load the submission with all related data
-        $submission->load([
-            'user',
-            'user.personalInfo',
-            'user.familyHistory',
-            'user.educationalBackground',
-            'user.employmentHistory',
-            'user.militaryHistory',
-            'user.addressDetails',
-            'user.nameDetails',
-            'user.birthDetails'
-        ]);
+    // public function preview($username)
+    // {
 
-        return view('admin.phs.print-submission', compact('submission'));
-    }
+    //     $applicant = User::where('username', $username)->first();
+    //     return view("admin.phs.phs-template");
+    // }
+
+    // public function printPHSSubmission(PHSSubmission $submission)
+    // {
+    //     // Load the submission with all related data
+    //     $submission->load([
+    //         'user',
+    //         'user.personalInfo',
+    //         'user.familyHistory',
+    //         'user.educationalBackground',
+    //         'user.employmentHistory',
+    //         'user.militaryHistory',
+    //         'user.addressDetails',
+    //         'user.nameDetails',
+    //         'user.birthDetails'
+    //     ]);
+
+    //     return view('admin.phs.print-submission', compact('submission'));
+    // }
 }
