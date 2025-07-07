@@ -107,56 +107,68 @@
         </div>
     </div>
     <!-- Place of Birth -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <!-- Region -->
-        <div>
-            <label for="birth_region" class="block text-sm font-medium text-gray-700 mb-2">
-                Region
-            </label>
-            <select name="birth_region" id="birth_region"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                    onchange="loadProvinces('birth')">
-                <option value="">Select Region</option>
-                @if(isset($personalDetails->birth_region) && $personalDetails->birth_region)
-                    <option value="{{ $personalDetails->birth_region }}" selected>
-                        {{ $personalDetails->birth_region_name ?? $personalDetails->birth_region }}
-                    </option>
-                @endif
-            </select>
+    <div class="mb-6">
+        <div class="flex items-center mb-4">
+            <div class="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center mr-3">
+                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+            </div>
+            <h4 class="text-lg font-semibold text-[#1B365D]">Place of Birth</h4>
         </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Region -->
+            <div>
+                <label for="birth_region" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-map mr-1 text-[#D4AF37]"></i>
+                    Region
+                </label>
+                <select name="birth_region" id="birth_region"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                        onchange="loadProvinces('birth')">
+                    <option value="">Select Region</option>
+                    @if(isset($personalDetails->birth_region) && $personalDetails->birth_region)
+                        <option value="{{ $personalDetails->birth_region }}" selected>
+                            {{ $personalDetails->birth_region_name ?? $personalDetails->birth_region }}
+                        </option>
+                    @endif
+                </select>
+            </div>
 
-        <!-- Province -->
-        <div>
-            <label for="birth_province" class="block text-sm font-medium text-gray-700 mb-2">
-                Province
-            </label>
-            <select name="birth_province" id="birth_province"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                    onchange="loadCities('birth')">
-                <option value="">Select Province</option>
-                @if(isset($personalDetails->birth_province) && $personalDetails->birth_province)
-                    <option value="{{ $personalDetails->birth_province }}" selected>
-                        {{ $personalDetails->birth_province_name ?? $personalDetails->birth_province }}
-                    </option>
-                @endif
-            </select>
-        </div>
+            <!-- Province -->
+            <div>
+                <label for="birth_province" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-map mr-1 text-[#D4AF37]"></i>
+                    Province
+                </label>
+                <select name="birth_province" id="birth_province"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                        onchange="loadCities('birth')">
+                    <option value="">Select Province</option>
+                    @if(isset($personalDetails->birth_province) && $personalDetails->birth_province)
+                        <option value="{{ $personalDetails->birth_province }}" selected>
+                            {{ $personalDetails->birth_province_name ?? $personalDetails->birth_province }}
+                        </option>
+                    @endif
+                </select>
+            </div>
 
-        <!-- City/Municipality -->
-        <div>
-            <label for="birth_city" class="block text-sm font-medium text-gray-700 mb-2">
-                City/Municipality
-            </label>
-            <select name="birth_city" id="birth_city"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                    onchange="loadBarangays('birth')">
-                <option value="">Select City/Municipality</option>
-                @if(isset($personalDetails->birth_city) && $personalDetails->birth_city)
-                    <option value="{{ $personalDetails->birth_city }}" selected>
-                        {{ $personalDetails->birth_city_name ?? $personalDetails->birth_city }}
-                    </option>
-                @endif
-            </select>
+            <!-- City/Municipality -->
+            <div>
+                <label for="birth_city" class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-map mr-1 text-[#D4AF37]"></i>
+                    City/Municipality
+                </label>
+                <select name="birth_city" id="birth_city"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                        onchange="loadBarangays('birth')">
+                    <option value="">Select City/Municipality</option>
+                    @if(isset($personalDetails->birth_city) && $personalDetails->birth_city)
+                        <option value="{{ $personalDetails->birth_city }}" selected>
+                            {{ $personalDetails->birth_city_name ?? $personalDetails->birth_city }}
+                        </option>
+                    @endif
+                </select>
+            </div>
         </div>
     </div>
 

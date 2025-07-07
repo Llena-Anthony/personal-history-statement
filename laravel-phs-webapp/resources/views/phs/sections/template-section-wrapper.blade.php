@@ -193,5 +193,217 @@ function displayErrors(errors) {
     
     showNotification('Please correct the errors above.', 'error');
 }
+
+// Philippines Address API Integration for Personal Details
+async function loadRegions() {
+    try {
+        const response = await fetch('https://psgc.gitlab.io/api/regions/');
+        const regions = await response.json();
+
+        const birthRegionSelect = document.getElementById('birth_region');
+        const homeRegionSelect = document.getElementById('home_region');
+        const businessRegionSelect = document.getElementById('business_region');
+
+        if (birthRegionSelect) {
+            birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            regions.forEach(region => {
+                const option = new Option(region.name, region.code);
+                birthRegionSelect.add(option);
+            });
+        }
+
+        if (homeRegionSelect) {
+            homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            regions.forEach(region => {
+                const option = new Option(region.name, region.code);
+                homeRegionSelect.add(option);
+            });
+        }
+
+        if (businessRegionSelect) {
+            businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            regions.forEach(region => {
+                const option = new Option(region.name, region.code);
+                businessRegionSelect.add(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading regions:', error);
+        // Fallback: Add common regions manually
+        const commonRegions = [
+            'National Capital Region (NCR)',
+            'Cordillera Administrative Region (CAR)',
+            'Ilocos Region (Region I)',
+            'Cagayan Valley (Region II)',
+            'Central Luzon (Region III)',
+            'CALABARZON (Region IV-A)',
+            'MIMAROPA (Region IV-B)',
+            'Bicol Region (Region V)',
+            'Western Visayas (Region VI)',
+            'Central Visayas (Region VII)',
+            'Eastern Visayas (Region VIII)',
+            'Zamboanga Peninsula (Region IX)',
+            'Northern Mindanao (Region X)',
+            'Davao Region (Region XI)',
+            'SOCCSKSARGEN (Region XII)',
+            'Caraga (Region XIII)',
+            'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)'
+        ];
+
+        const birthRegionSelect = document.getElementById('birth_region');
+        const homeRegionSelect = document.getElementById('home_region');
+        const businessRegionSelect = document.getElementById('business_region');
+
+        if (birthRegionSelect) {
+            birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            commonRegions.forEach(region => {
+                const option = new Option(region, region);
+                birthRegionSelect.add(option);
+            });
+        }
+
+        if (homeRegionSelect) {
+            homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            commonRegions.forEach(region => {
+                const option = new Option(region, region);
+                homeRegionSelect.add(option);
+            });
+        }
+
+        if (businessRegionSelect) {
+            businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+            commonRegions.forEach(region => {
+                const option = new Option(region, region);
+                businessRegionSelect.add(option);
+            });
+        }
+    }
+}
+
+async function loadProvinces(type) {
+    const regionSelect = document.getElementById(`${type}_region`);
+    const provinceSelect = document.getElementById(`${type}_province`);
+    const citySelect = document.getElementById(`${type}_city`);
+    const barangaySelect = document.getElementById(`${type}_barangay`);
+
+    if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect) return;
+
+    // Reset dependent dropdowns
+    provinceSelect.innerHTML = '<option value="">Select Province</option>';
+    citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+    if (!regionSelect.value) return;
+
+    try {
+        const response = await fetch(`https://psgc.gitlab.io/api/regions/${regionSelect.value}/provinces/`);
+        const provinces = await response.json();
+
+        provinces.forEach(province => {
+            const option = new Option(province.name, province.code);
+            provinceSelect.add(option);
+        });
+    } catch (error) {
+        console.error('Error loading provinces:', error);
+        // Fallback: Add common provinces for selected region
+        const commonProvinces = getCommonProvinces(regionSelect.value);
+        commonProvinces.forEach(province => {
+            const option = new Option(province, province);
+            provinceSelect.add(option);
+        });
+    }
+}
+
+async function loadCities(type) {
+    const provinceSelect = document.getElementById(`${type}_province`);
+    const citySelect = document.getElementById(`${type}_city`);
+    const barangaySelect = document.getElementById(`${type}_barangay`);
+
+    if (!provinceSelect || !citySelect || !barangaySelect) return;
+
+    // Reset dependent dropdowns
+    citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+    if (!provinceSelect.value) return;
+
+    try {
+        const response = await fetch(`https://psgc.gitlab.io/api/provinces/${provinceSelect.value}/cities-municipalities/`);
+        const cities = await response.json();
+
+        cities.forEach(city => {
+            const option = new Option(city.name, city.code);
+            citySelect.add(option);
+        });
+    } catch (error) {
+        console.error('Error loading cities:', error);
+        // Fallback: Add common cities
+        const commonCities = ['City/Municipality 1', 'City/Municipality 2', 'City/Municipality 3'];
+        commonCities.forEach(city => {
+            const option = new Option(city, city);
+            citySelect.add(option);
+        });
+    }
+}
+
+async function loadBarangays(type) {
+    const citySelect = document.getElementById(`${type}_city`);
+    const barangaySelect = document.getElementById(`${type}_barangay`);
+
+    if (!citySelect || !barangaySelect) return;
+
+    // Reset barangay dropdown
+    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+    if (!citySelect.value) return;
+
+    try {
+        const response = await fetch(`https://psgc.gitlab.io/api/cities-municipalities/${citySelect.value}/barangays/`);
+        const barangays = await response.json();
+
+        barangays.forEach(barangay => {
+            const option = new Option(barangay.name, barangay.code);
+            barangaySelect.add(option);
+        });
+    } catch (error) {
+        console.error('Error loading barangays:', error);
+        // Fallback: Add common barangays
+        const commonBarangays = ['Barangay 1', 'Barangay 2', 'Barangay 3', 'Barangay 4', 'Barangay 5'];
+        commonBarangays.forEach(barangay => {
+            const option = new Option(barangay, barangay);
+            barangaySelect.add(option);
+        });
+    }
+}
+
+// Helper function for common provinces (fallback)
+function getCommonProvinces(region) {
+    const provinceMap = {
+        'National Capital Region (NCR)': ['Metro Manila'],
+        'Cordillera Administrative Region (CAR)': ['Abra', 'Apayao', 'Benguet', 'Ifugao', 'Kalinga', 'Mountain Province'],
+        'Ilocos Region (Region I)': ['Ilocos Norte', 'Ilocos Sur', 'La Union', 'Pangasinan'],
+        'Cagayan Valley (Region II)': ['Batanes', 'Cagayan', 'Isabela', 'Nueva Vizcaya', 'Quirino'],
+        'Central Luzon (Region III)': ['Aurora', 'Bataan', 'Bulacan', 'Nueva Ecija', 'Pampanga', 'Tarlac', 'Zambales'],
+        'CALABARZON (Region IV-A)': ['Batangas', 'Cavite', 'Laguna', 'Quezon', 'Rizal'],
+        'MIMAROPA (Region IV-B)': ['Marinduque', 'Occidental Mindoro', 'Oriental Mindoro', 'Palawan', 'Romblon'],
+        'Bicol Region (Region V)': ['Albay', 'Camarines Norte', 'Camarines Sur', 'Catanduanes', 'Masbate', 'Sorsogon'],
+        'Western Visayas (Region VI)': ['Aklan', 'Antique', 'Capiz', 'Guimaras', 'Iloilo', 'Negros Occidental'],
+        'Central Visayas (Region VII)': ['Bohol', 'Cebu', 'Negros Oriental', 'Siquijor'],
+        'Eastern Visayas (Region VIII)': ['Biliran', 'Eastern Samar', 'Leyte', 'Northern Samar', 'Samar', 'Southern Leyte'],
+        'Zamboanga Peninsula (Region IX)': ['Zamboanga del Norte', 'Zamboanga del Sur', 'Zamboanga Sibugay'],
+        'Northern Mindanao (Region X)': ['Bukidnon', 'Camiguin', 'Lanao del Norte', 'Misamis Occidental', 'Misamis Oriental'],
+        'Davao Region (Region XI)': ['Compostela Valley', 'Davao del Norte', 'Davao del Sur', 'Davao Occidental', 'Davao Oriental'],
+        'SOCCSKSARGEN (Region XII)': ['Cotabato', 'Sarangani', 'South Cotabato', 'Sultan Kudarat'],
+        'Caraga (Region XIII)': ['Agusan del Norte', 'Agusan del Sur', 'Dinagat Islands', 'Surigao del Norte', 'Surigao del Sur'],
+        'Bangsamoro Autonomous Region in Muslim Mindanao (BARMM)': ['Basilan', 'Lanao del Sur', 'Maguindanao', 'Sulu', 'Tawi-Tawi']
+    };
+
+    return provinceMap[region] || ['Province 1', 'Province 2', 'Province 3'];
+}
+
+// Initialize place loading for personal details section
+if (document.getElementById('birth_region')) {
+    loadRegions();
+}
 </script>
 @endsection 
