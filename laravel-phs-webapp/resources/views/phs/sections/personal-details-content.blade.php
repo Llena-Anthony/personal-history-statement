@@ -108,18 +108,11 @@
     </div>
     <!-- Place of Birth -->
     <div class="mb-6">
-        <div class="flex items-center mb-4">
-            <div class="w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center mr-3">
-                <i class="fas fa-map-marker-alt text-white text-sm"></i>
-            </div>
-            <h4 class="text-lg font-semibold text-[#1B365D]">Place of Birth</h4>
-        </div>
-        
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Place of Birth</h4>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <!-- Region -->
             <div>
                 <label for="birth_region" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-map mr-1 text-[#D4AF37]"></i>
                     Region
                 </label>
                 <select name="birth_region" id="birth_region"
@@ -137,7 +130,6 @@
             <!-- Province -->
             <div>
                 <label for="birth_province" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-map mr-1 text-[#D4AF37]"></i>
                     Province
                 </label>
                 <select name="birth_province" id="birth_province"
@@ -155,7 +147,6 @@
             <!-- City/Municipality -->
             <div>
                 <label for="birth_city" class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-map mr-1 text-[#D4AF37]"></i>
                     City/Municipality
                 </label>
                 <select name="birth_city" id="birth_city"

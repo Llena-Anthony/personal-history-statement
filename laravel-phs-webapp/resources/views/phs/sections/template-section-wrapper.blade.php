@@ -405,5 +405,16 @@ function getCommonProvinces(region) {
 if (document.getElementById('birth_region')) {
     loadRegions();
 }
+
+// Initialize personal details section
+window.initializePersonalDetails = function() {
+    console.log('Personal Details section initialized');
+    loadRegions();
+};
+
+// Auto-initialize if this is the personal details section
+if (document.getElementById('birth_region')) {
+    window.initializePersonalDetails();
+}
 </script>
 @endsection 

@@ -124,6 +124,10 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'You have been successfully logged out.');
+        return redirect('/')
+            ->with('success', 'You have been successfully logged out.')
+            ->header('Cache-Control','no-cache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma','no-cache')
+            ->header('Expires','Sat, 01 Jan 1990 00:00:00 GMT');
     }
 }
