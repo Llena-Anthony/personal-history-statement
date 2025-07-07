@@ -13,7 +13,7 @@ class PersonalCharacteristicsController extends Controller
     public function create()
     {
         // Load existing personal characteristics data for autofill
-        $personalCharacteristics = DescriptionDetail::where('username', auth()->id())->first();
+        $personalCharacteristics = DescriptionDetail::where('username', auth()->user()->username)->first();
 
         $data = $this->getCommonViewData('personal-characteristics');
         $data['personalCharacteristics'] = $personalCharacteristics;
@@ -43,8 +43,8 @@ class PersonalCharacteristicsController extends Controller
                 return $value !== null && $value !== '';
             });
 
-            // Add user_id to data
-            $data['user_id'] = auth()->id();
+            // Add username to data
+            $data['username'] = auth()->user()->username;
 
             // Simple check for height to fit database decimal(3,2) constraint
             if (isset($data['height'])) {
@@ -102,8 +102,8 @@ class PersonalCharacteristicsController extends Controller
             \Log::info('PersonalCharacteristics data with defaults:', $data);
 
             // Save or update personal characteristics
-            $personalCharacteristics = PersonalCharacteristic::updateOrCreate(
-                ['user_id' => auth()->id()],
+            $personalCharacteristics = DescriptionDetail::updateOrCreate(
+                ['username' => auth()->user()->username],
                 $data
             );
 

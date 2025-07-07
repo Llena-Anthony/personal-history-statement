@@ -125,7 +125,7 @@ class CharacterReputationController extends Controller
                 return response()->json(['success' => true, 'message' => 'Character and reputation information saved successfully']);
             }
 
-            return redirect()->route('phs.organization')
+            return redirect()->route('phs.organization.create')
                 ->with('success', 'Character and reputation information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {

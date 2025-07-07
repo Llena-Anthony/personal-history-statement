@@ -1,28 +1,3 @@
-<div class="max-w-4xl mx-auto">
-    <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
-                <i class="fas fa-heart text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">Marital Status</h1>
-                <p class="text-gray-600">Please provide your marital status information</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Form -->
-    @php
-        $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
-        $formAction = $isPersonnel ? route('personnel.phs.marital-status.store') : route('phs.marital-status.store');
-        $nextSectionRoute = $isPersonnel ? route('personnel.phs.family-background') : route('phs.family-background.create');
-        $dashboardRoute = route('personnel.dashboard');
-    @endphp
-
-    <form method="POST" action="{{ $formAction }}" class="space-y-8">
-        @csrf
-
         <!-- Marital Status -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
@@ -323,21 +298,122 @@
             </button>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('marital-status')" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </button>
-            <button type="submit" class="btn-primary" formaction="{{ route('personnel.phs.family-background') }}">
-                Save & Continue
-                <i class="fas fa-arrow-right ml-2"></i>
-            </button>
-        </div>
-    </form>
-</div>
-
+@push('scripts')
 <script>
-if (window.initializeMaritalStatus) window.initializeMaritalStatus();
+// Initialize marital status functionality
+window.initializeMaritalStatus = function() {
+    let childIndex = {{ isset($children) && $children->count() > 0 ? $children->count() : 1 }};
+    
+    // Add child functionality
+    const addChildButton = document.getElementById('add-child');
+    if (addChildButton) {
+        addChildButton.addEventListener('click', function() {
+            const container = document.getElementById('children-container');
+            const newChildEntry = document.createElement('div');
+            newChildEntry.className = 'child-entry p-4 border border-gray-200 rounded-lg relative';
+            newChildEntry.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Child's Name</label>
+                        <input type="text" name="children[${childIndex}][name]"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter child's name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                        <input type="date" name="children[${childIndex}][birth_date]"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Citizenship</label>
+                        <input type="text" name="children[${childIndex}][citizenship]"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter citizenship">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                        <input type="text" name="children[${childIndex}][address]"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter address">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name of Father</label>
+                        <input type="text" name="children[${childIndex}][father_name]"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter father's name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name of Mother</label>
+                        <input type="text" name="children[${childIndex}][mother_name]"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                               placeholder="Enter mother's name">
+                    </div>
+                </div>
+                <button type="button" class="remove-child absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            `;
+            
+            container.appendChild(newChildEntry);
+            childIndex++;
+            
+            // Add event listener to the new remove button
+            const removeButton = newChildEntry.querySelector('.remove-child');
+            removeButton.addEventListener('click', function() {
+                newChildEntry.remove();
+            });
+        });
+    }
+    
+    // Remove child functionality (for existing remove buttons)
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-child')) {
+            e.target.closest('.child-entry').remove();
+        }
+    });
+};
+
+// Initialize marital status functionality when page loads
+function initializeMaritalStatusOnLoad() {
+    // Check if the add-child button exists and hasn't been initialized
+    const addChildButton = document.getElementById('add-child');
+    if (addChildButton && !addChildButton.hasAttribute('data-initialized')) {
+        console.log('Initializing marital status functionality...');
+        if (window.initializeMaritalStatus) {
+            window.initializeMaritalStatus();
+            addChildButton.setAttribute('data-initialized', 'true');
+            console.log('Marital status functionality initialized successfully');
+        }
+    }
+}
+
+// Multiple initialization attempts to ensure it works
+function attemptInitialization() {
+    // Try immediately
+    initializeMaritalStatusOnLoad();
+    
+    // Try after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeMaritalStatusOnLoad);
+    } else {
+        initializeMaritalStatusOnLoad();
+    }
+    
+    // Try after a delay
+    setTimeout(initializeMaritalStatusOnLoad, 100);
+    setTimeout(initializeMaritalStatusOnLoad, 500);
+    setTimeout(initializeMaritalStatusOnLoad, 1000);
+}
+
+// Start initialization attempts
+attemptInitialization();
+
+// Also try after window load to ensure everything is ready
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        initializeMaritalStatusOnLoad();
+    }, 100);
+});
 
 // Marriage date synchronization
 document.addEventListener('DOMContentLoaded', function() {
@@ -371,3 +447,4 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMarriageDate();
 });
 </script>
+@endpush

@@ -28,7 +28,7 @@ class MilitaryHistoryController extends Controller
             ['user_id' => auth()->id()],
             $validated
         );
-        return redirect()->route('personnel.phs.employment-history')
+        return redirect()->route('personnel.phs.employment-history.create')
             ->with('success', 'Military history saved successfully. Please continue with your employment history.');
     }
 }

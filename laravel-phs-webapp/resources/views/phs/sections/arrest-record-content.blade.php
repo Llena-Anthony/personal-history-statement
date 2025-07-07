@@ -1,17 +1,4 @@
-<div class="max-w-4xl mx-auto" x-data="arrestRecordForm()">
-    <div class="mb-8">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
-                <i class="fas fa-gavel text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">Arrest Record and Conduct</h1>
-                <p class="text-gray-600">Please provide details of any arrest record or conduct issues.</p>
-            </div>
-        </div>
-    </div>
-    <form method="POST" action="{{ route('phs.arrest-record.store') }}" class="space-y-8">
-        @csrf
+<div x-data="arrestRecordForm()">
         <!-- Arrest Record and Conduct Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
@@ -130,17 +117,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Action Buttons -->
-        <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
-            <a href="{{ $dashboardRoute }}" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </a>
-            <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'arrest-record')">
-                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
-            </button>
-        </div>
-    </form>
 </div>
 
 <script>

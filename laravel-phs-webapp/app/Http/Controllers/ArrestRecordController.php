@@ -83,7 +83,7 @@ class ArrestRecordController extends Controller
                 return response()->json(['success' => true, 'message' => 'Arrest record and conduct information saved successfully']);
             }
 
-            return redirect()->route('phs.character-and-reputation')->with('success', 'Arrest record and conduct saved successfully!');
+            return redirect()->route('phs.character-and-reputation.create')->with('success', 'Arrest record and conduct saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $e->errors()], 422);

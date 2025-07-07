@@ -331,7 +331,7 @@
 
     <!-- Action Buttons -->
     <div class="mt-12 flex justify-between items-center">
-        <a href="{{ route('phs.miscellaneous') }}" 
+        <a href="{{ route('phs.miscellaneous.create') }}" 
            class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B365D] transition-colors">
             <i class="fas fa-arrow-left mr-2"></i>
             Back to Edit

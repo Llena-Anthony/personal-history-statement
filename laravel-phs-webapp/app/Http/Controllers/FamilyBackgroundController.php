@@ -25,7 +25,7 @@ class FamilyBackgroundController extends Controller
         $data = $this->getCommonViewData($currentSection);
 
         // Load existing family background data for autofill
-        $familyBackground = FamilyHistoryDetail::where('username', auth()->id())
+        $familyBackground = FamilyHistoryDetail::where('username', auth()->user()->username)
             ->with(['fatherName', 'motherName', 'spouseName', 'stepParentGuardianName', 'fatherInLawName', 'motherInLawName'])
             ->first();
 
@@ -39,7 +39,7 @@ class FamilyBackgroundController extends Controller
             $data['familyBackground'] = $familyBackground;
 
             // Load family members from the family_members table
-            $familyMembers = FamilyMember::where('user_id', auth()->id())
+            $familyMembers = FamilyMember::where('username', auth()->user()->username)
                 ->with('nameDetails')
                 ->get()
                 ->keyBy('role');
@@ -82,11 +82,7 @@ class FamilyBackgroundController extends Controller
             \Log::info('No family background found, using empty data');
         }
 
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.family-background-content', $data);
-        }
-
+        // For both AJAX and normal requests, return the full section view
         return view('phs.family-background', $data);
     }
 
@@ -505,8 +501,13 @@ class FamilyBackgroundController extends Controller
 
             if ($request->ajax()) {
                 \Log::info('Returning AJAX response, session:', ['phs_sections' => session('phs_sections')]);
+                $nextRoute = auth()->user()->role === 'personnel'
+                    ? route('personnel.phs.educational-background.create')
+                    : route('phs.educational-background.create');
+                
                 return response()->json([
                     'success' => true,
+                    'next_route' => $nextRoute
                 ]);
             }
             return redirect()->route('phs.section', ['section' => 'family-background']);

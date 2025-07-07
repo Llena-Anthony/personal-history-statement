@@ -19,7 +19,7 @@ class ForeignCountriesController extends Controller
     public function store(\Illuminate\Http\Request $request)
     {
         // Implement validation and saving logic for foreign countries as needed
-        return redirect()->route('personnel.phs.credit-reputation')
+        return redirect()->route('personnel.phs.credit-reputation.create')
             ->with('success', 'Foreign countries saved successfully. Please continue with your credit reputation.');
     }
 }

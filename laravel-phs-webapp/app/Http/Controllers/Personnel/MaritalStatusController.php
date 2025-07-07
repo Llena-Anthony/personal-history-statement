@@ -47,7 +47,7 @@ class MaritalStatusController extends Controller
             ['user_id' => auth()->id()],
             $validated
         );
-        return redirect()->route('personnel.phs.family-background')
+        return redirect()->route('personnel.phs.family-background.create')
             ->with('success', 'Marital status saved successfully. Please continue with your family background.');
     }
 }
