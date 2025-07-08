@@ -18,38 +18,36 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Create Admin User
-        $adminName = NameDetail::create([
+        $adminName = NameDetail::firstOrCreate([
             'last_name' => 'Administrator',
             'first_name' => 'System',
             'middle_name' => 'Admin',
-            'name_extension' => null,
+            'suffix' => null,
             'nickname' => 'Admin',
             'change_in_name' => null,
         ]);
 
-        $adminHomeAddress = AddressDetail::create([
+        $adminHomeAddress = AddressDetail::firstOrCreate([
             'country' => 'Philippines',
             'region' => 'National Capital Region',
             'province' => 'Metro Manila',
             'city' => 'Quezon City',
-            'municipality' => 'Quezon City',
             'barangay' => 'Diliman',
             'street' => 'Admin Street',
             'zip_code' => '1101',
         ]);
 
-        $adminBirthAddress = AddressDetail::create([
+        $adminBirthAddress = AddressDetail::firstOrCreate([
             'country' => 'Philippines',
             'region' => 'National Capital Region',
             'province' => 'Metro Manila',
             'city' => 'Manila',
-            'municipality' => 'Manila',
             'barangay' => 'Intramuros',
             'street' => 'Birth Street',
             'zip_code' => '1002',
         ]);
 
-        $adminUser = User::create([
+        $adminUser = User::firstOrCreate([
             'username' => 'admin',
             'password' => Hash::make('admin123'),
             'usertype' => 'admin',
@@ -58,7 +56,7 @@ class UserSeeder extends Seeder
             'phs_status' => 'completed',
         ]);
 
-        UserDetail::create([
+        UserDetail::firstOrCreate([
             'username' => 'admin',
             'full_name' => $adminName->name_id,
             'profile_path' => null,
@@ -72,38 +70,36 @@ class UserSeeder extends Seeder
         ]);
 
         // Create Client User
-        $clientName = NameDetail::create([
+        $clientName = NameDetail::firstOrCreate([
             'last_name' => 'Santos',
             'first_name' => 'Juan',
             'middle_name' => 'Dela Cruz',
-            'name_extension' => null,
+            'suffix' => null,
             'nickname' => 'Juan',
             'change_in_name' => null,
         ]);
 
-        $clientHomeAddress = AddressDetail::create([
+        $clientHomeAddress = AddressDetail::firstOrCreate([
             'country' => 'Philippines',
             'region' => 'Cordillera Administrative Region',
             'province' => 'Benguet',
             'city' => 'Baguio City',
-            'municipality' => 'Baguio City',
             'barangay' => 'Central Business District',
             'street' => 'Client Street',
             'zip_code' => '2600',
         ]);
 
-        $clientBirthAddress = AddressDetail::create([
+        $clientBirthAddress = AddressDetail::firstOrCreate([
             'country' => 'Philippines',
             'region' => 'Cordillera Administrative Region',
             'province' => 'Benguet',
             'city' => 'Baguio City',
-            'municipality' => 'Baguio City',
             'barangay' => 'Central Business District',
             'street' => 'Birth Street',
             'zip_code' => '2600',
         ]);
 
-        $clientUser = User::create([
+        $clientUser = User::firstOrCreate([
             'username' => 'client',
             'password' => Hash::make('client123'),
             'usertype' => 'client',
@@ -112,7 +108,7 @@ class UserSeeder extends Seeder
             'phs_status' => 'in_progress',
         ]);
 
-        UserDetail::create([
+        UserDetail::firstOrCreate([
             'username' => 'client',
             'full_name' => $clientName->name_id,
             'profile_path' => null,
@@ -129,4 +125,4 @@ class UserSeeder extends Seeder
         $this->command->info('Admin credentials: username=admin, password=admin123');
         $this->command->info('Client credentials: username=client, password=client123');
     }
-} 
+}

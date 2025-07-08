@@ -31,7 +31,7 @@ class LookupDataSeeder extends Seeder
         ];
 
         foreach ($citizenships as $citizenship) {
-            CitizenshipDetail::create($citizenship);
+            CitizenshipDetail::firstOrCreate($citizenship);
         }
 
         // Seed Language Details
@@ -48,7 +48,7 @@ class LookupDataSeeder extends Seeder
         ];
 
         foreach ($languages as $language) {
-            LanguageDetail::create($language);
+            LanguageDetail::firstOrCreate($language);
         }
 
         // Seed Address Details for common locations
@@ -58,7 +58,6 @@ class LookupDataSeeder extends Seeder
                 'region' => 'National Capital Region',
                 'province' => 'Metro Manila',
                 'city' => 'Quezon City',
-                'municipality' => 'Quezon City',
                 'barangay' => 'Diliman',
                 'street' => 'Commonwealth Avenue',
                 'zip_code' => '1101',
@@ -68,7 +67,6 @@ class LookupDataSeeder extends Seeder
                 'region' => 'National Capital Region',
                 'province' => 'Metro Manila',
                 'city' => 'Manila',
-                'municipality' => 'Manila',
                 'barangay' => 'Intramuros',
                 'street' => 'General Luna Street',
                 'zip_code' => '1002',
@@ -78,7 +76,6 @@ class LookupDataSeeder extends Seeder
                 'region' => 'Cordillera Administrative Region',
                 'province' => 'Benguet',
                 'city' => 'Baguio City',
-                'municipality' => 'Baguio City',
                 'barangay' => 'Central Business District',
                 'street' => 'Session Road',
                 'zip_code' => '2600',
@@ -86,7 +83,7 @@ class LookupDataSeeder extends Seeder
         ];
 
         foreach ($addresses as $address) {
-            AddressDetail::create($address);
+            AddressDetail::firstOrCreate($address);
         }
 
         // Seed School Details
@@ -106,7 +103,7 @@ class LookupDataSeeder extends Seeder
         ];
 
         foreach ($schools as $school) {
-            SchoolDetail::create($school);
+            SchoolDetail::firstOrCreate($school);
         }
 
         // Seed Organization Details
@@ -126,7 +123,7 @@ class LookupDataSeeder extends Seeder
         ];
 
         foreach ($organizations as $organization) {
-            OrganizationDetail::create($organization);
+            OrganizationDetail::firstOrCreate($organization);
         }
 
         // Seed Occupation Details
@@ -149,7 +146,7 @@ class LookupDataSeeder extends Seeder
         ];
 
         foreach ($occupations as $occupation) {
-            OccupationDetail::create($occupation);
+            OccupationDetail::firstOrCreate($occupation);
         }
     }
-} 
+}

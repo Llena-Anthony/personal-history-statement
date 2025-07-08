@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AddressDetail;
 use Illuminate\Http\Request;
 
 Use App\Models\User;
@@ -161,7 +162,7 @@ class PersonalDetailsController extends Controller
                     ])->id;
     }
     private function createNewAddress($addressData):AddressDetail {
-        return AddressDetail::create([
+        return AddressDetail::firstOrCreate([
             'country' => $addressData['country'] ?? null,
             'region' => $addressData['region'] ?? null,
             'province' => $addressData['province'] ?? null,
@@ -172,7 +173,7 @@ class PersonalDetailsController extends Controller
         ]);
     }
     private function createJobDetails($jobData): {
-        JobDetail::create([
+        JobDetail::firstOrCreate([
             'username' => auth() ->user()->username,
             'service_branch'=> $jobData['branch_of_service'],
             'rank'=> $jobData['rank'],
@@ -195,14 +196,16 @@ class PersonalDetailsController extends Controller
         ]);
     }
 
-    private function updateName($nameId, $nameData){
-        NameDetail::where('name_id', $nameId->first();
-
-        if()
-    }
     private function retrieveRecordedName($nameId):NameDetail {
         return NameDetail::where('name_id', $nameId)->first();
     }
+    private function retrieveUserDetail(): UserDetail {
+        return UserDetail::where('username', auth()->user()->username)->first();
+    }
+    private function retrieveHomeDetail($addr_id): AddressDetail {
+        return AddressDetail::where('addr_id', $addr_id)->first();
+    }
+    private
 
     private function getCommonViewData($currentSection)
     {

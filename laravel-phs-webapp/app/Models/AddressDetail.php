@@ -10,7 +10,7 @@ class AddressDetail extends Model
     use HasFactory;
 
     public $timestamps = false;
-    
+
     protected $primaryKey = 'addr_id';
     public $incrementing = true;
     protected $keyType = 'int';
@@ -20,7 +20,6 @@ class AddressDetail extends Model
         'region',
         'province',
         'city',
-        'municipality',
         'barangay',
         'street',
         'zip_code',
