@@ -632,11 +632,17 @@
                 <div class="profile-section">
                     <div class="flex items-center space-x-4 mb-4">
                         <div class="relative">
+                            @if(session('admin_switched_to_client'))
+                            <span class="w-16 h-16 rounded-full overflow-hidden profile-avatar opacity-60 cursor-not-allowed select-none inline-block" title="Edit Profile (disabled in admin mode)">
+                                <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
+                            </span>
+                            @else
                             <a href="{{ route('profile.edit') }}">
                                 <div class="w-16 h-16 rounded-full overflow-hidden profile-avatar">
                                     <img src="{{ Auth::user()->profile_photo_url ?? asset('images/default-avatar.svg') }}" alt="Profile Picture" class="w-full h-full object-cover">
                                 </div>
                             </a>
+                            @endif
                             <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
                                 <i class="fas fa-check text-xs text-white"></i>
                             </div>

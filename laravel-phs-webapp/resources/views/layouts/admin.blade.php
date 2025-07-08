@@ -845,7 +845,7 @@
                         }}
                     </a>
                     <div class="user-username" style="font-size:0.85rem; color:#D4AF37; margin-bottom:0;">{{ '@' . Auth::user()->username }}</div>
-                    <div class="user-role" style="font-size:0.8rem; color:#94a3b8;">{{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}</div>
+                    {{-- <div class="user-role" style="font-size:0.8rem; color:#94a3b8;">{{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}</div> --}}
                 </div>
                 <div class="pma-switch-btn-wrapper" style="position:absolute; top:12px; right:16px; z-index:2; display:flex; flex-direction:column; align-items:flex-end;">
                     @if(Auth::user()->usertype === 'admin')
