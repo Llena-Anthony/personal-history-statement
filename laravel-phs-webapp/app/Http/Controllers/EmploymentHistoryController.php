@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
 use App\Models\User;
+use App\Helper\DataRetrieval;
 
 class EmploymentHistoryController extends Controller
 {
@@ -17,17 +18,9 @@ class EmploymentHistoryController extends Controller
      */
     public function create()
     {
-        // Load existing employment history data for autofill
-        $employmentHistory = User::where('username', auth()->id())->first();
-
+        $employment_history = DataRetrieval::retrieveEmployment(auth()->user()->username);
         $data = $this->getCommonViewData('employment-history');
-        $data['employmentHistory'] = $employmentHistory;
-
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.employment-history-content', $data);
-        }
-
+        $data['employment_history'] = $employment_history;
         return view('phs.employment-history', $data);
     }
 

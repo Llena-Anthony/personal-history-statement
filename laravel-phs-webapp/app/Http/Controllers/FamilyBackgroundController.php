@@ -7,6 +7,7 @@ use App\Traits\PHSSectionTracking;
 use App\Services\NameService;
 use App\Models\FamilyHistoryDetail;
 use App\Models\FamilyMember;
+use App\Helper\DataRetrieval;
 
 class FamilyBackgroundController extends Controller
 {
@@ -19,70 +20,9 @@ class FamilyBackgroundController extends Controller
      */
     public function create()
     {
-        // Determine which section is being accessed
-        $currentSection = request()->routeIs('phs.family-history.create') ? 'family-history' : 'family-background';
-
-        $data = $this->getCommonViewData($currentSection);
-
-        // Load existing family background data for autofill
-        $familyBackground = FamilyHistoryDetail::where('username', auth()->user()->username)
-            ->with(['fatherName', 'motherName', 'spouseName', 'stepParentGuardianName', 'fatherInLawName', 'motherInLawName'])
-            ->first();
-
-        \Log::info('FamilyBackground create method called', [
-            'user_id' => auth()->id(),
-            'family_background_found' => $familyBackground ? true : false,
-            'is_ajax' => request()->ajax()
-        ]);
-
-        if ($familyBackground) {
-            $data['familyBackground'] = $familyBackground;
-
-            // Load family members from the family_members table
-            $familyMembers = FamilyMember::where('username', auth()->user()->username)
-                ->with('nameDetails')
-                ->get()
-                ->keyBy('role');
-
-            \Log::info('Family members loaded', [
-                'count' => $familyMembers->count(),
-                'roles' => $familyMembers->keys()->toArray()
-            ]);
-
-            // Set the name data for each family member
-            $data['fatherName'] = $familyMembers->get('father')?->nameDetails;
-            $data['motherName'] = $familyMembers->get('mother')?->nameDetails;
-            $data['spouseName'] = $familyMembers->get('spouse')?->nameDetails;
-            $data['stepParentGuardianName'] = $familyMembers->get('step_parent_guardian')?->nameDetails;
-            $data['fatherInLawName'] = $familyMembers->get('father_in_law')?->nameDetails;
-            $data['motherInLawName'] = $familyMembers->get('mother_in_law')?->nameDetails;
-
-            // Load related data
-            $data['siblings'] = $familyBackground->siblings()->with('name')->get();
-            $data['family_members'] = $familyMembers;
-
-            \Log::info('Data loaded for form', [
-                'father_name' => $data['fatherName'] ? $data['fatherName']->first_name : null,
-                'mother_name' => $data['motherName'] ? $data['motherName']->first_name : null,
-                'siblings_count' => $data['siblings']->count(),
-                'family_members_count' => $data['family_members']->count()
-            ]);
-        } else {
-            // Initialize empty name objects to prevent errors
-            $data['familyBackground'] = null;
-            $data['fatherName'] = null;
-            $data['motherName'] = null;
-            $data['spouseName'] = null;
-            $data['stepParentGuardianName'] = null;
-            $data['fatherInLawName'] = null;
-            $data['motherInLawName'] = null;
-            $data['siblings'] = collect();
-            $data['family_members'] = collect();
-
-            \Log::info('No family background found, using empty data');
-        }
-
-        // For both AJAX and normal requests, return the full section view
+        $prefill = DataRetrieval::retrieveFamilyBackground(auth()->user()->username);
+        $data = $this->getCommonViewData('family-background');
+        $data = array_merge($data, $prefill);
         return view('phs.family-background', $data);
     }
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Traits\PHSSectionTracking;
 use App\Services\NameService;
+use App\Helper\DataRetrieval;
 
 class MaritalStatusController extends Controller
 {
@@ -16,21 +17,9 @@ class MaritalStatusController extends Controller
 
     public function create()
     {
+        $prefill = DataRetrieval::retrieveMaritalStatus(auth()->user()->username);
         $data = $this->getCommonViewData('marital-status');
-
-        // Load existing marital status data
-        $maritalStatus = MaritalDetail::where('username', auth()->user()->username)->first();
-        if ($maritalStatus) {
-            $data['maritalStatus'] = $maritalStatus;
-
-            // Load existing children data
-            $children = Child::where('marital_status_id', $maritalStatus->id)
-                           ->with('nameDetails')
-                           ->get();
-            $data['children'] = $children;
-        }
-
-        // For both AJAX and normal requests, return the full section view
+        $data = array_merge($data, $prefill);
         return view('phs.marital-status', $data);
     }
 

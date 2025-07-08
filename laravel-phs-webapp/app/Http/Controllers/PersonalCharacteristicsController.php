@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DescriptionDetail;
 use App\Traits\PHSSectionTracking;
+use App\Helper\DataRetrieval;
 
 class PersonalCharacteristicsController extends Controller
 {
@@ -13,7 +14,7 @@ class PersonalCharacteristicsController extends Controller
     public function create()
     {
         // Load existing personal characteristics data for autofill
-        $personalCharacteristics = DescriptionDetail::where('username', auth()->user()->username)->first();
+        $personalCharacteristics = (object) DataRetrieval::retrievePersonalCharacteristics(auth()->user()->username);
 
         $data = $this->getCommonViewData('personal-characteristics');
         $data['personalCharacteristics'] = $personalCharacteristics;

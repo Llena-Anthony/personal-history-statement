@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
 
 use App\Models\User;
+use App\Helper\DataRetrieval;
 
 class EducationalBackgroundController extends Controller
 {
@@ -13,18 +14,10 @@ class EducationalBackgroundController extends Controller
 
     public function create()
     {
-        // Load existing educational background data for autofill
-        $educationalBackground = User::where('username', auth()->id())->first();
-
-        $viewData = $this->getCommonViewData('educational-background');
-        $viewData['educationalBackground'] = $educationalBackground;
-
-        // Return partial for AJAX requests, full view for normal requests
-        if (request()->ajax()) {
-            return view('phs.sections.educational-background-content', $viewData);
-        }
-
-        return view('phs.educational-background', $viewData);
+        $prefill = DataRetrieval::retrieveEducationalBackground(auth()->user()->username);
+        $data = $this->getCommonViewData('educational-background');
+        $data = array_merge($data, $prefill);
+        return view('phs.educational-background', $data);
     }
 
     public function index()
