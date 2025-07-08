@@ -166,7 +166,7 @@
                 </div>
                 <div>
                     <p class="text-sm font-medium text-gray-800">Account created</p>
-                    <p class="text-xs text-gray-500">{{ Auth::user()->created_at->format('M d, Y g:i A') }}</p>
+                    <p class="text-xs text-gray-500">{{ Auth::user()->created_at ? Auth::user()->created_at->format('M d, Y g:i A') : 'N/A' }}</p>
                 </div>
             </div>
         </div>

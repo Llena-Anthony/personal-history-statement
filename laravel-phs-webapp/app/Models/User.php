@@ -189,4 +189,39 @@ class User extends Authenticatable
         // User model doesn't have timestamps, so we'll skip date filtering
         return $query;
     }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
+    /**
+     * Get the user's creation date from activity logs
+     *
+     * @return \Carbon\Carbon|null
+     */
+    public function getCreatedAtAttribute()
+    {
+        // First, try to find the user creation log entry
+        $creationLog = \App\Models\ActivityLogDetail::where('act_desc', 'like', "%Created new user: %{$this->username}%")
+            ->orWhere('act_desc', 'like', "%Created new user: % ({$this->username})%")
+            ->orderBy('act_date_time', 'asc')
+            ->first();
+
+        if ($creationLog) {
+            return $creationLog->act_date_time;
+        }
+
+        // Fallback: Find the earliest activity log entry for this user
+        $firstActivity = \App\Models\ActivityLogDetail::where('changes_made_by', $this->username)
+            ->orderBy('act_date_time', 'asc')
+            ->first();
+
+        return $firstActivity ? $firstActivity->act_date_time : null;
+    }
 }
