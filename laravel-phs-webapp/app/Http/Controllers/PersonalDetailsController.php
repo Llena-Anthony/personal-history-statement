@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AddressDetail;
 use Illuminate\Http\Request;
 
 Use App\Models\User;
@@ -205,7 +204,15 @@ class PersonalDetailsController extends Controller
     private function retrieveHomeDetail($addr_id): AddressDetail {
         return AddressDetail::where('addr_id', $addr_id)->first();
     }
-    private
+    private function retrieveBirthAddr($addr_id): AddressDetail {
+        return AddressDetail::where('addr_id', $addr_id)->first();
+    }
+    private function retrieveBusinessAddr($addr_id):AddressDetail {
+        return AddressDetail::where('addr_id', $addr_id)->first();
+    }
+    private function retrieveJobDetail(): JobDetail {
+        return JobDetail::where('username', auth()->user()->username)->first();
+    }
 
     private function getCommonViewData($currentSection)
     {

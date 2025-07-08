@@ -17,6 +17,7 @@ class JobDetail extends Model
         'service_branch',
         'rank',
         'afpsn',
+        'job_desc',
         'job_addr',
     ];
 
@@ -28,4 +29,4 @@ class JobDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

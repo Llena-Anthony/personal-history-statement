@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('service_branch')->nullable();
             $table->string('rank')->nullable();
             $table->string('afpsn')->nullable();
+            $table->string('job_desc')->nullable();
 
             $table->foreignId('job_addr')
             ->nullable()
