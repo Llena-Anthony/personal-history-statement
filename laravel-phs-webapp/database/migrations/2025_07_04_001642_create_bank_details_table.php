@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('bank_details', function (Blueprint $table) {
             $table->id('bank_id');
-            $table->string('bank')->unique();
+            $table->string('bank');
 
             $table->foreignId('bank_addr')
             ->nullable()
             ->constrained('address_details','addr_id')
             ->restrictOnDelete()
             ->cascadeOnUpdate();
+
+            $table->unique(['bank','bank_addr']);
         });
     }
 

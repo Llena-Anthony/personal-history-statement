@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('school_details', function (Blueprint $table) {
             $table->id('school_id');
 
-            $table->string('school_name');
+            $table->string('school_name')->unique();
 
             $table->foreignId('school_addr')
             ->nullable()

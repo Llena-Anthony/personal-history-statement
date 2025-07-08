@@ -78,55 +78,130 @@ class PersonalDetailsController extends Controller
             'name_change' => 'nullable|string|max:255',
         ]);
 
-        $nameData = $request->only([
+        $nameData = $validated->only([
                     'last_name', 'first_name', 'middle_name', 'suffix'
                 ]);
+        $birthAddr = $validated->only([
+            'birth_region','birth_province','birth_city','birth_barangay','birth_street',
+        ]);
 
         // Validate and store the personal details
-
         $existingUserDetail = UserDetail::where('username', auth()->user()->username)->first();
-        if ($existingUserDetail) {
-            // Check if user
-            if (!is_null($existingUserDetail->full_name)) {
+        $recordedName = $this->nameExists($nameData);
 
-
-            } else {
-                $recordedName = $this->nameExists($nameData);
-
-                if ($recordedName) {
-                    $existingUserDetail->update([
-                        'full_name' => $recordedName->id
-                    ]);
-                } else {
-                    $existingUserDetail->update([
-                        'full_name' => $this->createNewName($nameData)
-                    ]);
-                }
-            }
-        } else {
+        if (!$existingUserDetail) {
             $newUserDetail = UserDetail::create([
-                'username' => auth() ->user()->username,
+                            'username' => auth() ->user()->username,
+                        ]);
+            $existingUserDetail = $newUserDetail;
+        }
+
+        $birthAddr = $this->createNewAddress([
+            'region' => $request->birth_region,
+            'province'=> $request->birth_province,
+            'city'=> $request->birth_city,
+            'barangay'=> $request->birth_barangay,
+            'street'=> $request->birth_street,
+        ]);
+
+        $homeAddr = $this->createNewAddress([
+            'region' => $request->home_region,
+            'province'=> $request->home_province,
+            'city'=> $request->home_city,
+            'barangay'=> $request->home_barangay,
+            'street'=> $request->home_street,
+        ]);
+
+        $businessAddr = $this->createNewAddress([
+            'region' => $request->business_region,
+            'province'=> $request->business_province,
+            'city'=> $request->business_city,
+            'barangay'=> $request->business_barangay,
+            'street'=> $request->business_street,
+        ]);
+
+        //saving after mapping what needs to be mapped
+        if ($recordedName) {
+            $existingUserDetail->update([
+                'full_name' => $recordedName->id
+            ]);
+        } else {
+            $existingUserDetail->update([
+                'full_name' => $this->createNewName($nameData),
             ]);
         }
+
 
         return redirect()->route('phs.personal-characteristics.create');
             // ->with('success', 'Personal details saved successfully.');
     }
     private function nameExists($nameData):?NameDetail {
         return NameDetail::where('last_name',$nameData['last_name'])
-                    ->where('first_name',$nameData['first_name'])
-                    ->where('middle_name',$nameData['middle_name'])
-                    ->where('name_extension',$nameData['suffix'])
-                    ->first();
+        ->where('first_name',$nameData['first_name'])
+        ->where('middle_name',$nameData['middle_name'])
+        ->where('name_extension',$nameData['suffix'])
+        ->first();
     }
-
+    private function addressExists($addressData):?AddressDetail {
+        return AddressDetail::where('country', $addressData['country'])
+        ->where('region', $addressData['region'])
+        ->where('province', $addressData['province'])
+        ->where('city', $addressData['city'])
+        ->where('barangay', $addressData['barangay'])
+        ->where('street', $addressData['street'])
+        ->where('zip_code', $addressData['zip_code'])
+        ->first();
+    }
     private function createNewName($nameData):int {
-        return NameDetail::create([
+        return NameDetail::firstOrCreate([
                         'last_name' => $nameData['last_name'],
                         'first_name'=> $nameData['first_name'],
                         'middle_name' => $nameData['middle_name'],
                         'name_extension'=> $nameData['suffix'],
                     ])->id;
+    }
+    private function createNewAddress($addressData):AddressDetail {
+        return AddressDetail::create([
+            'country' => $addressData['country'] ?? null,
+            'region' => $addressData['region'] ?? null,
+            'province' => $addressData['province'] ?? null,
+            'city'=> $addressData['city'] ?? null,
+            'barangay'=> $addressData['barangay'] ?? null,
+            'street' => $addressData['street'] ?? null,
+            'zip_code'=> $addressData['zip_code'] ?? null,
+        ]);
+    }
+    private function createJobDetails($jobData): {
+        JobDetail::create([
+            'username' => auth() ->user()->username,
+            'service_branch'=> $jobData['branch_of_service'],
+            'rank'=> $jobData['rank'],
+            'afpsn'=> $jobData['afpsn'],
+            'job_addr'=> $jobData['job_addr'],
+        ]);
+    }
+
+    private function createNewActivity($activityData) {
+        ActivityLogDetail::create([
+            'changes_made_by'=>auth()->user()->username,
+            'action'=>$activityData('action'),
+            'act_desc'=> $activityData('act_desc'),
+            'act_stat'=> $activityData('act_stat'),
+            'ip_addr'=> $activityData('ip_addr'),
+            'user_agent'=> $activityData('user_agent'),
+            'act_date_time'=> $activityData(''),
+            'old_value'=> $activityData('old_value'),
+            'new_value'=> $activityData('new_value'),
+        ]);
+    }
+
+    private function updateName($nameId, $nameData){
+        NameDetail::where('name_id', $nameId->first();
+
+        if()
+    }
+    private function retrieveRecordedName($nameId):NameDetail {
+        return NameDetail::where('name_id', $nameId)->first();
     }
 
     private function getCommonViewData($currentSection)

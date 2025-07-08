@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('court_name')->nullable();
             $table->string('nature_of_offense')->nullable();
             $table->string('disposition_of_case')->nullable();
+
+            $table->unique(['court_name','nature_of_offense','disposition_of_case'],'full_arr_detail');
         });
     }
 

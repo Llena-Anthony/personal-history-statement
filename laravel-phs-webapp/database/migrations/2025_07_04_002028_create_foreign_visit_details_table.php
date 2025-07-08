@@ -29,6 +29,8 @@ return new class extends Migration
             ->on('users')
             ->onDelete('restrict')
             ->onUpdate('cascade');
+
+            $table->unique(['username','visit_addr']);
         });
     }
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('language_details', function (Blueprint $table) {
             $table->id('lang_id');
-            $table->string('lang_desc');
+            $table->string('lang_desc')->unique();
         });
     }
 

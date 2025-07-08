@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('region')->nullable();
             $table->string('province')->nullable();
             $table->string('city')->nullable();
-            $table->string('municipality')->nullable();
             $table->string('barangay')->nullable();
             $table->string('street')->nullable();
             $table->string('zip_code')->nullable();
+
+            $table->unique(['country','region','province','city','barangay','street'],'full_addr');
         });
     }
 
