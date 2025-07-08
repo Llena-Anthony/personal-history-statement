@@ -193,6 +193,77 @@
     </div>
 </div>
 
+<!-- Military and Contact Information -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-6">
+    <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
+        <i class="fas fa-user-shield mr-3 text-[#D4AF37]"></i>
+        Military and Contact Information
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <!-- Rank -->
+        <div>
+            <label for="rank" class="block text-sm font-medium text-gray-700 mb-2">Rank</label>
+            <input type="text" name="rank" id="rank" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your rank" value="{{ old('rank', $rank) }}">
+        </div>
+        <!-- AFPSN -->
+        <div>
+            <label for="afpsn" class="block text-sm font-medium text-gray-700 mb-2">AFPSN</label>
+            <input type="text" name="afpsn" id="afpsn" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your AFPSN" value="{{ old('afpsn', $afpsn) }}">
+        </div>
+        <!-- Branch of Service -->
+        <div>
+            <label for="branch_of_service" class="block text-sm font-medium text-gray-700 mb-2">Br of Svc</label>
+            <input type="text" name="branch_of_service" id="branch_of_service" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your branch of service" value="{{ old('branch_of_service', $branch_of_service) }}">
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Present Job Assignment -->
+        <div>
+            <label for="present_job" class="block text-sm font-medium text-gray-700 mb-2">Present Job Assignment</label>
+            <input type="text" name="present_job" id="present_job" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your present job assignment" value="{{ old('present_job', $present_job) }}">
+        </div>
+        <!-- Change in name -->
+        <div>
+            <label for="name_change" class="block text-sm font-medium text-gray-700 mb-2">Change in name (If by court action, give details)</label>
+            <input type="text" name="name_change" id="name_change" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="If by court action, give details" value="{{ old('name_change', $name_change) }}">
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <!-- TIN -->
+        <div>
+            <label for="tin" class="block text-sm font-medium text-gray-700 mb-2">TAX IDENTIFICATION NR</label>
+            <input type="text" name="tin" id="tin" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your TIN" value="{{ old('tin', $tin) }}">
+        </div>
+        <!-- Religion -->
+        <div>
+            <label for="religion" class="block text-sm font-medium text-gray-700 mb-2">Religion</label>
+            <input type="text" name="religion" id="religion" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your religion" value="{{ old('religion', $religion) }}">
+        </div>
+        <!-- Mobile Number -->
+        <div>
+            <label for="mobile" class="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
+            <input type="text" name="mobile" id="mobile" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your mobile number" value="{{ old('mobile', $mobile) }}">
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <!-- Email Address -->
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <input type="email" name="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your email address" value="{{ old('email', $email) }}">
+        </div>
+        <!-- Passport Number -->
+        <div>
+            <label for="passport_number" class="block text-sm font-medium text-gray-700 mb-2">Passport Number</label>
+            <input type="text" name="passport_number" id="passport_number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter your passport number" value="{{ old('passport_number', $passport_number) }}">
+        </div>
+        <!-- Passport Expiry -->
+        <div>
+            <label for="passport_expiry" class="block text-sm font-medium text-gray-700 mb-2">Passport Expiry Date</label>
+            <input type="date" name="passport_expiry" id="passport_expiry" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" value="{{ old('passport_expiry', $passport_expiry) }}">
+        </div>
+    </div>
+</div>
+
 <!-- Address Information -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
@@ -285,6 +356,20 @@
             </div>
         </div>
     </div>
+    @php
+        $fullHomeAddress = trim(
+            ($home_street ?? '') . ', ' .
+            ($home_barangay_name ?? $home_barangay ?? '') . ', ' .
+            ($home_city_name ?? $home_city ?? '') . ', ' .
+            ($home_province_name ?? $home_province ?? '') . ', ' .
+            ($home_region_name ?? $home_region ?? '')
+        , ' ,');
+    @endphp
+    @if($fullHomeAddress && $fullHomeAddress !== ', , , ,')
+        <div class="mt-2 text-sm text-gray-600 font-semibold">
+            Full Address: {{ $fullHomeAddress }}
+        </div>
+    @endif
 
     <!-- Business Address -->
     <div>
@@ -371,6 +456,20 @@
             </div>
         </div>
     </div>
+    @php
+        $fullBusinessAddress = trim(
+            ($business_street ?? '') . ', ' .
+            ($business_barangay_name ?? $business_barangay ?? '') . ', ' .
+            ($business_city_name ?? $business_city ?? '') . ', ' .
+            ($business_province_name ?? $business_province ?? '') . ', ' .
+            ($business_region_name ?? $business_region ?? '')
+        , ' ,');
+    @endphp
+    @if($fullBusinessAddress && $fullBusinessAddress !== ', , , ,')
+        <div class="mt-2 text-sm text-gray-600 font-semibold">
+            Full Address: {{ $fullBusinessAddress }}
+        </div>
+    @endif
 </div>
 
 <!-- Hidden fields for address names -->
