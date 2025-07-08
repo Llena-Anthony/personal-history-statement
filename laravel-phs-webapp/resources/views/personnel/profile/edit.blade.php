@@ -328,7 +328,7 @@
                         <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>
                         <span class="text-sm font-semibold text-gray-700">Member Since</span>
                     </div>
-                    <p class="text-gray-900">{{ Auth::user()->created_at->format('F d, Y') }}</p>
+                    <p class="text-gray-900">{{ Auth::user()->created_at ? Auth::user()->created_at->format('F d, Y') : 'N/A' }}</p>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-4">
@@ -336,7 +336,7 @@
                         <i class="fas fa-clock text-blue-600 mr-2"></i>
                         <span class="text-sm font-semibold text-gray-700">Last Updated</span>
                     </div>
-                    <p class="text-gray-900">{{ Auth::user()->updated_at->format('F d, Y \a\t g:i A') }}</p>
+                    <p class="text-gray-900">{{ Auth::user()->updated_at ? Auth::user()->updated_at->format('F d, Y \a\t g:i A') : 'N/A' }}</p>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-4">

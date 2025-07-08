@@ -240,7 +240,7 @@
                             <div class="bg-[#1B365D]/10 rounded-xl p-4">
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-[#1B365D]">Member Since</span>
-                                    <span class="text-sm text-gray-600">{{ $user->created_at->format('M Y') }}</span>
+                                    <span class="text-sm text-gray-600">{{ $user->created_at ? $user->created_at->format('M Y') : 'N/A' }}</span>
                                 </div>
                     </div>
                 </div>
@@ -253,7 +253,7 @@
                         <span id="btnText">Update User</span>
                     </button>
                             
-                            <a href="{{ route('admin.users.show', $user->id) }}" 
+                            <a href="{{ route('admin.users.show', $user) }}" 
                                class="w-full inline-flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200">
                                 <i class="fas fa-eye mr-2"></i>
                                 View Profile

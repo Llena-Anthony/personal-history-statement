@@ -197,7 +197,7 @@
                 class="absolute z-10 mt-2 w-64 rounded-xl shadow-xl bg-white ring-1 ring-black ring-opacity-5 border border-gray-200">
                 <div class="py-2 max-h-60 overflow-y-auto">
                     @foreach($filters['user'] as $user)
-                    <a href="{{ request()->fullUrlWithQuery(['user_id' => $user->id]) }}" 
+                    <a href="{{ request()->fullUrlWithQuery(['user_id' => $user->username]) }}" 
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-150">
                         <div class="flex items-center">
                             <div class="w-6 h-6 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-3">

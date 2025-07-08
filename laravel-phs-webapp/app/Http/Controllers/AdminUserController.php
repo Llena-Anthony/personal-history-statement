@@ -478,7 +478,7 @@ class AdminUserController extends Controller
             $query->whereIn('id', $userIds);
         }
 
-        $users = $query->orderBy('created_at', 'desc')->get();
+        $users = $query->get();
 
         $filename = 'users_export_' . now()->format('Y-m-d_H-i-s') . '.csv';
         
@@ -492,23 +492,23 @@ class AdminUserController extends Controller
             
             // CSV Headers
             fputcsv($file, [
-                'ID', 'Name', 'Username', 'Email', 'User Type', 'Organic Group', 
+                'Username', 'Name', 'Username', 'Email', 'User Type', 'Organic Group', 
                 'Branch', 'Status', 'Created By', 'Created At', 'Last Login'
             ]);
 
             // CSV Data
             foreach ($users as $user) {
                 fputcsv($file, [
-                    $user->id,
+                    $user->username,
                     $user->name,
                     $user->username,
                     $user->email,
                     ucfirst($user->usertype),
                     ucfirst($user->organic_role),
-                    $user->branch,
+                    'N/A', // branch field doesn't exist
                     $user->is_active ? 'Active' : 'Disabled',
-                    $user->created_by,
-                    $user->created_at->format('Y-m-d H:i:s'),
+                    'N/A', // created_by field doesn't exist
+                    $user->created_at ? $user->created_at->format('Y-m-d H:i:s') : 'N/A',
                     $user->last_login_at ? $user->last_login_at->format('Y-m-d H:i:s') : 'Never'
                 ]);
             }

@@ -98,8 +98,8 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <label class="text-xs font-medium text-gray-500">Account Created</label>
-                <p class="text-sm text-gray-900">{{ $user->created_at->format('M d, Y \a\t g:i A') }}</p>
-                <p class="text-xs text-gray-500">{{ $user->created_at->diffForHumans() }}</p>
+                <p class="text-sm text-gray-900">{{ $user->created_at ? $user->created_at->format('M d, Y \a\t g:i A') : 'N/A' }}</p>
+<p class="text-xs text-gray-500">{{ $user->created_at ? $user->created_at->diffForHumans() : 'N/A' }}</p>
             </div>
             <div>
                 <label class="text-xs font-medium text-gray-500">Last Login</label>
@@ -124,7 +124,7 @@
             <i class="fas fa-edit mr-2"></i>
             Edit User
         </a>
-        <button onclick="toggleUserStatus({{ $user->id }}, {{ $user->is_active ? 'false' : 'true' }})" 
+        <button onclick="toggleUserStatus('{{ $user->username }}', {{ $user->is_active ? 'false' : 'true' }})" 
                 class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg font-medium text-sm transition-all duration-200
                        {{ $user->is_active ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200' }}">
             <i class="fas {{ $user->is_active ? 'fa-user-times' : 'fa-user-check' }} mr-2"></i>

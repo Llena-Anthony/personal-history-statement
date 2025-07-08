@@ -213,7 +213,7 @@
                         View All Logs
                     </a>
                     @if($activityLog->user)
-                    <a href="{{ route('admin.users.show', $activityLog->user->id) }}" 
+                    <a href="{{ route('admin.users.show', $activityLog->user) }}" 
                        class="inline-flex items-center px-4 py-2 bg-[#D4AF37]/10 text-[#D4AF37] rounded-lg hover:bg-[#D4AF37]/20 transition-colors border border-[#D4AF37]/20">
                         <i class="fas fa-user mr-2"></i>
                         View User Profile
