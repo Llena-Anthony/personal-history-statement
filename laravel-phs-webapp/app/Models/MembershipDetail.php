@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MembershipDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';
@@ -27,4 +26,4 @@ class MembershipDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

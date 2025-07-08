@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MaritalDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';
@@ -26,4 +25,4 @@ class MaritalDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

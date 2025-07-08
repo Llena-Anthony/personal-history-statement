@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CitizenshipDetail;
 use Illuminate\Http\Request;
 
 Use App\Models\User;
@@ -16,26 +17,21 @@ Use App\Traits\PHSSectionTracking;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Psy\Readline\Hoa\Console;
 
 class PersonalDetailsController extends Controller
 {
     public function create()
     {
-        $user = User::find(auth()->id());
-
-        $data = UserDetail::with('nameDetail')
-        ->where('username',auth()->user()->username)
-        ->first();
-
-        $viewData = $this->getCommonViewData('personal-details');
-        $viewData['personalDetails'] = $user;
-        $viewData['userDetails'] = $data;
+        $viewData = array_merge(
+            $this->getCommonViewData('personal-details'),
+            $this->retrievePreFillValues()
+        );
 
         // Check if it's an AJAX request
         if (request()->ajax()) {
             return view('phs.personal-details', $viewData)->render();
         }
-
         return view('phs.personal-details', $viewData);
     }
 
@@ -171,7 +167,7 @@ class PersonalDetailsController extends Controller
             'zip_code'=> $addressData['zip_code'] ?? null,
         ]);
     }
-    private function createJobDetails($jobData): {
+    private function createJobDetails($jobData): void {
         JobDetail::firstOrCreate([
             'username' => auth() ->user()->username,
             'service_branch'=> $jobData['branch_of_service'],
@@ -181,7 +177,7 @@ class PersonalDetailsController extends Controller
         ]);
     }
 
-    private function createNewActivity($activityData) {
+    private function createNewActivity($activityData): void {
         ActivityLogDetail::create([
             'changes_made_by'=>auth()->user()->username,
             'action'=>$activityData('action'),
@@ -195,25 +191,76 @@ class PersonalDetailsController extends Controller
         ]);
     }
 
-    private function retrieveRecordedName($nameId):NameDetail {
+    private function retrieveFullName($nameId): ?NameDetail {
         return NameDetail::where('name_id', $nameId)->first();
     }
-    private function retrieveUserDetail(): UserDetail {
+    private function retrieveUserDetail(): ?UserDetail {
         return UserDetail::where('username', auth()->user()->username)->first();
     }
-    private function retrieveHomeDetail($addr_id): AddressDetail {
+    private function retrieveHomeDetail($addr_id): ?AddressDetail {
         return AddressDetail::where('addr_id', $addr_id)->first();
     }
-    private function retrieveBirthAddr($addr_id): AddressDetail {
+    private function retrieveBirthAddr($addr_id): ?AddressDetail {
         return AddressDetail::where('addr_id', $addr_id)->first();
     }
-    private function retrieveBusinessAddr($addr_id):AddressDetail {
+    private function retrieveBusinessAddr($addr_id): ?AddressDetail {
         return AddressDetail::where('addr_id', $addr_id)->first();
     }
-    private function retrieveJobDetail(): JobDetail {
-        return JobDetail::where('username', auth()->user()->username)->first();
+    private function retrieveJobDetail(): ?JobDetail {
+        return JobDetail::where('username', auth()->user()->username)->first() ?? null;
     }
+    private function retrieveGovId(): ?GovernmentIdDetail {
+        return GovernmentIdDetail::where('username',auth()->user()->username)->first();
+    }
+    private function retrieveNationality($citId): ?CitizenshipDetail {
+        return CitizenshipDetail::where('cit_id', $citId)->first();
+    }
+    private function retrievePreFillValues(): ?array {
+        $userDetail = $this->retrieveUserDetail() ?? null;
+        $name = $this->retrieveFullName($userDetail?->full_name ?? null) ?? null;
+        $home = $this->retrieveHomeDetail($userDetail?->home_addr ?? null) ?? null;
+        $birthAddr = $this->retrieveBirthAddr($userDetail?->birth_place ?? null) ?? null;
+        $jobDetail = $this->retrieveJobDetail() ?? null;
+        $busAddr = $this->retrieveBusinessAddr($jobDetail?->job_addr ?? null) ?? null;
+        $govId = $this->retrieveGovId() ?? null;
+        $nationality = $this->retrieveNationality($userDetail->nationality ?? null) ?? null     ;
 
+        return [
+            "first_name" => $name?->first_name ?? '',
+            "last_name" => $name?->last_name ?? '',
+            "middle_name" => $name?->middle_name ?? '',
+            "suffix" => $name?->suffix ?? '',
+            "nickname"=> $name?->nickname ?? '',
+            "date_of_birth" => $userDetail?->birth_date ?? '',
+            "birth_region" => $birthAddr?->region ?? '',
+            "birth_province" => $birthAddr?->province ?? '',
+            "birth_city" => $birthAddr?->city ?? '',
+            "birth_barangay" => $birthAddr?->barangay ?? '',
+            "birth_street" => $birthAddr?->street ?? '',
+            "nationality" => $nationality?->cit_description ?? '',
+            "rank" => $jobDetail?->rank ?? '',
+            "afpsn" => $jobDetail?->afpsn ?? '',
+            "branch_of_service"=> $jobDetail?->service_branch ?? '',
+            "present_job" => $jobDetail?->job_desc ?? '',
+            "home_region" => $home?->region ?? '',
+            "home_province" => $home?->province ?? '',
+            "home_city" => $home?->city ?? '',
+            "home_barangay" => $home?->barangay ?? '',
+            "home_street" => $home?->street ?? '',
+            "business_region" => $busAddr?->region ?? '',
+            "business_province" => $busAddr?->province ?? '',
+            "business_city" => $busAddr?->city ?? '',
+            "business_barangay" => $busAddr?->barangay ?? '',
+            "business_street" => $busAddr?->street ?? '',
+            "email" => $userDetail?->email_addr ?? '',
+            "mobile" => $userDetail?->mobile_num ?? '',
+            "religion" => $userDetail?->religion ?? '',
+            "tin" => $govId?->tin_num ?? '',
+            "passport_number" => $govId?->pass_num ?? '',
+            "passport_expiry" => $govId?->pass_exp ?? '',
+            "name_change" => $name?->change_in_name ?? '',
+        ];
+    }
     private function getCommonViewData($currentSection)
     {
         // Mark current section as visited

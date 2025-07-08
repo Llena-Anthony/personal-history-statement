@@ -8,9 +8,11 @@ use App\Traits\Searchable;
 
 class ArrestDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'arrest_detail_id';
     public $incrementing = true;
     public $keyType = 'int';
+    protected $table = 'arrest_detail';
 
     protected $fillable = [
         'court_name',

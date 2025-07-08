@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class FamilyDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'fam_id';
     public $incrementing = true;
     public $keyType = 'int';

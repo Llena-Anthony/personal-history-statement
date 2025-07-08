@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class GovernmentIdDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     protected $fillable = [

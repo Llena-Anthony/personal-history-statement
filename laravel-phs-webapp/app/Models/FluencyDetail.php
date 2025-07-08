@@ -9,6 +9,7 @@ use App\Traits\Searchable;
 
 class FluencyDetail extends Model
 {
+    public $timestamps = false;
     public $fillable = [
         'username',
         'lang',

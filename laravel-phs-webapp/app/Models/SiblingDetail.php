@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SiblingDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'sib_id';
     public $incrementing = true;
     public $keyType = 'int';
@@ -25,4 +24,4 @@ class SiblingDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

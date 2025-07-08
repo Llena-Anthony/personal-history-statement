@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class AssignmentDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'assign_id';
     public $incrementing = true;
     public $keyType = 'int';

@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReferenceDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'ref_id';
     public $incrementing = true;
     public $keyType = 'int';
@@ -31,4 +30,4 @@ class ReferenceDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

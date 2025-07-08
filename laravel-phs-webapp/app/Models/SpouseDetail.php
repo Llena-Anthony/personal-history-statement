@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SpouseDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'spouse_id';
     public $incrementing = true;
     public $keyType = 'int';
@@ -48,4 +47,4 @@ class SpouseDetail extends Model
     {
         return $this->belongsTo(CitizenshipDetail::class, 'dual', 'cit_id');
     }
-} 
+}

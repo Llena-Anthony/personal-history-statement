@@ -2658,18 +2658,33 @@
 
                 const homeRegionSelect = document.getElementById('home_region');
                 const businessRegionSelect = document.getElementById('business_region');
+                const birthRegionSelect = document.getElementById('birth_region');
 
-                if (homeRegionSelect && businessRegionSelect) {
+                if (homeRegionSelect && businessRegionSelect && birthRegionSelect) {
                     // Clear existing options except the first one
                     homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                     businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                    birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
 
                     regions.forEach(region => {
                         const homeOption = new Option(region.name, region.code);
                         const businessOption = new Option(region.name, region.code);
+                        const birthOption = new Option(region.name, region.code);
                         homeRegionSelect.add(homeOption);
                         businessRegionSelect.add(businessOption);
+                        birthRegionSelect.add(birthOption);
                     });
+
+                    // Restore prefilled values if available
+                    if (window.prefilledHomeRegion) {
+                        homeRegionSelect.value = window.prefilledHomeRegion;
+                    }
+                    if (window.prefilledBusinessRegion) {
+                        businessRegionSelect.value = window.prefilledBusinessRegion;
+                    }
+                    if (window.prefilledBirthRegion) {
+                        birthRegionSelect.value = window.prefilledBirthRegion;
+                    }
                 }
             } catch (error) {
                 console.error('Error loading regions:', error);
@@ -2696,17 +2711,21 @@
 
                 const homeRegionSelect = document.getElementById('home_region');
                 const businessRegionSelect = document.getElementById('business_region');
+                const birthRegionSelect = document.getElementById('birth_region');
 
-                if (homeRegionSelect && businessRegionSelect) {
+                if (homeRegionSelect && businessRegionSelect && birthRegionSelect) {
                     // Clear existing options except the first one
                     homeRegionSelect.innerHTML = '<option value="">Select Region</option>';
                     businessRegionSelect.innerHTML = '<option value="">Select Region</option>';
+                    birthRegionSelect.innerHTML = '<option value="">Select Region</option>';
 
                     commonRegions.forEach(region => {
                         const homeOption = new Option(region, region);
                         const businessOption = new Option(region, region);
+                        const birthOption = new Option(region, region);
                         homeRegionSelect.add(homeOption);
                         businessRegionSelect.add(businessOption);
+                        birthRegionSelect.add(birthOption);
                     });
                 }
             }

@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class EducationDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'educ_id';
     public $incrementing = true;
     public $keyType = true;

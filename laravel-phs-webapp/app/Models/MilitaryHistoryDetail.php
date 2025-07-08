@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MilitaryHistoryDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';
@@ -24,4 +23,4 @@ class MilitaryHistoryDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

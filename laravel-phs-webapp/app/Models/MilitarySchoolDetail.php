@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MilitarySchoolDetail extends Model
 {
-    use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'mil_school_id';
     public $incrementing = true;
     public $keyType = 'int';
@@ -28,4 +27,4 @@ class MilitarySchoolDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

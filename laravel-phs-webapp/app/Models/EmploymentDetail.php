@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class EmploymentDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'employ_id';
     public $incrementing = true;
     public $keyType = 'int';

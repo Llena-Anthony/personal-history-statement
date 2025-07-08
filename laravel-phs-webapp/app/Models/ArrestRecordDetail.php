@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class ArrestRecordDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     protected $fillable = [
