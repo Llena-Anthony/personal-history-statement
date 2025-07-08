@@ -24,7 +24,8 @@ class ActivityLogsController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        $activityLogs = $query->paginate(20)->withQueryString();
+        $perPage = $request->get('per_page', 10); // Use per_page from request, default 10
+        $activityLogs = $query->paginate($perPage)->withQueryString();
 
         // Get filter options for dropdowns
         $actionLabels = [
@@ -87,8 +88,7 @@ class ActivityLogsController extends Controller
 
     public function show(ActivityLogDetail $activityLog)
     {
-        $activityLog->load('user');
-        
+        $activityLog->load('user.userDetail.nameDetail');
         return view('admin.activity-logs.show', compact('activityLog'));
     }
 
