@@ -15,6 +15,8 @@ use App\Models\GovernmentIdDetail;
 
 Use App\Traits\PHSSectionTracking;
 
+Use App\Helper\DataRetrieval;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Psy\Readline\Hoa\Console;
@@ -74,9 +76,7 @@ class PersonalDetailsController extends Controller
             'name_change' => 'nullable|string|max:255',
         ]);
 
-        $nameData = $validated->only([
-                    'last_name', 'first_name', 'middle_name', 'suffix'
-                ]);
+        $nameData = Arr::only ($validated, ['first_name', 'last_name', 'middle_name', 'nickname', 'change_in_name']);
         $birthAddr = $validated->only([
             'birth_region','birth_province','birth_city','birth_barangay','birth_street',
         ]);
@@ -131,23 +131,6 @@ class PersonalDetailsController extends Controller
         return redirect()->route('phs.personal-characteristics.create');
             // ->with('success', 'Personal details saved successfully.');
     }
-    private function nameExists($nameData):?NameDetail {
-        return NameDetail::where('last_name',$nameData['last_name'])
-        ->where('first_name',$nameData['first_name'])
-        ->where('middle_name',$nameData['middle_name'])
-        ->where('name_extension',$nameData['suffix'])
-        ->first();
-    }
-    private function addressExists($addressData):?AddressDetail {
-        return AddressDetail::where('country', $addressData['country'])
-        ->where('region', $addressData['region'])
-        ->where('province', $addressData['province'])
-        ->where('city', $addressData['city'])
-        ->where('barangay', $addressData['barangay'])
-        ->where('street', $addressData['street'])
-        ->where('zip_code', $addressData['zip_code'])
-        ->first();
-    }
     private function createNewName($nameData):int {
         return NameDetail::firstOrCreate([
                         'last_name' => $nameData['last_name'],
@@ -191,39 +174,15 @@ class PersonalDetailsController extends Controller
         ]);
     }
 
-    private function retrieveFullName($nameId): ?NameDetail {
-        return NameDetail::where('name_id', $nameId)->first();
-    }
-    private function retrieveUserDetail(): ?UserDetail {
-        return UserDetail::where('username', auth()->user()->username)->first();
-    }
-    private function retrieveHomeDetail($addr_id): ?AddressDetail {
-        return AddressDetail::where('addr_id', $addr_id)->first();
-    }
-    private function retrieveBirthAddr($addr_id): ?AddressDetail {
-        return AddressDetail::where('addr_id', $addr_id)->first();
-    }
-    private function retrieveBusinessAddr($addr_id): ?AddressDetail {
-        return AddressDetail::where('addr_id', $addr_id)->first();
-    }
-    private function retrieveJobDetail(): ?JobDetail {
-        return JobDetail::where('username', auth()->user()->username)->first() ?? null;
-    }
-    private function retrieveGovId(): ?GovernmentIdDetail {
-        return GovernmentIdDetail::where('username',auth()->user()->username)->first();
-    }
-    private function retrieveNationality($citId): ?CitizenshipDetail {
-        return CitizenshipDetail::where('cit_id', $citId)->first();
-    }
     private function retrievePreFillValues(): ?array {
-        $userDetail = $this->retrieveUserDetail() ?? null;
-        $name = $this->retrieveFullName($userDetail?->full_name ?? null) ?? null;
-        $home = $this->retrieveHomeDetail($userDetail?->home_addr ?? null) ?? null;
-        $birthAddr = $this->retrieveBirthAddr($userDetail?->birth_place ?? null) ?? null;
-        $jobDetail = $this->retrieveJobDetail() ?? null;
-        $busAddr = $this->retrieveBusinessAddr($jobDetail?->job_addr ?? null) ?? null;
-        $govId = $this->retrieveGovId() ?? null;
-        $nationality = $this->retrieveNationality($userDetail->nationality ?? null) ?? null     ;
+        $userDetail = DataRetrieval::retrieveUserDetail(auth()->user()->username) ?? null;
+        $name = DataRetrieval::retrieveNameDetail($userDetail?->full_name ?? null) ?? null;
+        $home = DataRetrieval::retrieveAddressDetail($userDetail?->home_addr ?? null) ?? null;
+        $birthAddr = DataRetrieval::retrieveAddressDetail($userDetail?->birth_place ?? null) ?? null;
+        $jobDetail = DataRetrieval::retrieveJobDetail(auth()->user()->username) ?? null;
+        $busAddr = DataRetrieval::retrieveAddressDetail($jobDetail?->job_addr ?? null) ?? null;
+        $govId = DataRetrieval::retrieveGovIdDetail(auth()->user()->username) ?? null;
+        $nationality = DataRetrieval::retrieveCitizenshipDetail($userDetail->nationality ?? null) ?? null     ;
 
         return [
             "first_name" => $name?->first_name ?? '',
