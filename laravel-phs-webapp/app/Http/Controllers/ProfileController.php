@@ -82,6 +82,10 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['profile_picture' => 'You must be logged in to update your profile picture.']);
+        }
+
         if (!$user->userDetail) {
             \Log::error('Profile update failed: userDetail relation missing for user', ['username' => $user->username]);
             return back()->withErrors(['profile_picture' => 'Profile details not found. Please contact admin.']);
@@ -92,7 +96,7 @@ class ProfileController extends Controller
             $path = $this->handleProfilePictureUpload(
                 $request->file('profile_picture'),
                 $user->userDetail->profile_path ?? null,
-                $user->id
+                $user->username
             );
             
             $user->userDetail->profile_path = $path;
