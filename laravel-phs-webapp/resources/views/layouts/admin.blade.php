@@ -167,7 +167,7 @@
         /* Sidebar Enhancements - Modern Design */
         .sidebar {
             background: linear-gradient(180deg, #1B365D 0%, #2B4B7D 50%, #1B365D 100%);
-            border: 2px solid transparent;
+            /* border: 2px solid transparent; */
             background-clip: padding-box;
             position: relative;
             overflow: hidden;
@@ -199,24 +199,20 @@
             left: 0;
             right: 0;
             bottom: 0;
-            border: 2px solid;
-            border-image: linear-gradient(135deg, #D4AF37, #B38F2A, #D4AF37) 1;
+            /* border: 2px solid; */
+            /* border-image: linear-gradient(135deg, #D4AF37, #B38F2A, #D4AF37) 1; */
             border-radius: 1.5rem;
             pointer-events: none;
         }
 
         .profile-container {
-            text-align: left;
-            padding: 1.5rem 1.25rem;
-            background: linear-gradient(135deg, rgba(43, 75, 125, 0.4) 0%, rgba(27, 54, 93, 0.3) 100%);
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 0.75rem;
-            margin: 0.75rem;
-            border-radius: 1.5rem;
             position: relative;
             overflow: visible;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 1.5rem;
+            padding: 1.5rem 1.25rem;
             min-height: 100px;
             max-width: calc(100% - 1.5rem);
         }
@@ -228,7 +224,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+     
             pointer-events: none;
             border-radius: 1.5rem;
         }
@@ -241,7 +237,7 @@
             right: 0;
             bottom: 0;
             /* border: 1px solid; */
-            border-image: linear-gradient(135deg, rgba(212, 175, 55, 0.3), transparent) 1;
+           
             border-radius: 1.5rem;
             pointer-events: none;
         }
@@ -273,10 +269,8 @@
         
         .profile-container .user-info {
             flex-grow: 1;
-            position: relative;
-            z-index: 1;
             min-width: 0;
-            max-width: calc(100% - 60px);
+            max-width: 100%;
             display: flex;
             flex-direction: column;
             gap: 0.125rem;
@@ -284,22 +278,10 @@
         }
         
         .profile-container .user-name {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 0.125rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            overflow-wrap: break-word;
+            word-break: break-word;
             white-space: normal;
-            overflow: visible;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: block;
-            text-decoration: none;
-            width: 100%;
             max-width: 100%;
-            line-height: 1.2;
-            word-wrap: break-word;
         }
         
         .profile-container .user-name:hover {
@@ -659,12 +641,13 @@
         }
 
         .pma-switch-btn-wrapper {
-            position: absolute;
-            top: 0;
-            right: 0;
+            position: static;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            margin-top: 0;
+            margin-right: 0;
+            z-index: 2;
         }
         .pma-switch-tooltip {
             position: fixed;
@@ -842,41 +825,50 @@
         <!-- Sidebar -->
             <aside class="sidebar text-white flex flex-col no-print">
             <!-- Profile Section -->
-            <div class="profile-container relative">
-                    <a href="{{ route('admin.profile.edit') }}" class="block">
-                        <img src="{{ Auth::user()->userDetail && Auth::user()->userDetail->profile_path ? asset('storage/' . Auth::user()->userDetail->profile_path) : asset('images/default-avatar.svg') }}" alt="Profile Picture" class="profile-picture">
+            <div class="ml-[0.4cm] profile-container flex items-center gap-4 px-4 py-3 pr-16 relative" style=" border-radius: 1.5rem; min-height: 100px;">
+                <a href="{{ route('admin.profile.edit') }}" class="block flex-shrink-0">
+                    <img src="{{ Auth::user()->userDetail && Auth::user()->userDetail->profile_path ? asset('storage/' . Auth::user()->userDetail->profile_path) : asset('images/default-avatar.svg') }}" alt="Profile Picture" class="profile-picture" style="box-shadow: 0 4px 16px rgba(212, 175, 55, 0.18);">
+                </a>
+                <div class="user-info flex-grow min-w-0" style="display:flex; flex-direction:column; gap:0.15rem;">
+                    <a href="{{ route('admin.profile.edit') }}" 
+                       class="user-name"
+                       title="{{ Auth::user()->username }} - {{ optional(Auth::user()->userDetail->nameDetail)->first_name ?? Auth::user()->username }}"
+                       style="overflow-wrap:break-word;word-break:break-word;white-space:normal; font-size:1rem; font-weight:600; color:#fff; text-shadow:0 2px 4px rgba(0,0,0,0.18);">
+                        {{
+                            optional(Auth::user()->userDetail->nameDetail) ?
+                                trim(
+                                    optional(Auth::user()->userDetail->nameDetail)->first_name . ' ' .
+                                    (optional(Auth::user()->userDetail->nameDetail)->middle_name ? substr(optional(Auth::user()->userDetail->nameDetail)->middle_name,0,1) . '. ' : '') .
+                                    optional(Auth::user()->userDetail->nameDetail)->last_name
+                                ) :
+                                Auth::user()->username
+                        }}
                     </a>
-                <div class="user-info">
-                        <a href="{{ route('admin.profile.edit') }}" 
-                           class="user-name"
-                           title="{{ Auth::user()->username }} - {{ optional(Auth::user()->userDetail->nameDetail)->first_name ?? Auth::user()->username }}">
-                            {{
-                                optional(Auth::user()->userDetail->nameDetail) ?
-                                    trim(
-                                        optional(Auth::user()->userDetail->nameDetail)->first_name . ' ' .
-                                        (optional(Auth::user()->userDetail->nameDetail)->middle_name ? substr(optional(Auth::user()->userDetail->nameDetail)->middle_name,0,1) . '. ' : '') .
-                                        optional(Auth::user()->userDetail->nameDetail)->last_name
-                                    ) :
-                                    Auth::user()->username
-                            }}
+                    <div class="user-username" style="font-size:0.85rem; color:#D4AF37; margin-bottom:0;">{{ '@' . Auth::user()->username }}</div>
+                    <div class="user-role" style="font-size:0.8rem; color:#94a3b8;">{{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}</div>
+                </div>
+                <div class="pma-switch-btn-wrapper" style="position:absolute; top:12px; right:16px; z-index:2; display:flex; flex-direction:column; align-items:flex-end;">
+                    @if(Auth::user()->usertype === 'admin')
+                        <a href="{{ route('admin.switch.to.client') }}"
+                           class="pma-switch-btn"
+                           id="pmaSwitchBtn"
+                           tabindex="0"
+                           style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-repeat" style="font-size: 1.1rem;"></i>
                         </a>
-                    <div class="user-username">
-                        {{ '@' . Auth::user()->username }}
-                    </div>
-                    <div class="user-role">
-                        {{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}
-                    </div>
-                    <div class="pma-switch-btn-wrapper absolute top-0 right-0" style="margin-top:2px; margin-right:2px; z-index:2;">
+                        <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Switch to Client PHS<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Direct to Client PHS</span></div>
+                    @elseif(Auth::user()->usertype === 'personnel')
                         <a href="/personnel/phs/personal-details"
                            class="pma-switch-btn"
                            id="pmaSwitchBtn"
-                           tabindex="0">
-                            <i class="fas fa-repeat" style="font-size: 1rem;"></i>
+                           tabindex="0"
+                           style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-repeat" style="font-size: 1.1rem;"></i>
                         </a>
                         <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Go to PHS Personal Details<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Direct to Personnel PHS</span></div>
-                    </div>
+                    @endif
                 </div>
-                </div>
+            </div>
                 
             <!-- Navigation -->
                 <div class="tab-container">
@@ -889,13 +881,7 @@
                             <span class="ml-3">Dashboard</span>
                         </a></li>
 
-                        <!-- User Management -->
-                        <li><a href="{{ route('admin.users.index') }}" 
-                               data-route="admin.users.index"
-                               class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }} dynamic-nav">
-                            <i class="fas fa-users-cog"></i>
-                            <span class="ml-3">Manage Users</span>
-                        </a></li>
+
 
                         <!-- Submissions -->
                         <li><a href="{{ route('admin.phs.index') }}" 
@@ -907,6 +893,14 @@
                         <li><a href="#" class="nav-link">
                             <i class="fa-regular fa-folder"></i>
                             <span class="ml-3">PDS Submissions</span>
+                        </a></li>
+
+                        <!-- User Management -->
+                        <li><a href="{{ route('admin.users.index') }}" 
+                               data-route="admin.users.index"
+                               class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }} dynamic-nav">
+                            <i class="fas fa-users-cog"></i>
+                            <span class="ml-3">User Management</span>
                         </a></li>
 
                         <!-- System Management -->
@@ -925,10 +919,6 @@
                     </div>
                 </div>
 
-            <!-- Logout Section -->
-                <div class="p-6 border-t border-[#2B4B7D] mt-auto relative z-10">
-                <!-- Logout button removed from sidebar, now in header -->
-                </div>
         </aside>
 
             <!-- Content Area -->

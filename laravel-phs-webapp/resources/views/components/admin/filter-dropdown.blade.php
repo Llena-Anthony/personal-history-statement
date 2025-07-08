@@ -215,6 +215,9 @@
         </div>
         @endif
 
+        <!-- Active User Filter Chip -->
+
+
         <!-- Clear All Filters -->
         @if(collect(request()->except(['page', 'per_page']))->filter()->count() > 0)
         <a href="{{ $route }}" 
@@ -275,6 +278,17 @@
                 </a>
             </span>
             @endif
+
+                    @if(request('user_id'))
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
+                <i class="fas fa-user mr-1"></i>
+                User: <span class="ml-1 font-bold">{{ request('user_id') }}</span>
+                <a href="{{ request()->fullUrlWithQuery(['user_id' => null, 'page' => null]) }}" class="ml-2 text-blue-500 hover:text-blue-700">
+                    <i class="fas fa-times"></i>
+                </a>
+            </span>
+        @endif
+        
         </div>
     </div>
     @endif

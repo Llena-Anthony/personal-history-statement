@@ -33,20 +33,6 @@
         </div>
     </div>
 
-    <!-- Success Message for User Update -->
-    @if (session('success'))
-        <div class="bg-green-50 border border-green-200 rounded-xl p-4 fade-in mb-4">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
-                </div>
-            </div>
-        </div>
-    @endif
-
     <!-- Enhanced Search Bar with Filter Dropdowns -->
     <x-admin.search-bar 
         :route="route('admin.users.index')"

@@ -14,11 +14,11 @@
         </a>
         <div class="flex items-center gap-3">
             <span class="px-3 py-1 text-xs font-semibold rounded-full 
-                @if($activityLog->status === 'success') bg-green-100 text-green-800
-                @elseif($activityLog->status === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
+                @if($activityLog->act_stat === 'success') bg-green-100 text-green-800
+                @elseif($activityLog->act_stat === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
                 @else bg-red-100 text-red-800
                 @endif">
-                {{ ucfirst($activityLog->status) }}
+                {{ ucfirst($activityLog->act_stat) }}
             </span>
         </div>
     </div>
@@ -51,12 +51,18 @@
                                 echo $actionLabels[$activityLog->action] ?? ucfirst(explode('_', $activityLog->action)[0]);
                             @endphp
                         </h1>
-                        <p class="text-gray-600">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('F d, Y \a\t h:i:s A') }}</p>
+                        <p class="text-gray-600">
+                            @if($activityLog->act_date_time)
+                                {{ $activityLog->act_date_time->setTimezone('Asia/Manila')->format('F d, Y \a\t h:i:s A') }}
+                            @else
+                                N/A
+                            @endif
+                        </p>
                     </div>
                 </div>
                 <div class="text-right">
                     <p class="text-sm text-gray-500">Activity ID</p>
-                    <p class="font-mono text-sm text-gray-700">#{{ $activityLog->id }}</p>
+                    <p class="font-mono text-sm text-gray-700">#{{ $activityLog->act_id }}</p>
                 </div>
             </div>
         </div>
@@ -122,20 +128,32 @@
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Status:</span>
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                    @if($activityLog->status === 'success') bg-green-100 text-green-800
-                    @elseif($activityLog->status === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
+                    @if($activityLog->act_stat === 'success') bg-green-100 text-green-800
+                    @elseif($activityLog->act_stat === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
                     @else bg-red-100 text-red-800
                     @endif">
-                    {{ ucfirst($activityLog->status) }}
+                    {{ ucfirst($activityLog->act_stat) }}
                 </span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Date:</span>
-                                <span class="font-medium text-gray-900">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('M d, Y') }}</span>
+                                <span class="font-medium text-gray-900">
+                                    @if($activityLog->act_date_time)
+                                        {{ $activityLog->act_date_time->setTimezone('Asia/Manila')->format('M d, Y') }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Time:</span>
-                                <span class="font-medium text-gray-900">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('h:i:s A') }}</span>
+                                <span class="font-medium text-gray-900">
+                                    @if($activityLog->act_date_time)
+                                        {{ $activityLog->act_date_time->setTimezone('Asia/Manila')->format('h:i:s A') }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -149,7 +167,7 @@
                     Activity Description
                 </h2>
                 <div class="bg-gray-50 rounded-xl p-6">
-                    <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ $activityLog->description }}</p>
+                    <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">{{ $activityLog->act_desc }}</p>
         </div>
         </div>
 
@@ -159,42 +177,15 @@
                     <i class="fas fa-cogs mr-2 text-[#1B365D]"></i>
                     Technical Details
                 </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gray-50 rounded-xl p-6">
-                        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-network-wired mr-2 text-[#D4AF37]"></i>
-                            Network Information
-                        </h3>
-                        <div class="space-y-3">
-                            <div>
-                                <span class="text-sm text-gray-600">IP Address:</span>
-                                <p class="font-mono text-sm text-gray-900 bg-white px-3 py-2 rounded-lg border">{{ $activityLog->ip_address ?? 'N/A' }}</p>
-        </div>
-                <div>
-                                <span class="text-sm text-gray-600">User Agent:</span>
-                                <p class="text-sm text-gray-900 bg-white px-3 py-2 rounded-lg border break-all">{{ $activityLog->user_agent ?? 'N/A' }}</p>
-                            </div>
+                <div class="bg-gray-50 rounded-xl p-6">
+                    <div class="space-y-3">
+                        <div>
+                            <span class="text-sm text-gray-600">IP Address:</span>
+                            <p class="font-mono text-sm text-gray-900 bg-white px-3 py-2 rounded-lg border">{{ $activityLog->ip_addr ?? 'N/A' }}</p>
                         </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-xl p-6">
-                        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                            <i class="fas fa-clock mr-2 text-[#D4AF37]"></i>
-                            Timestamp Information
-                        </h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Created:</span>
-                                <span class="font-medium text-gray-900">{{ $activityLog->created_at->setTimezone('Asia/Manila')->format('M d, Y h:i:s A') }}</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Updated:</span>
-                                <span class="font-medium text-gray-900">{{ $activityLog->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i:s A') }}</span>
-                            </div>
-                            <div class="flex justify-between text-sm">
-                                <span class="text-gray-600">Time Ago:</span>
-                                <span class="font-medium text-gray-900">{{ $activityLog->created_at->setTimezone('Asia/Manila')->diffForHumans() }}</span>
-                            </div>
+                        <div>
+                            <span class="text-sm text-gray-600">User Agent:</span>
+                            <p class="text-sm text-gray-900 bg-white px-3 py-2 rounded-lg border break-all">{{ $activityLog->user_agent ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
@@ -207,7 +198,7 @@
                     Related Actions
                 </h2>
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ route('admin.activity-logs.index') }}" 
+                    <a href="{{ route('admin.activity-logs.index', ['user_id' => $activityLog->user->username]) }}" 
                        class="inline-flex items-center px-4 py-2 bg-[#1B365D]/10 text-[#1B365D] rounded-lg hover:bg-[#1B365D]/20 transition-colors border border-[#1B365D]/20">
                         <i class="fas fa-list mr-2"></i>
                         View All Logs

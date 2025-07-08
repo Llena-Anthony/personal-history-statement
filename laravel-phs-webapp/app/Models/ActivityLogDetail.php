@@ -235,4 +235,12 @@ class ActivityLogDetail extends Model
         // For other actions, return a more descriptive version
         return $action . " action performed";
     }
+
+    /**
+     * Get the user field name for this model
+     */
+    protected function getUserField()
+    {
+        return 'changes_made_by';
+    }
 }

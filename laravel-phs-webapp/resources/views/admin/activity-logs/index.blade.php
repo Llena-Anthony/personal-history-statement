@@ -135,105 +135,103 @@
 
     <!-- Table View -->
     <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Description</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">IP Address</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date & Time</th>
-                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @forelse($activityLogs as $log)
-                    <tr class="hover:bg-gray-50 transition-colors">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center">
-                                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-base font-bold border border-gray-300 shadow-sm">
-                                    {{ strtoupper(substr(optional(optional($log->user->userDetail)->nameDetail)->first_name ?? $log->user->username ?? 'N/A', 0, 1)) }}
-                                </div>
-                                <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900">{{ optional(optional($log->user->userDetail)->nameDetail)->first_name }} {{ optional(optional($log->user->userDetail)->nameDetail)->last_name }}</div>
-                                    <div class="text-sm text-gray-500">{{ $log->user->username ?? 'N/A' }}</div>
-                                </div>
+        <table class="w-full table-fixed text-sm">
+            <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                <tr>
+                    <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">User</th>
+                    <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-24">Action</th>
+                    <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-56 max-w-xs">Description</th>
+                    <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">Status</th>
+                    <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">IP Address</th>
+                    <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">Date & Time</th>
+                    <th class="px-3 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @forelse($activityLogs as $log)
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-3 py-2 truncate max-w-[8rem]">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-base font-bold border border-gray-300 shadow-sm">
+                                {{ strtoupper(substr(optional(optional($log->user->userDetail)->nameDetail)->first_name ?? $log->user->username ?? 'N/A', 0, 1)) }}
                             </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center">
-                                <div class="p-1 rounded bg-[#1B365D]/20 text-[#1B365D] mr-2">
-                                    <i class="{{ $log->action_icon }} text-xs"></i>
-                                </div>
-                                <span class="text-sm font-medium text-gray-900">
-                                    @php
-                                        $actionLabels = [
-                                            'access_own_phs' => 'Access',
-                                            'return_to_admin' => 'Return',
-                                            'login' => 'Login',
-                                            'logout' => 'Logout',
-                                            'create' => 'Create',
-                                            'update' => 'Update',
-                                            'delete' => 'Delete',
-                                            'submit' => 'Submit',
-                                            'enable' => 'Enable',
-                                            'disable' => 'Disable',
-                                            'password_reset' => 'Reset',
-                                        ];
-                                        echo $actionLabels[$log->action] ?? ucfirst(explode('_', $log->action)[0]);
-                                    @endphp
-                                </span>
+                            <div class="ml-2 truncate">
+                                <div class="text-xs font-medium text-gray-900 truncate">{{ optional(optional($log->user->userDetail)->nameDetail)->first_name }} {{ optional(optional($log->user->userDetail)->nameDetail)->last_name }}</div>
+                                <div class="text-xs text-gray-500 truncate">{{ $log->user->username ?? 'N/A' }}</div>
                             </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900 max-w-xs truncate" title="{{ $log->act_desc }}">
-                                {{ $log->act_desc }}
+                        </div>
+                    </td>
+                    <td class="px-3 py-2 truncate max-w-[6rem]">
+                        <div class="flex items-center">
+                            <div class="p-1 rounded bg-[#1B365D]/20 text-[#1B365D] mr-2">
+                                <i class="{{ $log->action_icon }} text-xs"></i>
                             </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                @if($log->act_stat === 'success') bg-green-100 text-green-800
-                                @elseif($log->act_stat === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
-                                @else bg-red-100 text-red-800
-                                @endif">
-                                {{ ucfirst($log->act_stat) }}
+                            <span class="text-xs font-medium text-gray-900 truncate">
+                                @php
+                                    $actionLabels = [
+                                        'access_own_phs' => 'Access',
+                                        'return_to_admin' => 'Return',
+                                        'login' => 'Login',
+                                        'logout' => 'Logout',
+                                        'create' => 'Create',
+                                        'update' => 'Update',
+                                        'delete' => 'Delete',
+                                        'submit' => 'Submit',
+                                        'enable' => 'Enable',
+                                        'disable' => 'Disable',
+                                        'password_reset' => 'Reset',
+                                    ];
+                                    echo $actionLabels[$log->action] ?? ucfirst(explode('_', $log->action)[0]);
+                                @endphp
                             </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="text-sm font-mono text-gray-500" title="{{ $log->ip_addr ?? 'N/A' }}">
-                                {{ $log->ip_addr ?? 'N/A' }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900">
-                                <div class="font-medium">{{ $log->act_date_time ? $log->act_date_time->setTimezone('Asia/Manila')->format('M d, Y') : 'N/A' }}</div>
-                                <div class="text-gray-500">{{ $log->act_date_time ? $log->act_date_time->setTimezone('Asia/Manila')->format('h:i A') : 'N/A' }}</div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <a href="{{ route('admin.activity-logs.show', $log->act_id) }}" 
-                               class="inline-flex items-center text-sm text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
-                                <i class="fas fa-eye mr-1"></i>
-                                View
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="px-6 py-12 text-center">
-                            <div class="text-gray-500">
-                                <i class="fas fa-search text-4xl mb-4"></i>
-                                <p class="text-lg font-medium">No activity logs found</p>
-                                <p class="text-sm">Try adjusting your search criteria or filters.</p>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                    </td>
+                    <td class="px-3 py-2 truncate max-w-[14rem]" title="{{ $log->act_desc }}">
+                        <div class="text-xs text-gray-900 truncate">
+                            {{ $log->act_desc }}
+                        </div>
+                    </td>
+                    <td class="px-3 py-2">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                            @if($log->act_stat === 'success') bg-green-100 text-green-800
+                            @elseif($log->act_stat === 'warning') bg-[#D4AF37]/20 text-[#D4AF37]
+                            @else bg-red-100 text-red-800
+                            @endif">
+                            {{ ucfirst($log->act_stat) }}
+                        </span>
+                    </td>
+                    <td class="px-3 py-2 truncate max-w-[8rem]" title="{{ $log->ip_addr ?? 'N/A' }}">
+                        <span class="text-xs font-mono text-gray-500 truncate">
+                            {{ $log->ip_addr ?? 'N/A' }}
+                        </span>
+                    </td>
+                    <td class="px-3 py-2">
+                        <div class="text-xs text-gray-900">
+                            <div class="font-medium">{{ $log->act_date_time ? $log->act_date_time->setTimezone('Asia/Manila')->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-gray-500">{{ $log->act_date_time ? $log->act_date_time->setTimezone('Asia/Manila')->format('h:i A') : 'N/A' }}</div>
+                        </div>
+                    </td>
+                    <td class="px-3 py-2 text-right">
+                        <a href="{{ route('admin.activity-logs.show', $log->act_id) }}" 
+                           class="inline-flex items-center text-xs text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
+                            <i class="fas fa-eye mr-1"></i>
+                            View
+                        </a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="px-3 py-8 text-center">
+                        <div class="text-gray-500">
+                            <i class="fas fa-search text-2xl mb-2"></i>
+                            <p class="text-base font-medium">No activity logs found</p>
+                            <p class="text-xs">Try adjusting your search criteria or filters.</p>
+                        </div>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
     <!-- Enhanced Pagination -->
