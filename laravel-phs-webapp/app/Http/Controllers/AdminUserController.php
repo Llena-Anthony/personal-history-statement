@@ -203,30 +203,28 @@ class AdminUserController extends Controller
                 'last_name' => $sessionUserData['last_name'],
                 'first_name' => $sessionUserData['first_name'],
                 'middle_name' => $sessionUserData['middle_name'],
-                'name_extension' => null,
+                'suffix' => null,
                 'nickname' => null,
                 'change_in_name' => null,
             ]);
 
             // Create AddressDetail record (default empty address)
-            $homeAddress = \App\Models\AddressDetail::create([
+            $homeAddress = \App\Models\AddressDetail::firstOrCreate([
                 'country' => 'Philippines',
                 'region' => 'Not specified',
                 'province' => 'Not specified',
                 'city' => 'Not specified',
-                'municipality' => 'Not specified',
                 'barangay' => 'Not specified',
                 'street' => 'Not specified',
                 'zip_code' => 'Not specified',
             ]);
 
             // Create birth address (same as home address for now)
-            $birthAddress = \App\Models\AddressDetail::create([
+            $birthAddress = \App\Models\AddressDetail::firstOrCreate([
                 'country' => 'Philippines',
                 'region' => 'Not specified',
                 'province' => 'Not specified',
                 'city' => 'Not specified',
-                'municipality' => 'Not specified',
                 'barangay' => 'Not specified',
                 'street' => 'Not specified',
                 'zip_code' => 'Not specified',

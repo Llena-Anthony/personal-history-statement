@@ -44,6 +44,9 @@ class AdminHomeController extends Controller
         // Get all users for user type distribution
         $users = User::all();
 
+        // Get the authenticated admin's full name
+        $adminName = auth()->user()->name ?? 'Administrator';
+
         $data = compact(
             'totalUsers',
             'enabledUsers',
@@ -55,7 +58,8 @@ class AdminHomeController extends Controller
             'submissionStats',
             'monthlyStats',
             'recentActivities',
-            'users'
+            'users',
+            'adminName'
         );
 
         // Check if it's an AJAX request

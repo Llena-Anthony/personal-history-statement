@@ -17,7 +17,7 @@
         <div class="relative p-8 text-white z-10 welcome-banner-content">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, Administrator! 👋</h1>
+                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, {{ $adminName }}! 👋</h1>
                     <p class="text-white/80 text-lg welcome-banner-subtitle">Here's what's happening with your system today</p>
                     <div class="flex items-center mt-4 space-x-6 text-sm welcome-banner-stats">
                         <div class="flex items-center">
@@ -612,12 +612,12 @@
         const welcomeTitle = document.querySelector('.welcome-banner-title');
         if (welcomeTitle) {
             console.log('Welcome title found:', welcomeTitle.textContent);
-            const userName = 'Administrator';
+            const userName = '{{ $adminName }}';
             if (userName && userName.trim() !== '') {
                 console.log('User name is set:', userName);
             } else {
                 console.log('Using fallback administrator name');
-                welcomeTitle.textContent = 'Welcome back, Administrator! 👋';
+                welcomeTitle.textContent = 'Welcome back, {{ $adminName }}! 👋';
             }
         } else {
             console.warn('Welcome title not found');
