@@ -144,7 +144,7 @@
                     <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">Status</th>
                     <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">IP Address</th>
                     <th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-32">Date & Time</th>
-                    <th class="px-3 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">Actions</th>
+                    <th class="px-3 py-2 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider w-10">View</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -215,7 +215,6 @@
                         <a href="{{ route('admin.activity-logs.show', $log->act_id) }}" 
                            class="inline-flex items-center text-xs text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
                             <i class="fas fa-eye mr-1"></i>
-                            View
                         </a>
                     </td>
                 </tr>

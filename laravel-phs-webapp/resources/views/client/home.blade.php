@@ -33,6 +33,20 @@
                 </div>
 
                 <!-- Profile Picture (Direct Link) -->
+                @if(session('admin_switched_to_client'))
+                <span class="relative group focus:outline-none opacity-60 cursor-not-allowed select-none" title="Edit Profile (disabled in admin mode)">
+                    <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
+                        @if(auth()->user()->profile_picture)
+                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                                 alt="Profile"
+                                 class="w-full h-full object-cover rounded-full">
+                        @else
+                            <i class="fas fa-user text-[#1B365D] text-3xl md:text-4xl"></i>
+                        @endif
+                    </div>
+                    <div class="absolute inset-0 rounded-full border-4 border-[#D4AF37]/30 animate-ping"></div>
+                </span>
+                @else
                 <a href="{{ route('profile.edit') }}" class="relative group focus:outline-none" title="Edit Profile">
                     <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
                         @if(auth()->user()->profile_picture)
@@ -43,9 +57,9 @@
                             <i class="fas fa-user text-[#1B365D] text-3xl md:text-4xl"></i>
                         @endif
                     </div>
-                    <!-- Decorative ring -->
                     <div class="absolute inset-0 rounded-full border-4 border-[#D4AF37]/30 animate-ping"></div>
                 </a>
+                @endif
             </div>
         </div>
 
@@ -197,6 +211,23 @@
             </div>
 
             <!-- Profile Action -->
+            @if(session('admin_switched_to_client'))
+            <div class="group relative bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 opacity-60 cursor-not-allowed select-none">
+                <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-4 mx-auto">
+                    <i class="fas fa-user-edit text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-center text-[#1B365D] mb-3">Edit Profile</h3>
+                <p class="text-gray-600 text-center mb-6 text-sm">
+                    Update your personal information, contact details, and account settings.
+                </p>
+                <div class="text-center">
+                    <span class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white font-medium rounded-lg pointer-events-none opacity-80">
+                        <i class="fas fa-cog mr-2"></i>
+                        Manage Profile
+                    </span>
+                </div>
+            </div>
+            @else
             <div class="group relative bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">
                 <a href="{{ route('profile.edit') }}" class="absolute inset-0 z-10" aria-label="Go to Profile"></a>
                 <div class="flex items-center justify-center w-16 h-16 bg-[#1B365D] rounded-full mb-4 mx-auto group-hover:bg-[#2B4B7D] transition-colors duration-300">
@@ -213,6 +244,7 @@
                     </span>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 

@@ -225,31 +225,21 @@
                     <tr class="hover:bg-gray-50 transition-colors duration-200 group">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-12 w-12 relative">
-                                        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] flex items-center justify-center text-white font-semibold text-lg ring-2 ring-white shadow-sm">
-                                            {{ strtoupper(substr($user->username, 0, 1)) }}
-                                        </div>
-                                        @if($user->is_active)
-                                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
-                                        @else
-                                        <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-red-400 border-2 border-white rounded-full"></div>
-                                        @endif
+                                <div class="flex-shrink-0 h-12 w-12 relative">
+                                    <img src="{{ $user->userDetail && $user->userDetail->profile_path ? asset('storage/' . $user->userDetail->profile_path) : asset('images/default-avatar.svg') }}" alt="Profile Picture" class="h-12 w-12 rounded-full object-cover border-2 border-white shadow">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-semibold text-gray-900">{{ $user->name }}</div>
+                                    <div class="text-sm text-gray-500 font-mono">{{ '@' . $user->username }}</div>
+                                    @if($user->usertype === 'admin')
+                                    <div class="text-xs text-[#1B365D] font-medium mt-1">
+                                        <i class="fas fa-crown mr-1"></i>Admin Access
                                     </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-semibold text-gray-900">{{ ucfirst($user->usertype) }} User</div>
-                                        <div class="text-sm text-gray-500 font-mono">{{ '@' . $user->username }}</div>
-                                        @if($user->usertype === 'admin')
-                                        <div class="text-xs text-[#1B365D] font-medium mt-1">
-                                            <i class="fas fa-crown mr-1"></i>Admin Access
-                                        </div>
-                                        @endif
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900 font-medium">{{ $user->username }}</div>
                             <div class="text-xs text-gray-400 mt-1">
                                 <i class="fas fa-envelope mr-1"></i>
                                 {{ $user->userDetail->email_addr ?? 'No email' }}

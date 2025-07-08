@@ -66,7 +66,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Main Form Card -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden h-full" id="user-info-card">
                     <!-- Card Header -->
                     <div class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10 px-6 py-4 border-b border-gray-100">
                         <div class="flex items-center justify-between">
@@ -186,7 +186,7 @@
 
             <!-- Sidebar Card -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden h-full flex flex-col" id="user-profile-card">
                     <!-- Card Header -->
                     <div class="bg-gradient-to-r from-[#D4AF37]/10 to-[#B38F2A]/10 px-6 py-4 border-b border-gray-100">
                         <h2 class="text-lg font-semibold text-gray-900 flex items-center">
@@ -199,19 +199,13 @@
                     <div class="p-6">
                         <!-- User Avatar -->
                         <div class="text-center mb-6">
-                            @if($user->profile_picture)
-                                <div class="w-20 h-20 rounded-full mx-auto mb-3 shadow-lg overflow-hidden">
-                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" 
-                                         alt="{{ $user->name }}" 
-                                         class="w-full h-full object-cover">
-                                </div>
-                            @else
-                                <div class="w-20 h-20 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg">
-                                    <span class="text-white text-2xl font-bold">{{ substr($user->name, 0, 1) }}</span>
-                                </div>
-                            @endif
+                            <div class="w-20 h-20 rounded-full mx-auto mb-3 shadow-lg overflow-hidden">
+                                <img src="{{ $user->userDetail && $user->userDetail->profile_path ? asset('storage/' . $user->userDetail->profile_path) : asset('images/default-avatar.svg') }}" 
+                                     alt="{{ $user->name }}" 
+                                     class="w-full h-full object-cover">
+                            </div>
                             <h3 class="font-semibold text-gray-900">{{ $user->name }}</h3>
-                            <p class="text-sm text-gray-500">{{ $user->username }}</p>
+                            <p class="text-sm text-gray-500">{{'@'. $user->username }}</p>
                         </div>
 
                         <!-- User Stats -->
@@ -287,6 +281,25 @@
 /* Enhanced select styling */
 select:focus {
     box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.1);
+}
+
+/* Make user profile sidebar match user info card height */
+@media (min-width: 1024px) {
+  #user-profile-card {
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .grid-cols-3 > #user-profile-card {
+    height: 100%;
+  }
+  .grid-cols-3 > #user-info-card {
+    height: 100%;
+  }
+  .grid-cols-3 {
+    align-items: stretch;
+  }
 }
 </style>
 
