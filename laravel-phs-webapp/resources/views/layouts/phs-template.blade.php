@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>@yield('title','Print PHS Document')</title>
+        <title>@yield('title', 'Print PHS Document')</title>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -15,39 +15,129 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
         <style>
+            @page {
+                size: A4;
+                margin-top: 0.2in;
+                margin-bottom: 0.3in;
+                margin-left: 0.5in;
+                margin-right: 0.5in;
+            }
             body {
                 font-family: 'Inter', system-ui, -apple-system, sans-serif;
-                min-height: 100 vh;
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                background: #fff;
+                margin: 0;
+                padding: 0;
             }
-
-
+            .phs-page {
+                position: relative;
+                page-break-after: always;
+                break-after: page;
+            }
+            .phs-header, .phs-footer {
+                position: fixed;
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+            .phs-header {
+                top: 0;
+            }
+            .phs-footer {
+                bottom: 0;
+            }
+            @media print {
+                body {
+                    background: #fff !important;
+                }
+                .phs-page {
+                    page-break-after: always;
+                    break-after: page;
+                }
+                .phs-header, .phs-footer {
+                    position: fixed;
+                    left: 0;
+                    right: 0;
+                    width: 100%;
+                }
+                .phs-header {
+                    top: 0;
+                }
+                .phs-footer {
+                    bottom: 0;
+                }
+                /* Strict print rule: only show header, footer, and page */
+                body > *:not(.phs-header):not(.phs-footer):not(.phs-page) {
+                    display: none !important;
+                }
+            }
         </style>
     </head>
 
     <body>
-        <p id='confidential'>CONFIDENTIAL</p>
-        <p id='vision'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
-        <p id='annex'>ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
-        <p id='fnr'>File Nr:_______</p>
-        <p id='ghq'>GHQ, OJ2</p>
-        <p id='num-form'>200-054 Form</p>
-        <p id='doc-title'>PERSONAL HISTORY STATEMENT</p>
-        <p class='instruc'>INSTRUCTION</p>
-        <ol class='instruc-list'>
-            <li>Answer all questions completely; if question is not applicable, write "NA".write "Unknown"
-                only if you do not know the answer and cannot obtain the answer from personal records.
-                Use the blank pages at the back of this form for extra details on any question for which you
-                do not have sufficient space.
-            </li>
-            <li>Write carefully, Illegible or incomplete forms will not receive consideration.</li>
-        </ol>
-        <p class='instruc'>WARNING</p>
-        <ol class='instruc-list'>
-            <li>The correctness of all statement of entries made herein will be investigated.</li>
-            <li>Any deliberate omission or distortion of material facts may give sufficient cause for denial of clearance.</li>
-            <li>The statements made herein are classified CONFIDENTIAL. Revelation or use for other than the authorized
-                purpose is prohibited by AFPR G-200-054.</li>
-        </ol>
+        <div class="phs-header">
+            {{-- PHS Print Header Fragment --}}
+            <div class="w-full left-0 right-0 top-0 z-[1000] text-center bg-white absolute">
+                <p class="text-[12pt] mt-0 mb-[10pt] tracking-[2px]">
+                    <span class="underline">C</span>
+                    <span class="underline">O</span>
+                    <span class="underline">N</span>
+                    <span class="underline">F</span>
+                    <span class="underline">I</span>
+                    <span class="underline">D</span>
+                    <span class="underline">E</span>
+                    <span class="underline">N</span>
+                    <span class="underline">T</span>
+                    <span class="underline">I</span>
+                    <span class="underline">A</span>
+                    <span class="underline">L</span>
+                </p>
+                <p class='text-[10pt] italic'>AFP Vision 2028: A World-class Armed Forces, Source of National Pride</p>
+                <p class="text-[9pt] text-left font-bold underline decoration-[2px]">ANNEX A of AFPR G 200-054 dtd 22 September 2014, cont'n:</p>
+            </div> 
+        </div>
+        
+        @php use Illuminate\Support\Facades\View; @endphp
+        @php
+            $pages = collect([
+                'content',
+                'page1',
+                'page2',
+                'page3',
+                'page4',
+                'page5',
+                'page6',
+                'page7',
+                'page8',
+                'page9',
+                'page10',
+                'page11',
+            ])->filter(fn($section) => trim(View::getSection($section)) !== '')->values();
+        @endphp
+        @foreach ($pages as $i => $page)
+            <div class="phs-page" style="{{ $i === $pages->count() - 1 ? 'page-break-after: auto; break-after: auto;' : '' }}">
+                <div class="phs-content">@yield($page)</div>
+            </div>
+        @endforeach
+        
+        <div class="phs-footer">
+            {{-- PHS Print Footer Fragment --}}
+            <div class="w-full left-0 right-0 bottom-0 z-[1000] text-center bg-white absolute">
+                <p class='text-[12pt] mt-0 mb-[10pt] tracking-[2px]'>
+                    <span class="underline">C</span>
+                    <span class="underline">O</span>
+                    <span class="underline">N</span>
+                    <span class="underline">F</span>
+                    <span class="underline">I</span>
+                    <span class="underline">D</span>
+                    <span class="underline">E</span>
+                    <span class="underline">N</span>
+                    <span class="underline">T</span>
+                    <span class="underline">I</span>
+                    <span class="underline">A</span>
+                    <span class="underline">L</span>
+                </p>
+                <p class="text-[10pt] italic">AFP Core Values: Honor, Service, Patriotism</p>
+            </div> 
+        </div>
     </body>
 </html>

@@ -26,7 +26,7 @@
                     {{ $submissions->where('created_at', '>=', now()->subDays(30))->count() }} this month
                 </div>
             </div>
-            <a href="{{ route('admin.phs.preview') }}" 
+            <a href="#" onclick="printTemplateDirect(event)"
                class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-opacity-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
                 <i class="fas fa-print mr-2"></i>
                 Print Template
@@ -277,6 +277,25 @@ function confirmPHSDelete(username, userName) {
             form.submit();
         }
     );
+}
+
+function printTemplateDirect(event) {
+    event.preventDefault();
+    // Remove any existing iframe
+    let oldIframe = document.getElementById('print-template-iframe');
+    if (oldIframe) oldIframe.remove();
+    // Create a hidden iframe
+    let iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.id = 'print-template-iframe';
+    iframe.src = "{{ route('admin.phs.preview') }}";
+    document.body.appendChild(iframe);
+    iframe.onload = function() {
+        setTimeout(function() {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        }, 300);
+    };
 }
 </script>
 @endsection
