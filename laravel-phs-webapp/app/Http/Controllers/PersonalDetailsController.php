@@ -66,68 +66,96 @@ class PersonalDetailsController extends Controller
             'passport_expiry' => 'nullable|string|max:255',
             'name_change' => 'nullable|string|max:255',
         ]);
+        // Trim all input
+        $trim_recursive = function ($value) use (&$trim_recursive) {
+            if (is_array($value)) {
+                return array_map($trim_recursive, $value);
+            } elseif (is_string($value)) {
+                return trim($value);
+            }
+            return $value;
+        };
+        $validated = $trim_recursive($validated);
 
-        $nameData = Arr::only ($validated, ['first_name', 'last_name', 'middle_name', 'nickname', 'change_in_name']);
-        $birthAddr = $validated->only([
-            'birth_region','birth_province','birth_city','birth_barangay','birth_street',
-        ]);
-
+        $nameData = Arr::only($validated, ['first_name', 'last_name', 'middle_name', 'suffix']);
         // Validate and store the personal details
         $existingUserDetail = UserDetail::where('username', auth()->user()->username)->first();
         $recordedName = $this->nameExists($nameData);
-
         if (!$existingUserDetail) {
             $newUserDetail = UserDetail::create([
-                            'username' => auth() ->user()->username,
-                        ]);
+                'username' => auth()->user()->username,
+            ]);
             $existingUserDetail = $newUserDetail;
         }
-
-        $birthAddr = $this->createNewAddress([
-            'region' => $request->birth_region,
-            'province'=> $request->birth_province,
-            'city'=> $request->birth_city,
-            'barangay'=> $request->birth_barangay,
-            'street'=> $request->birth_street,
-        ]);
-
-        $homeAddr = $this->createNewAddress([
-            'region' => $request->home_region,
-            'province'=> $request->home_province,
-            'city'=> $request->home_city,
-            'barangay'=> $request->home_barangay,
-            'street'=> $request->home_street,
-        ]);
-
-        $businessAddr = $this->createNewAddress([
-            'region' => $request->business_region,
-            'province'=> $request->business_province,
-            'city'=> $request->business_city,
-            'barangay'=> $request->business_barangay,
-            'street'=> $request->business_street,
-        ]);
-
-        //saving after mapping what needs to be mapped
-        if ($recordedName) {
+        // Create or update NameDetail
+        $name = NameDetail::where([
+            'last_name' => $nameData['last_name'],
+            'first_name' => $nameData['first_name'],
+            'middle_name' => $nameData['middle_name'],
+            'suffix' => $nameData['suffix'],
+        ])->first();
+        if ($name) {
             $existingUserDetail->update([
-                'full_name' => $recordedName->id
+                'full_name' => $name->id
             ]);
         } else {
+            $newName = NameDetail::create([
+                'last_name' => $nameData['last_name'],
+                'first_name' => $nameData['first_name'],
+                'middle_name' => $nameData['middle_name'],
+                'suffix' => $nameData['suffix'],
+            ]);
             $existingUserDetail->update([
-                'full_name' => $this->createNewName($nameData),
+                'full_name' => $newName->id
             ]);
         }
-
-
+        // Create or update AddressDetail for birth and home
+        $birthAddr = $this->createNewAddress([
+            'region' => $validated['birth_region'] ?? null,
+            'province'=> $validated['birth_province'] ?? null,
+            'city'=> $validated['birth_city'] ?? null,
+            'barangay'=> $validated['birth_barangay'] ?? null,
+            'street'=> $validated['birth_street'] ?? null,
+        ]);
+        $homeAddr = $this->createNewAddress([
+            'region' => $validated['home_region'] ?? null,
+            'province'=> $validated['home_province'] ?? null,
+            'city'=> $validated['home_city'] ?? null,
+            'barangay'=> $validated['home_barangay'] ?? null,
+            'street'=> $validated['home_street'] ?? null,
+        ]);
+        $existingUserDetail->update([
+            'home_addr' => $homeAddr->addr_id,
+            'birth_date' => $validated['date_of_birth'],
+            'birth_place' => $birthAddr->addr_id,
+            'nationality' => 1, // You may want to look up the ID for the nationality string
+            'religion' => $validated['religion'] ?? null,
+            'mobile_num' => $validated['mobile'] ?? null,
+            'email_addr' => $validated['email'] ?? null,
+        ]);
+        // Save all personal fields in PersonalDetail
+        \App\Models\PersonalDetail::updateOrCreate(
+            ['username' => auth()->user()->username],
+            [
+                'health_state' => null, // Add logic to get from form if present
+                'illness' => null, // Add logic to get from form if present
+                'blood_type' => null, // Add logic to get from form if present
+                'cap_size' => null, // Add logic to get from form if present
+                'shoe_size' => null, // Add logic to get from form if present
+                'hobbies' => null, // Add logic to get from form if present
+                'undergo_lie_detection' => null, // Add logic to get from form if present
+                'nickname' => $validated['nickname'] ?? null,
+                'change_in_name' => $validated['name_change'] ?? null,
+            ]
+        );
         return redirect()->route('phs.personal-characteristics.create');
-            // ->with('success', 'Personal details saved successfully.');
     }
     private function createNewName($nameData):int {
         return NameDetail::firstOrCreate([
                         'last_name' => $nameData['last_name'],
                         'first_name'=> $nameData['first_name'],
                         'middle_name' => $nameData['middle_name'],
-                        'name_extension'=> $nameData['suffix'],
+                        'suffix'=> $nameData['suffix'],
                     ])->id;
     }
     private function createNewAddress($addressData):AddressDetail {
@@ -180,7 +208,7 @@ class PersonalDetailsController extends Controller
             "last_name" => $name?->last_name ?? '',
             "middle_name" => $name?->middle_name ?? '',
             "suffix" => $name?->suffix ?? '',
-            "nickname"=> $name?->nickname ?? '',
+            "nickname"=> $userDetail?->nickname ?? '',
             "date_of_birth" => $userDetail?->birth_date ?? '',
             "birth_region" => $birthAddr?->region ?? '',
             "birth_province" => $birthAddr?->province ?? '',
@@ -208,7 +236,7 @@ class PersonalDetailsController extends Controller
             "tin" => $govId?->tin_num ?? '',
             "passport_number" => $govId?->pass_num ?? '',
             "passport_expiry" => $govId?->pass_exp ?? '',
-            "name_change" => $name?->change_in_name ?? '',
+            "name_change" => $userDetail?->change_in_name ?? '',
         ];
     }
     private function getCommonViewData($currentSection)

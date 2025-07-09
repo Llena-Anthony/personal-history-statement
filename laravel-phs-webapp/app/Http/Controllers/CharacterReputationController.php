@@ -102,22 +102,4 @@ class CharacterReputationController extends Controller
             return back()->with('error', 'An error occurred while saving your character and reputation information. Please try again.');
         }
     }
-
-    protected function getSections()
-    {
-        return [
-            'personal-details',
-            'family-background',
-            'educational-background',
-            'employment-history',
-            'military-history',
-            'places-of-residence',
-            'foreign-countries',
-            'credit-reputation',
-            'arrest-record',
-            'character-and-reputation',
-            'organization',
-            'miscellaneous'
-        ];
-    }
 }

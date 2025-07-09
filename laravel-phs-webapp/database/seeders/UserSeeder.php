@@ -9,6 +9,7 @@ use App\Models\NameDetail;
 use App\Models\AddressDetail;
 use App\Models\CitizenshipDetail;
 use Illuminate\Support\Facades\Hash;
+use App\Models\PersonalDetail;
 
 class UserSeeder extends Seeder
 {
@@ -22,9 +23,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Administrator',
             'first_name' => 'System',
             'middle_name' => 'Admin',
-            'suffix' => null,
-            'nickname' => 'Admin',
-            'change_in_name' => null,
+            'suffix' => 'Sr.',
         ]);
 
         $adminHomeAddress = AddressDetail::firstOrCreate([
@@ -54,12 +53,14 @@ class UserSeeder extends Seeder
             'organic_role' => 'System Administrator',
             'is_active' => true,
             'phs_status' => 'completed',
+            'last_login_at' => now(),
+            'remember_token' => 'admintoken',
         ]);
 
         UserDetail::firstOrCreate([
             'username' => 'admin',
             'full_name' => $adminName->name_id,
-            'profile_path' => null,
+            'profile_path' => 'profiles/admin.jpg',
             'home_addr' => $adminHomeAddress->addr_id,
             'birth_date' => '1990-01-01',
             'birth_place' => $adminBirthAddress->addr_id,
@@ -68,15 +69,25 @@ class UserSeeder extends Seeder
             'mobile_num' => '09123456789',
             'email_addr' => 'admin@phs-system.com',
         ]);
+        PersonalDetail::firstOrCreate([
+            'username' => 'admin',
+            'health_state' => 'Healthy',
+            'illness' => 'None',
+            'blood_type' => 'O+',
+            'cap_size' => '7',
+            'shoe_size' => '9',
+            'hobbies' => 'Reading, Chess',
+            'undergo_lie_detection' => 'No',
+            'nickname' => 'Admin',
+            'change_in_name' => 'No',
+        ]);
 
         // Create Client User
         $clientName = NameDetail::firstOrCreate([
             'last_name' => 'Santos',
             'first_name' => 'Juan',
             'middle_name' => 'Dela Cruz',
-            'suffix' => null,
-            'nickname' => 'Juan',
-            'change_in_name' => null,
+            'suffix' => 'Jr.',
         ]);
 
         $clientHomeAddress = AddressDetail::firstOrCreate([
@@ -106,12 +117,14 @@ class UserSeeder extends Seeder
             'organic_role' => 'PMA Cadet',
             'is_active' => true,
             'phs_status' => 'in_progress',
+            'last_login_at' => now()->subDays(2),
+            'remember_token' => 'clienttoken',
         ]);
 
         UserDetail::firstOrCreate([
             'username' => 'client',
             'full_name' => $clientName->name_id,
-            'profile_path' => null,
+            'profile_path' => 'profiles/client.jpg',
             'home_addr' => $clientHomeAddress->addr_id,
             'birth_date' => '2000-05-15',
             'birth_place' => $clientBirthAddress->addr_id,
@@ -119,6 +132,18 @@ class UserSeeder extends Seeder
             'religion' => 'Roman Catholic',
             'mobile_num' => '09187654321',
             'email_addr' => 'client@phs-system.com',
+        ]);
+        PersonalDetail::firstOrCreate([
+            'username' => 'client',
+            'health_state' => 'Good',
+            'illness' => 'Asthma',
+            'blood_type' => 'A+',
+            'cap_size' => '6.5',
+            'shoe_size' => '8',
+            'hobbies' => 'Basketball, Music',
+            'undergo_lie_detection' => 'Yes',
+            'nickname' => 'Juan',
+            'change_in_name' => 'No',
         ]);
 
         $this->command->info('Users seeded successfully!');

@@ -23,8 +23,8 @@
                 Hobbies, Sports, and Pastimes
             </h2>
             <div>
-                <label for="hobbies_sports_pastimes" class="block font-medium text-gray-800 mb-1">Please list your hobbies, sports, and pastimes:</label>
-                <textarea name="hobbies_sports_pastimes" id="hobbies_sports_pastimes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors resize-none" placeholder="e.g., Reading, Basketball, Photography, etc. If none, write 'NONE'">{{ old('hobbies_sports_pastimes', $miscellaneous->hobbies_sports_pastimes ?? '') }}</textarea>
+                <label for="hobbies" class="block font-medium text-gray-800 mb-1">Please list your hobbies, sports, and pastimes:</label>
+                <textarea name="hobbies" id="hobbies" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors resize-none" placeholder="e.g., Reading, Basketball, Photography, etc. If none, write 'NONE'">{{ old('hobbies', $personalDetail->hobbies ?? '') }}</textarea>
             </div>
         </div>
 
@@ -37,48 +37,42 @@
             <p class="text-sm text-gray-600 mb-4">Indicate your proficiency level as FLUENT, FAIR, or POOR for each language/dialect.</p>
             
             <div id="languages-container">
-                <!-- Dynamic language rows will be added here -->
-                @if(isset($languages) && count($languages) > 0)
-                    @foreach($languages as $index => $language)
+                @if(isset($fluencies) && count($fluencies) > 0)
+                    @foreach($fluencies as $index => $fluency)
                         <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="{{ $index }}">
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
-                                    <input type="text" name="languages[{{ $index }}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" value="{{ $language['language'] ?? '' }}">
+                                    <input type="text" name="languages[{{ $index }}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" value="{{ $fluency->languageDetail->lang_desc ?? '' }}" readonly>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
                                     <select name="languages[{{ $index }}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                         <option value="">Select</option>
-                                        <option value="FLUENT" {{ ($language['speak'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
-                                        <option value="FAIR" {{ ($language['speak'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
-                                        <option value="POOR" {{ ($language['speak'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
+                                        <option value="FLUENT" {{ ($fluency->speak_fluency ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                        <option value="FAIR" {{ ($fluency->speak_fluency ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                        <option value="POOR" {{ ($fluency->speak_fluency ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
                                     <select name="languages[{{ $index }}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                         <option value="">Select</option>
-                                        <option value="FLUENT" {{ ($language['read'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
-                                        <option value="FAIR" {{ ($language['read'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
-                                        <option value="POOR" {{ ($language['read'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
+                                        <option value="FLUENT" {{ ($fluency->read_fluency ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                        <option value="FAIR" {{ ($fluency->read_fluency ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                        <option value="POOR" {{ ($fluency->read_fluency ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
                                     <select name="languages[{{ $index }}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                         <option value="">Select</option>
-                                        <option value="FLUENT" {{ ($language['write'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
-                                        <option value="FAIR" {{ ($language['write'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
-                                        <option value="POOR" {{ ($language['write'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
+                                        <option value="FLUENT" {{ ($fluency->write_fluency ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                        <option value="FAIR" {{ ($fluency->write_fluency ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                        <option value="POOR" {{ ($fluency->write_fluency ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
                                     </select>
                                 </div>
                             </div>
-                            @if($index > 0)
-                                <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
-                                    <i class="fas fa-times-circle"></i>
-                                </button>
-                            @endif
                         </div>
                     @endforeach
                 @else
@@ -135,11 +129,11 @@
                 <label class="block font-medium text-gray-800 mb-3">Are you willing to undergo periodic lie detection test?</label>
                 <div class="space-y-2">
                     <label class="flex items-center">
-                        <input type="radio" name="lie_detection_test" value="yes" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'yes' ? 'checked' : '' }}>
+                        <input type="radio" name="undergo_lie_detection" value="yes" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('undergo_lie_detection', $personalDetail->undergo_lie_detection ?? '') === 'yes' ? 'checked' : '' }}>
                         <span class="text-gray-800">Yes</span>
                     </label>
                     <label class="flex items-center">
-                        <input type="radio" name="lie_detection_test" value="no" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'no' ? 'checked' : '' }}>
+                        <input type="radio" name="undergo_lie_detection" value="no" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('undergo_lie_detection', $personalDetail->undergo_lie_detection ?? '') === 'no' ? 'checked' : '' }}>
                         <span class="text-gray-800">No</span>
                     </label>
                 </div>

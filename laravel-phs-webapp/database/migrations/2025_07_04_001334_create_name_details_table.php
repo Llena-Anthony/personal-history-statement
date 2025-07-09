@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('suffix')->nullable();
-            $table->string('nickname')->nullable();
-            $table->string('change_in_name')->nullable();
 
             $table->unique(['first_name','last_name','middle_name','suffix'],'full_name');
         });

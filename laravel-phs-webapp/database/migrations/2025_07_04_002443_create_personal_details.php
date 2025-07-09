@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('shoe_size')->nullable();
             $table->string('hobbies')->nullable();
             $table->string('undergo_lie_detection')->nullable();
+            $table->string('nickname')->nullable();
+            $table->string('change_in_name')->nullable();
 
             $table->foreign('username')
             ->references('username')

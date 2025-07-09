@@ -30,49 +30,76 @@
                 Elementary Education
             </h3>
             <div id="elementary-container" class="space-y-4">
-                <!-- Initial elementary entry -->
-                <div class="elementary-entry p-4 border border-gray-200 rounded-lg" data-index="0">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                School Name
-                            </label>
-                            <input type="text" name="elementary[0][school]"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school name"
-                                   value="{{ old('elementary.0.school', $educationalBackground->elementary_school ?? '') }}">
+                @php $elementary = $elementary ?? []; @endphp
+                @if(count($elementary) > 0)
+                    @foreach($elementary as $i => $entry)
+                        <div class="elementary-entry p-4 border border-gray-200 rounded-lg" data-index="{{ $i }}">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">School Name</label>
+                                    <input type="text" name="elementary[{{ $i }}][school]"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                           placeholder="Enter school name"
+                                           value="{{ old('elementary.' . $i . '.school', $entry['school'] ?? '') }}">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">School Address</label>
+                                    <input type="text" name="elementary[{{ $i }}][address]"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                           placeholder="Enter school address"
+                                           value="{{ old('elementary.' . $i . '.address', $entry['address'] ?? '') }}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Year Started</label>
+                                    <input type="number" name="elementary[{{ $i }}][start]" min="1900" max="2030"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                           placeholder="YYYY"
+                                           value="{{ old('elementary.' . $i . '.start', $entry['attend_date'] ?? '') }}">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Year Graduated</label>
+                                    <input type="number" name="elementary[{{ $i }}][graduate]" min="1900" max="2030"
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                           placeholder="YYYY"
+                                           value="{{ old('elementary.' . $i . '.graduate', $entry['year_grad'] ?? '') }}">
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                School Address
-                            </label>
-                            <input type="text" name="elementary[0][address]"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="Enter school address"
-                                   value="{{ old('elementary.0.address', $educationalBackground->elementary_address ?? '') }}">
+                    @endforeach
+                @else
+                    <div class="elementary-entry p-4 border border-gray-200 rounded-lg" data-index="0">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">School Name</label>
+                                <input type="text" name="elementary[0][school]"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                       placeholder="Enter school name" value="">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">School Address</label>
+                                <input type="text" name="elementary[0][address]"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                       placeholder="Enter school address" value="">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Year Started</label>
+                                <input type="number" name="elementary[0][start]" min="1900" max="2030"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                       placeholder="YYYY" value="">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Year Graduated</label>
+                                <input type="number" name="elementary[0][graduate]" min="1900" max="2030"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                                       placeholder="YYYY" value="">
+                            </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Year Started
-                            </label>
-                            <input type="number" name="elementary[0][start]" min="1900" max="2030"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY"
-                                   value="{{ old('elementary.0.start', $educationalBackground->elementary_period_from ?? '') }}">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Year Graduated
-                            </label>
-                            <input type="number" name="elementary[0][graduate]" min="1900" max="2030"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                                   placeholder="YYYY"
-                                   value="{{ old('elementary.0.graduate', $educationalBackground->elementary_year_graduated ?? '') }}">
-                        </div>
-                    </div>
-                </div>
+                @endif
             </div>
             <button type="button" id="add-elementary" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
                 <i class="fas fa-plus mr-1"></i> Add Another Elementary School

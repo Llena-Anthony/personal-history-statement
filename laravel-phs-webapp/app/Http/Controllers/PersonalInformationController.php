@@ -25,7 +25,7 @@ class PersonalInformationController extends Controller
                 'last_name' => 'required|string|max:255',
                 'first_name' => 'required|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
-                'name_extension' => 'nullable|string|max:255',
+                'suffix' => 'nullable|string|max:255',
                 'date_of_birth' => 'required|date',
                 'place_of_birth' => 'required|string|max:255',
                 'sex' => 'required|in:male,female',

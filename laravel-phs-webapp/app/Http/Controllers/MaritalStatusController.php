@@ -108,7 +108,7 @@ class MaritalStatusController extends Controller
                         'last_name' => '',
                         'middle_name' => null,
                         'nickname' => null,
-                        'name_extension' => null,
+                        'suffix' => null,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
