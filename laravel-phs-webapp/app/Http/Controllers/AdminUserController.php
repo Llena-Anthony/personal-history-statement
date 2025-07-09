@@ -208,26 +208,26 @@ class AdminUserController extends Controller
                 'change_in_name' => null,
             ]);
 
-            // Create AddressDetail record (default empty address)
+            // Create AddressDetail record (empty address)
             $homeAddress = \App\Models\AddressDetail::firstOrCreate([
-                'country' => 'Philippines',
-                'region' => 'Not specified',
-                'province' => 'Not specified',
-                'city' => 'Not specified',
-                'barangay' => 'Not specified',
-                'street' => 'Not specified',
-                'zip_code' => 'Not specified',
+                'country' => null,
+                'region' => null,
+                'province' => null,
+                'city' => null,
+                'barangay' => null,
+                'street' => null,
+                'zip_code' => null,
             ]);
 
-            // Create birth address (same as home address for now)
+            // Create birth address (empty address)
             $birthAddress = \App\Models\AddressDetail::firstOrCreate([
-                'country' => 'Philippines',
-                'region' => 'Not specified',
-                'province' => 'Not specified',
-                'city' => 'Not specified',
-                'barangay' => 'Not specified',
-                'street' => 'Not specified',
-                'zip_code' => 'Not specified',
+                'country' => null,
+                'region' => null,
+                'province' => null,
+                'city' => null,
+                'barangay' => null,
+                'street' => null,
+                'zip_code' => null,
             ]);
 
             // Create UserDetail record
@@ -236,10 +236,10 @@ class AdminUserController extends Controller
                 'full_name' => $nameDetail->name_id,
                 'profile_path' => null,
                 'home_addr' => $homeAddress->addr_id,
-                'birth_date' => '1990-01-01', // Default birth date
+                'birth_date' => null,
                 'birth_place' => $birthAddress->addr_id,
-                'nationality' => 1, // Filipino (from lookup data)
-                'religion' => 'Not specified',
+                'nationality' => null,
+                'religion' => null,
                 'mobile_num' => null,
                 'email_addr' => $sessionUserData['email'],
             ]);

@@ -80,7 +80,6 @@ class PersonalDetailsController extends Controller
         $nameData = Arr::only($validated, ['first_name', 'last_name', 'middle_name', 'suffix']);
         // Validate and store the personal details
         $existingUserDetail = UserDetail::where('username', auth()->user()->username)->first();
-        $recordedName = $this->nameExists($nameData);
         if (!$existingUserDetail) {
             $newUserDetail = UserDetail::create([
                 'username' => auth()->user()->username,
@@ -124,11 +123,19 @@ class PersonalDetailsController extends Controller
             'barangay'=> $validated['home_barangay'] ?? null,
             'street'=> $validated['home_street'] ?? null,
         ]);
+        // Map nationality string to citizenship ID
+        $nationalityId = null;
+        if (!empty($validated['nationality'])) {
+            $citizenship = \App\Models\CitizenshipDetail::where('cit_description', $validated['nationality'])->first();
+            if ($citizenship) {
+                $nationalityId = $citizenship->cit_id;
+            }
+        }
         $existingUserDetail->update([
             'home_addr' => $homeAddr->addr_id,
             'birth_date' => $validated['date_of_birth'],
             'birth_place' => $birthAddr->addr_id,
-            'nationality' => 1, // You may want to look up the ID for the nationality string
+            'nationality' => $nationalityId,
             'religion' => $validated['religion'] ?? null,
             'mobile_num' => $validated['mobile'] ?? null,
             'email_addr' => $validated['email'] ?? null,
