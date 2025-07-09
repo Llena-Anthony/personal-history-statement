@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
+use App\Services\NameService;
 use App\Models\FamilyHistoryDetail;
 use App\Models\FamilyMember;
 use App\Helper\DataRetrieval;
@@ -43,7 +44,6 @@ class FamilyBackgroundController extends Controller
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
 
         try {
-            // Validation (same as before)
             $validated = $request->validate([
                 // Father
                 'father_first_name' => 'nullable|string|max:255',
@@ -160,28 +160,65 @@ class FamilyBackgroundController extends Controller
                 'mother_in_law_naturalized_place' => 'nullable|string|max:255',
                 'mother_in_law_naturalized_details' => 'nullable|string|max:500',
             ]);
-
             \Log::info('Validation passed', ['validated_data' => $validated]);
 
-            // Save or update all family background data using the helper
-            \App\Helper\DataUpdate::saveOrUpdateFamilyBackground(auth()->user()->username, $validated);
-
-            // Update PHS section tracking
-            $phs = \App\Models\PHS::where('user_id', auth()->id())->first();
-            if ($phs) {
-                $phs->update(['section_4_completed' => true]);
+        // Capitalize names for all family members
+        foreach ([
+                'father', 'mother', 'step_parent_guardian', 'father_in_law', 'mother_in_law'
+        ] as $role) {
+            foreach (['first_name', 'middle_name', 'last_name'] as $part) {
+                $key = $role . '_' . $part;
+                if (isset($validated[$key]) && $validated[$key]) {
+                    $validated[$key] = ucwords(strtolower($validated[$key]));
+                }
             }
-            $this->markSectionAsCompleted('family-background');
-            \Log::info('Session after markSectionAsCompleted', ['phs_sections' => session('phs_sections')]);
-            session()->save();
-            \Log::info('Session after session()->save()', ['phs_sections' => session('phs_sections')]);
+        }
 
+            // Prepare family_members and siblings arrays for the helper
+            $familyMembers = [];
+            foreach ([
+                'father', 'mother', 'step_parent_guardian', 'father_in_law', 'mother_in_law'
+            ] as $role) {
+                if (!empty($validated[$role . '_first_name']) || !empty($validated[$role . '_last_name'])) {
+                $familyMembers[] = [
+                        'role' => $role,
+                        'name' => [
+                            'first_name' => $validated[$role . '_first_name'] ?? null,
+                            'last_name' => $validated[$role . '_last_name'] ?? null,
+                            'middle_name' => $validated[$role . '_middle_name'] ?? null,
+                            'suffix' => $validated[$role . '_suffix'] ?? null,
+                        ],
+                        'birth_date' => $validated[$role . '_birth_date'] ?? null,
+                        'birth_place' => $validated[$role . '_birth_place'] ?? null,
+                        'occupation' => $validated[$role . '_occupation'] ?? null,
+                        'employer' => $validated[$role . '_employer'] ?? null,
+                        'place_of_employment' => $validated[$role . '_place_of_employment'] ?? null,
+                        'complete_address' => $validated[$role . '_complete_address'] ?? null,
+                        'citizenship_type' => $validated[$role . '_citizenship_type'] ?? null,
+                        'citizenship' => $validated[$role . '_citizenship'] ?? null,
+                        'citizenship_dual_1' => $validated[$role . '_citizenship_dual_1'] ?? null,
+                        'citizenship_dual_2' => $validated[$role . '_citizenship_dual_2'] ?? null,
+                        'citizenship_naturalized' => $validated[$role . '_citizenship_naturalized'] ?? null,
+                        'naturalized_month' => $validated[$role . '_naturalized_month'] ?? null,
+                        'naturalized_year' => $validated[$role . '_naturalized_year'] ?? null,
+                        'naturalized_place' => $validated[$role . '_naturalized_place'] ?? null,
+                        'isnaturalized' => ($validated[$role . '_citizenship_type'] ?? null) === 'Naturalized' ? 1 : 0,
+                        'naturalized_details' => $validated[$role . '_naturalized_details'] ?? null,
+                    ];
+                }
+            }
+            $siblings = $validated['siblings'] ?? [];
+            $userId = auth()->id();
+            $data = $validated;
+            $data['family_members'] = $familyMembers;
+            $data['siblings'] = $siblings;
+            \App\Helper\DataUpdate::saveFamilyBackground($data, $userId);
+            $this->markSectionAsCompleted('family-background');
+            session()->save();
             if ($request->ajax()) {
-                \Log::info('Returning AJAX response, session:', ['phs_sections' => session('phs_sections')]);
                 $nextRoute = auth()->user()->role === 'personnel'
                     ? route('personnel.phs.educational-background.create')
                     : route('phs.educational-background.create');
-
                 return response()->json([
                     'success' => true,
                     'next_route' => $nextRoute

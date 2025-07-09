@@ -18,7 +18,9 @@ class NameDetail extends Model
         'last_name',
         'first_name',
         'middle_name',
-        'suffix',
+        'name_extension',
+        'nickname',
+        'change_in_name',
     ];
 
     // Relationships

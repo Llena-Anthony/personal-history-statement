@@ -37,10 +37,9 @@ class MilitaryHistoryController extends Controller
 
     public function store(Request $request)
     {
-        // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
 
-        // For save-only mode, use minimal validation
+        // Validation (keep as is)
         if ($isSaveOnly) {
             $validated = $request->validate([
                 'enlistment_month' => 'required|string|max:2',
@@ -70,7 +69,6 @@ class MilitaryHistoryController extends Controller
                 'awards.*.name' => 'nullable|string|max:255',
             ]);
         } else {
-            // Full validation for final submission
             $validated = $request->validate([
                 'enlistment_month' => 'required|string|max:2',
                 'enlistment_year' => 'required|integer|min:1900|max:2030',
@@ -100,20 +98,14 @@ class MilitaryHistoryController extends Controller
             ]);
         }
 
-        // Process date fields based on date type
         $this->processDateFields($validated);
 
         try {
             DB::beginTransaction();
 
-            \Log::info('MilitaryHistory validated data:', $validated);
-
-            $userId = auth()->id();
-
-            // Create or update military history
-            $militaryHistory = MilitaryHistory::updateOrCreate(
-                ['user_id' => $userId],
-                [
+            $username = auth()->user()->username;
+            $data = [
+                'military' => [
                     'enlistment_month' => $validated['enlistment_month'],
                     'enlistment_year' => $validated['enlistment_year'],
                     'commission_source' => $validated['commission_source'] ?? null,
@@ -121,89 +113,16 @@ class MilitaryHistoryController extends Controller
                     'commission_date_from_year' => $validated['commission_date_from_year'] ?? null,
                     'commission_date_to_month' => $validated['commission_date_to_month'] ?? null,
                     'commission_date_to_year' => $validated['commission_date_to_year'] ?? null,
-                ]
-            );
+                ],
+                'assignments' => $validated['assignments'] ?? [],
+                'schools' => $validated['schools'] ?? [],
+                'awards' => $validated['awards'] ?? [],
+            ];
+            \App\Helper\DataUpdate::saveMilitaryHistory($data, $username);
 
-            \Log::info('MilitaryHistory after save:', $militaryHistory->toArray());
-
-            // Handle assignments
-            if (isset($validated['assignments'])) {
-                // Clear existing assignments
-                MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->delete();
-
-                foreach ($validated['assignments'] as $assignmentData) {
-                    if (!empty($assignmentData['unit_office'])) {
-                        $assignment = MilitaryAssignment::create([
-                            'assign_id' => $militaryHistory->military_assign,
-                            'date_from_month' => $assignmentData['from_month'] ?? null,
-                            'date_from_year' => $assignmentData['from_year'] ?? null,
-                            'date_to_month' => $assignmentData['to_month'] ?? null,
-                            'date_to_year' => $assignmentData['to_year'] ?? null,
-                            'unit_office' => $assignmentData['unit_office'],
-                            'co_or_chief_of_office' => $assignmentData['co_chief'] ?? null,
-                        ]);
-                    }
-                }
-            }
-
-            // Handle schools
-            if (isset($validated['schools'])) {
-                // Clear existing schools
-                MilitarySchool::where('user_id', $userId)->delete();
-
-                foreach ($validated['schools'] as $schoolData) {
-                    if (!empty($schoolData['school'])) {
-                        $school = MilitarySchool::create([
-                            'user_id' => $userId,
-                            'school' => $schoolData['school'],
-                            'location' => $schoolData['location'] ?? null,
-                            'date_attended_from_month' => $schoolData['date_attended_from_month'] ?? null,
-                            'date_attended_from_year' => $schoolData['date_attended_from_year'] ?? null,
-                            'date_attended_to_month' => $schoolData['date_attended_to_month'] ?? null,
-                            'date_attended_to_year' => $schoolData['date_attended_to_year'] ?? null,
-                            'nature_training' => $schoolData['nature_training'] ?? null,
-                            'rating' => $schoolData['rating'] ?? null,
-                        ]);
-                    }
-                }
-            }
-
-            // Handle awards
-            if (isset($validated['awards'])) {
-                // Clear existing awards
-                MilitaryAward::whereIn('history_id', MilitarySchool::where('user_id', $userId)->pluck('history_id'))->delete();
-
-                foreach ($validated['awards'] as $awardData) {
-                    if (!empty($awardData['name'])) {
-                        // For simplicity, associate awards with the first school or create a dummy school
-                        $school = MilitarySchool::where('user_id', $userId)->first();
-                        if (!$school) {
-                            $school = MilitarySchool::create([
-                                'user_id' => $userId,
-                                'date_attended' => null,
-                            ]);
-                        }
-
-                        MilitaryAward::create([
-                            'history_id' => $school->history_id,
-                            'decoration_award_or_commendation' => $awardData['name'],
-                        ]);
-                    }
-                }
-            }
-
-            \Log::info('MilitaryHistory related data after save:', [
-                'assignments' => MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get()->toArray(),
-                'schools' => MilitarySchool::where('user_id', $userId)->get()->toArray(),
-                'awards' => MilitaryAward::whereIn('history_id', MilitarySchool::where('user_id', $userId)->pluck('history_id'))->get()->toArray(),
-            ]);
-
-            // Mark military history as completed
             $this->markSectionAsCompleted('military-history');
-
             DB::commit();
 
-            // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Military history saved successfully']);
             }

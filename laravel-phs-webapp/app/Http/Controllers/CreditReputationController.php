@@ -17,93 +17,39 @@ class CreditReputationController extends Controller
 
     public function create()
     {
-        $creditDetail = DataRetrieval::retrieveCreditDetail(auth()->user()->username);
-        $creditReferences = DataRetrieval::retrieveCreditReferences(auth()->user()->username);
-        $bankAccounts = DataRetrieval::retrieveBankAccounts(auth()->user()->username);
+        $username = auth()->user()->username;
+        $creditDetail = \App\Models\CreditDetail::where('username', $username)->first();
+        $creditReferences = \App\Models\CreditReferenceDetail::with(['bankDetail.addressDetail'])->where('username', $username)->get();
         $data = $this->getCommonViewData('credit-reputation');
         $data['creditDetail'] = $creditDetail;
         $data['creditReferences'] = $creditReferences;
-        $data['bankAccounts'] = $bankAccounts;
+        // You may want to decode JSON fields for the view here if needed
         return view('phs.credit-reputation', $data);
     }
 
     public function store(Request $request)
     {
         $this->markSectionAsCompleted('credit-reputation');
-
+        $username = auth()->user()->username;
         // Validation can be added here as needed
-        $user = Auth::user();
-
-        \Log::info('CreditReputation request data:', $request->all());
-
-        try {
-            // Update or create CreditReputation
-            $creditReputation = CreditReputation::updateOrCreate(
-                ['user_id' => $user->id],
-                $request->only([
-                    'dependent_on_salary',
-                    'has_loans',
-                    'has_filed_assets_liabilities',
-                    'assets_liabilities_agency',
-                    'assets_liabilities_month',
-                    'assets_liabilities_year',
-                    'has_filed_itr',
-                    'itr_amount',
-                ])
-            );
-
-            \Log::info('CreditReputation after save:', $creditReputation->toArray());
-
-            // Clear and create OtherIncomes
-            $creditReputation->otherIncomes()->delete();
-            if ($request->has('other_incomes')) {
-                foreach ($request->other_incomes as $income) {
-                    if (!empty($income['source'])) {
-                        $creditReputation->otherIncomes()->create($income);
-                    }
-                }
-            }
-
-            // Clear and create BankAccounts
-            $creditReputation->bankAccounts()->delete();
-            if ($request->has('bank_accounts')) {
-                foreach ($request->bank_accounts as $account) {
-                    if (!empty($account['bank_name'])) {
-                        $creditReputation->bankAccounts()->create($account);
-                    }
-                }
-            }
-
-            // Clear and create CharacterReferences
-            $creditReputation->characterReferences()->delete();
-            if ($request->has('character_references')) {
-                foreach ($request->character_references as $reference) {
-                    if (!empty($reference['name'])) {
-                        $creditReputation->characterReferences()->create($reference);
-                    }
-                }
-            }
-
-            \Log::info('CreditReputation related data after save:', [
-                'other_incomes' => $creditReputation->otherIncomes()->get()->toArray(),
-                'bank_accounts' => $creditReputation->bankAccounts()->get()->toArray(),
-                'character_references' => $creditReputation->characterReferences()->get()->toArray(),
-            ]);
-
-            // The next section is arrest-record
-            return redirect()->route('phs.arrest-record.create')
-                ->with('success', 'Credit reputation saved successfully.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
-            }
-            throw $e;
-        } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
-            }
-            return back()->with('error', 'An error occurred while saving your credit reputation. Please try again.');
-        }
+        $data = [
+            'credit' => [
+                'other_incomes' => $request->input('other_incomes', []),
+                'assets_liabilities_agency' => $request->input('assets_liabilities_agency'),
+                'assets_liabilities_month' => $request->input('assets_liabilities_month'),
+                'assets_liabilities_year' => $request->input('assets_liabilities_year'),
+                'itr_amount' => $request->input('itr_amount'),
+            ],
+            'references' => array_map(function($ref) {
+                return [
+                    'bank_name' => $ref['name'] ?? null,
+                    'bank_address' => $ref['address'] ?? null,
+                ];
+            }, $request->input('character_references', [])),
+        ];
+        \App\Helper\DataUpdate::saveCreditReputation($data, $username);
+        return redirect()->route('phs.arrest-record.create')
+            ->with('success', 'Credit reputation saved successfully.');
     }
 
     protected function getSections()

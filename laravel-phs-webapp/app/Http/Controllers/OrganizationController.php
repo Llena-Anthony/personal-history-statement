@@ -8,8 +8,6 @@ use App\Models\OrganizationDetail;
 use App\Models\MembershipDetail;
 use App\Models\AddressDetails;
 use Illuminate\Support\Facades\Auth;
-use App\Helper\DataRetrieval;
-use App\Helper\DataUpdate;
 
 class OrganizationController extends Controller
 {
@@ -22,12 +20,17 @@ class OrganizationController extends Controller
      */
     public function create()
     {
-        $organizations = DataRetrieval::retrieveOrganizations(auth()->user()->username);
+        // Load existing organization data for autofill
+        $organizations = MembershipDetail::where('username', auth()->user()->username)->get();
+
         $viewData = $this->getCommonViewData('organization');
         $viewData['organizations'] = $organizations;
+
+        // Return partial for AJAX requests, full view for normal requests
         if (request()->ajax()) {
             return view('phs.sections.organization-content', $viewData);
         }
+
         return view('phs.organization', $viewData);
     }
 
@@ -40,7 +43,9 @@ class OrganizationController extends Controller
     public function store(Request $request)
     {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
+
         try {
+            // Check if this is a save-only request (for dynamic navigation)
             if ($isSaveOnly) {
                 $validated = $request->validate([
                     'organizations.*.name' => 'nullable|string|max:255',
@@ -50,6 +55,7 @@ class OrganizationController extends Controller
                     'organizations.*.position' => 'nullable|string|max:255',
                 ]);
             } else {
+                // Full validation for final submission
                 $validated = $request->validate([
                     'organizations.*.name' => 'required|string|max:255',
                     'organizations.*.address' => 'required|string|max:500',
@@ -58,14 +64,42 @@ class OrganizationController extends Controller
                     'organizations.*.position' => 'required|string|max:255',
                 ]);
             }
+
             \Log::info('Organization validated data:', $validated);
+
+            // Additional validation for date fields based on month/year
             if (isset($validated['organizations'])) {
-                DataUpdate::updateOrganizations(auth()->user()->username, $validated['organizations']);
+                foreach ($validated['organizations'] as $index => $organization) {
+                    if (!empty($organization['month']) && empty($organization['year'])) {
+                        if (!$isSaveOnly) {
+                            return back()->withErrors(["organizations.{$index}.year" => 'Year is required when month is provided.']);
+                        }
+                    } elseif (empty($organization['month']) && !empty($organization['year'])) {
+                        if (!$isSaveOnly) {
+                            return back()->withErrors(["organizations.{$index}.month" => 'Month is required when year is provided.']);
+                        }
+                    }
+                }
             }
+
+            // Use centralized helper to save organization memberships
+            $username = auth()->user()->username;
+            $organizations = $validated['organizations'] ?? [];
+            \App\Helper\DataUpdate::saveOrganizationMemberships($organizations, $username);
+
+            \Log::info('Organization after save:', [
+                'organizations' => \App\Models\OrganizationDetail::all()->toArray(),
+                'membership_details' => \App\Models\MembershipDetail::where('username', $username)->get()->toArray(),
+            ]);
+
+            // Mark organization section as completed
             $this->markSectionAsCompleted('organization');
+
+            // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Organization information saved successfully']);
             }
+
             return redirect()->route('phs.miscellaneous.create')->with('success', 'Organization information saved successfully!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {

@@ -18,7 +18,8 @@ class EmploymentHistoryController extends Controller
      */
     public function create()
     {
-        $employment_history = DataRetrieval::retrieveEmployment(auth()->user()->username);
+        $username = auth()->user()->username;
+        $employment_history = \App\Models\EmploymentDetail::with('addressDetail')->where('username', $username)->get();
         $data = $this->getCommonViewData('employment-history');
         $data['employment_history'] = $employment_history;
         return view('phs.employment-history', $data);
@@ -32,57 +33,56 @@ class EmploymentHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
 
-        // For save-only mode, use minimal validation
+        // Validation (keep as is, but for array of employment entries)
         if ($isSaveOnly) {
             $validated = $request->validate([
-                'inclusive_dates' => 'nullable|string|max:255',
-                'employment_type' => 'nullable|string|max:255',
-                'employment_address' => 'nullable|string|max:255',
-                'employment_reason_for_leaving' => 'nullable|string|max:255',
-                'employer_name' => 'nullable|string|max:255',
-                'employer_addr' => 'nullable|string|max:255',
+                'employment' => 'nullable|array',
+                'employment.*.from_month' => 'nullable|string|max:2',
+                'employment.*.from_year' => 'nullable|integer|min:1900|max:2030',
+                'employment.*.to_month' => 'nullable|string|max:2',
+                'employment.*.to_year' => 'nullable|integer|min:1900|max:2030',
+                'employment.*.type' => 'nullable|string|max:255',
+                'employment.*.employer_name' => 'nullable|string|max:255',
+                'employment.*.employer_address' => 'nullable|string|max:255',
+                'employment.*.reason_leaving' => 'nullable|string|max:255',
+                'dismissed' => 'nullable|string|max:10',
+                'dismissed_explanation' => 'nullable|string|max:255',
             ]);
         } else {
-            // Full validation for final submission
             $validated = $request->validate([
-                'inclusive_dates' => 'nullable|string|max:255',
-                'employment_type' => 'nullable|string|max:255',
-                'employment_address' => 'nullable|string|max:255',
-                'employment_reason_for_leaving' => 'nullable|string|max:255',
-                'employer_name' => 'nullable|string|max:255',
-                'employer_addr' => 'nullable|string|max:255',
+                'employment' => 'nullable|array',
+                'employment.*.from_month' => 'nullable|string|max:2',
+                'employment.*.from_year' => 'nullable|integer|min:1900|max:2030',
+                'employment.*.to_month' => 'nullable|string|max:2',
+                'employment.*.to_year' => 'nullable|integer|min:1900|max:2030',
+                'employment.*.type' => 'nullable|string|max:255',
+                'employment.*.employer_name' => 'nullable|string|max:255',
+                'employment.*.employer_address' => 'nullable|string|max:255',
+                'employment.*.reason_leaving' => 'nullable|string|max:255',
+                'dismissed' => 'nullable|string|max:10',
+                'dismissed_explanation' => 'nullable|string|max:255',
             ]);
         }
 
         try {
-            // Add user_id to validated data
-            $validated['user_id'] = auth()->id();
+            $username = auth()->user()->username;
+            $data = [
+                'employment' => $validated['employment'] ?? [],
+                'dismissed' => $validated['dismissed'] ?? null,
+                'dismissed_explanation' => $validated['dismissed_explanation'] ?? null,
+            ];
+            \App\Helper\DataUpdate::saveEmploymentHistory($data, $username);
 
-            \Log::info('EmploymentHistory validated data:', $validated);
-
-            // Save or update employment history
-            $employmentHistory = EmploymentHistory::updateOrCreate(
-                ['user_id' => auth()->id()],
-                $validated
-            );
-
-            \Log::info('EmploymentHistory before save:', ['user_id' => auth()->id(), 'data' => $validated]);
-
-            // Mark employment history as completed
             $this->markSectionAsCompleted('employment-history');
 
-            \Log::info('EmploymentHistory after save:', $employmentHistory->toArray());
-
-            // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Employment history saved successfully']);
             }
 
-            return redirect()->route('phs.places-of-residence.create')
-                ->with('success', 'Employment history saved successfully. Please continue with your places of residence.');
+            return redirect()->route('phs.foreign-countries.create')
+                ->with('success', 'Employment history saved successfully. Please continue with your foreign countries.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $e->errors()], 422);

@@ -13,8 +13,9 @@ class PlacesOfResidenceController extends Controller
 
     public function create()
     {
-        // Load existing residence history data for autofill
-        $residenceHistory = User::where('username', auth()->id())->first();
+        // Load all residence history details for the current user, with address details
+        $username = auth()->user()->username;
+        $residenceHistory = \App\Models\ResidenceHistoryDetail::with('addressDetail')->where('username', $username)->get();
 
         $data = $this->getCommonViewData('places-of-residence');
         $data['residenceHistory'] = $residenceHistory;
@@ -29,10 +30,9 @@ class PlacesOfResidenceController extends Controller
 
     public function store(Request $request)
     {
-        // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
 
-        // For save-only mode, use minimal validation
+        // Validation (keep as is)
         if ($isSaveOnly) {
             $validated = $request->validate([
                 'residences.*.address' => 'nullable|string|max:255',
@@ -40,7 +40,6 @@ class PlacesOfResidenceController extends Controller
                 'residences.*.to_date' => 'nullable|date',
             ]);
         } else {
-            // Full validation for final submission
             $validated = $request->validate([
                 'residences.*.address' => 'nullable|string|max:255',
                 'residences.*.from_date' => 'nullable|date',
@@ -49,30 +48,17 @@ class PlacesOfResidenceController extends Controller
         }
 
         try {
-            // Mark places of residence as completed
+            $username = auth()->user()->username;
+            $data = [
+                'residences' => $validated['residences'] ?? [],
+            ];
+            \App\Helper\DataUpdate::savePlacesOfResidence($data, $username);
+
             $this->markSectionAsCompleted('places-of-residence');
 
-            // Log validated data
-            \Log::info('PlacesOfResidence validated data:', $validated);
-
-            // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Places of residence saved successfully']);
             }
-
-            // Save residences
-            foreach ($validated['residences'] as $residence) {
-                ResidenceHistory::updateOrCreate(
-                    ['user_id' => auth()->id(), 'address' => $residence['address']],
-                    [
-                        'from_date' => $residence['from_date'],
-                        'to_date' => $residence['to_date'],
-                    ]
-                );
-            }
-
-            // Log residences after saving
-            \Log::info('ResidenceHistory after save:', ResidenceHistory::where('user_id', auth()->id())->get()->toArray());
 
             return redirect()->route('phs.employment-history.create')
                 ->with('success', 'Places of residence saved successfully. Please continue with your employment history.');

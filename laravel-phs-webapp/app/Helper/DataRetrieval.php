@@ -216,7 +216,7 @@ class DataRetrieval {
             'spouse_first_name' => $spouseName?->first_name ?? '',
             'spouse_middle_name' => $spouseName?->middle_name ?? '',
             'spouse_last_name' => $spouseName?->last_name ?? '',
-            'spouse_suffix' => $spouseName?->suffix ?? '',
+            'spouse_suffix' => $spouseName?->name_extension ?? '',
             'marriage_month' => $spouse?->marr_date ? date('m', strtotime($spouse->marr_date)) : '',
             'marriage_year' => $spouse?->marr_date ? date('Y', strtotime($spouse->marr_date)) : '',
             'marriage_place' => $marriagePlace ? implode(', ', array_filter([
@@ -283,7 +283,7 @@ class DataRetrieval {
                     'first_name' => $name?->first_name ?? '',
                     'middle_name' => $name?->middle_name ?? '',
                     'last_name' => $name?->last_name ?? '',
-                    'suffix' => $name?->suffix ?? '',
+                    'suffix' => $name?->name_extension ?? '',
                     'birth_date' => $fam?->birth_date ?? '',
                     'birth_place' => $birthPlace ? implode(', ', array_filter([
                         $birthPlace->street,
@@ -327,10 +327,8 @@ class DataRetrieval {
                 ]);
             }
         }
-        $siblings = self::retrieveSiblings($username);
         return [
             'family_members' => $family_members,
-            'siblings' => $siblings,
         ];
     }
 
@@ -343,28 +341,6 @@ class DataRetrieval {
             'highschool' => self::retrieveHighSchool($username),
             'college' => self::retrieveCollege($username),
             'postgrad' => self::retrievePostGrad($username),
-        ];
-    }
-
-    /**
-     * Retrieve all organization membership records for a user.
-     */
-    public static function retrieveOrganizations($username) {
-        return \App\Models\MembershipDetail::where('username', $username)->get();
-    }
-
-    /**
-     * Retrieve miscellaneous info and languages for a user.
-     */
-    public static function retrieveMiscellaneous($username) {
-        $misc = \App\Models\Miscellaneous::where('user_id', $username)->where('misc_type', 'general-miscellaneous')->first();
-        $languages = [];
-        if ($misc && $misc->languages_dialects) {
-            $languages = json_decode($misc->languages_dialects, true) ?: [];
-        }
-        return [
-            'miscellaneous' => $misc,
-            'languages' => $languages,
         ];
     }
 }

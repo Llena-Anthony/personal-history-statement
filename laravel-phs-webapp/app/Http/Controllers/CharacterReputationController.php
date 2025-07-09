@@ -69,10 +69,11 @@ class CharacterReputationController extends Controller
 
             \Log::info('CharacterReputation validated data:', $validated);
 
-            // Use helper to update character references
-            DataUpdate::updateCharacterReferences($user->username, $request->character_references ?? []);
-            // Use helper to update neighbors
-            DataUpdate::updateNeighbors($user->username, $request->neighbors ?? []);
+            // Use centralized helper to update character and reputation data
+            DataUpdate::saveCharacterReputation([
+                'character_references' => $request->character_references ?? [],
+                'neighbors' => $request->neighbors ?? [],
+            ], $user->username);
 
             \Log::info('CharacterReputation after save:', [
                 'character_references' => \App\Models\ReferenceDetail::where('username', $user->username)
@@ -101,5 +102,23 @@ class CharacterReputationController extends Controller
             }
             return back()->with('error', 'An error occurred while saving your character and reputation information. Please try again.');
         }
+    }
+
+    protected function getSections()
+    {
+        return [
+            'personal-details',
+            'family-background',
+            'educational-background',
+            'employment-history',
+            'military-history',
+            'places-of-residence',
+            'foreign-countries',
+            'credit-reputation',
+            'arrest-record',
+            'character-and-reputation',
+            'organization',
+            'miscellaneous'
+        ];
     }
 }

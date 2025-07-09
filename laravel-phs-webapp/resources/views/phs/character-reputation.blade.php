@@ -1,6 +1,6 @@
 @php
     // Standardized section configuration
-    $sectionName = 'character-and-reputation';
+    $sectionName = 'character-reputation';
     $sectionTitle = 'XIII: Character and Reputation';
     $sectionDescription = 'Please provide your character references and neighbor information.';
     $sectionIcon = 'fas fa-user-shield';

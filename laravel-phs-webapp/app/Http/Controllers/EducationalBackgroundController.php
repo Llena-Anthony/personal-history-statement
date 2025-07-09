@@ -14,17 +14,7 @@ class EducationalBackgroundController extends Controller
 
     public function create()
     {
-        $username = auth()->user()->username;
-        // Prefill: retrieve all EducationDetail records for the user, grouped by level and special
-        $educationDetails = \App\Models\EducationDetail::where('username', $username)->get();
-        $prefill = [
-            'elementary' => $educationDetails->where('educ_level', 'elementary')->values()->all(),
-            'highschool' => $educationDetails->where('educ_level', 'highschool')->values()->all(),
-            'college' => $educationDetails->where('educ_level', 'college')->values()->all(),
-            'postgraduate' => $educationDetails->where('educ_level', 'postgraduate')->values()->all(),
-            'other_schools_training' => optional($educationDetails->where('educ_level', 'other_training')->first())->other_training ?? '',
-            'civil_service_qualifications' => optional($educationDetails->where('educ_level', 'civil_service')->first())->civil_service ?? '',
-        ];
+        $prefill = DataRetrieval::retrieveEducationalBackground(auth()->user()->username);
         $data = $this->getCommonViewData('educational-background');
         $data = array_merge($data, $prefill);
         return view('phs.educational-background', $data);
@@ -38,38 +28,47 @@ class EducationalBackgroundController extends Controller
     public function store(Request $request)
     {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-        // Accept arrays for each level and special fields
-        $validated = $request->validate([
-            'elementary' => 'nullable|array',
-            'elementary.*.school' => 'nullable|string|max:255',
-            'elementary.*.address' => 'nullable|string|max:255',
-            'elementary.*.start' => 'nullable|string|max:255',
-            'elementary.*.graduate' => 'nullable|string|max:255',
-            'highschool' => 'nullable|array',
-            'highschool.*.school' => 'nullable|string|max:255',
-            'highschool.*.address' => 'nullable|string|max:255',
-            'highschool.*.start' => 'nullable|string|max:255',
-            'highschool.*.graduate' => 'nullable|string|max:255',
-            'college' => 'nullable|array',
-            'college.*.school' => 'nullable|string|max:255',
-            'college.*.address' => 'nullable|string|max:255',
-            'college.*.start' => 'nullable|string|max:255',
-            'college.*.graduate' => 'nullable|string|max:255',
-            'postgraduate' => 'nullable|array',
-            'postgraduate.*.school' => 'nullable|string|max:255',
-            'postgraduate.*.address' => 'nullable|string|max:255',
-            'postgraduate.*.start' => 'nullable|string|max:255',
-            'postgraduate.*.graduate' => 'nullable|string|max:255',
-            'other_schools_training' => 'nullable|string',
-            'civil_service_qualifications' => 'nullable|string',
-        ]);
-        \App\Helper\DataUpdate::saveOrUpdateEducationDetails(auth()->user()->username, $validated);
-        $this->markSectionAsCompleted('educational-background');
+        // For save-only mode, use minimal validation
         if ($isSaveOnly) {
-            return response()->json(['success' => true, 'message' => 'Educational background saved successfully']);
+            $validated = $request->validate([
+                'elementary' => 'nullable|array',
+                'highschool' => 'nullable|array',
+                'college' => 'nullable|array',
+                'postgrad' => 'nullable|array',
+                'other_schools_training' => 'nullable|string',
+                'civil_service_qualifications' => 'nullable|string',
+            ]);
+        } else {
+            // Full validation for final submission
+            $validated = $request->validate([
+                'elementary' => 'nullable|array',
+                'highschool' => 'nullable|array',
+                'college' => 'nullable|array',
+                'postgrad' => 'nullable|array',
+                'other_schools_training' => 'nullable|string',
+                'civil_service_qualifications' => 'nullable|string',
+            ]);
         }
-        return redirect()->route('phs.military-history.create')
-            ->with('success', 'Educational background saved successfully. Please continue with your military history.');
+        try {
+            $username = auth()->user()->username;
+            \App\Helper\DataUpdate::saveEducationalBackground($validated, $username);
+            $this->markSectionAsCompleted('educational-background');
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Educational background saved successfully']);
+            }
+            return redirect()->route('phs.military-history.create')
+                ->with('success', 'Educational background saved successfully. Please continue with your military history.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your educational background. Please try again.');
+        }
     }
 
     /**

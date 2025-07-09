@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PersonalDetail extends Model
+class ResidenceHistoryDetail extends Model
 {
     public $timestamps = false;
     protected $primaryKey = 'username';
@@ -13,15 +13,12 @@ class PersonalDetail extends Model
     public $keyType = 'string';
     protected $fillable = [
         'username',
-        'health_state',
-        'illness',
-        'blood_type',
-        'cap_size',
-        'shoe_size',
-        'hobbies',
-        'undergo_lie_detection',
+        'addr',
     ];
-
+    public function addressDetail()
+    {
+        return $this->belongsTo(AddressDetail::class, 'addr', 'addr_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'username', 'username');
