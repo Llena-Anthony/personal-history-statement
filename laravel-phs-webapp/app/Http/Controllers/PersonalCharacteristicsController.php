@@ -77,31 +77,6 @@ class PersonalCharacteristicsController extends Controller
                 $data['shoe_size'] = max(1, min(20, $data['shoe_size']));
             }
 
-            // Add default values for required fields if they're missing
-            $defaults = [
-                'sex' => 'male',
-                'age' => 25,
-                'height' => 1.70,
-                'weight' => 70.00,
-                'body_build' => 'medium',
-                'complexion' => 'fair',
-                'hair_color' => 'black',
-                'eye_color' => 'brown',
-                'health_status' => 'good',
-                'blood_type' => 'O+',
-                'shoe_size' => 9.0,
-                'cap_size' => 'M'
-            ];
-
-            // Only add defaults for fields that are missing
-            foreach ($defaults as $field => $defaultValue) {
-                if (!isset($data[$field]) || empty($data[$field])) {
-                    $data[$field] = $defaultValue;
-                }
-            }
-
-            \Log::info('PersonalCharacteristics data with defaults:', $data);
-
             // Save or update personal characteristics
             $personalCharacteristics = DescriptionDetail::updateOrCreate(
                 ['username' => auth()->user()->username],
