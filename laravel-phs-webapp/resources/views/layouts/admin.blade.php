@@ -811,10 +811,22 @@
                                 @yield('header', 'Dashboard')
                             </span>
                         </div>
-                        <!-- Logout Icon Button -->
-                        <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
-                            <i class="fas fa-power-off text-lg"></i>
-                        </button>
+                        <!-- Hamburger Menu for Admin -->
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-2">
+                                <i class="fas fa-bars text-lg"></i>
+                            </button>
+                            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" @click.away="open = false" class="absolute right-0 mt-2 w-48 rounded-lg bg-white/95 shadow-xl border border-white/10 z-50">
+                                <div class="py-1">
+                                    <a href="{{ route('admin.switch.to.client') }}" id="pmaSwitchBtn" class="block px-4 py-2 text-sm text-[#1B365D] hover:bg-blue-50 flex items-center">
+                                        <i class="fas fa-repeat mr-2"></i>Switch to Client
+                                    </a>
+                                    <button onclick="showLogoutConfirmation()" class="w-full text-left px-4 py-2 text-sm text-[#1B365D] hover:bg-blue-50 flex items-center">
+                                        <i class="fas fa-power-off mr-2"></i>Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -846,27 +858,6 @@
                     </a>
                     <div class="user-username" style="font-size:0.85rem; color:#D4AF37; margin-bottom:0;">{{ '@' . Auth::user()->username }}</div>
                     {{-- <div class="user-role" style="font-size:0.8rem; color:#94a3b8;">{{ ucfirst(Auth::user()->usertype ?? 'Administrator') }}</div> --}}
-                </div>
-                <div class="pma-switch-btn-wrapper" style="position:absolute; top:12px; right:16px; z-index:2; display:flex; flex-direction:column; align-items:flex-end;">
-                    @if(Auth::user()->usertype === 'admin')
-                        <a href="{{ route('admin.switch.to.client') }}"
-                           class="pma-switch-btn"
-                           id="pmaSwitchBtn"
-                           tabindex="0"
-                           style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-repeat" style="font-size: 1.1rem;"></i>
-                        </a>
-                        <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Switch to Client PHS<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Direct to Client PHS</span></div>
-                    @elseif(Auth::user()->usertype === 'personnel')
-                        <a href="/personnel/phs/personal-details"
-                           class="pma-switch-btn"
-                           id="pmaSwitchBtn"
-                           tabindex="0"
-                           style="width:32px; height:32px; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-repeat" style="font-size: 1.1rem;"></i>
-                        </a>
-                        <div class="pma-switch-tooltip" id="pmaSwitchTooltip">Go to PHS Personal Details<br><span style='font-weight:400;font-size:0.68em;opacity:0.85;'>Direct to Personnel PHS</span></div>
-                    @endif
                 </div>
             </div>
                 
@@ -1271,17 +1262,20 @@
             btn.addEventListener('blur', hideTooltip);
         });
 
-        // Show loading overlay on switch button click
+        // Show loading overlay on switch button click with delay
         const switchBtn = document.getElementById('pmaSwitchBtn');
         if (switchBtn) {
             switchBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent immediate navigation
                 const overlay = document.getElementById('switchLoadingOverlay');
                 if (overlay) {
                     overlay.classList.add('active');
-                    // Force reflow for transition
                     void overlay.offsetWidth;
                 }
-                // Let the navigation proceed
+                // Delay navigation for 1.5 seconds
+                setTimeout(function() {
+                    window.location.href = switchBtn.getAttribute('href');
+                }, 1500);
             });
         }
     </script>

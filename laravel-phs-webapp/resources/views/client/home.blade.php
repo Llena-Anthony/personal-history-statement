@@ -36,26 +36,18 @@
                 @if(session('admin_switched_to_client'))
                 <span class="relative group focus:outline-none opacity-60 cursor-not-allowed select-none" title="Edit Profile (disabled in admin mode)">
                     <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
-                        @if(auth()->user()->profile_picture)
-                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                 alt="Profile"
-                                 class="w-full h-full object-cover rounded-full">
-                        @else
-                            <i class="fas fa-user text-[#1B365D] text-3xl md:text-4xl"></i>
-                        @endif
+                        <img src="{{ Auth::user()->profile_photo_url }}"
+                             alt="Profile"
+                             class="w-full h-full object-cover rounded-full">
                     </div>
                     <div class="absolute inset-0 rounded-full border-4 border-[#D4AF37]/30 animate-ping"></div>
                 </span>
                 @else
                 <a href="{{ route('profile.edit') }}" class="relative group focus:outline-none" title="Edit Profile">
                     <div class="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#D4AF37] to-[#B8941F] rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm group-hover:ring-4 group-hover:ring-[#D4AF37]/40 transition">
-                        @if(auth()->user()->profile_picture)
-                            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                 alt="Profile"
-                                 class="w-full h-full object-cover rounded-full">
-                        @else
-                            <i class="fas fa-user text-[#1B365D] text-3xl md:text-4xl"></i>
-                        @endif
+                        <img src="{{ Auth::user()->profile_photo_url }}"
+                             alt="Profile"
+                             class="w-full h-full object-cover rounded-full">
                     </div>
                     <div class="absolute inset-0 rounded-full border-4 border-[#D4AF37]/30 animate-ping"></div>
                 </a>

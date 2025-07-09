@@ -1601,16 +1601,16 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // Dashboard transition function
+        // Show dashboard transition overlay and delay navigation
         function goToDashboard() {
-            const transitionOverlay = document.getElementById('dashboard-transition-overlay');
-            if (transitionOverlay) {
-                transitionOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                transitionOverlay.classList.add('opacity-100');
+            const overlay = document.getElementById('dashboard-transition-overlay');
+            if (overlay) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100');
             }
             setTimeout(function() {
-                window.location.href = '{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}';
-            }, 400);
+                window.location.href = '/client/home'; // Adjust route if needed
+            }, 1500); // 1.5 seconds delay
         }
 
         window.initializeMaritalStatus = function() {
