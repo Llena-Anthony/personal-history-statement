@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/pma_logo.svg') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
@@ -308,6 +309,9 @@
             60% { transform: scale(1.08); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
         }
+
+        /* Hide [x-cloak] elements until Alpine is ready */
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body>
@@ -339,8 +343,6 @@
                                 <div id="ph-time-value-client"></div>
                             </div>
                         </a>
-                        <!-- User Avatar and Name (no dropdown) -->
-                        <!-- Removed user avatar/profile picture and name from header -->
                         <div class="hidden lg:block text-white text-xs flex items-center gap-2">
                             <span class="text-[#D4AF37]">Client</span>
                             <span class="mx-2">/</span>
@@ -351,21 +353,29 @@
                             </span>
                             @endif
                         </div>
-                        
-                        <!-- Return to Admin Button (only show if admin switched to client) -->
                         @if(session('admin_switched_to_client'))
-                        <a href="{{ route('return.to.admin') }}" 
-                           id="returnToAdminBtn"
-                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-sm font-medium rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            Return to Admin
-                        </a>
-                        @endif
-                        
-                        <!-- Logout Icon Button -->
+                        <!-- Hamburger Menu for Admin-Switched-to-Client -->
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-2">
+                                <i class="fas fa-bars text-lg"></i>
+                            </button>
+                            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" @click.away="open = false" class="absolute right-0 mt-2 w-48 rounded-lg bg-white/95 shadow-xl border border-white/10 z-50">
+                                <div class="py-1">
+                                    <a href="{{ route('return.to.admin') }}" id="returnToAdminBtn" class="block px-4 py-2 text-sm text-[#1B365D] hover:bg-blue-50 flex items-center">
+                                        <i class="fas fa-arrow-left mr-2"></i>Return to Admin
+                                    </a>
+                                    <button onclick="showLogoutConfirmation()" class="w-full text-left px-4 py-2 text-sm text-[#1B365D] hover:bg-blue-50 flex items-center">
+                                        <i class="fas fa-power-off mr-2"></i>Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <!-- Logout Icon Button (only if not admin-switched-to-client) -->
                         <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
                             <i class="fas fa-power-off text-lg"></i>
                         </button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -576,24 +586,32 @@
         updatePHTimeHeaderClient();
 
         document.addEventListener('DOMContentLoaded', function() {
-            var returnBtn = document.getElementById('returnToAdminBtn');
             var overlay = document.getElementById('switchLoadingOverlay');
             var loadingText = document.getElementById('switchLoadingText');
-            if (returnBtn && overlay && loadingText) {
-                returnBtn.addEventListener('click', function(e) {
+            // Handle both admin-to-client and client-to-admin switches
+            var switchBtns = [
+                ...document.querySelectorAll('a[href*="admin.switch.to.client"]'),
+                document.getElementById('returnToAdminBtn')
+            ].filter(Boolean);
+            switchBtns.forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    loadingText.textContent = 'Returning to Admin View...';
+                    if (loadingText) {
+                        loadingText.textContent = btn.id === 'returnToAdminBtn' ? 'Returning to Admin View...' : 'Switching to Client View...';
+                    }
+                    if (overlay) {
                     overlay.style.opacity = '1';
                     overlay.style.pointerEvents = 'all';
                     overlay.classList.add('active');
-                    var href = returnBtn.getAttribute('href');
+                    }
+                    var href = btn.getAttribute('href');
                     setTimeout(function() {
                         overlay.style.opacity = '0';
                         overlay.style.pointerEvents = 'none';
                         window.location.href = href;
-                    }, 700);
+                    }, 1500);
                 });
-            }
+            });
         });
     </script>
 </body>

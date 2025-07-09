@@ -191,4 +191,17 @@ class User extends Authenticatable
 
         return $firstActivity ? $firstActivity->act_date_time : null;
     }
+
+    /**
+     * Get the user's profile photo URL (uploaded or default)
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->userDetail && $this->userDetail->profile_path) {
+            return asset('storage/' . $this->userDetail->profile_path);
+        }
+        return asset('images/default-avatar.svg');
+    }
 }
