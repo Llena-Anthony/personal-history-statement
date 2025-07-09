@@ -22,6 +22,10 @@ class EmploymentDetail extends Model
         'dismissal_desc',
         'username'
     ];
+    protected $casts = [
+        'start_date'=> 'date',
+        'end_date'=> 'date',
+    ];
     public function addressDetail()
     {
         return $this->belongsTo(AddressDetail::class,'employ_addr','addr_id');

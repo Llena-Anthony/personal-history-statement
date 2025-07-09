@@ -21,6 +21,10 @@ class EducationDetail extends Model
         'civil_service',
         'username'
     ];
+    protected $casts = [
+        'attend_date'=> 'date',
+        'year_grad'=> 'date',
+    ];
     public function schoolDetail()
     {
         return $this->belongsTo(SchoolDetail::class,'school','school_id');

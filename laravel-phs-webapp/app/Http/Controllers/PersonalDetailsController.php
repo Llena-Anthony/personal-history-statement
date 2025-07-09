@@ -2,24 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CitizenshipDetail;
 use Illuminate\Http\Request;
 
-Use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\ActivityLogDetail;
 use App\Models\NameDetail;
 use App\Models\AddressDetail;
 use App\Models\JobDetail;
-use App\Models\GovernmentIdDetail;
-
-Use App\Traits\PHSSectionTracking;
 
 Use App\Helper\DataRetrieval;
-
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Psy\Readline\Hoa\Console;
 
 class PersonalDetailsController extends Controller
 {

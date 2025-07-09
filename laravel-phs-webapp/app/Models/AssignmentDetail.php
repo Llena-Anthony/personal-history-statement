@@ -20,6 +20,11 @@ class AssignmentDetail extends Model
         'username',
     ];
 
+    protected $casts = [
+        'start_date'=> 'date',
+        'end_date'=> 'date',
+        ];
+
     public function user()
     {
         return $this->belongsTo(User::class,'username','username');

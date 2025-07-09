@@ -168,8 +168,8 @@ class DataRetrieval {
      * Retrieve all personal characteristics fields for a user, merging DescriptionDetail and PersonalDetail.
      */
     public static function retrievePersonalCharacteristics($username) {
-        $desc = \App\Models\DescriptionDetail::where('username', $username)->first();
-        $personal = \App\Models\PersonalDetail::where('username', $username)->first();
+        $desc = DescriptionDetail::where('username', $username)->first();
+        $personal = PersonalDetail::where('username', $username)->first();
 
         return [
             // DescriptionDetail fields
@@ -341,15 +341,6 @@ class DataRetrieval {
             'highschool' => self::retrieveHighSchool($username),
             'college' => self::retrieveCollege($username),
             'postgrad' => self::retrievePostGrad($username),
-        ];
-    }
-
-    /**
-     * Retrieve all employment history fields for a user, using the existing retrieveEmployment helper.
-     */
-    public static function retrieveEmploymentHistory($username) {
-        return [
-            'employment_history' => self::retrieveEmployment($username),
         ];
     }
 }

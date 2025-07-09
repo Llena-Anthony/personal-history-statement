@@ -9,6 +9,7 @@ use App\Models\CreditDetail;
 use App\Models\CreditReferenceDetail;
 
 use Illuminate\Support\Facades\Auth;
+use App\Helper\DataRetrieval;
 
 class CreditReputationController extends Controller
 {
@@ -16,28 +17,14 @@ class CreditReputationController extends Controller
 
     public function create()
     {
-        $creditReputation = CreditDetail::where('username', auth()->id())->first();
-
-        // $creditReputation = CreditDetail::with(['otherIncomes', 'bankAccounts', 'characterReferences'])->firstOrNew(['user_id' => $user->id]);
-
-        $commonData = $this->getCommonViewData('credit-reputation');
-
-        $viewData = array_merge($commonData, [
-            'creditReputation' => $creditReputation,
-            'otherIncomes' => '$creditReputation->otherIncomes->isEmpty() ? collect([new OtherIncome()]) : $creditReputation->otherIncomes',
-            'bankAccounts' => null,
-            'characterReferences' => $creditReputation && $creditReputation->characterReferences
-                ? $creditReputation->characterReferences
-                : collect([new CreditReferenceDetail()]),
-        ]);
-
-        // $viewData = $commonData;
-
-        if (request()->ajax()) {
-            return view('phs.sections.credit-reputation-content', $viewData);
-        }
-
-        return view('phs.credit-reputation', $viewData);
+        $creditDetail = DataRetrieval::retrieveCreditDetail(auth()->user()->username);
+        $creditReferences = DataRetrieval::retrieveCreditReferences(auth()->user()->username);
+        $bankAccounts = DataRetrieval::retrieveBankAccounts(auth()->user()->username);
+        $data = $this->getCommonViewData('credit-reputation');
+        $data['creditDetail'] = $creditDetail;
+        $data['creditReferences'] = $creditReferences;
+        $data['bankAccounts'] = $bankAccounts;
+        return view('phs.credit-reputation', $data);
     }
 
     public function store(Request $request)

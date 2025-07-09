@@ -8,6 +8,7 @@ use App\Models\ReferenceDetail;
 use App\Models\Miscellaneous;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\PHSSectionTracking;
+use App\Helper\DataUpdate;
 
 class CharacterReputationController extends Controller
 {
@@ -68,55 +69,17 @@ class CharacterReputationController extends Controller
 
             \Log::info('CharacterReputation validated data:', $validated);
 
-            // Clear existing character references for this user
-            CharacterReference::where('user_id', $user->id)
-                ->where('ref_relationship', 'character_reference')
-                ->delete();
-
-            // Save character references
-            if ($request->has('character_references')) {
-                foreach ($request->character_references as $reference) {
-                    if (!empty($reference['name']) || !empty($reference['address'])) {
-                        CharacterReference::create([
-                            'user_id' => $user->id,
-                            'ref_name' => $reference['name'] ?? '',
-                            'ref_address' => $reference['address'] ?? '',
-                            'ref_occupation' => '',
-                            'ref_employer' => '',
-                            'ref_contact' => '',
-                            'ref_relationship' => 'character_reference',
-                        ]);
-                    }
-                }
-            }
-
-            // Clear existing neighbors
-            Miscellaneous::where('user_id', $user->id)
-                ->where('misc_type', 'neighbor')
-                ->delete();
-
-            // Save neighbors
-            if ($request->has('neighbors')) {
-                foreach ($request->neighbors as $index => $neighbor) {
-                    if (!empty($neighbor['name']) || !empty($neighbor['address'])) {
-                        Miscellaneous::create([
-                            'user_id' => $user->id,
-                            'misc_type' => 'neighbor',
-                            'misc_details' => json_encode([
-                                'name' => $neighbor['name'] ?? '',
-                                'address' => $neighbor['address'] ?? '',
-                            ]),
-                        ]);
-                    }
-                }
-            }
+            // Use helper to update character references
+            DataUpdate::updateCharacterReferences($user->username, $request->character_references ?? []);
+            // Use helper to update neighbors
+            DataUpdate::updateNeighbors($user->username, $request->neighbors ?? []);
 
             \Log::info('CharacterReputation after save:', [
-                'character_references' => CharacterReference::where('user_id', $user->id)
-                    ->where('ref_relationship', 'character_reference')
+                'character_references' => \App\Models\ReferenceDetail::where('username', $user->username)
+                    ->where('ref_type', 'character')
                     ->get()->toArray(),
-                'neighbors' => Miscellaneous::where('user_id', $user->id)
-                    ->where('misc_type', 'neighbor')
+                'neighbors' => \App\Models\ReferenceDetail::where('username', $user->username)
+                    ->where('ref_type', 'neighbor')
                     ->get()->toArray(),
             ]);
 

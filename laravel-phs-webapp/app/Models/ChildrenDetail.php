@@ -19,6 +19,9 @@ class ChildrenDetail extends Model
         'other_parent',
         'username'
     ];
+    protected $casts = [
+        'birth_date'=> 'date'
+        ];
     public function childName()
     {
         return $this->belongsTo(NameDetail::class,'child_name', 'name_id');

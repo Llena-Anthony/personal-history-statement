@@ -18,6 +18,11 @@ class MilitaryHistoryDetail extends Model
         'end_comm',
         'comm_src',
     ];
+    protected $casts = [
+        'enlist_date'=> 'date',
+        'start_comm'=> 'date',
+        'end_comm'=> 'date',
+        ];
 
     public function user()
     {

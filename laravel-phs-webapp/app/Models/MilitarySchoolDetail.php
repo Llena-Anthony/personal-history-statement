@@ -18,7 +18,9 @@ class MilitarySchoolDetail extends Model
         'rating',
         'username',
     ];
-
+    protected $casts = [
+        'attend_date'=> 'date'
+        ];
     public function schoolDetail()
     {
         return $this->belongsTo(SchoolDetail::class, 'school', 'school_id');

@@ -22,6 +22,10 @@ class SpouseDetail extends Model
         'citizenship',
         'dual',
     ];
+    protected $casts = [
+        'marr_date'=> 'date',
+        'birth_date'=> 'date'
+        ];
 
     public function nameDetail()
     {

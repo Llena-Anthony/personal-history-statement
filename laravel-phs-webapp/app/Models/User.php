@@ -38,6 +38,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function userDetail() {
+        return $this->hasOne(UserDetail::class,'username','username');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

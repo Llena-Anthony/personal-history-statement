@@ -23,6 +23,9 @@ class FamilyDetail extends Model
         'date_naturalized',
         'place_naturalized'
     ];
+    protected $casts = [
+        'birth_date'=> 'date'
+        ];
     public function familyName()
     {
         return $this->belongsTo(NameDetail::class,'fam_name','name_id');

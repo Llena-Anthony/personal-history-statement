@@ -10,7 +10,7 @@ class UserDetail extends Model
     use HasFactory;
 
     public $timestamps = false;
-    
+
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';
@@ -26,6 +26,9 @@ class UserDetail extends Model
         'mobile_num',
         'email_addr',
     ];
+    protected $casts = [
+        'birth_date'=> 'date'
+        ];
 
     public function nameDetail()
     {
@@ -47,4 +50,4 @@ class UserDetail extends Model
     {
         return $this->belongsTo(User::class, 'username', 'username');
     }
-} 
+}

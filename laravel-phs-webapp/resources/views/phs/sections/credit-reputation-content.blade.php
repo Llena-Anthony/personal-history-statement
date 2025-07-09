@@ -41,19 +41,22 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Name and address of banks or other credit institutions with which you have accounts/loans:</label>
                     <div id="bank-accounts-list" class="space-y-4">
-                        <template x-for="(account, index) in bank_accounts" :key="index">
+                        @foreach ($bankAccounts as $account)
+                            @php $bank = $account->bankDetail; @endphp
                             <div class="bank-account-entry p-4 border border-gray-200 rounded-lg mt-4 relative">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <input type="text" :name="'bank_accounts[' + index + '][bank_name]'" x-model="account.bank_name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter name of bank or credit institution">
-                                    <input type="text" :name="'bank_accounts[' + index + '][address]'" x-model="account.address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter address of bank or credit institution">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">Bank Name</label>
+                                        <input type="text" value="{{ $bank?->bank ?? '' }}" class="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 mb-1">Bank Address</label>
+                                        <input type="text" value="{{ $bank?->bank_addr ?? '' }}" class="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50" readonly>
+                                    </div>
                                 </div>
-                                <button type="button" @click="removeAccount(index)" x-show="bank_accounts.length > 1 && index > 0" class="remove-account absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
                             </div>
-                        </template>
+                        @endforeach
                     </div>
-                    <button type="button" @click="addAccount" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
-                        <i class="fas fa-plus mr-1"></i> Add Another Bank/Credit Institution
-                    </button>
                 </div>
                 <!-- Assets and Liabilities -->
                 <div>
@@ -124,15 +127,16 @@
                 Three (3) credit references in the Philippines
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @foreach ($characterReferences as $i => $reference)
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Name</label>
-                    <input type="text" name="character_references[{{ $i }}][name]" value="{{ old('character_references.'.$i.'.name', $reference->name) }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter credit reference name">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Address</label>
-                    <input type="text" name="character_references[{{ $i }}][address]" value="{{ old('character_references.'.$i.'.address', $reference->address) }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter credit reference address">
-                </div>
+                @foreach ($creditReferences as $i => $reference)
+                    @php $bank = $reference->bankDetail; @endphp
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Bank Name</label>
+                        <input type="text" name="character_references[{{ $i }}][name]" value="{{ $bank?->bank ?? '' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter credit reference name" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Address</label>
+                        <input type="text" name="character_references[{{ $i }}][address]" value="{{ $bank?->bank_addr ?? '' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter credit reference address" readonly>
+                    </div>
                 @endforeach
             </div>
         </div>

@@ -17,7 +17,9 @@ class MembershipDetail extends Model
         'mem_date',
         'position',
     ];
-
+    protected $casts = [
+        'mem_date'=> 'date'
+        ];
     public function organizationDetail()
     {
         return $this->belongsTo(OrganizationDetail::class, 'org', 'org_id');
