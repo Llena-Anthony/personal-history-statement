@@ -24,7 +24,7 @@
                 <div class="flex-1 text-white mb-6 md:mb-0">
                     <div class="mb-4">
                         <h1 class="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">
-                            Welcome back, {{ auth()->user()->name }}!
+                            Welcome back, {{ $fullName }}!
                         </h1>
                         <p class="text-[#D4AF37] text-lg md:text-xl font-medium drop-shadow-md">
                             Complete your Personal History Statement and Personal Data Sheet

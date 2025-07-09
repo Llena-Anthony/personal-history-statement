@@ -837,7 +837,7 @@
         <!-- Sidebar -->
             <aside class="sidebar text-white flex flex-col no-print">
             <!-- Profile Section -->
-            <div class="ml-[0.4cm] profile-container flex items-center gap-4 px-4 py-3 pr-16 relative" style=" border-radius: 1.5rem; min-height: 100px;">
+            <div class="ml-[0.4cm] profile-container flex items-center gap-4 px-4 py-3 pr-8 relative" style=" border-radius: 1.5rem; min-height: 100px;">
                 <a href="{{ route('admin.profile.edit') }}" class="block flex-shrink-0">
                     <img src="{{ Auth::user()->userDetail && Auth::user()->userDetail->profile_path ? asset('storage/' . Auth::user()->userDetail->profile_path) : asset('images/default-avatar.svg') }}" alt="Profile Picture" class="profile-picture" style="box-shadow: 0 4px 16px rgba(212, 175, 55, 0.18);">
                 </a>

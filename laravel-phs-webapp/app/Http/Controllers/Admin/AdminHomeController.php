@@ -45,7 +45,24 @@ class AdminHomeController extends Controller
         $users = User::all();
 
         // Get the authenticated admin's full name
-        $adminName = auth()->user()->name ?? 'Administrator';
+        $admin = auth()->user();
+        $adminName = 'Administrator';
+        if ($admin) {
+            $userDetail = $admin->userDetail;
+            $nameDetail = $userDetail ? $userDetail->nameDetail : null;
+            if ($nameDetail) {
+                $adminName = $nameDetail->first_name;
+                if ($nameDetail->middle_name) {
+                    $adminName .= ' ' . strtoupper(substr($nameDetail->middle_name, 0, 1)) . '.';
+                }
+                $adminName .= ' ' . $nameDetail->last_name;
+                if ($nameDetail->name_extension) {
+                    $adminName .= ' ' . $nameDetail->name_extension;
+                }
+            } else {
+                $adminName = $admin->username;
+            }
+        }
 
         $data = compact(
             'totalUsers',

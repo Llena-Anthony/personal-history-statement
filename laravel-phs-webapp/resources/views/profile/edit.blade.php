@@ -4,624 +4,428 @@
 @section('header', 'Edit Profile')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-8">
-    <!-- Header Section -->
-    <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] rounded-2xl p-8 text-white relative overflow-hidden">
+<div class="max-w-4xl mx-auto">
+    <!-- Back to Dashboard Button -->
+    <div class="mb-6">
+        <a href="{{ route('client.dashboard') }}" class="inline-flex items-center text-[#1B365D] hover:text-[#2B4B7D] font-medium transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Dashboard
+        </a>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden animate-scale-in">
+        <!-- Profile Header -->
+        <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-8 py-6 relative overflow-hidden">
         <div class="absolute inset-0 bg-black opacity-10"></div>
-        <div class="relative z-10">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mb-2">Edit Profile</h1>
-                    <p class="text-[#D4AF37] text-lg">Update your personal information and account settings</p>
-                </div>
-                <div class="hidden md:block">
-                    <div class="w-20 h-20 bg-[#D4AF37] rounded-full flex items-center justify-center">
-                        <i class="fas fa-user-edit text-[#1B365D] text-3xl"></i>
+            <div class="relative flex items-center space-x-6">
+                <div class="relative group">
+                    <img src="{{ $user->userDetail && $user->userDetail->profile_path ? asset('storage/' . $user->userDetail->profile_path) : asset('images/default-avatar.svg') }}" 
+                         alt="Profile Picture" 
+                         class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover transition-transform group-hover:scale-105">
+                    <div class="absolute -bottom-2 -right-2 bg-[#D4AF37] rounded-full p-2 shadow-lg">
+                        <i class="fas fa-camera text-white text-sm"></i>
                     </div>
+                </div>
+                <div class="text-white">
+                    <h2 class="text-2xl font-bold">{{ $user->name }}</h2>
+                    <p class="text-gray-200">{{ $user->userDetail->email_addr ?? $user->email }}</p>
+                    <p class="text-sm text-gray-300">Client</p>
                 </div>
             </div>
         </div>
-        <div class="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37] opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
-        <div class="absolute bottom-0 left-0 w-24 h-24 bg-[#D4AF37] opacity-10 rounded-full translate-y-12 -translate-x-12"></div>
-    </div>
 
-    <!-- Success Message -->
-    @if (session('success'))
-        <div class="bg-green-50 border border-green-200 rounded-xl p-4 fade-in">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <!-- Profile Picture Section -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div class="bg-gradient-to-r from-purple-50 to-pink-50 px-8 py-6 border-b border-purple-200">
-            <h2 class="text-2xl font-bold text-[#1B365D] flex items-center">
-                <i class="fas fa-camera mr-3 text-[#D4AF37]"></i>
-                Profile Picture
-            </h2>
-            <p class="text-gray-600 mt-1">Update your profile picture</p>
-        </div>
-
-        <div class="p-8">
-            <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
-                <!-- Current Profile Picture -->
-                <div class="text-center">
-                    <div class="relative inline-block">
-                        <div class="w-32 h-32 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center mb-4 overflow-hidden">
-                            @if($user->userDetail && $user->userDetail->profile_path)
-                                <img src="{{ asset('storage/' . $user->userDetail->profile_path) }}" 
-                                     alt="Profile Picture" 
-                                     class="w-full h-full object-cover">
-                            @else
-                                <i class="fas fa-user text-[#D4AF37] text-4xl"></i>
-                            @endif
-                        </div>
-                        <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-[#D4AF37] rounded-full flex items-center justify-center">
-                            <i class="fas fa-camera text-[#1B365D] text-sm"></i>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600">Current Picture</p>
-                </div>
-
-                <!-- Upload Form -->
-                <div class="flex-1">
-                    <form method="POST" action="{{ route('profile.picture') }}" enctype="multipart/form-data" class="space-y-4">
+        <!-- Profile Form -->
+        <form id="client-profile-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="p-8">
                         @csrf
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                <i class="fas fa-upload mr-2 text-[#1B365D]"></i>
-                                Upload New Picture
-                            </label>
-                            
-                            <!-- Drag & Drop Upload Area -->
-                            <div id="drag-drop-area" 
-                                 class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#1B365D] hover:bg-blue-50 transition-all duration-300 cursor-pointer group">
-                                <div id="drag-drop-content">
-                                    <div class="w-16 h-16 bg-[#1B365D] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2B4B7D] transition-colors duration-300">
-                                        <i class="fas fa-cloud-upload-alt text-white text-2xl"></i>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Drag & Drop your image here</h3>
-                                    <p class="text-gray-500 mb-4">or click to browse files</p>
-                                    <div class="flex items-center justify-center space-x-2 text-sm text-gray-400">
-                                        <i class="fas fa-image"></i>
-                                        <span>JPG, PNG, GIF (Max: 2MB)</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- Loading State -->
-                                <div id="upload-loading" class="hidden">
-                                    <div class="w-16 h-16 bg-[#1B365D] rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Uploading...</h3>
-                                    <p class="text-gray-500">Please wait while we process your image</p>
-                                </div>
-                                
-                                <!-- Success State -->
-                                <div id="upload-success" class="hidden">
-                                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <i class="fas fa-check text-white text-2xl"></i>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Upload Successful!</h3>
-                                    <p class="text-gray-500">Your profile picture has been updated</p>
-                                </div>
-                                
-                                <!-- Error State -->
-                                <div id="upload-error" class="hidden">
-                                    <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
-                                    </div>
-                                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Upload Failed</h3>
-                                    <p id="error-message" class="text-gray-500">Please try again</p>
-                                </div>
-                                
-                                <input type="file" 
-                                       name="profile_picture" 
-                                       id="profile_picture"
-                                       accept="image/*"
-                                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                       onchange="handleFileSelect(this)">
-                            </div>
-                            
-                            <!-- Upload Button (shown when file is selected) -->
-                            <div id="upload-button-container" class="hidden mt-4">
-                                <button type="submit" 
-                                        id="upload-button"
-                                        class="inline-flex items-center px-6 py-3 bg-[#1B365D] text-white text-sm font-medium rounded-xl hover:bg-[#2B4B7D] transition-colors duration-200 w-full justify-center">
-                                    <i class="fas fa-save mr-2"></i>
-                                    Upload Profile Picture
-                                </button>
-                            </div>
-                            
-                            <!-- File Info -->
-                            <div id="file-info" class="hidden mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
-                                        <i class="fas fa-image text-blue-600"></i>
-                                        <div>
-                                            <p id="file-name" class="text-sm font-medium text-gray-900"></p>
-                                            <p id="file-size" class="text-xs text-gray-500"></p>
-                                        </div>
-                                    </div>
-                                    <button type="button" 
-                                            onclick="removeSelectedFile()"
-                                            class="text-red-500 hover:text-red-700 transition-colors duration-200">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Image Preview -->
-                    <div id="image-preview" class="hidden mt-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Preview</label>
-                        <div class="w-24 h-24 bg-gray-100 rounded-full overflow-hidden">
-                            <img id="preview-img" src="" alt="Preview" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Profile Form -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-8 py-6 border-b border-gray-200">
-            <h2 class="text-2xl font-bold text-[#1B365D] flex items-center">
-                <i class="fas fa-user-circle mr-3 text-[#D4AF37]"></i>
-                Personal Information
-            </h2>
-            <p class="text-gray-600 mt-1">Update your basic profile information</p>
-        </div>
-
-        <form method="POST" action="{{ route('profile.update') }}" id="profile-form" class="p-8 space-y-6">
-            @csrf
             @method('PUT')
 
-            <!-- Name Field (Read-only) -->
-            <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-user mr-2 text-[#1B365D]"></i>
-                        Full Name
-                    </label>
-                    <input type="text" 
-                           name="name" 
-                           id="name" 
-                           value="{{ old('name', $user->name) }}" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed" 
-                           readonly>
-                    <p class="text-xs text-gray-500 mt-1">Name cannot be here. Edit your full name in the PHS Form</p>
-                </div>
-            </div> -->
+            <!-- Instruction -->
+            <div class="mb-4 flex items-center gap-2">
+                <i class="fas fa-info-circle text-blue-500 text-xs"></i>
+                <span class="text-gray-500 text-xs font-semibold">You can edit your username, email, password, and profile picture.</span>
+                                    </div>
+            <div class="border-b border-gray-200 mb-4"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Profile Photo Upload Section -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center">
+                    <i class="fas fa-camera mr-2 text-[#D4AF37]"></i>
+                    Profile Photo
+                </h3>
+                <!-- Photo Requirements -->
+                <div class="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-blue-500 mt-0.5 mr-3"></i>
+                        <div>
+                            <h4 class="text-sm font-semibold text-blue-800 mb-1">Photo Requirements</h4>
+                            <ul class="text-xs text-blue-700 space-y-1">
+                                <li>• Must be a formal 2x2 ID photo</li>
+                                <li>• Professional appearance with proper attire</li>
+                                <li>• Clear, high-quality image</li>
+                                <li>• Neutral background</li>
+                                <li>• File formats: JPEG, PNG, JPG, GIF (Max: 2MB)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <div class="relative">
+                                <input type="file" 
+                               name="profile_photo" 
+                               id="profile_photo" 
+                                       accept="image/*"
+                               class="hidden"
+                               onchange="previewImage(this)">
+                        <label for="profile_photo" 
+                               class="cursor-pointer bg-gray-50 hover:bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 block">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-3"></i>
+                            <p class="text-sm text-gray-600 font-medium">Click to upload a profile photo</p>
+                            <p class="text-xs text-gray-500 mt-1">JPEG, PNG, JPG, GIF up to 2MB</p>
+                        </label>
+                            </div>
+                    <div id="image-preview" class="hidden">
+                                    <div class="flex items-center space-x-3">
+                            <img id="preview" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-md">
+                                        <div>
+                                <p class="text-sm font-medium text-gray-700">Preview</p>
+                                <p class="text-xs text-gray-500">Your new profile photo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('profile_photo')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+    </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Column -->
+                <div class="space-y-6">
+                    <!-- Basic Information -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 flex items-center">
+                            <i class="fas fa-user mr-2 text-[#D4AF37]"></i>
+                            Basic Information
+                        </h3>
                 <div>
-                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-envelope mr-2 text-[#1B365D]"></i>
-                        Email Address
-                    </label>
-                    <input type="email" 
-                           name="email" 
-                           id="email" 
-                           value="{{ old('email', $user->userDetail->email_addr ?? '') }}"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors duration-200 @error('email') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
-                           placeholder="Enter your email address">
-                    @error('email')
-                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i>
-                            {{ $message }}
-                        </p>
-                    @enderror
+                            <label for="full_name" class="block text-xs font-semibold text-gray-700 mb-1">Full Name</label>
+                            <div class="relative">
+                                <input type="text"
+                                       name="full_name"
+                                       id="full_name"
+                                       value="{{ $user->name }}"
+                                       class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs" readonly>
+                                <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                        </div>
+                <div>
+                            <label for="username" class="block text-xs font-semibold text-gray-700 mb-1">Username <span class="text-red-500">*</span></label>
+                    <input type="text" 
+                                   name="username" 
+                                   id="username" 
+                                   value="{{ old('username', $user->username) }}"
+                                   placeholder="Enter your username"
+                                   class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5">
+                            @error('username')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                </div>
+                <div>
+                            <label for="email" class="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
+                            <div class="relative">
+                                <input type="email" 
+                                       name="email" 
+                                       id="email" 
+                                       value="{{ old('email', $user->userDetail->email_addr ?? '') }}"
+                                       placeholder="Enter your email address"
+                                       class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs" readonly>
+                                <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                        </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Member Since</label>
+                    <input type="text"
+                           value="{{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('F d, Y') : 'N/A' }}"
+                           class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs" readonly>
                 </div>
             </div>
-
-            <!-- Password Change Section -->
-            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-                <h3 class="text-lg font-semibold text-[#1B365D] mb-4 flex items-center">
+                </div>
+                <!-- Right Column -->
+                <div class="space-y-6">
+                    <!-- Password Change -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 flex items-center">
                     <i class="fas fa-lock mr-2 text-[#D4AF37]"></i>
                     Change Password
                 </h3>
-                <p class="text-gray-600 text-sm mb-4">Leave password fields blank if you don't want to change your password</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border-l-4 border-[#D4AF37]">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Leave blank if you don't want to change your password
+                        </p>
                     <div>
-                        <label for="current_password" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-key mr-2 text-[#1B365D]"></i>
-                            Current Password
-                        </label>
+                            <label for="current_password" class="block text-xs font-semibold text-gray-700 mb-1">Current Password</label>
                         <div class="relative">
                             <input type="password" 
                                    name="current_password" 
                                    id="current_password"
-                                   class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors duration-200 @error('current_password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
-                                   placeholder="Enter current password">
+                                       placeholder="Enter your current password"
+                                       class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5 pr-10">
                             <button type="button" 
-                                    onclick="togglePasswordVisibility('current_password', 'current_password_toggle')"
-                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                                <i class="fas fa-eye" id="current_password_toggle"></i>
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                        onclick="togglePasswordVisibility('current_password')">
+                                    <i class="fas fa-eye text-xs"></i>
                             </button>
                         </div>
                         @error('current_password')
-                            <p class="mt-2 text-sm text-red-600 flex items-center">
-                                <i class="fas fa-exclamation-circle mr-1"></i>
-                                {{ $message }}
-                            </p>
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <div>
-                        <label for="new_password" class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-lock mr-2 text-[#1B365D]"></i>
-                            New Password
-                        </label>
+                            <label for="new_password" class="block text-xs font-semibold text-gray-700 mb-1">New Password</label>
                         <div class="relative">
                             <input type="password" 
                                    name="new_password" 
                                    id="new_password"
-                                   class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors duration-200 @error('new_password') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
-                                   placeholder="Enter new password">
+                                       placeholder="Enter your new password (min. 8 characters)"
+                                       class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5 pr-10">
                             <button type="button" 
-                                    onclick="togglePasswordVisibility('new_password', 'new_password_toggle')"
-                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                                <i class="fas fa-eye" id="new_password_toggle"></i>
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                        onclick="togglePasswordVisibility('new_password')">
+                                    <i class="fas fa-eye text-xs"></i>
                             </button>
                         </div>
                         @error('new_password')
-                            <p class="mt-2 text-sm text-red-600 flex items-center">
-                                <i class="fas fa-exclamation-circle mr-1"></i>
-                                {{ $message }}
-                            </p>
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
-
-                <div class="mt-6">
-                    <label for="new_password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-check-circle mr-2 text-[#1B365D]"></i>
-                        Confirm New Password
-                    </label>
+                        <div>
+                            <label for="new_password_confirmation" class="block text-xs font-semibold text-gray-700 mb-1">Confirm New Password</label>
                     <div class="relative">
                         <input type="password" 
                                name="new_password_confirmation" 
                                id="new_password_confirmation"
-                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors duration-200"
-                               placeholder="Confirm new password">
+                                       placeholder="Confirm your new password"
+                                       class="block w-full rounded-lg border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-xs bg-white text-gray-900 px-3 py-1.5 pr-10">
                         <button type="button" 
-                                onclick="togglePasswordVisibility('new_password_confirmation', 'confirm_password_toggle')"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-eye" id="confirm_password_toggle"></i>
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                                        onclick="togglePasswordVisibility('new_password_confirmation')">
+                                    <i class="fas fa-eye text-xs"></i>
                         </button>
+                            </div>
+                            @error('new_password_confirmation')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
-                <a href="{{ route('client.dashboard') }}" 
-                   class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Back to Dashboard
-                </a>
-                <button type="button" 
-                        onclick="confirmProfileUpdate()" 
-                        class="inline-flex items-center justify-center px-6 py-3 bg-[#1B365D] text-white font-medium rounded-xl hover:bg-[#2B4B7D] transition-all duration-200 hover:shadow-lg">
+            <!-- Form Actions -->
+            <div class="flex justify-end space-x-4 pt-8 border-t border-gray-200 mt-8">
+                <button type="button" id="cancelBtn" disabled
+                        class="px-6 py-2.5 border border-gray-300 text-gray-400 rounded-lg transition-colors cursor-not-allowed">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancel
+                </button>
+                <button type="button" id="saveChangesBtn" disabled
+                        class="px-6 py-2.5 bg-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-all duration-200 shadow-md flex items-center justify-center cursor-not-allowed">
                     <i class="fas fa-save mr-2"></i>
-                    Update Profile
+                    <span>Save Changes</span>
+                </button>
+                <button type="submit" id="confirmSaveBtn" style="display:none;"
+                        class="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center animate-fade-in">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>Click to Confirm</span>
                 </button>
             </div>
         </form>
     </div>
-
-    <!-- Profile Information Card -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-8 py-6 border-b border-green-200">
-            <h2 class="text-2xl font-bold text-[#1B365D] flex items-center">
-                <i class="fas fa-info-circle mr-3 text-[#D4AF37]"></i>
-                Account Information
-            </h2>
-            <p class="text-gray-600 mt-1">Your current account details</p>
-        </div>
-
-        <div class="p-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-calendar-alt text-[#1B365D] mr-2"></i>
-                        <span class="text-sm font-semibold text-gray-700">Member Since</span>
-                    </div>
-                    <p class="text-gray-900">{{ $user->created_at ? $user->created_at->format('F d, Y') : 'N/A' }}</p>
-                </div>
-
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-clock text-[#1B365D] mr-2"></i>
-                        <span class="text-sm font-semibold text-gray-700">Last Updated</span>
-                    </div>
-                    <p class="text-gray-900">{{ $user->updated_at ? $user->updated_at->format('F d, Y \a\t g:i A') : 'N/A' }}</p>
-                </div>
-
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-shield-alt text-[#1B365D] mr-2"></i>
-                        <span class="text-sm font-semibold text-gray-700">Account Status</span>
-                    </div>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        <i class="fas fa-check-circle mr-1"></i>
-                        Active
-                    </span>
-                </div>
-
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-user-tag text-[#1B365D] mr-2"></i>
-                        <span class="text-sm font-semibold text-gray-700">User Role</span>
-                    </div>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        <i class="fas fa-user mr-1"></i>
-                        Client
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
-<!-- Confirmation Modal -->
-<div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-        <div class="flex items-center mb-4">
-            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                <i class="fas fa-question-circle text-blue-600 text-xl"></i>
-            </div>
-            <div>
-                <h3 class="text-lg font-semibold text-gray-900">Confirm Profile Update</h3>
-                <p class="text-sm text-gray-600">Are you sure you want to update your profile?</p>
-            </div>
-        </div>
-        
-        <div class="flex justify-end space-x-3">
-            <button onclick="closeConfirmModal()" 
-                    class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200">
-                Cancel
-            </button>
-            <button onclick="submitProfileForm()" 
-                    class="px-4 py-2 bg-[#1B365D] text-white rounded-lg hover:bg-[#2B4B7D] transition-colors duration-200">
-                Update Profile
-            </button>
-        </div>
-    </div>
-</div>
+<style>
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+}
+
+.animate-scale-in {
+    animation: scale-in 0.6s ease-out;
+}
+</style>
 
 <script>
-// Drag and Drop functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const dragDropArea = document.getElementById('drag-drop-area');
-    const fileInput = document.getElementById('profile_picture');
-    const dragDropContent = document.getElementById('drag-drop-content');
-    const uploadButtonContainer = document.getElementById('upload-button-container');
-    const fileInfo = document.getElementById('file-info');
-    const fileName = document.getElementById('file-name');
-    const fileSize = document.getElementById('file-size');
-    const imagePreview = document.getElementById('image-preview');
-    const previewImg = document.getElementById('preview-img');
-
-    // Prevent default drag behaviors
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dragDropArea.addEventListener(eventName, preventDefaults, false);
-        document.body.addEventListener(eventName, preventDefaults, false);
-    });
-
-    // Highlight drop area when item is dragged over it
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dragDropArea.addEventListener(eventName, highlight, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dragDropArea.addEventListener(eventName, unhighlight, false);
-    });
-
-    // Handle dropped files
-    dragDropArea.addEventListener('drop', handleDrop, false);
-
-    // Handle file input change
-    fileInput.addEventListener('change', function() {
-        handleFiles(this.files);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    function highlight(e) {
-        dragDropArea.classList.add('border-[#1B365D]', 'bg-blue-50');
-    }
-
-    function unhighlight(e) {
-        dragDropArea.classList.remove('border-[#1B365D]', 'bg-blue-50');
-    }
-
-    function handleDrop(e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        handleFiles(files);
-    }
-
-    function handleFiles(files) {
-        if (files.length > 0) {
-            const file = files[0];
-            
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                showError('Please select an image file (JPG, PNG, GIF)');
-                return;
-            }
-
-            // Validate file size (2MB = 2 * 1024 * 1024 bytes)
-            if (file.size > 2 * 1024 * 1024) {
-                showError('File size must be less than 2MB');
-                return;
-            }
-
-            // Set the file input
-            fileInput.files = files;
-            
-            // Show file info
-            showFileInfo(file);
-            
-            // Show preview
-            showImagePreview(file);
-            
-            // Show upload button
-            uploadButtonContainer.classList.remove('hidden');
-        }
-    }
-
-    function showFileInfo(file) {
-        fileName.textContent = file.name;
-        fileSize.textContent = formatFileSize(file.size);
-        fileInfo.classList.remove('hidden');
-    }
-
-    function showImagePreview(file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            imagePreview.classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
-    }
-
-    function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
-
-    function showError(message) {
-        const errorDiv = document.getElementById('upload-error');
-        const errorMessage = document.getElementById('error-message');
-        const dragDropContent = document.getElementById('drag-drop-content');
-        
-        errorMessage.textContent = message;
-        dragDropContent.classList.add('hidden');
-        errorDiv.classList.remove('hidden');
-        
-        // Hide error after 3 seconds
-        setTimeout(() => {
-            errorDiv.classList.add('hidden');
-            dragDropContent.classList.remove('hidden');
-        }, 3000);
-    }
-});
-
-// Handle file selection from input
-function handleFileSelect(input) {
-    if (input.files && input.files[0]) {
-        const file = input.files[0];
-        
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-            alert('Please select an image file (JPG, PNG, GIF)');
-            return;
-        }
-
-        // Validate file size (2MB = 2 * 1024 * 1024 bytes)
-        if (file.size > 2 * 1024 * 1024) {
-            alert('File size must be less than 2MB');
-            return;
-        }
-
-        // Show file info
-        document.getElementById('file-name').textContent = file.name;
-        document.getElementById('file-size').textContent = formatFileSize(file.size);
-        document.getElementById('file-info').classList.remove('hidden');
-        
-        // Show preview
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('preview-img').src = e.target.result;
-            document.getElementById('image-preview').classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
-        
-        // Show upload button
-        document.getElementById('upload-button-container').classList.remove('hidden');
-    }
-}
-
-// Remove selected file
-function removeSelectedFile() {
-    document.getElementById('profile_picture').value = '';
-    document.getElementById('file-info').classList.add('hidden');
-    document.getElementById('image-preview').classList.add('hidden');
-    document.getElementById('upload-button-container').classList.add('hidden');
-}
-
-// Format file size helper
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// Legacy function for backward compatibility
 function previewImage(input) {
-    handleFileSelect(input);
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('image-preview');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.classList.remove('hidden');
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
-function togglePasswordVisibility(inputId, toggleId) {
-    const input = document.getElementById(inputId);
-    const toggle = document.getElementById(toggleId);
-    
-    if (input.type === 'password') {
-        input.type = 'text';
-        toggle.classList.remove('fa-eye');
-        toggle.classList.add('fa-eye-slash');
+function togglePasswordVisibility(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const toggleButton = passwordField.nextElementSibling;
+    const eyeIcon = toggleButton.querySelector('i');
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+        toggleButton.setAttribute('title', 'Hide password');
     } else {
-        input.type = 'password';
-        toggle.classList.remove('fa-eye-slash');
-        toggle.classList.add('fa-eye');
+        passwordField.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+        toggleButton.setAttribute('title', 'Show password');
     }
 }
 
-function confirmProfileUpdate() {
-    document.getElementById('confirmModal').classList.remove('hidden');
-}
-
-function closeConfirmModal() {
-    document.getElementById('confirmModal').classList.add('hidden');
-}
-
-function submitProfileForm() {
-    document.getElementById('profile-form').submit();
-}
-
-// Close modal when clicking outside
-document.getElementById('confirmModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeConfirmModal();
+// Hybrid admin-style save/cancel/confirm logic
+let originalFormData = {};
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('client-profile-form');
+    const usernameField = form.querySelector('input[name="username"]');
+    if (usernameField) {
+        originalFormData['username'] = usernameField.value;
     }
+    const emailField = form.querySelector('input[name="email"]');
+    if (emailField) {
+        originalFormData['email'] = emailField.value;
+    }
+    // Add event listeners for editable fields only
+    if (usernameField) {
+        usernameField.addEventListener('input', checkFormChanges);
+        usernameField.addEventListener('change', checkFormChanges);
+    }
+    if (emailField) {
+        emailField.addEventListener('input', checkFormChanges);
+        emailField.addEventListener('change', checkFormChanges);
+    }
+    // Add event listeners for password fields
+    const passwordFields = form.querySelectorAll('input[type="password"]');
+    passwordFields.forEach(field => {
+        field.addEventListener('input', checkFormChanges);
+    });
+    // Add event listener for file input
+    const fileInput = form.querySelector('input[type="file"]');
+    if (fileInput) {
+        fileInput.addEventListener('change', checkFormChanges);
+    }
+    // Confirmation button logic
+    const saveBtn = document.getElementById('saveChangesBtn');
+    const confirmBtn = document.getElementById('confirmSaveBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    let confirmTimeout;
+    if (saveBtn && confirmBtn) {
+        saveBtn.addEventListener('click', function() {
+            if (!saveBtn.disabled) {
+                saveBtn.style.display = 'none';
+                confirmBtn.style.display = 'flex';
+                confirmBtn.classList.add('scale-105');
+                confirmTimeout = setTimeout(() => {
+                    confirmBtn.style.display = 'none';
+                    saveBtn.style.display = 'flex';
+                }, 5000); // 5 seconds to confirm
+            }
+        });
+        confirmBtn.addEventListener('click', function() {
+            clearTimeout(confirmTimeout);
+        });
+    }
+    // Cancel button functionality
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            if (!cancelBtn.disabled) {
+                // Reset form to original values
+                if (usernameField) {
+                    usernameField.value = originalFormData['username'] || '';
+                }
+                if (emailField) {
+                    emailField.value = originalFormData['email'] || '';
+                }
+                // Clear password fields
+                passwordFields.forEach(field => {
+                    field.value = '';
+                });
+                // Clear file input
+                if (fileInput) {
+                    fileInput.value = '';
+                }
+                // Hide image preview
+                const previewContainer = document.getElementById('image-preview');
+                if (previewContainer) {
+                    previewContainer.classList.add('hidden');
+                }
+                // Check form changes to update button states
+                checkFormChanges();
+            }
+        });
+    }
+    // Initialize form state
+    checkFormChanges();
 });
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeConfirmModal();
+function checkFormChanges() {
+    const form = document.getElementById('client-profile-form');
+    const saveBtn = document.getElementById('saveChangesBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    let hasChanges = false;
+    // Only check editable fields: username, email, password fields
+    const usernameField = form.querySelector('input[name="username"]');
+    const emailField = form.querySelector('input[name="email"]');
+    const passwordFields = form.querySelectorAll('input[type="password"]');
+    if (usernameField && usernameField.value !== (originalFormData['username'] || '')) {
+        hasChanges = true;
     }
-});
+    if (emailField && emailField.value !== (originalFormData['email'] || '')) {
+        hasChanges = true;
+    }
+    // Check file input (profile photo)
+    const fileInput = form.querySelector('input[type="file"]');
+    if (fileInput && fileInput.files.length > 0) {
+        hasChanges = true;
+    }
+    // Check password fields (if any are filled)
+    passwordFields.forEach(field => {
+        if (field.value.trim() !== '') {
+            hasChanges = true;
+        }
+    });
+    // Enable/disable both buttons
+    if (hasChanges) {
+        // Enable Save button
+        saveBtn.disabled = false;
+        saveBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+        saveBtn.classList.add('bg-[#D4AF37]', 'hover:bg-[#B38F2A]', 'focus:ring-[#D4AF37]');
+        // Enable Cancel button
+        cancelBtn.disabled = false;
+        cancelBtn.classList.remove('text-gray-400', 'cursor-not-allowed');
+        cancelBtn.classList.add('text-gray-700', 'hover:bg-gray-50');
+    } else {
+        // Disable Save button
+        saveBtn.disabled = true;
+        saveBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+        saveBtn.classList.remove('bg-[#D4AF37]', 'hover:bg-[#B38F2A]', 'focus:ring-[#D4AF37]');
+        // Disable Cancel button
+        cancelBtn.disabled = true;
+        cancelBtn.classList.add('text-gray-400', 'cursor-not-allowed');
+        cancelBtn.classList.remove('text-gray-700', 'hover:bg-gray-50');
+    }
+}
 </script>
 @endsection 

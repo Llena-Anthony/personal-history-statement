@@ -24,7 +24,7 @@ class ProfileController extends Controller
         $userDetail = $user->userDetail;
 
         $validated = $request->validate([
-            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $user->id],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username,' . $user->username . ',username'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:user_details,email_addr,' . $user->username . ',username'],
             'current_password' => ['nullable', 'required_with:new_password'],
             'new_password' => ['nullable', 'min:8', 'confirmed'],
@@ -38,6 +38,11 @@ class ProfileController extends Controller
         if ($user->username !== $validated['username']) {
             $user->username = $validated['username'];
             $changes[] = 'Username updated from ' . $originalUsername . ' to ' . $validated['username'];
+            if ($userDetail) {
+                // Update the userDetail primary key to match the new username
+                $userDetail->username = $user->username;
+                $userDetail->save();
+            }
         }
 
         // Update password if requested
@@ -54,6 +59,27 @@ class ProfileController extends Controller
             $changes[] = 'Email updated from ' . $originalEmail . ' to ' . $validated['email'];
             $userDetail->email_addr = $validated['email'];
             $userDetail->save();
+        }
+
+        // Handle profile photo if present (like admin)
+        if ($request->hasFile('profile_photo')) {
+            $request->validate([
+                'profile_photo' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            ], [
+                'profile_photo.image' => 'Profile photo must be an image.',
+                'profile_photo.mimes' => 'Profile photo must be a JPEG, PNG, JPG, or GIF file.',
+                'profile_photo.max' => 'Profile photo must not exceed 2MB.',
+            ]);
+            $path = $this->handleProfilePictureUpload(
+                $request->file('profile_photo'),
+                $userDetail ? $userDetail->profile_path : null,
+                $user->username
+            );
+            if ($userDetail) {
+                $userDetail->profile_path = $path;
+                $userDetail->save();
+            }
+            $changes[] = 'Profile picture updated';
         }
 
         $user->save();

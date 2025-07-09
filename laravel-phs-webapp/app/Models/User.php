@@ -208,4 +208,33 @@ class User extends Authenticatable
         }
         return asset('images/default-avatar.svg');
     }
+
+    /**
+     * Get the user's full name (first, middle initial, last, extension) if available, otherwise username.
+     */
+    public function getNameAttribute()
+    {
+        $userDetail = $this->userDetail;
+        $nameDetail = $userDetail ? $userDetail->nameDetail : null;
+        if ($nameDetail) {
+            $fullName = $nameDetail->first_name;
+            if ($nameDetail->middle_name) {
+                $fullName .= ' ' . $nameDetail->middle_name;
+            }
+            $fullName .= ' ' . $nameDetail->last_name;
+            if ($nameDetail->name_extension) {
+                $fullName .= ' ' . $nameDetail->name_extension;
+            }
+            return trim($fullName);
+        }
+        return $this->username;
+    }
+
+    /**
+     * Get the user's email address from userDetail if available.
+     */
+    public function getEmailAttribute()
+    {
+        return $this->userDetail->email_addr ?? null;
+    }
 }
