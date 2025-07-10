@@ -24,21 +24,23 @@ class PrintController extends Controller
     //     return view("admin.phs.phs-template");
     // }
 
-    // public function printPHSSubmission(PHSSubmission $submission)
-    // {
-    //     // Load the submission with all related data
-    //     $submission->load([
-    //         'user',
-    //         'user.personalInfo',
-    //         'user.familyHistory',
-    //         'user.educationalBackground',
-    //         'user.employmentHistory',
-    //         'user.militaryHistory',
-    //         'user.addressDetails',
-    //         'user.nameDetails',
-    //         'user.birthDetails'
-    //     ]);
+    public function printPHSSubmission($username)
+    {
+        $user = \App\Models\User::with([
+            'userDetail',
+            'userDetail.nameDetail',
+            // Address and birth details are accessed via userDetail relationships
+        ])->where('username', $username)->firstOrFail();
 
-    //     return view('admin.phs.print-submission', compact('submission'));
-    // }
+        // For compatibility with the print-submission view, wrap in a $submission object
+        $submission = (object) [
+            'user' => $user,
+            'status' => $user->phs_status ?? 'pending',
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+            'admin_notes' => $user->admin_notes ?? null,
+        ];
+
+        return view('admin.phs.print-submission', compact('submission'));
+    }
 }

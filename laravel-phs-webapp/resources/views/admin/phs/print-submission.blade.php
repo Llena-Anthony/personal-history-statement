@@ -290,11 +290,11 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">Submitted Date</span>
-                    <span class="info-value">{{ $submission->created_at->format('M d, Y h:i A') }}</span>
+                    <span class="info-value">{{ $submission->created_at ? $submission->created_at->format('M d, Y h:i A') : 'N/A' }}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Last Updated</span>
-                    <span class="info-value">{{ $submission->updated_at->format('M d, Y h:i A') }}</span>
+                    <span class="info-value">{{ $submission->updated_at ? $submission->updated_at->format('M d, Y h:i A') : 'N/A' }}</span>
                 </div>
             </div>
             
@@ -368,15 +368,16 @@
 
                 {{-- Personal-C --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">C.</span>Present Job/Assignment:
+                    @php $employment = $submission->user->employmentHistory && $submission->user->employmentHistory->first() ? $submission->user->employmentHistory->first() : null; @endphp
                     <div id="app-job" class="border-b border-black text-[11pt] text-left ml-auto w-[4.4in] pl-2">
-                        {{ $submission->user->employmentHistory->first()->position ?? 'N/A' }}
+                        {{ $employment ? $employment->position : 'N/A' }}
                     </div>
                 </div>
 
                 {{-- Personal-D --}}
                 <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">D.</span>Business or Duty Address:
                     <div id="app-job-addr" class="border-b border-black text-[11pt] text-left ml-auto w-[4.3in] pl-2">
-                        {{ $submission->user->employmentHistory->first()->address ?? 'N/A' }}
+                        {{ $employment ? $employment->address : 'N/A' }}
                     </div>
                 </div>
 
