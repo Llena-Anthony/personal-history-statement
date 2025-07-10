@@ -23,8 +23,6 @@ class UserSeeder extends Seeder
             'first_name' => 'System',
             'middle_name' => 'Admin',
             'suffix' => null,
-            'nickname' => 'Admin',
-            'change_in_name' => null,
         ]);
 
         $adminHomeAddress = AddressDetail::firstOrCreate([
@@ -75,8 +73,6 @@ class UserSeeder extends Seeder
             'first_name' => 'Juan',
             'middle_name' => 'Dela Cruz',
             'suffix' => null,
-            'nickname' => 'Juan',
-            'change_in_name' => null,
         ]);
 
         $clientHomeAddress = AddressDetail::firstOrCreate([

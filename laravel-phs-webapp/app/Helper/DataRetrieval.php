@@ -343,4 +343,92 @@ class DataRetrieval {
             'postgrad' => self::retrievePostGrad($username),
         ];
     }
+
+    /**
+     * Retrieve all personal details fields for a user, using existing helpers and relationships.
+     */
+    public static function retrievePersonalDetails($username) {
+        $userDetail = self::retrieveUserDetail($username);
+        $name = $userDetail ? self::retrieveNameDetail($userDetail->full_name) : null;
+        $home = $userDetail ? self::retrieveAddressDetail($userDetail->home_addr) : null;
+        $birthAddr = $userDetail ? self::retrieveAddressDetail($userDetail->birth_place) : null;
+        $jobDetail = self::retrieveJobDetail($username);
+        $busAddr = $jobDetail ? self::retrieveAddressDetail($jobDetail->job_addr) : null;
+        $govId = self::retrieveGovIdDetail($username);
+        $nationality = $userDetail ? self::retrieveCitizenshipDetail($userDetail->nationality) : null;
+
+        return [
+            "first_name" => $name?->first_name ?? '',
+            "last_name" => $name?->last_name ?? '',
+            "middle_name" => $name?->middle_name ?? '',
+            "suffix" => $name?->name_extension ?? '',
+            "nickname" => $name?->nickname ?? '',
+            "date_of_birth" => $userDetail?->birth_date ?? '',
+            "birth_region" => $birthAddr?->region ?? '',
+            "birth_province" => $birthAddr?->province ?? '',
+            "birth_city" => $birthAddr?->city ?? '',
+            "birth_barangay" => $birthAddr?->barangay ?? '',
+            "birth_street" => $birthAddr?->street ?? '',
+            "nationality" => $nationality?->cit_description ?? '',
+            "rank" => $jobDetail?->rank ?? '',
+            "afpsn" => $jobDetail?->afpsn ?? '',
+            "branch_of_service" => $jobDetail?->service_branch ?? '',
+            "present_job" => $jobDetail?->job_desc ?? '',
+            "home_region" => $home?->region ?? '',
+            "home_province" => $home?->province ?? '',
+            "home_city" => $home?->city ?? '',
+            "home_barangay" => $home?->barangay ?? '',
+            "home_street" => $home?->street ?? '',
+            "business_region" => $busAddr?->region ?? '',
+            "business_province" => $busAddr?->province ?? '',
+            "business_city" => $busAddr?->city ?? '',
+            "business_barangay" => $busAddr?->barangay ?? '',
+            "business_street" => $busAddr?->street ?? '',
+            "email" => $userDetail?->email_addr ?? '',
+            "mobile" => $userDetail?->mobile_num ?? '',
+            "religion" => $userDetail?->religion ?? '',
+            "tin" => $govId?->tin_num ?? '',
+            "passport_number" => $govId?->pass_num ?? '',
+            "passport_expiry" => $govId?->pass_exp ?? '',
+            "name_change" => $name?->change_in_name ?? '',
+        ];
+    }
+
+    /**
+     * Retrieve all character and reputation fields for a user.
+     */
+    public static function retrieveCharacterReputation($username) {
+        $characterReferences = self::retrieveCharRef($username);
+        $neighbors = self::retrieveNeighbor($username);
+
+        return [
+            'character_references' => $characterReferences,
+            'neighbors' => $neighbors,
+        ];
+    }
+
+    /**
+     * Retrieve all organization memberships for a user.
+     */
+    public static function retrieveOrganizationMemberships($username) {
+        $memberships = self::retrieveMemberships($username);
+        
+        return [
+            'organizations' => $memberships,
+        ];
+    }
+
+    /**
+     * Retrieve all miscellaneous information for a user.
+     */
+    public static function retrieveMiscellaneous($username) {
+        $personalDetail = self::retrievePersonalDetail($username);
+        $fluencyDetails = self::retrieveFluency($username);
+
+        return [
+            'hobbies_sports_pastimes' => $personalDetail?->hobbies ?? '',
+            'lie_detection_test' => $personalDetail?->undergo_lie_detection ?? '',
+            'languages' => $fluencyDetails,
+        ];
+    }
 }

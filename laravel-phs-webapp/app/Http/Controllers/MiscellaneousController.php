@@ -4,91 +4,85 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Traits\PHSSectionTracking;
-
-use App\Models\UserDetail;
-
-use Illuminate\Support\Facades\Auth;
+use App\Helper\DataRetrieval;
 
 class MiscellaneousController extends Controller
 {
     use PHSSectionTracking;
 
-    /**
-     * Show the form for creating/editing miscellaneous information.
-     *
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
-        $miscellaneous = UserDetail::where('username', Auth::id())
-            ->first();
+        $prefill = DataRetrieval::retrieveMiscellaneous(auth()->user()->username);
+        $data = $this->getCommonViewData('miscellaneous');
+        $data = array_merge($data, $prefill);
 
-        // Decode languages data if it exists
-        $languages = [];
-        if ($miscellaneous && $miscellaneous->languages_dialects) {
-            $languages = json_decode($miscellaneous->languages_dialects, true) ?: [];
-        }
-
-        $viewData = $this->getCommonViewData('miscellaneous');
-        $viewData['miscellaneous'] = $miscellaneous;
-        $viewData['languages'] = $languages;
-
-        // Return partial for AJAX requests, full view for normal requests
+        // Check if it's an AJAX request
         if (request()->ajax()) {
-            return view('phs.sections.miscellaneous-content', $viewData);
+            return view('phs.sections.miscellaneous-content', $data)->render();
         }
-
-        return view('phs.miscellaneous-new', $viewData);
+        return view('phs.miscellaneous-new', $data);
     }
 
-    /**
-     * Store miscellaneous information.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-
+        
         try {
-            // Validation rules
-            $validated = $request->validate([
-                'hobbies_sports_pastimes' => $isSaveOnly ? 'nullable|string|max:1000' : 'required|string|max:1000',
-                'languages' => 'nullable|array',
-                'languages.*.language' => 'nullable|string|max:255',
-                'languages.*.speak' => 'nullable|string|max:255',
-                'languages.*.read' => 'nullable|string|max:255',
-                'languages.*.write' => 'nullable|string|max:255',
-                'lie_detection_test' => 'nullable|in:yes,no',
-            ]);
+            // Validation (minimal for save-only, full for final submission)
+            if ($isSaveOnly) {
+                $validated = $request->validate([
+                    'hobbies_sports_pastimes' => 'nullable|string|max:1000',
+                    'languages' => 'nullable|array',
+                    'languages.*.language' => 'nullable|string|max:255',
+                    'languages.*.speak' => 'nullable|string|max:50',
+                    'languages.*.read' => 'nullable|string|max:50',
+                    'languages.*.write' => 'nullable|string|max:50',
+                    'lie_detection_test' => 'nullable|string|max:255',
+                ]);
+            } else {
+                $validated = $request->validate([
+                    'hobbies_sports_pastimes' => 'nullable|string|max:1000',
+                    'languages' => 'nullable|array',
+                    'languages.*.language' => 'nullable|string|max:255',
+                    'languages.*.speak' => 'nullable|string|max:50',
+                    'languages.*.read' => 'nullable|string|max:50',
+                    'languages.*.write' => 'nullable|string|max:50',
+                    'lie_detection_test' => 'nullable|string|max:255',
+                ]);
+            }
 
-            \Log::info('Miscellaneous validated data:', $validated);
-
-            // Use centralized helper to save miscellaneous data
             $username = auth()->user()->username;
-            \App\Helper\DataUpdate::saveMiscellaneous($validated, $username);
-
-            \Log::info('Miscellaneous after save:', [
-                'personal_details' => \App\Models\PersonalDetail::where('username', $username)->first(),
-                'fluency_details' => \App\Models\FluencyDetail::where('username', $username)->get()->toArray(),
-            ]);
-
-            // Mark miscellaneous section as completed
+            $data = [
+                'hobbies_sports_pastimes' => $validated['hobbies_sports_pastimes'] ?? null,
+                'languages' => $validated['languages'] ?? [],
+                'lie_detection_test' => $validated['lie_detection_test'] ?? null,
+            ];
+            
+            \App\Helper\DataUpdate::saveMiscellaneous($data, $username);
             $this->markSectionAsCompleted('miscellaneous');
+            session()->save();
 
-            // Return appropriate response based on mode
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Miscellaneous information saved successfully']);
             }
 
-            return redirect()->route('phs.review')->with('success', 'Miscellaneous information saved successfully!');
+            if ($request->ajax()) {
+                $nextRoute = route('phs.review');
+                return response()->json([
+                    'success' => true,
+                    'next_route' => $nextRoute
+                ]);
+            }
+
+            return redirect()->route('phs.review')
+                ->with('success', 'Miscellaneous information saved successfully. Please review your PHS submission.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $e->errors()], 422);
             }
             throw $e;
         } catch (\Exception $e) {
+            \Log::error('Exception in MiscellaneousController@store', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }
@@ -96,11 +90,6 @@ class MiscellaneousController extends Controller
         }
     }
 
-    /**
-     * Get the list of PHS sections for progress calculation.
-     *
-     * @return array
-     */
     protected function getSections()
     {
         return [
@@ -111,11 +100,11 @@ class MiscellaneousController extends Controller
             'military-history',
             'places-of-residence',
             'foreign-countries',
-            'personal-characteristics',
-            'marital-status',
-            'family-history',
+            'credit-reputation',
+            'arrest-record',
+            'character-and-reputation',
             'organization',
-            'miscellaneous',
+            'miscellaneous'
         ];
     }
 }

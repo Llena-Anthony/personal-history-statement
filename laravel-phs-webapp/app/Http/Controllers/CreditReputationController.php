@@ -23,38 +23,95 @@ class CreditReputationController extends Controller
         $data = $this->getCommonViewData('credit-reputation');
         $data['creditDetail'] = $creditDetail;
         $data['creditReferences'] = $creditReferences;
-        // You may want to decode JSON fields for the view here if needed
+        
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.sections.credit-reputation-content', $data)->render();
+        }
         return view('phs.credit-reputation', $data);
     }
 
     public function store(Request $request)
     {
-        $this->markSectionAsCompleted('credit-reputation');
-        $username = auth()->user()->username;
-        // Validation can be added here as needed
-        $data = [
-            'credit' => [
-                'other_incomes' => $request->input('other_incomes', []),
-                'assets_liabilities_agency' => $request->input('assets_liabilities_agency'),
-                'assets_liabilities_month' => $request->input('assets_liabilities_month'),
-                'assets_liabilities_year' => $request->input('assets_liabilities_year'),
-                'itr_amount' => $request->input('itr_amount'),
-            ],
-            'references' => array_map(function($ref) {
-                return [
-                    'bank_name' => $ref['name'] ?? null,
-                    'bank_address' => $ref['address'] ?? null,
-                ];
-            }, $request->input('character_references', [])),
-        ];
-        \App\Helper\DataUpdate::saveCreditReputation($data, $username);
-        return redirect()->route('phs.arrest-record.create')
-            ->with('success', 'Credit reputation saved successfully.');
+        $isSaveOnly = $request->header('X-Save-Only') === 'true';
+        
+        try {
+            // Validation (minimal for save-only, full for final submission)
+            if ($isSaveOnly) {
+                $validated = $request->validate([
+                    'other_incomes' => 'nullable|array',
+                    'assets_liabilities_agency' => 'nullable|string|max:255',
+                    'assets_liabilities_month' => 'nullable|string|max:2',
+                    'assets_liabilities_year' => 'nullable|integer|min:1900|max:2030',
+                    'itr_amount' => 'nullable|string|max:255',
+                    'character_references' => 'nullable|array',
+                    'character_references.*.name' => 'nullable|string|max:255',
+                    'character_references.*.address' => 'nullable|string|max:255',
+                ]);
+            } else {
+                $validated = $request->validate([
+                    'other_incomes' => 'nullable|array',
+                    'assets_liabilities_agency' => 'nullable|string|max:255',
+                    'assets_liabilities_month' => 'nullable|string|max:2',
+                    'assets_liabilities_year' => 'nullable|integer|min:1900|max:2030',
+                    'itr_amount' => 'nullable|string|max:255',
+                    'character_references' => 'nullable|array',
+                    'character_references.*.name' => 'nullable|string|max:255',
+                    'character_references.*.address' => 'nullable|string|max:255',
+                ]);
+            }
+
+            $username = auth()->user()->username;
+            $data = [
+                'credit' => [
+                    'other_incomes' => $validated['other_incomes'] ?? [],
+                    'assets_liabilities_agency' => $validated['assets_liabilities_agency'] ?? null,
+                    'assets_liabilities_month' => $validated['assets_liabilities_month'] ?? null,
+                    'assets_liabilities_year' => $validated['assets_liabilities_year'] ?? null,
+                    'itr_amount' => $validated['itr_amount'] ?? null,
+                ],
+                'references' => array_map(function($ref) {
+                    return [
+                        'bank_name' => $ref['name'] ?? null,
+                        'bank_address' => $ref['address'] ?? null,
+                    ];
+                }, $validated['character_references'] ?? []),
+            ];
+            
+            \App\Helper\DataUpdate::saveCreditReputation($data, $username);
+            $this->markSectionAsCompleted('credit-reputation');
+            session()->save();
+
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Credit reputation saved successfully']);
+            }
+
+            if ($request->ajax()) {
+                $nextRoute = route('phs.arrest-record.create');
+                return response()->json([
+                    'success' => true,
+                    'next_route' => $nextRoute
+                ]);
+            }
+
+            return redirect()->route('phs.arrest-record.create')
+                ->with('success', 'Credit reputation saved successfully. Please continue with your arrest record.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'errors' => $e->errors()], 422);
+            }
+            throw $e;
+        } catch (\Exception $e) {
+            \Log::error('Exception in CreditReputationController@store', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
+            }
+            return back()->with('error', 'An error occurred while saving your credit reputation. Please try again.');
+        }
     }
 
     protected function getSections()
     {
-        // Define all sections for progress tracking
         return [
             'personal-details',
             'family-background',
@@ -65,7 +122,7 @@ class CreditReputationController extends Controller
             'foreign-countries',
             'credit-reputation',
             'arrest-record',
-            'character-references',
+            'character-and-reputation',
             'organization',
             'miscellaneous'
         ];

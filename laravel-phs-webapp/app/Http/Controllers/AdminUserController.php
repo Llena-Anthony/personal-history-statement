@@ -42,7 +42,7 @@ class AdminUserController extends Controller
         // Handle sorting
         $sort = $request->get('sort', 'username');
         $direction = $request->get('direction', 'asc');
-        
+
         if (in_array($sort, ['username', 'usertype', 'organic_role', 'is_active'])) {
             $query->orderBy($sort, $direction);
         } else {
@@ -140,7 +140,7 @@ class AdminUserController extends Controller
             'session' => session()->all(),
             'has_user_data' => session()->has('user_data')
         ]);
-        
+
         if (!session()->has('user_data')) {
             Log::error('No user data in session');
             if ($request->ajax()) {
@@ -153,7 +153,7 @@ class AdminUserController extends Controller
         $userData = session('user_data');
         $sessionUserData = $userData; // Save original session data for later use
         Log::info('User data from session', ['userData' => $userData]);
-        
+
         try {
             // Validate the request
             $validated = $request->validate([
@@ -187,7 +187,7 @@ class AdminUserController extends Controller
             $userInfo = $sessionUserData['first_name'] . ' ' . $sessionUserData['last_name'] . ' (' . $user->username . ')';
             $userDetails = 'Type: ' . ucfirst($user->usertype) . ' | Organic Group: ' . ucfirst($user->organic_role);
             $description = "Created new user: {$userInfo} | {$userDetails}";
-            
+
             ActivityLogDetail::create([
                 'changes_made_by' => auth()->user()->username,
                 'action' => 'create',
@@ -280,13 +280,13 @@ class AdminUserController extends Controller
                 'errors' => $e->errors(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->ajax()) {
                 return response()->json([
                     'error' => 'Please check the form for errors: ' . collect($e->errors())->first()[0]
                 ], 422);
             }
-            
+
             return redirect()->route('admin.users.confirm')
                 ->with('error', 'Please check the form for errors: ' . collect($e->errors())->first()[0])
                 ->withInput();
@@ -298,13 +298,13 @@ class AdminUserController extends Controller
                 'bindings' => $e->getBindings(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->ajax()) {
                 return response()->json([
                     'error' => 'Database error occurred while creating the user: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             return redirect()->route('admin.users.confirm')
                 ->with('error', 'Database error occurred while creating the user: ' . $e->getMessage())
                 ->withInput();
@@ -314,13 +314,13 @@ class AdminUserController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->ajax()) {
                 return response()->json([
                     'error' => 'An error occurred while creating the user: ' . $e->getMessage()
                 ], 500);
             }
-            
+
             return redirect()->route('admin.users.confirm')
                 ->with('error', 'An error occurred while creating the user: ' . $e->getMessage())
                 ->withInput();
@@ -369,7 +369,7 @@ class AdminUserController extends Controller
                 $userInfo = $userDetail ? $userDetail->nameDetail->first_name . ' ' . $userDetail->nameDetail->last_name . ' (' . $user->username . ')' : $user->username;
                 $changesList = implode(' | ', $changes);
                 $description = "Updated user: {$userInfo} | Changes: {$changesList}";
-                
+
                 ActivityLogDetail::create([
                     'changes_made_by' => auth()->user()->username,
                     'action' => 'update',
@@ -389,7 +389,7 @@ class AdminUserController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return back()->with('error', 'An error occurred while updating the user: ' . $e->getMessage())
                 ->withInput();
         }
@@ -401,7 +401,7 @@ class AdminUserController extends Controller
             $html = view('admin.users.show', compact('user'))->render();
             return response()->json(['html' => $html]);
         }
-        
+
         return view('admin.users.show', compact('user'));
     }
 
@@ -414,14 +414,14 @@ class AdminUserController extends Controller
         try {
             $oldStatus = $user->is_active ? 'Active' : 'Disabled';
             $newStatus = $validated['is_active'] ? 'Active' : 'Disabled';
-            
+
             $user->update(['is_active' => $validated['is_active']]);
 
             // Log the status change
             $userDetail = $user->userDetail;
             $userInfo = $userDetail ? $userDetail->nameDetail->first_name . ' ' . $userDetail->nameDetail->last_name . ' (' . $user->username . ')' : $user->username;
             $description = "Changed user status: {$userInfo} | Status: {$oldStatus} → {$newStatus}";
-            
+
             ActivityLogDetail::create([
                 'changes_made_by' => auth()->user()->username,
                 'action' => 'update',
@@ -442,7 +442,7 @@ class AdminUserController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while updating user status.'
@@ -479,7 +479,7 @@ class AdminUserController extends Controller
         $users = $query->get();
 
         $filename = 'users_export_' . now()->format('Y-m-d_H-i-s') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
@@ -487,10 +487,10 @@ class AdminUserController extends Controller
 
         $callback = function() use ($users) {
             $file = fopen('php://output', 'w');
-            
+
             // CSV Headers
             fputcsv($file, [
-                'Username', 'Name', 'Username', 'Email', 'User Type', 'Organic Group', 
+                'Username', 'Name', 'Username', 'Email', 'User Type', 'Organic Group',
                 'Branch', 'Status', 'Created By', 'Created At', 'Last Login'
             ]);
 
@@ -516,4 +516,4 @@ class AdminUserController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
-} 
+}

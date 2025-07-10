@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\ReferenceDetail;
-use App\Models\Miscellaneous;
-use Illuminate\Support\Facades\Auth;
 use App\Traits\PHSSectionTracking;
-use App\Helper\DataUpdate;
+use App\Helper\DataRetrieval;
 
 class CharacterReputationController extends Controller
 {
@@ -16,91 +12,78 @@ class CharacterReputationController extends Controller
 
     public function create()
     {
-        $user = Auth::user();
+        $prefill = DataRetrieval::retrieveCharacterReputation(auth()->user()->username);
+        $data = $this->getCommonViewData('character-and-reputation');
+        $data = array_merge($data, $prefill);
 
-        // Get character references for this user
-        $characterReferences = ReferenceDetail::where('username', $user->id)
-            ->where('ref_type', 'character')
-            ->get();
-
-        // If no character references exist, create 5 empty ones
-        if ($characterReferences->isEmpty()) {
-            $characterReferences = collect(array_fill(0, 5, new ReferenceDetail()));
+        // Check if it's an AJAX request
+        if (request()->ajax()) {
+            return view('phs.sections.character-and-reputation-content', $data)->render();
         }
-
-        // Get neighbors (stored as miscellaneous with type 'neighbor')
-        $neighbors = ReferenceDetail::where('username', $user->id)
-            ->where('ref_type', 'neighbor')
-            ->get();
-
-        // If no neighbors exist, create 3 empty ones
-        if ($neighbors->isEmpty()) {
-            $neighbors = collect(array_fill(0, 3, new ReferenceDetail()));
-        }
-
-        $commonData = $this->getCommonViewData('character-and-reputation');
-
-        return view('phs.character-reputation', array_merge($commonData, [
-            'characterReferences' => $characterReferences,
-            'neighbors' => $neighbors,
-        ]));
+        return view('phs.character-and-reputation', $data);
     }
 
     public function store(Request $request)
     {
-        $this->markSectionAsCompleted('character-and-reputation');
-
-        $user = Auth::user();
-
-        // Check if this is a save-only request (for dynamic navigation)
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-
-        // Validation rules
-        $characterRefRules = $isSaveOnly ? 'nullable|string|max:255' : 'required|string|max:255';
-        $neighborRules = $isSaveOnly ? 'nullable|string|max:255' : 'required|string|max:255';
-
+        
         try {
-            $validated = $request->validate([
-                'character_references.*.name' => $characterRefRules,
-                'character_references.*.address' => $characterRefRules,
-                'neighbors.*.name' => $neighborRules,
-                'neighbors.*.address' => $neighborRules,
-            ]);
-
-            \Log::info('CharacterReputation validated data:', $validated);
-
-            // Use centralized helper to update character and reputation data
-            DataUpdate::saveCharacterReputation([
-                'character_references' => $request->character_references ?? [],
-                'neighbors' => $request->neighbors ?? [],
-            ], $user->username);
-
-            \Log::info('CharacterReputation after save:', [
-                'character_references' => \App\Models\ReferenceDetail::where('username', $user->username)
-                    ->where('ref_type', 'character')
-                    ->get()->toArray(),
-                'neighbors' => \App\Models\ReferenceDetail::where('username', $user->username)
-                    ->where('ref_type', 'neighbor')
-                    ->get()->toArray(),
-            ]);
-
-            // Return appropriate response based on mode
+            // Validation (minimal for save-only, full for final submission)
             if ($isSaveOnly) {
-                return response()->json(['success' => true, 'message' => 'Character and reputation information saved successfully']);
+                $validated = $request->validate([
+                    'character_references' => 'nullable|array',
+                    'character_references.*.name' => 'nullable|string|max:255',
+                    'character_references.*.address' => 'nullable|string|max:255',
+                    'neighbors' => 'nullable|array',
+                    'neighbors.*.name' => 'nullable|string|max:255',
+                    'neighbors.*.address' => 'nullable|string|max:255',
+                ]);
+            } else {
+                $validated = $request->validate([
+                    'character_references' => 'nullable|array',
+                    'character_references.*.name' => 'nullable|string|max:255',
+                    'character_references.*.address' => 'nullable|string|max:255',
+                    'neighbors' => 'nullable|array',
+                    'neighbors.*.name' => 'nullable|string|max:255',
+                    'neighbors.*.address' => 'nullable|string|max:255',
+                ]);
+            }
+
+            $username = auth()->user()->username;
+            $data = [
+                'character_references' => $validated['character_references'] ?? [],
+                'neighbors' => $validated['neighbors'] ?? [],
+            ];
+            
+            \App\Helper\DataUpdate::saveCharacterReputation($data, $username);
+            $this->markSectionAsCompleted('character-and-reputation');
+            session()->save();
+
+            if ($isSaveOnly) {
+                return response()->json(['success' => true, 'message' => 'Character and reputation saved successfully']);
+            }
+
+            if ($request->ajax()) {
+                $nextRoute = route('phs.organization.create');
+                return response()->json([
+                    'success' => true,
+                    'next_route' => $nextRoute
+                ]);
             }
 
             return redirect()->route('phs.organization.create')
-                ->with('success', 'Character and reputation information saved successfully!');
+                ->with('success', 'Character and reputation saved successfully. Please continue with your organization memberships.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'errors' => $e->errors()], 422);
             }
             throw $e;
         } catch (\Exception $e) {
+            \Log::error('Exception in CharacterReputationController@store', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }
-            return back()->with('error', 'An error occurred while saving your character and reputation information. Please try again.');
+            return back()->with('error', 'An error occurred while saving your character and reputation. Please try again.');
         }
     }
 
