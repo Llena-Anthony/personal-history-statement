@@ -19,4 +19,4 @@
 {{-- Pass currentSection to layout --}}
 @php($currentSection = 'educational-background')
 
-<form method="POST" action="{{ route('personnel.phs.educational-background.store') }}">
+<form method="POST" action="{{ route('phs.educational-background.store') }}">

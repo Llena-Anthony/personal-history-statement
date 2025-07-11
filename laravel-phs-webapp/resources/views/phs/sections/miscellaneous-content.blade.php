@@ -176,5 +176,5 @@
     }
 
     // Set the dashboard route
-    var $dashboardRoute = "{{ route('personnel.dashboard') }}";
+    var $dashboardRoute = "{{ route('client.dashboard') }}";
 </script> 

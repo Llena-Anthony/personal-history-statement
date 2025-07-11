@@ -1,9 +1,7 @@
 @php
     // Standardized section configuration
-    $isPersonnel = Auth::user() && Auth::user()->usertype === 'personnel';
     $formAction = route('phs.' . $sectionName . '.store');
-    $nextSectionRoute = route('phs.' . $nextSection . '.create');
-    $dashboardRoute = route('personnel.dashboard');
+    $dashboardRoute = route('client.dashboard');
     $sectionTitle = $sectionTitle ?? 'Section Title';
     $sectionDescription = $sectionDescription ?? 'Please provide the required information';
     $sectionIcon = $sectionIcon ?? 'fas fa-file-alt';
