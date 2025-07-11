@@ -198,29 +198,12 @@
                             <div class="text-sm text-gray-500">{{ $submission->last_login_at ? $submission->last_login_at->format('h:i A') : 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <div class="flex justify-end space-x-2">
+                            <div class="flex justify-end">
                                 <a href="{{ route('admin.phs.show', $submission->username) }}" 
                                    class="inline-flex items-center p-2 text-[#1B365D] hover:text-[#2B4B7D] hover:bg-[#1B365D]/10 rounded-lg transition-colors" 
                                    title="View Details">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="{{ route('admin.phs.edit', $submission->username) }}" 
-                                   class="inline-flex items-center p-2 text-[#1B365D] hover:text-[#2B4B7D] hover:bg-[#1B365D]/10 rounded-lg transition-colors" 
-                                   title="Edit Submission">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="{{ route('admin.phs.print', $submission->username) }}" 
-                                   class="inline-flex items-center p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors" 
-                                   title="Print PHS" 
-                                   target="_blank">
-                                    <i class="fas fa-print"></i>
-                                </a>
-                                <button type="button" 
-                                        onclick="confirmPHSDelete('{{ $submission->username }}', '{{ optional(optional($submission->userDetail)->nameDetail)->first_name }} {{ optional(optional($submission->userDetail)->nameDetail)->last_name }}')" 
-                                        class="inline-flex items-center p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors" 
-                                        title="Delete Submission">
-                                    <i class="fas fa-trash"></i>
-                                </button>
                             </div>
                         </td>
                     </tr>
@@ -250,35 +233,7 @@
     </div>
 </div>
 
-<!-- Confirmation Modal for PHS Delete -->
-<x-confirmation-modal
-    id="phsDeleteModal"
-    title="Confirm PHS Deletion"
-    message="Are you sure you want to delete this PHS submission? This action cannot be undone."
-    confirmText="Delete Submission"
-    cancelText="Cancel"
-    confirmClass="bg-red-600 hover:bg-red-700"
-/>
-
-<!-- Hidden form for delete -->
-<form id="delete-phs-form" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
-</form>
-
 <script>
-function confirmPHSDelete(username, userName) {
-    showConfirmationModal(
-        'phsDeleteModal',
-        `Are you sure you want to delete the PHS submission for "${userName}"? This action cannot be undone and will permanently remove all associated data.`,
-        function() {
-            const form = document.getElementById('delete-phs-form');
-            form.action = '{{ route("admin.phs.destroy", ":username") }}'.replace(':username', username);
-            form.submit();
-        }
-    );
-}
-
 function printTemplateDirect(event) {
     event.preventDefault();
     // Remove any existing iframe
