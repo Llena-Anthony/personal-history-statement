@@ -473,89 +473,89 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 //     // PDS route is not accessible yet
 // });
 
-// Consolidated Personnel PHS Routes
-Route::middleware(['auth', 'personnel'])->prefix('personnel/phs')->name('personnel.phs.')->group(function () {
-    Route::get('personal-details', [App\Http\Controllers\PHSController::class, 'create'])->name('personal-details.create');
-    Route::post('personal-details', [App\Http\Controllers\PHSController::class, 'store'])->name('personal-details.store');
+// // Consolidated Personnel PHS Routes
+// Route::middleware(['auth', 'personnel'])->prefix('personnel/phs')->name('personnel.phs.')->group(function () {
+//     Route::get('personal-details', [App\Http\Controllers\PHSController::class, 'create'])->name('personal-details.create');
+//     Route::post('personal-details', [App\Http\Controllers\PHSController::class, 'store'])->name('personal-details.store');
 
-    Route::get('family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'create'])->name('family-background.create');
-    // Add POST if needed
+//     Route::get('family-background', [App\Http\Controllers\FamilyBackgroundController::class, 'create'])->name('family-background.create');
+//     // Add POST if needed
 
-    Route::get('educational-background', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])->name('educational-background.create');
-    // Add POST if needed
+//     Route::get('educational-background', [App\Http\Controllers\EducationalBackgroundController::class, 'create'])->name('educational-background.create');
+//     // Add POST if needed
 
-    Route::get('marital-status', [App\Http\Controllers\MaritalStatusController::class, 'create'])->name('marital-status.create');
-    // Add POST if needed
+//     Route::get('marital-status', [App\Http\Controllers\MaritalStatusController::class, 'create'])->name('marital-status.create');
+//     // Add POST if needed
 
-    Route::get('military-history', [App\Http\Controllers\MilitaryHistoryController::class, 'create'])->name('military-history.create');
-    // Add POST if needed
+//     Route::get('military-history', [App\Http\Controllers\MilitaryHistoryController::class, 'create'])->name('military-history.create');
+//     // Add POST if needed
 
-    Route::get('employment-history', [App\Http\Controllers\EmploymentHistoryController::class, 'create'])->name('employment-history.create');
-    // Add POST if needed
+//     Route::get('employment-history', [App\Http\Controllers\EmploymentHistoryController::class, 'create'])->name('employment-history.create');
+//     // Add POST if needed
 
-    Route::get('credit-reputation', [App\Http\Controllers\CreditReputationController::class, 'create'])->name('credit-reputation.create');
-    // Add POST if needed
+//     Route::get('credit-reputation', [App\Http\Controllers\CreditReputationController::class, 'create'])->name('credit-reputation.create');
+//     // Add POST if needed
 
-    Route::get('arrest-record', [App\Http\Controllers\ArrestRecordController::class, 'create'])->name('arrest-record.create');
-    // Add POST if needed
+//     Route::get('arrest-record', [App\Http\Controllers\ArrestRecordController::class, 'create'])->name('arrest-record.create');
+//     // Add POST if needed
 
-    Route::get('organization', [App\Http\Controllers\OrganizationController::class, 'create'])->name('organization.create');
-    // Add POST if needed
+//     Route::get('organization', [App\Http\Controllers\OrganizationController::class, 'create'])->name('organization.create');
+//     // Add POST if needed
 
-    Route::get('personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'create'])->name('personal-characteristics.create');
-    Route::post('personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'store'])->name('personal-characteristics.store');
+//     Route::get('personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'create'])->name('personal-characteristics.create');
+//     Route::post('personal-characteristics', [App\Http\Controllers\PersonalCharacteristicsController::class, 'store'])->name('personal-characteristics.store');
 
-    Route::get('places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'create'])->name('places-of-residence.create');
-    // Add POST if needed
+//     Route::get('places-of-residence', [App\Http\Controllers\PlacesOfResidenceController::class, 'create'])->name('places-of-residence.create');
+//     // Add POST if needed
 
-    Route::get('foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])->name('foreign-countries.create');
-    // Add POST if needed
+//     Route::get('foreign-countries', [App\Http\Controllers\ForeignCountriesController::class, 'create'])->name('foreign-countries.create');
+//     // Add POST if needed
 
-    // Route::get('review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('review');
-    // Add POST if needed
-});
+//     // Route::get('review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('review');
+//     // Add POST if needed
+// });
 
-Route::prefix('personnel')->middleware(['auth', 'role:personnel'])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\PersonnelDashboardController::class, 'index'])->name('dashboard');
-    Route::prefix('phs')->name('personnel.phs.')->group(function () {
-        Route::get('personal-details', [\App\Http\Controllers\Personnel\PersonalDetailsController::class, 'create'])->name('personal-details.create');
-        Route::post('personal-details', [\App\Http\Controllers\Personnel\PersonalDetailsController::class, 'store'])->name('personal-details.store');
+// Route::prefix('personnel')->middleware(['auth', 'role:personnel'])->group(function () {
+//     Route::get('/dashboard', [App\Http\Controllers\PersonnelDashboardController::class, 'index'])->name('dashboard');
+//     Route::prefix('phs')->name('personnel.phs.')->group(function () {
+//         Route::get('personal-details', [\App\Http\Controllers\Personnel\PersonalDetailsController::class, 'create'])->name('personal-details.create');
+//         Route::post('personal-details', [\App\Http\Controllers\Personnel\PersonalDetailsController::class, 'store'])->name('personal-details.store');
 
-        Route::get('personal-characteristics', [\App\Http\Controllers\Personnel\PersonalCharacteristicsController::class, 'create'])->name('personal-characteristics.create');
-        Route::post('personal-characteristics', [\App\Http\Controllers\Personnel\PersonalCharacteristicsController::class, 'store'])->name('personal-characteristics.store');
+//         Route::get('personal-characteristics', [\App\Http\Controllers\Personnel\PersonalCharacteristicsController::class, 'create'])->name('personal-characteristics.create');
+//         Route::post('personal-characteristics', [\App\Http\Controllers\Personnel\PersonalCharacteristicsController::class, 'store'])->name('personal-characteristics.store');
 
-        Route::get('marital-status', [\App\Http\Controllers\Personnel\MaritalStatusController::class, 'create'])->name('marital-status.create');
-        Route::post('marital-status', [\App\Http\Controllers\Personnel\MaritalStatusController::class, 'store'])->name('marital-status.store');
+//         Route::get('marital-status', [\App\Http\Controllers\Personnel\MaritalStatusController::class, 'create'])->name('marital-status.create');
+//         Route::post('marital-status', [\App\Http\Controllers\Personnel\MaritalStatusController::class, 'store'])->name('marital-status.store');
 
-        Route::get('family-background', [\App\Http\Controllers\Personnel\FamilyBackgroundController::class, 'create'])->name('family-background.create');
-        Route::post('family-background', [\App\Http\Controllers\Personnel\FamilyBackgroundController::class, 'store'])->name('family-background.store');
+//         Route::get('family-background', [\App\Http\Controllers\Personnel\FamilyBackgroundController::class, 'create'])->name('family-background.create');
+//         Route::post('family-background', [\App\Http\Controllers\Personnel\FamilyBackgroundController::class, 'store'])->name('family-background.store');
 
-        Route::get('educational-background', [\App\Http\Controllers\Personnel\EducationalBackgroundController::class, 'create'])->name('educational-background.create');
-        Route::post('educational-background', [\App\Http\Controllers\Personnel\EducationalBackgroundController::class, 'store'])->name('educational-background.store');
+//         Route::get('educational-background', [\App\Http\Controllers\Personnel\EducationalBackgroundController::class, 'create'])->name('educational-background.create');
+//         Route::post('educational-background', [\App\Http\Controllers\Personnel\EducationalBackgroundController::class, 'store'])->name('educational-background.store');
 
-        Route::get('military-history', [\App\Http\Controllers\Personnel\MilitaryHistoryController::class, 'create'])->name('military-history.create');
-        Route::post('military-history', [\App\Http\Controllers\Personnel\MilitaryHistoryController::class, 'store'])->name('military-history.store');
+//         Route::get('military-history', [\App\Http\Controllers\Personnel\MilitaryHistoryController::class, 'create'])->name('military-history.create');
+//         Route::post('military-history', [\App\Http\Controllers\Personnel\MilitaryHistoryController::class, 'store'])->name('military-history.store');
 
-        Route::get('employment-history', [\App\Http\Controllers\Personnel\EmploymentHistoryController::class, 'create'])->name('employment-history.create');
-        Route::post('employment-history', [\App\Http\Controllers\Personnel\EmploymentHistoryController::class, 'store'])->name('employment-history.store');
+//         Route::get('employment-history', [\App\Http\Controllers\Personnel\EmploymentHistoryController::class, 'create'])->name('employment-history.create');
+//         Route::post('employment-history', [\App\Http\Controllers\Personnel\EmploymentHistoryController::class, 'store'])->name('employment-history.store');
 
-        Route::get('places-of-residence', [\App\Http\Controllers\Personnel\PlacesOfResidenceController::class, 'create'])->name('places-of-residence.create');
-        Route::post('places-of-residence', [\App\Http\Controllers\Personnel\PlacesOfResidenceController::class, 'store'])->name('places-of-residence.store');
+//         Route::get('places-of-residence', [\App\Http\Controllers\Personnel\PlacesOfResidenceController::class, 'create'])->name('places-of-residence.create');
+//         Route::post('places-of-residence', [\App\Http\Controllers\Personnel\PlacesOfResidenceController::class, 'store'])->name('places-of-residence.store');
 
-        Route::get('foreign-countries', [\App\Http\Controllers\Personnel\ForeignCountriesController::class, 'create'])->name('foreign-countries.create');
-        Route::post('foreign-countries', [\App\Http\Controllers\Personnel\ForeignCountriesController::class, 'store'])->name('foreign-countries.store');
+//         Route::get('foreign-countries', [\App\Http\Controllers\Personnel\ForeignCountriesController::class, 'create'])->name('foreign-countries.create');
+//         Route::post('foreign-countries', [\App\Http\Controllers\Personnel\ForeignCountriesController::class, 'store'])->name('foreign-countries.store');
 
-        Route::get('credit-reputation', [\App\Http\Controllers\Personnel\CreditReputationController::class, 'create'])->name('credit-reputation.create');
-        Route::post('credit-reputation', [\App\Http\Controllers\Personnel\CreditReputationController::class, 'store'])->name('credit-reputation.store');
+//         Route::get('credit-reputation', [\App\Http\Controllers\Personnel\CreditReputationController::class, 'create'])->name('credit-reputation.create');
+//         Route::post('credit-reputation', [\App\Http\Controllers\Personnel\CreditReputationController::class, 'store'])->name('credit-reputation.store');
 
-        Route::get('arrest-record', [\App\Http\Controllers\Personnel\ArrestRecordController::class, 'create'])->name('arrest-record.create');
-        Route::post('arrest-record', [\App\Http\Controllers\Personnel\ArrestRecordController::class, 'store'])->name('arrest-record.store');
+//         Route::get('arrest-record', [\App\Http\Controllers\Personnel\ArrestRecordController::class, 'create'])->name('arrest-record.create');
+//         Route::post('arrest-record', [\App\Http\Controllers\Personnel\ArrestRecordController::class, 'store'])->name('arrest-record.store');
 
-        Route::get('organization', [\App\Http\Controllers\Personnel\OrganizationController::class, 'create'])->name('organization.create');
-        Route::post('organization', [\App\Http\Controllers\Personnel\OrganizationController::class, 'store'])->name('organization.store');
+//         Route::get('organization', [\App\Http\Controllers\Personnel\OrganizationController::class, 'create'])->name('organization.create');
+//         Route::post('organization', [\App\Http\Controllers\Personnel\OrganizationController::class, 'store'])->name('organization.store');
 
-        Route::get('miscellaneous', [\App\Http\Controllers\Personnel\MiscellaneousController::class, 'create'])->name('miscellaneous.create');
-        Route::post('miscellaneous', [\App\Http\Controllers\Personnel\MiscellaneousController::class, 'store'])->name('miscellaneous.store');
-    });
-});
+//         Route::get('miscellaneous', [\App\Http\Controllers\Personnel\MiscellaneousController::class, 'create'])->name('miscellaneous.create');
+//         Route::post('miscellaneous', [\App\Http\Controllers\Personnel\MiscellaneousController::class, 'store'])->name('miscellaneous.store');
+//     });
+// });
 

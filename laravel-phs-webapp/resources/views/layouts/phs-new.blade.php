@@ -835,23 +835,8 @@
             'miscellaneous'
         ];
 
-        const isPersonnel = {{ (Auth::user() && Auth::user()->usertype === 'personnel') ? 'true' : 'false' }};
-        const PHSSectionRoutes = isPersonnel ? {
-            'personal-details': '{{ route("personnel.phs.personal-details.create") }}',
-            'personal-characteristics': '{{ route("personnel.phs.personal-characteristics.create") }}',
-            'marital-status': '{{ route("personnel.phs.marital-status.create") }}',
-            'family-background': '{{ route("personnel.phs.family-background.create") }}',
-            'educational-background': '{{ route("personnel.phs.educational-background.create") }}',
-            'military-history': '{{ route("personnel.phs.military-history.create") }}',
-            'places-of-residence': '{{ route("personnel.phs.places-of-residence.create") }}',
-            'employment-history': '{{ route("personnel.phs.employment-history.create") }}',
-            'foreign-countries': '{{ route("personnel.phs.foreign-countries.create") }}',
-            'credit-reputation': '{{ route("personnel.phs.credit-reputation.create") }}',
-            'arrest-record': '{{ route("personnel.phs.arrest-record.create") }}',
-            'character-and-reputation': '#', // Add personnel route if exists
-            'organization': '{{ route("personnel.phs.organization.create") }}',
-            'miscellaneous': '#', // Add personnel route if exists
-        } : {
+        // const isPersonnel = {{ (Auth::user() && Auth::user()->usertype === 'personnel') ? 'true' : 'false' }};
+        const PHSSectionRoutes = {
             'personal-details': '{{ route("phs.personal-details.create") }}',
             'personal-characteristics': '{{ route("phs.personal-characteristics.create") }}',
             'marital-status': '{{ route("phs.marital-status.create") }}',

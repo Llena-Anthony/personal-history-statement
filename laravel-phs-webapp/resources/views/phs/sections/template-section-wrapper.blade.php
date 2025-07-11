@@ -26,7 +26,7 @@
     $previousSection = $currentIndex > 0 ? $sectionOrder[$currentIndex - 1] : null;
     $formAction = route('phs.' . $sectionName . '.store');
     $nextSectionRoute = route('phs.' . $nextSection . '.create');
-    $dashboardRoute = route('dashboard');
+    $dashboardRoute = route('client.dashboard');
     $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : $dashboardRoute;
 @endphp
 
