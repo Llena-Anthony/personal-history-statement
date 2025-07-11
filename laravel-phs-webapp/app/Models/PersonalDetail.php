@@ -20,6 +20,8 @@ class PersonalDetail extends Model
         'shoe_size',
         'hobbies',
         'undergo_lie_detection',
+        'nickname',
+        'change_in_name',
     ];
 
     public function user()

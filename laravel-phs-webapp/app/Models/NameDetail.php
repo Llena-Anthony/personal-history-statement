@@ -10,7 +10,7 @@ class NameDetail extends Model
     use HasFactory;
 
     public $timestamps = false;
-    
+
     protected $primaryKey = 'name_id';
     public $incrementing = true;
     public $keyType = 'int';
@@ -18,9 +18,7 @@ class NameDetail extends Model
         'last_name',
         'first_name',
         'middle_name',
-        'name_extension',
-        'nickname',
-        'change_in_name',
+        'suffix',
     ];
 
     // Relationships
@@ -48,4 +46,4 @@ class NameDetail extends Model
     {
         return $this->hasMany(UserDetail::class, 'full_name', 'name_id');
     }
-} 
+}

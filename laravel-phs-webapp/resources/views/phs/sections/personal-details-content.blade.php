@@ -89,7 +89,7 @@
             </label>
             <input type="date" name="date_of_birth" id="date_of_birth"
        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-       value="{{ isset($date_of_birth) ? (strlen($date_of_birth) === 10 ? \Carbon\Carbon::parse($date_of_birth)->format('Y-m-d') : '') : '' }}">
+       value="{{ old('date_of_birth', isset($date_of_birth) && $date_of_birth ? \Carbon\Carbon::parse($date_of_birth)->format('Y-m-d') : '') }}">
             @error('date_of_birth')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

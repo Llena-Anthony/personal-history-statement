@@ -48,16 +48,14 @@ class DataUpdate {
      * Update or create name detail for a user.
      */
     public static function updateNameDetail($username, $nameData) {
+        // Only use columns that exist in the table
         $name = \App\Models\NameDetail::firstOrCreate([
             'last_name' => $nameData['last_name'] ?? null,
             'first_name' => $nameData['first_name'] ?? null,
             'middle_name' => $nameData['middle_name'] ?? null,
-            'name_extension' => $nameData['suffix'] ?? null,
-        ], [
-            'nickname' => $nameData['nickname'] ?? null,
-            'change_in_name' => $nameData['change_in_name'] ?? null,
+            'suffix' => $nameData['suffix'] ?? null,
         ]);
-        return $name->id;
+        return $name->name_id;
     }
 
     /**
@@ -80,11 +78,15 @@ class DataUpdate {
      * Update or create user detail for a user.
      */
     public static function updateUserDetail($username, $userDetailData) {
+        // Ensure full_name is set to the correct name_id
+        if (isset($userDetailData['full_name']) && is_array($userDetailData['full_name'])) {
+            $userDetailData['full_name'] = self::updateNameDetail($username, $userDetailData['full_name']);
+        }
         $userDetail = \App\Models\UserDetail::updateOrCreate(
             ['username' => $username],
             $userDetailData
         );
-        return $userDetail->id;
+        return $userDetail->username;
     }
 
     /**
@@ -102,11 +104,23 @@ class DataUpdate {
      * Update or create job detail for a user.
      */
     public static function updateJobDetail($username, $jobDetailData) {
+        // Map input keys to actual DB columns
+        $mapped = [
+            'username' => $username,
+            'service_branch' => $jobDetailData['branch_of_service'] ?? null,
+            'rank' => $jobDetailData['rank'] ?? null,
+            'afpsn' => $jobDetailData['afpsn'] ?? null,
+            'job_desc' => $jobDetailData['job_desc'] ?? null,
+        ];
+        // If job_addr is present in $jobDetailData, add it
+        if (!empty($jobDetailData['job_addr'])) {
+            $mapped['job_addr'] = $jobDetailData['job_addr'];
+        }
         $jobDetail = \App\Models\JobDetail::updateOrCreate(
             ['username' => $username],
-            $jobDetailData
+            $mapped
         );
-        return $jobDetail->id;
+        return $jobDetail->username;
     }
 
     /**
@@ -150,7 +164,7 @@ class DataUpdate {
                     'last_name' => $childData['last_name'] ?? '',
                     'middle_name' => $childData['middle_name'] ?? null,
                     'nickname' => $childData['nickname'] ?? null,
-                    'name_extension' => $childData['suffix'] ?? null,
+                    'suffix' => $childData['suffix'] ?? null,
                 ])->id;
                 // Create child record
                 \App\Models\ChildrenDetail::create([
@@ -185,7 +199,7 @@ class DataUpdate {
                     'last_name' => $member['name']['last_name'] ?? '',
                     'middle_name' => $member['name']['middle_name'] ?? null,
                     'nickname' => $member['name']['nickname'] ?? null,
-                    'name_extension' => $member['name']['suffix'] ?? null,
+                    'suffix' => $member['name']['suffix'] ?? null,
                 ])->id;
                 \App\Models\FamilyMember::create([
                     'user_id' => $userId,
@@ -221,7 +235,7 @@ class DataUpdate {
                         'last_name' => $sibling['last_name'] ?? '',
                         'middle_name' => $sibling['middle_name'] ?? null,
                         'nickname' => $sibling['nickname'] ?? null,
-                        'name_extension' => $sibling['suffix'] ?? null,
+                        'suffix' => $sibling['suffix'] ?? null,
                     ])->id;
                 }
                 $familyBackground->siblings()->create([

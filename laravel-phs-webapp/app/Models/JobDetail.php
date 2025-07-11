@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class JobDetail extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';

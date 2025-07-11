@@ -16,9 +16,10 @@
     @include('phs.sections.personal-details-content')
 @endsection
 
-{{-- Inline script to pass prefilled region values to JS --}}
+@push('scripts')
 <script>
     window.prefilledHomeRegion = @json($home_region ?? '');
     window.prefilledBusinessRegion = @json($business_region ?? '');
     window.prefilledBirthRegion = @json($birth_region ?? '');
 </script>
+@endpush
