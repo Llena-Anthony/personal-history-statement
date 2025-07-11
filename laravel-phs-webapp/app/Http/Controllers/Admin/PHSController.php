@@ -52,8 +52,9 @@ class PHSController extends Controller
         $militarySchools = \App\Models\MilitarySchoolDetail::where('username', $username)->get();
         $militaryAwards = DataRetrieval::retrieveAwards($username);
         $placesOfResidence = \App\Models\ResidenceHistoryDetail::where('username', $username)->with('addressDetail')->get();
+        $employmentHistory = \App\Helper\DataRetrieval::retrieveEmployment($username);
         
-        return view('admin.phs.show', compact('user', 'personalDetails', 'personalCharacteristics', 'maritalStatus', 'familyBackground', 'siblings', 'educationalBackground', 'militaryHistory', 'militaryAssignments', 'militarySchools', 'militaryAwards', 'placesOfResidence'));
+        return view('admin.phs.show', compact('user', 'personalDetails', 'personalCharacteristics', 'maritalStatus', 'familyBackground', 'siblings', 'educationalBackground', 'militaryHistory', 'militaryAssignments', 'militarySchools', 'militaryAwards', 'placesOfResidence', 'employmentHistory'));
     }
 
     public function edit($username)

@@ -904,37 +904,75 @@
         </div>
 
         <!-- Employment History Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-briefcase mr-3"></i>
+                    <i class="fas fa-briefcase mr-3 text-[#D4AF37]"></i>
                     Employment History
                 </h3>
             </div>
             <div class="p-6">
-                <div class="space-y-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
+                @if($employmentHistory && count($employmentHistory))
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($employmentHistory as $i => $employment)
+                            @php $addr = $employment->addressDetail; @endphp
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <h4 class="font-semibold text-gray-900 mb-3">Employment Record #{{ $i+1 }}</h4>
+                                <div class="grid grid-cols-1 gap-2">
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Inclusive Dates:</span>
+                                        <span class="text-sm text-gray-900">
+                                            {{ ($employment->start_date ?? 'N/A') }} - {{ ($employment->end_date ?? 'N/A') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Type of Employment:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment->employ_type ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Name:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment->employer ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Address:</span>
+                                        <span class="text-sm text-gray-900">{{ $addr ? ($addr->street ?? 'N/A') : 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Reason for Leaving:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment->reason_for_leaving ?? 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
                         <h4 class="font-semibold text-gray-900 mb-3">Employment Record #1</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-2">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Position:</span>
+                                <span class="text-sm font-medium text-gray-600">Inclusive Dates:</span>
+                                <span class="text-sm text-gray-900">N/A - N/A</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Type of Employment:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Company:</span>
+                                <span class="text-sm font-medium text-gray-600">Name:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">From:</span>
+                                <span class="text-sm font-medium text-gray-600">Address:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">To:</span>
+                                <span class="text-sm font-medium text-gray-600">Reason for Leaving:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
+
             </div>
         </div>
 
