@@ -1,9 +1,26 @@
 @php
     // Standardized section configuration
-    // $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
+    // $isPersonnel = Auth::user() && Auth::user()->usertype === 'personnel';
     // $formAction = $isPersonnel ? route('personnel.phs.' . $sectionName . '.store') : route('phs.' . $sectionName . '.store');
     // $nextSectionRoute = $isPersonnel ? route('personnel.phs.' . $nextSection . '.create') : route('phs.' . $nextSection . '.create');
-    // $dashboardRoute = route('personnel.dashboard');
+    // $dashboardRoute = $isPersonnel ? route('personnel.dashboard') : route('client.dashboard');
+    $formAction = route('phs.' . $sectionName . '.store');
+    $nextSectionRoute = route ('phs.' . $nextSection . '.create');
+    \Log::info("Going to ", $nextSection)
+    $dashboardRoute = route('client.dashboard');
+
+    // Debug route generation
+    \Log::info('Route generation debug', [
+        // 'isPersonnel' => $isPersonnel,
+        'sectionName' => $sectionName,
+        'nextSection' => $nextSection,
+        'formAction' => $formAction,
+        'nextSectionRoute' => $nextSectionRoute,
+        'dashboardRoute' => $dashboardRoute,
+        'user_usertype' => Auth::user()->usertype ?? 'null',
+        'user_id' => Auth::id(),
+        'user_authenticated' => Auth::check()
+    ]);
     $sectionTitle = $sectionTitle ?? 'Section Title';
     $sectionDescription = $sectionDescription ?? 'Please provide the required information';
     $sectionIcon = $sectionIcon ?? 'fas fa-file-alt';
@@ -28,10 +45,8 @@
 
     $currentIndex = array_search($sectionName, $sectionOrder);
     $previousSection = $currentIndex > 0 ? $sectionOrder[$currentIndex - 1] : null;
-    $formAction = route('phs.' . $sectionName . '.store');
-    $nextSectionRoute = route('phs.' . $nextSection . '.create');
-    $dashboardRoute = route('dashboard');
-    $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : $dashboardRoute;
+    // $previousSectionRoute = $previousSection ? ($isPersonnel ? route('personnel.phs.' . $previousSection . '.create') : route('phs.' . $previousSection . '.create')) : $dashboardRoute;
+    $previousSectionRoute = $dashboardRoute;
 @endphp
 
 @extends($layout)
@@ -55,6 +70,11 @@
 
     <!-- Form -->
     <form method="POST" action="{{ $formAction }}" class="space-y-8" id="phs-form">
+        <!-- Debug info -->
+        <div style="display: none;">
+            <p>Debug: Form Action = {{ $formAction }}</p>
+            <p>Debug: User Type = {{ Auth::user()->usertype ?? 'null' }}</p>
+        </div>
         @csrf
 
         <!-- Form content will be included here -->
@@ -82,6 +102,9 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('phs-form');
+    console.log("Form element found:", form);
+    console.log("Form action attribute:", form ? form.action : 'Form not found');
+    console.log("Form method:", form ? form.method : 'Form not found');
     if (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -95,6 +118,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
             });
 
+            console.log('Form action URL:', form.action);
+            console.log('Form action type:', typeof form.action);
+            console.log('Form action value:', form.action);
             fetch(form.action, {
                 method: 'POST',
                 headers: {
@@ -199,6 +225,7 @@ function displayErrors(errors) {
 
 // Philippines Address API Integration for Personal Details
 async function loadRegions() {
+    console.log('Loading regions from Philippines Address API...');
     try {
         const response = await fetch('https://psgc.gitlab.io/api/regions/');
         const regions = await response.json();
@@ -231,7 +258,8 @@ async function loadRegions() {
             });
         }
     } catch (error) {
-        console.error('Error loading regions:', error);
+        console.error('Error loading regions from API:', error);
+        console.log('Falling back to common regions...');
         // Fallback: Add common regions manually
         const commonRegions = [
             'National Capital Region (NCR)',
@@ -284,12 +312,16 @@ async function loadRegions() {
 }
 
 async function loadProvinces(type) {
+    console.log(`Loading provinces for ${type}...`);
     const regionSelect = document.getElementById(`${type}_region`);
     const provinceSelect = document.getElementById(`${type}_province`);
     const citySelect = document.getElementById(`${type}_city`);
     const barangaySelect = document.getElementById(`${type}_barangay`);
 
-    if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect) return;
+    if (!regionSelect || !provinceSelect || !citySelect || !barangaySelect) {
+        console.log(`Missing select elements for ${type}`);
+        return;
+    }
 
     // Reset dependent dropdowns
     provinceSelect.innerHTML = '<option value="">Select Province</option>';
@@ -307,7 +339,8 @@ async function loadProvinces(type) {
             provinceSelect.add(option);
         });
     } catch (error) {
-        console.error('Error loading provinces:', error);
+        console.error(`Error loading provinces for ${type}:`, error);
+        console.log(`Falling back to common provinces for ${type}...`);
         // Fallback: Add common provinces for selected region
         const commonProvinces = getCommonProvinces(regionSelect.value);
         commonProvinces.forEach(province => {

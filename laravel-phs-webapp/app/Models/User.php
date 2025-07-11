@@ -208,4 +208,14 @@ class User extends Authenticatable
         }
         return asset('images/default-avatar.svg');
     }
+
+    /**
+     * Get the user's role (alias for usertype)
+     *
+     * @return string
+     */
+    public function getRoleAttribute()
+    {
+        return $this->usertype;
+    }
 }

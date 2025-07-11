@@ -216,7 +216,7 @@ class FamilyBackgroundController extends Controller
             $this->markSectionAsCompleted('family-background');
             session()->save();
             if ($request->ajax()) {
-                $nextRoute = auth()->user()->role === 'personnel'
+                $nextRoute = auth()->user()->usertype === 'personnel'
                     ? route('personnel.phs.educational-background.create')
                     : route('phs.educational-background.create');
                 return response()->json([

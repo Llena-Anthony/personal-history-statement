@@ -1,5 +1,5 @@
 @php
-    $isPersonnel = Auth::user() && Auth::user()->role === 'personnel';
+    $isPersonnel = Auth::user() && Auth::user()->usertype === 'personnel';
     $formAction = $isPersonnel ? route('personnel.phs.educational-background.store') : route('phs.educational-background.store');
     $nextSectionRoute = $isPersonnel ? route('personnel.phs.military-history.create') : route('phs.military-history.create');
     $dashboardRoute = route('personnel.dashboard');

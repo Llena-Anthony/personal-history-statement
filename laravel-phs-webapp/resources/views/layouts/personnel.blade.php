@@ -639,7 +639,7 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="user-username">{{ Auth::user()->username }}</div>
-                        <div class="user-role">{{ Auth::user()->role }}</div>
+                        <div class="user-role">{{ Auth::user()->usertype }}</div>
                     </div>
                 </div>
 

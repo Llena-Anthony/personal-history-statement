@@ -12,6 +12,7 @@ class PersonalDetailsController extends Controller
 
     public function create()
     {
+        \Log::info('PersonalDetails create method called');
         $prefill = DataRetrieval::retrievePersonalDetails(auth()->user()->username);
         $data = $this->getCommonViewData('personal-details');
         $data = array_merge($data, $prefill);

@@ -73,7 +73,7 @@ class PersonalCharacteristicsController extends Controller
                 return response()->json(['success' => true, 'message' => 'Personal characteristics saved successfully']);
             }
 
-            $nextRoute = auth()->user()->role === 'personnel'
+            $nextRoute = auth()->user()->usertype === 'personnel'
                 ? 'personnel.phs.marital-status.create'
                 : 'phs.marital-status.create';
 

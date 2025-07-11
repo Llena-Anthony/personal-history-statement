@@ -65,7 +65,7 @@ class MaritalStatusController extends Controller
             \App\Helper\DataUpdate::saveMaritalStatus($data, $username);
             $this->markSectionAsCompleted('marital-status');
             if ($request->ajax()) {
-                $nextRoute = auth()->user()->role === 'personnel'
+                $nextRoute = auth()->user()->usertype === 'personnel'
                     ? route('personnel.phs.family-background.create')
                     : route('phs.family-background.create');
                 return response()->json([

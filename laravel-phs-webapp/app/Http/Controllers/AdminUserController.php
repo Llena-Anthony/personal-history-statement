@@ -204,8 +204,6 @@ class AdminUserController extends Controller
                 'first_name' => $sessionUserData['first_name'],
                 'middle_name' => $sessionUserData['middle_name'],
                 'suffix' => null,
-                'nickname' => null,
-                'change_in_name' => null,
             ]);
 
             // Create AddressDetail record (empty address)

@@ -587,11 +587,11 @@
                             <i class="fas fa-bars text-lg"></i>
                         </button>
                         <div class="flex items-center space-x-3">
-                            <a href="{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
+                            <a href="{{ Auth::user() && Auth::user()->usertype === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
                                 <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
                             </a>
                             <div class="hidden sm:block">
-                                <a href="{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}" onclick="event.preventDefault(); if(window.location.pathname === '{{ Auth::user() && Auth::user()->role === 'personnel' ? url('/personnel/dashboard') : url('/dashboard') }}'){ window.location.reload(); } else { window.location.href='{{ Auth::user() && Auth::user()->role === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}'; }" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                <a href="{{ Auth::user() && Auth::user()->usertype === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}" onclick="event.preventDefault(); if(window.location.pathname === '{{ Auth::user() && Auth::user()->usertype === 'personnel' ? url('/personnel/dashboard') : url('/dashboard') }}'){ window.location.reload(); } else { window.location.href='{{ Auth::user() && Auth::user()->usertype === 'personnel' ? route('personnel.dashboard') : route('client.dashboard') }}'; }" class="hover:opacity-80 transition-opacity cursor-pointer">
                                     <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
                                     <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
                                 </a>
@@ -606,7 +606,7 @@
                         </div>
                         <div class="hidden lg:block text-white text-xs">
                             <span class="text-[#D4AF37]">
-                                @if(Auth::user() && Auth::user()->role === 'personnel')
+                                @if(Auth::user() && Auth::user()->usertype === 'personnel')
                                     Personnel
                                 @else
                                     Client
@@ -650,7 +650,7 @@
                         <div class="flex-1">
                             <h3 class="font-bold text-lg text-white">{{ Auth::user()->name }}</h3>
                             <p class="text-[#D4AF37] text-sm">
-                                @if(Auth::user() && Auth::user()->role === 'personnel')
+                                @if(Auth::user() && Auth::user()->usertype === 'personnel')
                                     Personnel
                                 @else
                                     Client
@@ -835,7 +835,7 @@
             'miscellaneous'
         ];
 
-        const isPersonnel = {{ (Auth::user() && Auth::user()->role === 'personnel') ? 'true' : 'false' }};
+        const isPersonnel = {{ (Auth::user() && Auth::user()->usertype === 'personnel') ? 'true' : 'false' }};
         const PHSSectionRoutes = isPersonnel ? {
             'personal-details': '{{ route("personnel.phs.personal-details.create") }}',
             'personal-characteristics': '{{ route("personnel.phs.personal-characteristics.create") }}',
