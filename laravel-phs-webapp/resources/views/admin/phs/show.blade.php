@@ -83,8 +83,8 @@
                         <i class="fas fa-id-card mr-2 text-[#D4AF37]"></i>
                         Personal Information
                     </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
                             <div class="flex justify-between items-center py-2 border-b border-[#D4AF37]/30 hover:bg-[#1B365D]/5 transition-colors">
                                 <span class="text-sm font-medium text-[#1B365D]">First Name:</span>
                                 <span class="text-sm text-gray-900 font-semibold">{{ $personalDetails['first_name'] ?? 'N/A' }}</span>
@@ -115,7 +115,7 @@
                                 <span class="text-sm font-medium text-gray-600">Place of Birth:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['birth_street'] ? $personalDetails['birth_street'] . ', ' . $personalDetails['birth_city'] . ', ' . $personalDetails['birth_province'] : 'N/A' }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Nationality:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['nationality'] ?? 'N/A' }}</span>
                             </div>
@@ -138,8 +138,8 @@
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">AFPSN:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['afpsn'] ?? 'N/A' }}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Branch of Service:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['branch_of_service'] ?? 'N/A' }}</span>
                             </div>
@@ -152,8 +152,8 @@
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Change in Name:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['name_change'] ?? 'N/A' }}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">TIN Number:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['tin'] ?? 'N/A' }}</span>
                             </div>
@@ -166,16 +166,16 @@
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Mobile Number:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['mobile'] ?? 'N/A' }}</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Email Address:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['email'] ?? 'N/A' }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Passport Number:</span>
                                 <span class="text-sm text-gray-900">{{ $personalDetails['passport_number'] ?? 'N/A' }}</span>
                             </div>
@@ -219,8 +219,8 @@
                                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                     <span class="text-sm font-medium text-gray-600">Barangay:</span>
                                     <span class="text-sm text-gray-900">{{ $personalDetails['home_barangay'] ?? 'N/A' }}</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                     <span class="text-sm font-medium text-gray-600">Street Address:</span>
                                     <span class="text-sm text-gray-900">{{ $personalDetails['home_street'] ?? 'N/A' }}</span>
                                 </div>
@@ -250,20 +250,20 @@
                                 </div>
                             </div>
                             <div class="space-y-4">
-                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                     <span class="text-sm font-medium text-gray-600">Barangay:</span>
                                     <span class="text-sm text-gray-900">{{ $personalDetails['business_barangay'] ?? 'N/A' }}</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                     <span class="text-sm font-medium text-gray-600">Street Address:</span>
                                     <span class="text-sm text-gray-900">{{ $personalDetails['business_street'] ?? 'N/A' }}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>
+    </div>
 
         <!-- Personal Characteristics Section -->
         <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
@@ -271,7 +271,7 @@
                 <h3 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-user-tag mr-3 text-[#D4AF37]"></i>
                     Personal Characteristics
-                </h3>
+        </h3>
             </div>
             <div class="p-6">
                 <!-- Physical Description -->
@@ -309,7 +309,7 @@
                                 <span class="text-sm text-gray-900">{{ $personalCharacteristics['complexion'] ?? 'N/A' }}</span>
                             </div>
                         </div>
-                        <div class="space-y-4">
+            <div class="space-y-4">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Eye Color:</span>
                                 <span class="text-sm text-gray-900">{{ $personalCharacteristics['eye_color'] ?? 'N/A' }}</span>
@@ -333,7 +333,7 @@
                         Physical Condition
                     </h4>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="space-y-4">
+                    <div class="space-y-4">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Health Status:</span>
                                 <span class="text-sm text-gray-900">{{ $personalCharacteristics['health_status'] ?? 'N/A' }}</span>
@@ -357,12 +357,12 @@
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Recent Illness:</span>
                                 <span class="text-sm text-gray-900">{{ $personalCharacteristics['recent_illness'] ?? 'N/A' }}</span>
-                            </div>
-                        </div>
+                    </div>
+                    </div>
+                    </div>
                     </div>
                 </div>
             </div>
-        </div>
 
         <!-- Marital Status Section -->
         <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
@@ -414,7 +414,7 @@
                                 <span class="text-sm text-gray-900">{{ $maritalStatus['spouse_suffix'] ?? 'N/A' }}</span>
                             </div>
                         </div>
-                        <div class="space-y-4">
+            <div class="space-y-4">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Birth Date:</span>
                                 <span class="text-sm text-gray-900">{{ $maritalStatus['spouse_birth_date'] ?? 'N/A' }}</span>
@@ -442,7 +442,7 @@
                         Marriage Information
                     </h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-4">
+                    <div class="space-y-4">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Marriage Date:</span>
                                 <span class="text-sm text-gray-900">
@@ -462,7 +462,7 @@
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Occupation:</span>
                                 <span class="text-sm text-gray-900">{{ $maritalStatus['spouse_occupation'] ?? 'N/A' }}</span>
-                            </div>
+                    </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Employer:</span>
                                 <span class="text-sm text-gray-900">{{ $maritalStatus['spouse_employer'] ?? 'N/A' }}</span>
@@ -475,7 +475,7 @@
                                 <span class="text-sm font-medium text-gray-600">Contact Number:</span>
                                 <span class="text-sm text-gray-900">{{ $maritalStatus['spouse_contact'] ?? 'N/A' }}</span>
                             </div>
-                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -537,7 +537,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
         <!-- Family Background Section -->
         <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
@@ -545,47 +544,149 @@
                 <h3 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-users mr-3 text-[#D4AF37]"></i>
                     Family Background
-        </h3>
+                </h3>
             </div>
             <div class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Father's Information</h4>
-                <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Name:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Date of Birth:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Occupation:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    @foreach([
+                        'father' => "Father's Information",
+                        'mother' => "Mother's Information",
+                        'guardian' => "Guardian's Information",
+                        'father_in_law' => "Father-in-law's Information",
+                        'mother_in_law' => "Mother-in-law's Information"
+                    ] as $role => $label)
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">{{ $label }}</h4>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Name:</span>
+                                    <span class="text-sm text-gray-900">
+                                        {{
+                                            trim(
+                                                ($familyBackground['family_members'][$role]->first_name ?? '') . ' ' .
+                                                ($familyBackground['family_members'][$role]->middle_name ?? '') . ' ' .
+                                                ($familyBackground['family_members'][$role]->last_name ?? '') . ' ' .
+                                                ($familyBackground['family_members'][$role]->suffix ?? '')
+                                            ) ?: 'N/A'
+                                        }}
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Birth Date:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->birth_date ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Birth Place:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->birth_place ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Complete Address:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->complete_address ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Occupation:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->occupation ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Employer:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->employer ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Place of Employment:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->place_of_employment ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Citizenship:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->citizenship ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Dual Citizenship:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->dual_citizenship ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Citizenship Type:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->citizenship_type ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Date Naturalized:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->date_naturalized ?? 'N/A' }}</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Place Naturalized:</span>
+                                    <span class="text-sm text-gray-900">{{ $familyBackground['family_members'][$role]->place_naturalized ?? 'N/A' }}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
+                </div>
+                <!-- Siblings Section -->
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold text-[#1B365D] border-b-2 border-[#D4AF37] pb-2 mb-4 flex items-center">
+                        <i class="fas fa-user-friends mr-2 text-[#D4AF37]"></i>
+                        Siblings
+                    </h4>
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Mother's Information</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Name:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+                        @if(isset($siblings) && count($siblings) > 0)
+                            @foreach($siblings as $index => $sibling)
+                                <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20">
+                                    <h5 class="font-semibold text-[#1B365D] mb-3 flex items-center">
+                                        <i class="fas fa-user mr-2 text-[#D4AF37]"></i>
+                                        Sibling {{ $index + 1 }}
+                                    </h5>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Name:</span>
+                                                <span class="text-sm text-gray-900">
+                                                    {{ trim(($sibling->first_name ?? '') . ' ' . ($sibling->middle_name ?? '') . ' ' . ($sibling->last_name ?? '') . ' ' . ($sibling->suffix ?? '')) ?: 'N/A' }}
+                                                </span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Birth Date:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->date_of_birth ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Citizenship:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->citizenship ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Dual Citizenship:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->dual_citizenship ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Complete Address:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->complete_address ?? 'N/A' }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Occupation:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->occupation ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Employer:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->employer ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Employer Address:</span>
+                                                <span class="text-sm text-gray-900">{{ $sibling->employer_address ?? 'N/A' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20">
+                                <div class="text-center text-gray-500 py-4">
+                                    <i class="fas fa-info-circle text-[#D4AF37] mb-2"></i>
+                                    <p>No siblings information available</p>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Date of Birth:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Occupation:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                    </div>
-                    </div>
-                    </div>
+                        @endif
                     </div>
                 </div>
             </div>
+        </div>
 
         <!-- Educational Background Section -->
         <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
@@ -596,49 +697,115 @@
                 </h3>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Elementary</h4>
-                <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">School:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Year:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @foreach([
+                        'elementary' => 'Elementary',
+                        'highschool' => 'High School',
+                        'college' => 'College',
+                        'postgrad' => 'Postgraduate'
+                    ] as $level => $label)
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">{{ $label }}</h4>
+                            @php $entries = $educationalBackground[$level] ?? []; @endphp
+                            @if(count($entries) > 0)
+                                @foreach($entries as $entry)
+                                    <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Name of School:</span>
+                                                <span class="text-sm text-gray-900">{{ $entry->school_name ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Location:</span>
+                                                <span class="text-sm text-gray-900">{{ $entry->school_addr ?? 'N/A' }}</span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Date of Attendance:</span>
+                                                <span class="text-sm text-gray-900">
+                                                    @if(isset($entry->period_from) || isset($entry->period_to))
+                                                        {{ $entry->period_from ?? 'N/A' }} - {{ $entry->period_to ?? 'N/A' }}
+                                                    @elseif(isset($entry->attend_date))
+                                                        {{ $entry->attend_date ?? 'N/A' }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <div class="flex justify-between items-center py-1">
+                                                <span class="text-sm font-medium text-gray-600">Year Graduated:</span>
+                                                <span class="text-sm text-gray-900">{{ $entry->year_graduated ?? ($entry->year_grad ?? 'N/A') }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Name of School:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Location:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Date of Attendance:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Year Graduated:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
+                    @endforeach
+                </div>
+                <!-- Other Schools/Training and Civil Service Eligibility -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="space-y-4">
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Other Schools/Training</h4>
+                        @php
+                            $otherTraining = collect($educationalBackground['elementary'] ?? [])
+                                ->merge($educationalBackground['highschool'] ?? [])
+                                ->merge($educationalBackground['college'] ?? [])
+                                ->merge($educationalBackground['postgrad'] ?? [])
+                                ->pluck('other_training')->filter()->unique();
+                        @endphp
+                        @if($otherTraining->count() > 0)
+                            @foreach($otherTraining as $training)
+                                <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                    <span class="text-sm text-gray-900">{{ $training }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <span class="text-sm text-gray-900">N/A</span>
+                            </div>
+                        @endif
                     </div>
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">High School</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">School:</span>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Civil Service Eligibility</h4>
+                        @php
+                            $civilService = collect($educationalBackground['elementary'] ?? [])
+                                ->merge($educationalBackground['highschool'] ?? [])
+                                ->merge($educationalBackground['college'] ?? [])
+                                ->merge($educationalBackground['postgrad'] ?? [])
+                                ->pluck('civil_service')->filter()->unique();
+                        @endphp
+                        @if($civilService->count() > 0)
+                            @foreach($civilService as $cs)
+                                <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                    <span class="text-sm text-gray-900">{{ $cs }}</span>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Year:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">College</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">School:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Course:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Year:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                    </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -656,32 +823,82 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Service Branch:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->branch_of_service ?? 'N/A' }}</span>
+                            <span class="text-sm font-medium text-gray-600">Date Enlisted in the AFP:</span>
+                            <span class="text-sm text-gray-900">{{ $militaryHistory->service_branch ?? 'N/A' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Rank:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->rank ?? 'N/A' }}</span>
+                            <span class="text-sm font-medium text-gray-600">Date of Commission:</span>
+                            <span class="text-sm text-gray-900">{{ $militaryHistory->rank ?? 'N/A' }}</span>
                         </div>
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">AFPSN:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->afpsn ?? 'N/A' }}</span>
+                            <span class="text-sm font-medium text-gray-600">Source of Commission:</span>
+                            <span class="text-sm text-gray-900">{{ $militaryHistory->afpsn ?? 'N/A' }}</span>
                         </div>
                     </div>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Years of Service:</span>
+                </div>
+                <!-- Assignments -->
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold text-[#1B365D] border-b-2 border-[#D4AF37] pb-2 mb-4 flex items-center">
+                        <i class="fas fa-list mr-2 text-[#D4AF37]"></i>
+                        Assignments
+                    </h4>
+                    @if($militaryAssignments && count($militaryAssignments))
+                        @foreach($militaryAssignments as $assignment)
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <div class="flex flex-wrap gap-4">
+                                    <div><span class="font-medium text-gray-600">Unit/Office:</span> <span class="text-gray-900">{{ $assignment->assign_unit ?? 'N/A' }}</span></div>
+                                    <div><span class="font-medium text-gray-600">Chief:</span> <span class="text-gray-900">{{ $assignment->assign_chief ?? 'N/A' }}</span></div>
+                                    <div><span class="font-medium text-gray-600">Start Date:</span> <span class="text-gray-900">{{ $assignment->start_date ?? 'N/A' }}</span></div>
+                                    <div><span class="font-medium text-gray-600">End Date:</span> <span class="text-gray-900">{{ $assignment->end_date ?? 'N/A' }}</span></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
                             <span class="text-sm text-gray-900">N/A</span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Present Job:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->present_job ?? 'N/A' }}</span>
+                    @endif
+                </div>
+                <!-- Military Schools -->
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold text-[#1B365D] border-b-2 border-[#D4AF37] pb-2 mb-4 flex items-center">
+                        <i class="fas fa-university mr-2 text-[#D4AF37]"></i>
+                        Military Schools
+                    </h4>
+                    @if($militarySchools && count($militarySchools))
+                        @foreach($militarySchools as $school)
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <div class="flex flex-wrap gap-4">
+                                    <div><span class="font-medium text-gray-600">School:</span> <span class="text-gray-900">{{ $school->school ?? 'N/A' }}</span></div>
+                                    <div><span class="font-medium text-gray-600">Date Attended:</span> <span class="text-gray-900">{{ $school->attend_date ?? 'N/A' }}</span></div>
+                                    <div><span class="font-medium text-gray-600">Nature of Training:</span> <span class="text-gray-900">{{ $school->train_nature ?? 'N/A' }}</span></div>
+                                    <div><span class="font-medium text-gray-600">Rating:</span> <span class="text-gray-900">{{ $school->rating ?? 'N/A' }}</span></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                            <span class="text-sm text-gray-900">N/A</span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Religion:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->religion ?? 'N/A' }}</span>
+                    @endif
+                </div>
+                <!-- Awards -->
+                <div class="mt-8">
+                    <h4 class="text-lg font-semibold text-[#1B365D] border-b-2 border-[#D4AF37] pb-2 mb-4 flex items-center">
+                        <i class="fas fa-trophy mr-2 text-[#D4AF37]"></i>
+                        Awards
+                    </h4>
+                    @if($militaryAwards && count($militaryAwards))
+                        @foreach($militaryAwards as $award)
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <span class="font-medium text-gray-600">Award:</span> <span class="text-gray-900">{{ $award->award_desc ?? 'N/A' }}</span>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                            <span class="text-sm text-gray-900">N/A</span>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -722,37 +939,48 @@
         </div>
 
         <!-- Places of Residence Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-home mr-3"></i>
+                    <i class="fas fa-home mr-3 text-[#D4AF37]"></i>
                     Places of Residence
                 </h3>
             </div>
             <div class="p-6">
-                <div class="space-y-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
+                @if($placesOfResidence && count($placesOfResidence))
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($placesOfResidence as $i => $residence)
+                            @php $addr = $residence->addressDetail; @endphp
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <h4 class="font-semibold text-gray-900 mb-3">Residence #{{ $i+1 }}</h4>
+                                <div class="grid grid-cols-1 gap-2">
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Address:</span>
+                                        <span class="text-sm text-gray-900">{{ $addr ? ($addr->street ?? 'N/A') : 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Date:</span>
+                                        <span class="text-sm text-gray-900">{{ $addr ? ($addr->city ?? 'N/A') : 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
                         <h4 class="font-semibold text-gray-900 mb-3">Residence #1</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-2">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Address:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">City:</span>
+                                <span class="text-sm font-medium text-gray-600">Date:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">From:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">To:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
                     </div>
                     </div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
 
