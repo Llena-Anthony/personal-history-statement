@@ -103,7 +103,7 @@
                                 <div class="form-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                                     <div class="relative">
-                                        <input type="text" value="{{ $user->name }}" disabled
+                                        <input type="text" value="{{ $user->first_name }}" disabled
                                             class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                             <i class="fas fa-lock text-gray-400"></i>
@@ -201,10 +201,10 @@
                         <div class="text-center mb-6">
                             <div class="w-20 h-20 rounded-full mx-auto mb-3 shadow-lg overflow-hidden">
                                 <img src="{{ $user->userDetail && $user->userDetail->profile_path ? asset('storage/' . $user->userDetail->profile_path) : asset('images/default-avatar.svg') }}" 
-                                     alt="{{ $user->name }}" 
+                                     alt="{{ $user->first_name }}" 
                                      class="w-full h-full object-cover">
                             </div>
-                            <h3 class="font-semibold text-gray-900">{{ $user->name }}</h3>
+                            <h3 class="font-semibold text-gray-900">{{ $user->first_name }}</h3>
                             <p class="text-sm text-gray-500">{{'@'. $user->username }}</p>
                         </div>
 

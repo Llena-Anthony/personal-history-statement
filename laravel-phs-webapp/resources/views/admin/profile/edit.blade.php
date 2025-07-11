@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="text-white">
-                    <h2 class="text-2xl font-bold">{{ $user->name }}</h2>
+                    <h2 class="text-2xl font-bold">{{ $user->first_name }}</h2>
                     <p class="text-gray-200">{{ $user->email }}</p>
                     <p class="text-sm text-gray-300">{{ $user->organic_role ?? 'Administrator' }}</p>
                 </div>
@@ -109,7 +109,7 @@
                                 <input type="text" 
                                        name="name" 
                                        id="name" 
-                                       value="{{ old('name', $user->name) }}"
+                                       value="{{ old('name', $user->first_name) }}"
                                        disabled
                                        class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
                                 <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">

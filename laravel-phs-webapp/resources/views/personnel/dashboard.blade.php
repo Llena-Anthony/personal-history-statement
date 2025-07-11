@@ -14,7 +14,7 @@
         <div class="relative p-8 text-white z-10 welcome-banner-content">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, {{ auth()->user()->name }}!</h1>
+                    <h1 class="text-3xl font-bold mb-2 welcome-banner-title">Welcome back, {{ auth()->user()->first_name }}!</h1>
                     <p class="text-white/80 text-lg welcome-banner-subtitle">Manage your Personal History Statement and track your progress.</p>
                     <div class="flex items-center mt-4 space-x-6 text-sm welcome-banner-stats">
                         <div class="flex items-center">

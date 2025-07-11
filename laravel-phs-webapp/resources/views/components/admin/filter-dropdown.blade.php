@@ -201,10 +201,10 @@
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-150">
                         <div class="flex items-center">
                             <div class="w-6 h-6 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex items-center justify-center text-white text-xs font-semibold mr-3">
-                                {{ substr($user->name, 0, 1) }}
+                                {{ substr($user->first_name, 0, 1) }}
                             </div>
                             <div>
-                                <div class="font-medium">{{ $user->name }}</div>
+                                <div class="font-medium">{{ $user->first_name }}</div>
                                 <div class="text-xs text-gray-500">{{ $user->username }}</div>
                             </div>
                         </div>

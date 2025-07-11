@@ -636,7 +636,7 @@
                     </a>
                     <div class="user-info">
                         <a href="{{ route('personnel.profile.edit') }}" class="user-name">
-                            {{ Auth::user()->name }}
+                            {{ Auth::user()->first_name }}
                         </a>
                         <div class="user-username">{{ Auth::user()->username }}</div>
                         <div class="user-role">{{ Auth::user()->usertype }}</div>

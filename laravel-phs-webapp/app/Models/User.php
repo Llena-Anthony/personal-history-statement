@@ -218,4 +218,44 @@ class User extends Authenticatable
     {
         return $this->usertype;
     }
+
+    /**
+     * Get the user's full name from the related NameDetail
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        if ($this->userDetail && $this->userDetail->nameDetail) {
+            $nameDetail = $this->userDetail->nameDetail;
+            $fullName = trim($nameDetail->first_name . ' ' . $nameDetail->last_name);
+            
+            if (!empty($nameDetail->middle_name)) {
+                $fullName .= ' ' . $nameDetail->middle_name;
+            }
+            
+            if (!empty($nameDetail->name_extension)) {
+                $fullName .= ' ' . $nameDetail->name_extension;
+            }
+            
+            return $fullName;
+        }
+        
+        // Fallback to username if no name details are available
+        return $this->username;
+    }
+
+    /**
+     * Get the user's first name from the related NameDetail
+     *
+     * @return string
+     */
+    public function getFirstNameAttribute()
+    {
+        if ($this->userDetail && $this->userDetail->nameDetail) {
+            return $this->userDetail->nameDetail->first_name ?? $this->username;
+        }
+        
+        return $this->username;
+    }
 }

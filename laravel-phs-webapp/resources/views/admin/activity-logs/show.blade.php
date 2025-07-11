@@ -79,10 +79,10 @@
                     <div class="bg-gray-50 rounded-xl p-6">
                         <div class="flex items-center mb-4">
                             <div class="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-lg font-semibold">
-                                {{ substr($activityLog->user->name ?? 'N/A', 0, 1) }}
+                                {{ substr($activityLog->user->first_name ?? 'N/A', 0, 1) }}
                             </div>
                             <div class="ml-4">
-                                <h3 class="font-semibold text-gray-900">{{ $activityLog->user->name ?? 'N/A' }}</h3>
+                                <h3 class="font-semibold text-gray-900">{{ $activityLog->user->first_name ?? 'N/A' }}</h3>
                                 <p class="text-sm text-gray-500">{{ $activityLog->user->username ?? 'N/A' }}</p>
                             </div>
                         </div>

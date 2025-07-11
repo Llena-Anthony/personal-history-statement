@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'PHS Submission - ' . $submission->user->name)
+@section('title', 'PHS Submission - ' . $submission->user->first_name)
 
 @push('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/print-prev.css'])
@@ -266,7 +266,7 @@
             <div class="info-grid">
                 <div class="info-item">
                     <span class="info-label">Applicant Name</span>
-                    <span class="info-value">{{ $submission->user->name ?? 'N/A' }}</span>
+                    <span class="info-value">{{ $submission->user->first_name ?? 'N/A' }}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Username</span>
@@ -344,7 +344,7 @@
                 {{-- Personal-A --}}
                 <div class="mt-[-170pt] flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>
                     Name:<div id="app-name" class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2">
-                        {{ $submission->user->name ?? 'N/A' }}
+                        {{ $submission->user->first_name ?? 'N/A' }}
                     </div>
                 </div>
                 <div class="ml-[1.8in] text-center">

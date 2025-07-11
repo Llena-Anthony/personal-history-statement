@@ -4,10 +4,10 @@
         <div class="flex-shrink-0">
             <img class="h-16 w-16 rounded-full object-cover border-4 border-white shadow-lg" 
                  src="{{ $user->profile_photo_url }}" 
-                 alt="{{ $user->name }}">
+                 alt="{{ $user->first_name }}">
         </div>
         <div class="flex-1">
-            <h3 class="text-xl font-bold text-gray-900">{{ $user->name }}</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ $user->first_name }}</h3>
             <p class="text-gray-500">@{{ $user->username }}</p>
             <div class="flex items-center gap-2 mt-1">
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -37,7 +37,7 @@
             <div class="space-y-3">
                 <div>
                     <label class="text-xs font-medium text-gray-500">Full Name</label>
-                    <p class="text-sm text-gray-900">{{ $user->name }}</p>
+                    <p class="text-sm text-gray-900">{{ $user->first_name }}</p>
                 </div>
                 <div>
                     <label class="text-xs font-medium text-gray-500">Username</label>
