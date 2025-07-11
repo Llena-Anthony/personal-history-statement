@@ -327,8 +327,11 @@ class DataRetrieval {
                 ]);
             }
         }
+        // Always return siblings as a collection
+        $siblings = self::retrieveSiblings($username);
         return [
             'family_members' => $family_members,
+            'siblings' => $siblings,
         ];
     }
 

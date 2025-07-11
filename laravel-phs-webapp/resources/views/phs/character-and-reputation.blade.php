@@ -1,6 +1,6 @@
 @php
     // Standardized section configuration
-    $sectionName = 'character-reputation';
+    $sectionName = 'character-and-reputation';
     $sectionTitle = 'XIII: Character and Reputation';
     $sectionDescription = 'Please provide your character references and neighbor information.';
     $sectionIcon = 'fas fa-user-shield';
@@ -20,16 +20,19 @@
             Character References
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ($characterReferences as $i => $reference)
+            @php
+                $oldCharacterReferences = old('character_references', $character_references->toArray() ?? []);
+            @endphp
+            @for ($i = 0; $i < 5; $i++)
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Name</label>
-                    <input type="text" name="character_references[{{ $i }}][name]" value="{{ old('character_references.'.$i.'.name', $reference->ref_name ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter name">
+                    <input type="text" name="character_references[{{ $i }}][name]" value="{{ $oldCharacterReferences[$i]['name'] ?? '' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Address</label>
-                    <input type="text" name="character_references[{{ $i }}][address]" value="{{ old('character_references.'.$i.'.address', $reference->ref_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address">
+                    <input type="text" name="character_references[{{ $i }}][address]" value="{{ $oldCharacterReferences[$i]['address'] ?? '' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address">
                 </div>
-            @endforeach
+            @endfor
         </div>
     </div>
     <!-- Neighbors -->
@@ -39,16 +42,19 @@
             Neighbors
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach ($neighbors as $i => $neighbor)
+            @php
+                $oldNeighbors = old('neighbors', $neighbors->toArray() ?? []);
+            @endphp
+            @for ($i = 0; $i < 3; $i++)
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Name</label>
-                    <input type="text" name="neighbors[{{ $i }}][name]" value="{{ old('neighbors.'.$i.'.name', $neighbor->ref_name ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter name">
+                    <input type="text" name="neighbors[{{ $i }}][name]" value="{{ $oldNeighbors[$i]['name'] ?? '' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter name">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Address</label>
-                    <input type="text" name="neighbors[{{ $i }}][address]" value="{{ old('neighbors.'.$i.'.address', $neighbor->ref_address ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address">
+                    <input type="text" name="neighbors[{{ $i }}][address]" value="{{ $oldNeighbors[$i]['address'] ?? '' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address">
                 </div>
-            @endforeach
+            @endfor
         </div>
     </div>
 @endsection 

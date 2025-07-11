@@ -13,6 +13,9 @@ class ArrestRecordController extends Controller
     public function create()
     {
         $prefill = DataRetrieval::retrieveArrestRecord(auth()->user()->username);
+        if (!is_array($prefill)) {
+            $prefill = $prefill ? $prefill->toArray() : [];
+        }
         $data = $this->getCommonViewData('arrest-record');
         $data = array_merge($data, $prefill);
 

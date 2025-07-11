@@ -74,4 +74,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updateSiblingRemoveButtons();
+
+    // --- Bank Autofill Logic ---
+    window.bankList = [
+        // Example static data; replace with AJAX call for dynamic data
+        { name: 'Bank of Example', address: '123 Example St, City' },
+        { name: 'Sample Savings', address: '456 Sample Ave, Town' },
+        { name: 'Demo Bank', address: '789 Demo Blvd, Metro' },
+    ];
+
+    function handleBankNameInput(e) {
+        const input = e.target;
+        const value = input.value.trim().toLowerCase();
+        const parent = input.closest('.credit-reference-entry');
+        if (!parent) return;
+        const addressInput = parent.querySelector('input.credit-reference-bank-address');
+        if (!addressInput) return;
+        const found = window.bankList.find(b => b.name.toLowerCase() === value);
+        if (found) {
+            addressInput.value = found.address;
+        }
+    }
+
+    // Attach event listeners on DOMContentLoaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachBankAutofillListeners);
+    } else {
+        attachBankAutofillListeners();
+    }
+    function attachBankAutofillListeners() {
+        document.querySelectorAll('.credit-reference-entry input.credit-reference-bank-name').forEach(input => {
+            input.removeEventListener('blur', handleBankNameInput);
+            input.addEventListener('blur', handleBankNameInput);
+        });
+    }
 });
