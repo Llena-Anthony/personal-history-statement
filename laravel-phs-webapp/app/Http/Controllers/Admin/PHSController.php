@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Helper\DataRetrieval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +39,13 @@ class PHSController extends Controller
     public function show($username)
     {
         $user = User::with(['userDetail.nameDetail'])->where('username', $username)->firstOrFail();
-        return view('admin.phs.show', compact('user'));
+        
+        // Use the same data retrieval method as the client PHS
+        $personalDetails = DataRetrieval::retrievePersonalDetails($username);
+        $personalCharacteristics = DataRetrieval::retrievePersonalCharacteristics($username);
+        $maritalStatus = DataRetrieval::retrieveMaritalStatus($username);
+        
+        return view('admin.phs.show', compact('user', 'personalDetails', 'personalCharacteristics', 'maritalStatus'));
     }
 
     public function edit($username)
