@@ -648,7 +648,7 @@
                             </div>
                         </div>
                         <div class="flex-1">
-                            <h3 class="font-bold text-lg text-white">{{ Auth::user()->name }}</h3>
+                            <h3 class="font-bold text-lg text-white">{{ Auth::user()->first_name }}</h3>
                             <p class="text-[#D4AF37] text-sm">
                                 @if(Auth::user() && Auth::user()->usertype === 'personnel')
                                     Personnel

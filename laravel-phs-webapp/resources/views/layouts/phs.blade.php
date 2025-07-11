@@ -45,7 +45,7 @@
                                         class="h-8 w-8 rounded-full border-2 border-blue-400/50 hover:border-blue-400 transition-colors">
                                     <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-slate-900"></div>
                                 </div>
-                                <span class="text-sm font-medium text-slate-200">{{ auth()->user()->name }}</span>
+                                <span class="text-sm font-medium text-slate-200">{{ auth()->user()->first_name }}</span>
                                 <i class="fas fa-chevron-down text-slate-400 text-xs"></i>
                             </button>
 
@@ -81,7 +81,7 @@
                     <div class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-[#1B365D]"></div>
                 </div>
                 <div class="text-center">
-                    <h3 class="text-base font-semibold text-white">{{ auth()->user()->name }}</h3>
+                    <h3 class="text-base font-semibold text-white">{{ auth()->user()->first_name }}</h3>
                     <p class="text-xs text-[#D4AF37] font-medium tracking-wide">Civilian</p>
                 </div>
             </div>

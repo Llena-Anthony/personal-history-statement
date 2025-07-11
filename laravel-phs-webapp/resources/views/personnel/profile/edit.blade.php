@@ -188,7 +188,7 @@
                     <input type="text" 
                            name="name" 
                            id="name" 
-                           value="{{ old('name', Auth::user()->name) }}" 
+                           value="{{ old('name', Auth::user()->first_name) }}" 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed" 
                            readonly>
                     <p class="text-xs text-gray-500 mt-1">Name cannot be changed here. Edit your full name in the PHS Form</p>

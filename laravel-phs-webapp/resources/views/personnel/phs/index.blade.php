@@ -155,10 +155,10 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-[#1B365D] to-[#2B4B7D] rounded-full flex items-center justify-center text-white text-base font-bold border border-[#1B365D] shadow-sm">
-                                    {{ strtoupper(substr($submission->user->name, 0, 1)) }}
+                                    {{ strtoupper(substr($submission->user->first_name, 0, 1)) }}
                                 </div>
                                 <div class="ml-3">
-                                    <div class="text-sm font-medium text-gray-900">{{ $submission->user->name }}</div>
+                                    <div class="text-sm font-medium text-gray-900">{{ $submission->user->first_name }}</div>
                                     <div class="text-sm text-gray-500">{{ $submission->user->username }}</div>
                                 </div>
                             </div>
