@@ -6,7 +6,7 @@
     // $dashboardRoute = $isPersonnel ? route('personnel.dashboard') : route('client.dashboard');
     $formAction = route('phs.' . $sectionName . '.store');
     $nextSectionRoute = route ('phs.' . $nextSection . '.create');
-    \Log::info("Going to ", $nextSection)
+    \Log::info("Going to $nextSectionRoute");
     $dashboardRoute = route('client.dashboard');
 
     // Debug route generation
@@ -46,7 +46,8 @@
     $currentIndex = array_search($sectionName, $sectionOrder);
     $previousSection = $currentIndex > 0 ? $sectionOrder[$currentIndex - 1] : null;
     // $previousSectionRoute = $previousSection ? ($isPersonnel ? route('personnel.phs.' . $previousSection . '.create') : route('phs.' . $previousSection . '.create')) : $dashboardRoute;
-    $previousSectionRoute = $dashboardRoute;
+    $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : $dashboardRoute;
+
 @endphp
 
 @extends($layout)
