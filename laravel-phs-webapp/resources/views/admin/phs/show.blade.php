@@ -263,8 +263,8 @@
                 </div>
             </div>
         </div>
-    </div>
-
+        </div>
+        
         <!-- Personal Characteristics Section -->
         <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
             <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
@@ -485,54 +485,43 @@
                         <i class="fas fa-baby mr-2 text-[#D4AF37]"></i>
                         Children Information
                     </h4>
-                    <div class="space-y-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Birth Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Citizenship/Address</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name of Father/Mother</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
                         @if(isset($maritalStatus['children']) && count($maritalStatus['children']) > 0)
-                            @foreach($maritalStatus['children'] as $index => $child)
-                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20">
-                                <h5 class="font-semibold text-[#1B365D] mb-3 flex items-center">
-                                    <i class="fas fa-child mr-2 text-[#D4AF37]"></i>
-                                    Child {{ $index + 1 }}
-                                </h5>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="space-y-2">
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Name:</span>
-                                            <span class="text-sm text-gray-900">{{ $child->name ?? 'N/A' }}</span>
+                                    @foreach($maritalStatus['children'] as $child)
+                                        <tr>
+                                            <td class="px-6 py-4 text-sm text-gray-900">{{ $child->name ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $child->birth_date ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                <div class="space-y-1">
+                                                    <div><span class="font-medium text-[#1B365D]">Citizenship:</span> {{ $child->citizenship ?? 'N/A' }}</div>
+                                                    <div><span class="font-medium text-[#1B365D]">Address:</span> {{ $child->address ?? 'N/A' }}</div>
                                         </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Birth Date:</span>
-                                            <span class="text-sm text-gray-900">{{ $child->birth_date ?? 'N/A' }}</span>
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                <div class="space-y-1">
+                                                    <div><span class="font-medium text-[#1B365D]">Father:</span> {{ $child->father_name ?? 'N/A' }}</div>
+                                                    <div><span class="font-medium text-[#1B365D]">Mother:</span> {{ $child->mother_name ?? 'N/A' }}</div>
                                         </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Citizenship:</span>
-                                            <span class="text-sm text-gray-900">{{ $child->citizenship ?? 'N/A' }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Address:</span>
-                                            <span class="text-sm text-gray-900">{{ $child->address ?? 'N/A' }}</span>
-                                        </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Father's Name:</span>
-                                            <span class="text-sm text-gray-900">{{ $child->father_name ?? 'N/A' }}</span>
-                                        </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Mother's Name:</span>
-                                            <span class="text-sm text-gray-900">{{ $child->mother_name ?? 'N/A' }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            </td>
+                                        </tr>
                             @endforeach
                         @else
-                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20">
-                                <div class="text-center text-gray-500 py-4">
-                                    <i class="fas fa-info-circle text-[#D4AF37] mb-2"></i>
-                                    <p>No children information available</p>
-                                </div>
-                            </div>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No children information available</td>
+                                    </tr>
                         @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -677,9 +666,47 @@
                             @endforeach
                         @else
                             <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20">
-                                <div class="text-center text-gray-500 py-4">
-                                    <i class="fas fa-info-circle text-[#D4AF37] mb-2"></i>
-                                    <p>No siblings information available</p>
+                                <h5 class="font-semibold text-[#1B365D] mb-3 flex items-center">
+                                    <i class="fas fa-user mr-2 text-[#D4AF37]"></i>
+                                    Sibling 1
+                                </h5>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Name:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Birth Date:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Citizenship:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Dual Citizenship:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Complete Address:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Occupation:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Employer:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-sm font-medium text-gray-600">Employer Address:</span>
+                                            <span class="text-sm text-gray-900">N/A</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -697,31 +724,28 @@
                 </h3>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @foreach([
-                        'elementary' => 'Elementary',
-                        'highschool' => 'High School',
-                        'college' => 'College',
-                        'postgrad' => 'Postgraduate'
-                    ] as $level => $label)
-                        <div class="space-y-4">
-                            <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">{{ $label }}</h4>
-                            @php $entries = $educationalBackground[$level] ?? []; @endphp
+                <div class="space-y-8">
+                    <!-- Elementary Education -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Elementary Education</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name of School</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date of Attendance</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Year Graduated</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @php $entries = $educationalBackground['elementary'] ?? []; @endphp
                             @if(count($entries) > 0)
                                 @foreach($entries as $entry)
-                                    <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
-                                        <div class="space-y-2">
-                                            <div class="flex justify-between items-center py-1">
-                                                <span class="text-sm font-medium text-gray-600">Name of School:</span>
-                                                <span class="text-sm text-gray-900">{{ $entry->school_name ?? 'N/A' }}</span>
-                                            </div>
-                                            <div class="flex justify-between items-center py-1">
-                                                <span class="text-sm font-medium text-gray-600">Location:</span>
-                                                <span class="text-sm text-gray-900">{{ $entry->school_addr ?? 'N/A' }}</span>
-                                            </div>
-                                            <div class="flex justify-between items-center py-1">
-                                                <span class="text-sm font-medium text-gray-600">Date of Attendance:</span>
-                                                <span class="text-sm text-gray-900">
+                                            <tr>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_addr ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                     @if(isset($entry->period_from) || isset($entry->period_to))
                                                         {{ $entry->period_from ?? 'N/A' }} - {{ $entry->period_to ?? 'N/A' }}
                                                     @elseif(isset($entry->attend_date))
@@ -729,42 +753,148 @@
                                                     @else
                                                         N/A
                                                     @endif
-                                                </span>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $entry->year_graduated ?? ($entry->year_grad ?? 'N/A') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No elementary education found</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
                                             </div>
-                                            <div class="flex justify-between items-center py-1">
-                                                <span class="text-sm font-medium text-gray-600">Year Graduated:</span>
-                                                <span class="text-sm text-gray-900">{{ $entry->year_graduated ?? ($entry->year_grad ?? 'N/A') }}</span>
                                             </div>
-                                        </div>
-                                    </div>
+
+                    <!-- High School Education -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">High School Education</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name of School</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date of Attendance</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Year Graduated</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @php $entries = $educationalBackground['highschool'] ?? []; @endphp
+                                    @if(count($entries) > 0)
+                                        @foreach($entries as $entry)
+                                            <tr>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_addr ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    @if(isset($entry->period_from) || isset($entry->period_to))
+                                                        {{ $entry->period_from ?? 'N/A' }} - {{ $entry->period_to ?? 'N/A' }}
+                                                    @elseif(isset($entry->attend_date))
+                                                        {{ $entry->attend_date ?? 'N/A' }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $entry->year_graduated ?? ($entry->year_grad ?? 'N/A') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No high school education found</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                                            </div>
+                                            </div>
+
+                    <!-- College Education -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">College Education</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name of School</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date of Attendance</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Year Graduated</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @php $entries = $educationalBackground['college'] ?? []; @endphp
+                                    @if(count($entries) > 0)
+                                        @foreach($entries as $entry)
+                                            <tr>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_addr ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    @if(isset($entry->period_from) || isset($entry->period_to))
+                                                        {{ $entry->period_from ?? 'N/A' }} - {{ $entry->period_to ?? 'N/A' }}
+                                                    @elseif(isset($entry->attend_date))
+                                                        {{ $entry->attend_date ?? 'N/A' }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $entry->year_graduated ?? ($entry->year_grad ?? 'N/A') }}</td>
+                                            </tr>
                                 @endforeach
                             @else
-                                <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
-                                    <div class="space-y-2">
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Name of School:</span>
-                                            <span class="text-sm text-gray-900">N/A</span>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No college education found</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
                                         </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Location:</span>
-                                            <span class="text-sm text-gray-900">N/A</span>
                                         </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Date of Attendance:</span>
-                                            <span class="text-sm text-gray-900">N/A</span>
-                                        </div>
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-sm font-medium text-gray-600">Year Graduated:</span>
-                                            <span class="text-sm text-gray-900">N/A</span>
-                                        </div>
-                                    </div>
-                                </div>
+
+                    <!-- Postgraduate Education -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Postgraduate Education</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name of School</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date of Attendance</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Year Graduated</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @php $entries = $educationalBackground['postgrad'] ?? []; @endphp
+                                    @if(count($entries) > 0)
+                                        @foreach($entries as $entry)
+                                            <tr>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-900">{{ $entry->school_addr ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    @if(isset($entry->period_from) || isset($entry->period_to))
+                                                        {{ $entry->period_from ?? 'N/A' }} - {{ $entry->period_to ?? 'N/A' }}
+                                                    @elseif(isset($entry->attend_date))
+                                                        {{ $entry->attend_date ?? 'N/A' }}
+                                                    @else
+                                                        N/A
                             @endif
-                        </div>
+                                                </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $entry->year_graduated ?? ($entry->year_grad ?? 'N/A') }}</td>
+                                            </tr>
                     @endforeach
+                                    @else
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No postgraduate education found</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
                 </div>
+                    </div>
+
                 <!-- Other Schools/Training and Civil Service Eligibility -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Other Schools/Training</h4>
                         @php
@@ -806,6 +936,7 @@
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                         @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -904,36 +1035,125 @@
         </div>
 
         <!-- Employment History Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-briefcase mr-3"></i>
+                    <i class="fas fa-briefcase mr-3 text-[#D4AF37]"></i>
                     Employment History
                 </h3>
             </div>
             <div class="p-6">
-                <div class="space-y-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
+                @if($employmentHistory && count($employmentHistory))
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($employmentHistory as $i => $employment)
+                            @php $addr = $employment->addressDetail; @endphp
+                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
+                                <h4 class="font-semibold text-gray-900 mb-3">Employment Record #{{ $i+1 }}</h4>
+                                <div class="grid grid-cols-1 gap-2">
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Inclusive Dates:</span>
+                                        <span class="text-sm text-gray-900">
+                                            {{ ($employment->start_date ?? 'N/A') }} - {{ ($employment->end_date ?? 'N/A') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Type of Employment:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment->employ_type ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Name:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment->employer ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Address:</span>
+                                        <span class="text-sm text-gray-900">{{ $addr ? ($addr->street ?? 'N/A') : 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Reason for Leaving:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment->reason_for_leaving ?? 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
                         <h4 class="font-semibold text-gray-900 mb-3">Employment Record #1</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 gap-2">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Position:</span>
+                                <span class="text-sm font-medium text-gray-600">Inclusive Dates:</span>
+                                <span class="text-sm text-gray-900">N/A - N/A</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Type of Employment:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Company:</span>
+                                <span class="text-sm font-medium text-gray-600">Name:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">From:</span>
+                                <span class="text-sm font-medium text-gray-600">Address:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">To:</span>
+                                <span class="text-sm font-medium text-gray-600">Reason for Leaving:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
                         </div>
                     </div>
+                @endif
+
+                <!-- Dismissal Information Card -->
+                <div class="mt-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h4 class="text-lg font-semibold text-[#1B365D] mb-4 flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-3 text-[#D4AF37]"></i>
+                        Dismissal Information
+                    </h4>
+                    @php
+                        $hasDismissal = false;
+                        $dismissalDetails = [];
+                        if($employmentHistory && count($employmentHistory)) {
+                            foreach($employmentHistory as $employment) {
+                                if(!empty($employment->dismissal_desc)) {
+                                    $hasDismissal = true;
+                                    $dismissalDetails[] = $employment->dismissal_desc;
+                                }
+                            }
+                        }
+                    @endphp
+                    
+                    @if($hasDismissal)
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-r from-red-50 to-orange-50 p-4 rounded-lg border border-red-200">
+                                <h5 class="font-semibold text-red-900 mb-3 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-2"></i>
+                                    Dismissal Records Found
+                                </h5>
+                                @foreach($dismissalDetails as $i => $dismissal)
+                                    <div class="mb-3 p-3 bg-white rounded border border-red-100">
+                                        <div class="flex justify-between items-start">
+                                            <span class="text-sm font-medium text-gray-700">Dismissal Record #{{ $i+1 }}:</span>
+                                            <span class="text-sm text-red-700 font-medium">Dismissed</span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span class="text-sm text-gray-900">{{ $dismissal }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-lg border border-green-200">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-3 text-xl"></i>
+                                <div>
+                                    <h5 class="font-semibold text-green-900">No Dismissal Records</h5>
+                                    <p class="text-sm text-green-700 mt-1">No records of dismissal or forced resignation found.</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 </div>
             </div>
         </div>
@@ -947,200 +1167,495 @@
                 </h3>
             </div>
             <div class="p-6">
-                @if($placesOfResidence && count($placesOfResidence))
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        @foreach($placesOfResidence as $i => $residence)
-                            @php $addr = $residence->addressDetail; @endphp
-                            <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
-                                <h4 class="font-semibold text-gray-900 mb-3">Residence #{{ $i+1 }}</h4>
-                                <div class="grid grid-cols-1 gap-2">
-                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                        <span class="text-sm font-medium text-gray-600">Address:</span>
-                                        <span class="text-sm text-gray-900">{{ $addr ? ($addr->street ?? 'N/A') : 'N/A' }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                        <span class="text-sm font-medium text-gray-600">Date:</span>
-                                        <span class="text-sm text-gray-900">{{ $addr ? ($addr->city ?? 'N/A') : 'N/A' }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="bg-gradient-to-r from-[#1B365D]/5 to-[#2B4B7D]/5 p-4 rounded-lg border border-[#D4AF37]/20 mb-2">
-                        <h4 class="font-semibold text-gray-900 mb-3">Residence #1</h4>
-                        <div class="grid grid-cols-1 gap-2">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Address:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Date:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                    </div>
-                    </div>
-                @endif
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date (From-To)</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @if($placesOfResidence && count($placesOfResidence))
+                                @foreach($placesOfResidence as $residence)
+                                    @php $addr = $residence->addressDetail; @endphp
+                                    <tr>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            @if($residence->period_from || $residence->period_to)
+                                                {{ $residence->period_from ?? 'N/A' }} - {{ $residence->period_to ?? 'N/A' }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-900">
+                                            @if($addr)
+                                                {{ $addr->street ?? '' }}{{ $addr->street ? ', ' : '' }}{{ $addr->city ?? '' }}{{ $addr->city ? ', ' : '' }}{{ $addr->province ?? '' }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="2">No residence records found.</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Foreign Countries Visited Section -->
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
+                <h3 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-globe-asia mr-3 text-[#D4AF37]"></i>
+                    Foreign Countries Visited
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date of Visit</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Country Visited</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Purpose of Visit</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address Abroad</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @if($foreignCountries && count($foreignCountries))
+                                @foreach($foreignCountries as $visit)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $visit->visit_date ? \Carbon\Carbon::parse($visit->visit_date)->format('M d, Y') : 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $visit->addressDetail->country ?? 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $visit->visit_purpose ?? 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $visit->addressDetail->street ?? 'N/A' }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No records found</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- Character and Reputation Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-teal-600 to-teal-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-star mr-3"></i>
+                    <i class="fas fa-user-shield mr-3 text-[#D4AF37]"></i>
                     Character and Reputation
             </h3>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Character References</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Name:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+                <!-- Character References -->
+                <div class="mb-8">
+                    <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Character References</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @if($characterReferences && count($characterReferences))
+                                    @foreach($characterReferences as $reference)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $reference->ref_name ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">{{ $reference->ref_address ?? 'N/A' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="2">No character references found</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Relationship:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Contact:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+
+                <!-- Neighbors -->
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Neighbors</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @if($neighbors && count($neighbors))
+                                    @foreach($neighbors as $neighbor)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $neighbor->ref_name ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">{{ $neighbor->ref_address ?? 'N/A' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="2">No neighbors found</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
                             </div>
                         </div>
                     </div>
-                    <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2">Reputation</h4>
-                        <div class="space-y-3">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Community Standing:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Professional Reputation:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+
+        <!-- Organization Section -->
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
+                <h3 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-users mr-3 text-[#D4AF37]"></i>
+                    Organization
+                </h3>
                             </div>
-                        </div>
+            <div class="p-6">
+                <div class="space-y-6">
+                    <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Organization Memberships</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Organization Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Address</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date of Membership</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Position Held</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @if($organizations && count($organizations))
+                                    @foreach($organizations as $membership)
+                                        @php
+                                            $organization = $membership->organizationDetail;
+                                        @endphp
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $organization->org_name ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                @if($organization && $organization->addressDetail)
+                                                    {{ implode(', ', array_filter([
+                                                        $organization->addressDetail->street,
+                                                        $organization->addressDetail->barangay,
+                                                        $organization->addressDetail->city,
+                                                        $organization->addressDetail->province,
+                                                        $organization->addressDetail->region,
+                                                        $organization->addressDetail->country
+                                                    ])) }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                @if($membership->mem_date)
+                                                    {{ date('F Y', strtotime($membership->mem_date)) }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {{ $membership->position ?? 'N/A' }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No organization memberships found</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Credit Reputation Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-orange-600 to-orange-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-credit-card mr-3"></i>
+                    <i class="fas fa-credit-card mr-3 text-[#D4AF37]"></i>
                     Credit Reputation
             </h3>
             </div>
             <div class="p-6">
+                <!-- Credit Reputation Information -->
+                <div class="mb-8">
+                    <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Credit Reputation Information</h4>
+                    <div class="space-y-6">
+                        <!-- Dependent on Salary -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Credit Rating:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
+                                <span class="text-sm font-medium text-gray-600">Entirely dependent on salary:</span>
+                                <span class="text-sm text-gray-900">{{ $creditDetail ? ($creditDetail->dependent_on_salary ? 'Yes' : 'No') : 'N/A' }}</span>
                         </div>
+                            @if($creditDetail && !$creditDetail->dependent_on_salary)
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Bank Accounts:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
+                                    <span class="text-sm font-medium text-gray-600">Other sources of income:</span>
+                                    <span class="text-sm text-gray-900">{{ $creditDetail->other_income_src ?? 'N/A' }}</span>
                         </div>
+                            @endif
+                        </div>
+
+                        <!-- Bank Accounts/Loans -->
+                        <div class="flex justify-between items-start py-2 border-b border-gray-100">
+                            <span class="text-sm font-medium text-gray-600">Bank accounts/loans details:</span>
+                            <span class="text-sm text-gray-900 max-w-md">{{ $creditDetail->bank_accounts_details ?? 'N/A' }}</span>
+                        </div>
+
+                        <!-- Assets and Liabilities -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Outstanding Debts:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
+                                <span class="text-sm font-medium text-gray-600">Filed assets and liabilities:</span>
+                                <span class="text-sm text-gray-900">{{ $creditDetail ? ($creditDetail->has_filed_assets_liabilities ? 'Yes' : 'No') : 'N/A' }}</span>
                         </div>
+                            @if($creditDetail && $creditDetail->has_filed_assets_liabilities)
+                                @php
+                                    $salnDetail = $creditDetail->saln_detail ? json_decode($creditDetail->saln_detail, true) : null;
+                                @endphp
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-sm font-medium text-gray-600">Agency:</span>
+                                    <span class="text-sm text-gray-900">{{ $salnDetail['agency'] ?? 'N/A' }}</span>
                     </div>
-                    <div class="space-y-4">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">TIN Number:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->tin_no ?? 'N/A' }}</span>
+                                    <span class="text-sm font-medium text-gray-600">Date filed:</span>
+                                    <span class="text-sm text-gray-900">
+                                        @if($salnDetail)
+                                            {{ $salnDetail['month'] ?? '' }} {{ $salnDetail['year'] ?? '' }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </span>
                         </div>
+                            @endif
+                        </div>
+
+                        <!-- Income Tax Returns -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Passport Number:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->passport_number ?? 'N/A' }}</span>
+                                <span class="text-sm font-medium text-gray-600">Filed income tax returns:</span>
+                                <span class="text-sm text-gray-900">{{ $creditDetail ? ($creditDetail->has_filed_itr ? 'Yes' : 'No') : 'N/A' }}</span>
                         </div>
+                            @if($creditDetail && $creditDetail->has_filed_itr)
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Passport Expiry:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->passport_expiry ?? 'N/A' }}</span>
+                                    <span class="text-sm font-medium text-gray-600">Amount paid (last calendar year):</span>
+                                    <span class="text-sm text-gray-900">{{ $creditDetail->amount_paid ?? 'N/A' }}</span>
                         </div>
+                            @endif
+                    </div>
+
+
+                    </div>
+                </div>
+
+                <!-- Credit References -->
+                <div>
+                    <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4">Three (3) Credit References in the Philippines</h4>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Bank/Institution Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Complete Address</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @if($creditReferences && count($creditReferences))
+                                    @foreach($creditReferences as $reference)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($reference->bankDetail)->bank ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                @if($reference->bankDetail && $reference->bankDetail->addressDetail)
+                                                    {{ implode(', ', array_filter([
+                                                        $reference->bankDetail->addressDetail->street,
+                                                        $reference->bankDetail->addressDetail->barangay,
+                                                        $reference->bankDetail->addressDetail->city,
+                                                        $reference->bankDetail->addressDetail->province,
+                                                        $reference->bankDetail->addressDetail->region,
+                                                        $reference->bankDetail->addressDetail->country
+                                                    ])) }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="2">No credit references found</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Arrest Record Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-gavel mr-3"></i>
-                    Arrest Record
+                    <i class="fas fa-gavel mr-3 text-[#D4AF37]"></i>
+                    Arrest Record and Conduct
                 </h3>
             </div>
             <div class="p-6">
-                <div class="space-y-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="font-semibold text-gray-900 mb-3">Arrest Record #1</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-6">
+                    <!-- Question A: Have you ever been investigated/arrested, indicted or convicted for any violation of law? -->
+                    <div class="space-y-3">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Date:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+                            <span class="text-sm font-medium text-gray-600">Have you ever been investigated/arrested, indicted or convicted for any violation of law?</span>
+                            <span class="text-sm text-gray-900">{{ $arrestRecord ? ($arrestRecord->investigated_arrested === 'yes' ? 'Yes' : 'No') : 'N/A' }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Charge:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
+                        @if($arrestRecord && $arrestRecord->investigated_arrested === 'yes')
+                            <div class="flex justify-between items-start py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Details (court name, nature of offense, disposition):</span>
+                                <span class="text-sm text-gray-900 max-w-md">{{ optional($arrestRecord->arrestDetail)->disposition_of_case ?? 'N/A' }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Court:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-sm font-medium text-gray-600">Disposition:</span>
-                                <span class="text-sm text-gray-900">N/A</span>
-                            </div>
+                        @endif
                     </div>
+
+                    <!-- Question B: Has any member of your family ever been investigated/arrested, indicted or convicted for any violation of law? -->
+                    <div class="space-y-3">
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-sm font-medium text-gray-600">Has any member of your family ever been investigated/arrested, indicted or convicted for any violation of law?</span>
+                            <span class="text-sm text-gray-900">{{ $arrestRecord ? ($arrestRecord->family_investigated_arrested === 'yes' ? 'Yes' : 'No') : 'N/A' }}</span>
+                            </div>
+                        @if($arrestRecord && $arrestRecord->family_investigated_arrested === 'yes')
+                            <div class="flex justify-between items-start py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Details (court name, nature of offense, disposition):</span>
+                                <span class="text-sm text-gray-900 max-w-md">{{ optional($arrestRecord->familyArrestDetail)->disposition_of_case ?? 'N/A' }}</span>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Question C: Have you ever been charged of any administrative case? -->
+                    <div class="space-y-3">
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-sm font-medium text-gray-600">Have you ever been charged of any administrative case?</span>
+                            <span class="text-sm text-gray-900">{{ $arrestRecord ? ($arrestRecord->administrative_case === 'yes' ? 'Yes' : 'No') : 'N/A' }}</span>
+                            </div>
+                        @if($arrestRecord && $arrestRecord->administrative_case === 'yes')
+                            <div class="flex justify-between items-start py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Explanation:</span>
+                                <span class="text-sm text-gray-900 max-w-md">{{ $arrestRecord->admin_case_desc ?? 'N/A' }}</span>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Question D: Have you ever been arrested or detained pursuant to the provisions of PD 1081 and its implementing orders? -->
+                    <div class="space-y-3">
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-sm font-medium text-gray-600">Have you ever been arrested or detained pursuant to the provisions of PD 1081 and its implementing orders (GO, PD, LOI)?</span>
+                            <span class="text-sm text-gray-900">{{ $arrestRecord ? ($arrestRecord->pd1081_arrested === 'yes' ? 'Yes' : 'No') : 'N/A' }}</span>
+                            </div>
+                        @if($arrestRecord && $arrestRecord->pd1081_arrested === 'yes')
+                            <div class="flex justify-between items-start py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Details (nature of offense and disposition):</span>
+                                <span class="text-sm text-gray-900 max-w-md">{{ optional($arrestRecord->violationDetail)->disposition_of_case ?? 'N/A' }}</span>
+                    </div>
+                        @endif
+                    </div>
+
+                    <!-- Question E: Do you take/use intoxicating liquor or narcotics? -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-sm font-medium text-gray-600">Do you take/use intoxicating liquor or narcotics?</span>
+                            <span class="text-sm text-gray-900">{{ $arrestRecord ? ($arrestRecord->intoxicating_liquor_narcotics === 'yes' ? 'Yes' : 'No') : 'N/A' }}</span>
+                </div>
+                        @if($arrestRecord && $arrestRecord->intoxicating_liquor_narcotics === 'yes')
+                            <div class="flex justify-between items-start py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Extent of use:</span>
+                                <span class="text-sm text-gray-900 max-w-md">{{ $arrestRecord->extent_of_intoxication ?? 'N/A' }}</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Miscellaneous Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-pink-600 to-pink-700 px-6 py-4">
+        <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
+            <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
                 <h3 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-info-circle mr-3"></i>
+                    <i class="fas fa-puzzle-piece mr-3 text-[#D4AF37]"></i>
                     Miscellaneous Information
             </h3>
             </div>
             <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Height:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->height ?? 'N/A' }}</span>
+                <div class="space-y-8">
+                    <!-- Hobbies, Sports, and Pastimes -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center">
+                            <i class="fas fa-running mr-2 text-[#D4AF37]"></i>
+                            Hobbies, Sports, and Pastimes
+                        </h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-900">{{ $miscellaneous ?: 'No hobbies, sports, or pastimes listed' }}</p>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Weight:</span>
-                            <span class="text-sm text-gray-900">{{ optional($user->userDetail)->weight ?? 'N/A' }}</span>
                         </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Blood Type:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
+
+                    <!-- Language and Dialect Proficiency -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center">
+                            <i class="fas fa-language mr-2 text-[#D4AF37]"></i>
+                            Language and Dialect Proficiency
+                        </h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Language/Dialect</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Speak</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Read</th>
+                                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Write</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @if($languages && count($languages))
+                                        @foreach($languages as $language)
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ optional($language->languageDetail)->lang_desc ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $language->speak_fluency ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $language->read_fluency ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $language->write_fluency ?? 'N/A' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" colspan="4">No languages listed</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Emergency Contact:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
+
+                    <!-- Lie Detection Test -->
+                    <div>
+                        <h4 class="font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-4 flex items-center">
+                            <i class="fas fa-question-circle mr-2 text-[#D4AF37]"></i>
+                            Lie Detection Test
+                        </h4>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-medium text-gray-600">Are you willing to undergo periodic lie detection test?</span>
+                                <span class="text-sm text-gray-900">{{ $lieDetectionTest ? ($lieDetectionTest === 'yes' ? 'Yes' : 'No') : 'N/A' }}</span>
                     </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Emergency Phone:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
-                </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-sm font-medium text-gray-600">Relationship:</span>
-                            <span class="text-sm text-gray-900">N/A</span>
                     </div>
                     </div>
                 </div>
