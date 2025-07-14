@@ -263,8 +263,8 @@
                 </div>
             </div>
         </div>
-    </div>
-
+        </div>
+        
         <!-- Personal Characteristics Section -->
         <div class="bg-white rounded-xl shadow-lg border-2 border-[#1B365D] overflow-hidden">
             <div class="bg-gradient-to-r from-[#1B365D] to-[#2B4B7D] px-6 py-4 border-b-2 border-[#D4AF37]">
@@ -941,6 +941,10 @@
                                         <span class="text-sm font-medium text-gray-600">Reason for Leaving:</span>
                                         <span class="text-sm text-gray-900">{{ $employment->reason_for_leaving ?? 'N/A' }}</span>
                                     </div>
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-sm font-medium text-gray-600">Dismissal Description:</span>
+                                        <span class="text-sm text-gray-900">{{ $employment['dismissal_description'] ?? 'N/A' }}</span>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -969,10 +973,13 @@
                                 <span class="text-sm font-medium text-gray-600">Reason for Leaving:</span>
                                 <span class="text-sm text-gray-900">N/A</span>
                             </div>
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                <span class="text-sm font-medium text-gray-600">Dismissal Description:</span>
+                                <span class="text-sm text-gray-900">N/A</span>
+                            </div>
                         </div>
                     </div>
                 @endif
-
             </div>
         </div>
 
