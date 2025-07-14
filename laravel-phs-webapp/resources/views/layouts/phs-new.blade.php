@@ -588,7 +588,7 @@
                         </button>
                         <div class="flex items-center space-x-3">
                             @if(Auth::user())
-                                <a href="{{ route('client.dashboard') }}" onclick="event.preventDefault();" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
                                     <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
                                 </a>
                             @else
@@ -598,7 +598,7 @@
                             @endif
                             <div class="hidden sm:block">
                                 @if(Auth::user())
-                                    <a href="{{ route('client.dashboard') }}" onclick="event.preventDefault();" class="hover:opacity-80 transition-opacity cursor-pointer">
+                                    <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
                                         <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
                                         <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
                                     </a>
@@ -713,7 +713,10 @@
 
                 <!-- Action Buttons -->
                 <div class="p-6 border-t border-[#2B4B7D] space-y-3">
-                    <button onclick="goToDashboard()" class="w-full inline-flex items-center justify-center px-4 py-2 btn-secondary rounded-lg transition-all duration-300">
+                    <button onclick="goToDashboard()" 
+                            onkeydown="if(event.key === 'Enter' || event.key === ' ') goToDashboard()"
+                            class="w-full inline-flex items-center justify-center px-4 py-2 btn-secondary rounded-lg transition-all duration-300"
+                            title="Return to Client Dashboard">
                         <i class="fas fa-home mr-2"></i>
                         Back to Dashboard
                     </button>
@@ -824,7 +827,66 @@
         // Add this helper at the top of your main JS block or before any fetch calls
         function getCsrfToken() {
             const meta = document.querySelector('meta[name="csrf-token"]');
-            return meta ? meta.getAttribute('content') : '';
+            if (meta) {
+                return meta.getAttribute('content');
+            }
+            
+            // Fallback to input field if meta tag not found
+            const input = document.querySelector('input[name="_token"]');
+            if (input) {
+                return input.value;
+            }
+            
+            // If neither is found, try to get from Laravel's global variable
+            if (typeof window.Laravel !== 'undefined' && window.Laravel.csrfToken) {
+                return window.Laravel.csrfToken;
+            }
+            
+            console.error('CSRF token not found');
+            return '';
+        }
+
+        // Function to refresh CSRF token
+        async function refreshCsrfToken() {
+            try {
+                const response = await fetch('{{ route("refresh-csrf") }}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update the meta tag with new token
+                    const meta = document.querySelector('meta[name="csrf-token"]');
+                    if (meta && data.token) {
+                        meta.setAttribute('content', data.token);
+                        console.log('CSRF token refreshed successfully');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to refresh CSRF token:', error);
+            }
+        }
+
+        // Function to check session status
+        async function checkSessionStatus() {
+            try {
+                const response = await fetch('{{ route("debug-session") }}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Session status:', data);
+                    return data;
+                }
+            } catch (error) {
+                console.error('Failed to check session status:', error);
+            }
+            return null;
         }
 
         // In every fetch POST (form submission), add the CSRF token header
@@ -941,7 +1003,11 @@
             console.log('Form submit event triggered');
             event.preventDefault();
 
-            const form = event.target.form;
+            const form = event.target; // Fix: event.target is the form
+            if (!form) {
+                alert('Form not found.');
+                return false;
+            }
             const currentSection = window.currentSection || 'family-background'; // Use the section set by the global function
 
             console.log('Current section:', currentSection);
@@ -950,16 +1016,12 @@
             // Check if this is the last section (miscellaneous)
             if (currentSection === 'miscellaneous') {
                 console.log('Last section - allowing normal submission');
-                // For the last section, allow normal form submission with full validation
-                event.target.form.submit();
+                form.submit();
                 return;
             }
 
             console.log('Intermediate section - using dynamic navigation');
-            // For intermediate sections, use dynamic navigation
-            // The navigateToNextSection function now handles both saving and navigation
             await window.navigateToNextSection(currentSection);
-            // No need to submit the form since navigation is handled by AJAX
         };
 
         // Global function that buttons can call (without window. prefix)
@@ -995,62 +1057,101 @@
             const formData = new FormData(form);
             let saveSuccess = false;
             let errorMsg = '';
+            let retryCount = 0;
+            const maxRetries = 2;
 
-            console.log('Sending AJAX request...');
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-Save-Only': 'true',
-                        'X-CSRF-TOKEN': csrfToken
+            while (retryCount <= maxRetries && !saveSuccess) {
+                console.log(`Sending AJAX request (attempt ${retryCount + 1})...`);
+                try {
+                    // Get fresh CSRF token for each attempt
+                    const currentCsrfToken = getCsrfToken();
+                    if (!currentCsrfToken) {
+                        console.log('No CSRF token found, refreshing...');
+                        await refreshCsrfToken();
                     }
-                });
 
-                console.log('Response status:', response.status);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Response data:', data);
-                    if (data.success) {
-                        // Mark section as visited
-                        window.phsNavigationInstance.markSectionAsVisited(sectionId);
-                        saveSuccess = true;
-                        console.log('Save successful');
-                    } else {
-                        errorMsg = data.message || 'Save failed.';
-                        console.log('Save failed:', errorMsg);
-                    }
-                } else if (response.status === 422) {
-                    // Validation error
-                    const data = await response.json();
-                    console.log('Validation errors:', data.errors);
-                    if (data.errors) {
-                        for (const [field, messages] of Object.entries(data.errors)) {
-                            // Try to find the input/select/textarea by name
-                            const fieldName = field.replace(/\./g, '[') + (field.includes('.') ? ']' : '');
-                            const input = form.querySelector(`[name='${fieldName}']`);
-                            if (input) {
-                                input.classList.add('border-red-500');
-                                const errorDiv = document.createElement('div');
-                                errorDiv.className = 'phs-field-error text-red-500 text-xs mt-1';
-                                errorDiv.innerText = messages[0];
-                                input.parentNode.appendChild(errorDiv);
-                            }
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-Save-Only': 'true',
+                            'X-CSRF-TOKEN': getCsrfToken()
                         }
-                        errorMsg = 'Please correct the highlighted errors.';
+                    });
+
+                    console.log('Response status:', response.status);
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Response data:', data);
+                        if (data.success) {
+                            // Mark section as visited
+                            window.phsNavigationInstance.markSectionAsVisited(sectionId);
+                            saveSuccess = true;
+                            console.log('Save successful');
+                        } else {
+                            errorMsg = data.message || 'Save failed.';
+                            console.log('Save failed:', errorMsg);
+                        }
+                    } else if (response.status === 419) {
+                        // CSRF token mismatch
+                        console.log('CSRF token mismatch, refreshing...');
+                        await refreshCsrfToken();
+                        retryCount++;
+                        continue;
+                    } else if (response.status === 401) {
+                        // Authentication error
+                        console.log('Authentication error, checking session...');
+                        const sessionStatus = await checkSessionStatus();
+                        if (sessionStatus && sessionStatus.user_id) {
+                            // Session is valid, try refreshing CSRF token
+                            await refreshCsrfToken();
+                            retryCount++;
+                            continue;
+                        } else {
+                            // Session is invalid, redirect to login
+                            window.location.href = '{{ route("login") }}';
+                            return false;
+                        }
+                    } else if (response.status === 422) {
+                        // Validation error
+                        const data = await response.json();
+                        console.log('Validation errors:', data.errors);
+                        if (data.errors) {
+                            for (const [field, messages] of Object.entries(data.errors)) {
+                                // Try to find the input/select/textarea by name
+                                const fieldName = field.replace(/\./g, '[') + (field.includes('.') ? ']' : '');
+                                const input = form.querySelector(`[name='${fieldName}']`);
+                                if (input) {
+                                    input.classList.add('border-red-500');
+                                    const errorDiv = document.createElement('div');
+                                    errorDiv.className = 'phs-field-error text-red-500 text-xs mt-1';
+                                    errorDiv.innerText = messages[0];
+                                    input.parentNode.appendChild(errorDiv);
+                                }
+                            }
+                            errorMsg = 'Please correct the highlighted errors.';
+                        } else {
+                            errorMsg = 'Validation failed.';
+                        }
+                        break; // Don't retry validation errors
                     } else {
-                        errorMsg = 'Validation failed.';
+                        errorMsg = 'Server error: ' + response.status;
+                        console.log('Server error:', errorMsg);
+                        break; // Don't retry server errors
                     }
-                } else {
-                    errorMsg = 'Server error: ' + response.status;
-                    console.log('Server error:', errorMsg);
+                } catch (error) {
+                    errorMsg = 'An error occurred while saving.';
+                    console.log('Exception occurred:', error);
+                    retryCount++;
+                    if (retryCount <= maxRetries) {
+                        console.log('Retrying...');
+                        continue;
+                    }
                 }
-            } catch (error) {
-                errorMsg = 'An error occurred while saving.';
-                console.log('Exception occurred:', error);
             }
+
             if (!saveSuccess) {
                 alert(errorMsg || 'Failed to save. Please check your input.');
             }
@@ -1465,6 +1566,28 @@
                 window.phsNavigationInstance.init();
             }
 
+            // Ensure CSRF token is available
+            if (!getCsrfToken()) {
+                console.log('CSRF token not found on page load, refreshing...');
+                refreshCsrfToken();
+            }
+
+            // Initialize form
+            initializeForm();
+
+            // Add keyboard shortcut for testing dashboard navigation (Ctrl+Shift+D)
+            document.addEventListener('keydown', function(event) {
+                if (event.ctrlKey && event.shiftKey && event.key === 'D') {
+                    console.log('Keyboard shortcut triggered: Ctrl+Shift+D');
+                    goToDashboardDirect();
+                }
+                // Test route shortcut (Ctrl+Shift+T)
+                if (event.ctrlKey && event.shiftKey && event.key === 'T') {
+                    console.log('Keyboard shortcut triggered: Ctrl+Shift+T');
+                    testDashboardRoute();
+                }
+            });
+
             // Only show instructions on initial page load for personal-details
             @if(Route::currentRouteName() === 'phs.personal-details.create')
                 // Set a flag to indicate this is the initial load
@@ -1601,14 +1724,50 @@
 
         // Show dashboard transition overlay and delay navigation
         function goToDashboard() {
-            const overlay = document.getElementById('dashboard-transition-overlay');
-            if (overlay) {
-                overlay.classList.remove('opacity-0', 'pointer-events-none');
-                overlay.classList.add('opacity-100');
+            try {
+                console.log('goToDashboard function called');
+                const overlay = document.getElementById('dashboard-transition-overlay');
+                if (overlay) {
+                    console.log('Showing dashboard transition overlay');
+                    overlay.classList.remove('opacity-0', 'pointer-events-none');
+                    overlay.classList.add('opacity-100');
+                } else {
+                    console.log('Dashboard transition overlay not found');
+                }
+                
+                const dashboardUrl = '{{ route("client.dashboard") }}';
+                console.log('Navigating to:', dashboardUrl);
+                
+                // Set a timeout for navigation
+                const navigationTimeout = setTimeout(function() {
+                    try {
+                        console.log('Executing navigation to dashboard');
+                        window.location.href = dashboardUrl;
+                    } catch (error) {
+                        console.error('Error during navigation:', error);
+                        // Fallback to direct navigation
+                        window.location.href = dashboardUrl;
+                    }
+                }, 1500); // 1.5 seconds delay
+                
+                // Fallback: if navigation doesn't happen within 3 seconds, force it
+                setTimeout(function() {
+                    if (window.location.pathname !== '/client/dashboard' && window.location.pathname !== '/dashboard') {
+                        console.log('Fallback navigation triggered');
+                        clearTimeout(navigationTimeout);
+                        try {
+                            window.location.href = dashboardUrl;
+                        } catch (error) {
+                            console.error('Error during fallback navigation:', error);
+                            window.location.href = dashboardUrl;
+                        }
+                    }
+                }, 3000);
+            } catch (error) {
+                console.error('Error in goToDashboard function:', error);
+                // Use direct navigation as last resort
+                window.location.href = '{{ route("client.dashboard") }}';
             }
-            setTimeout(function() {
-                window.location.href = '/client/home'; // Adjust route if needed
-            }, 1500); // 1.5 seconds delay
         }
 
         window.initializeMaritalStatus = function() {
@@ -3018,6 +3177,8 @@
                 const container = document.querySelector('#phs-section-container');
                 if (container) {
                     container.innerHTML = html;
+                    // Initialize form after loading new content
+                    initializeForm();
                     window.initializePersonalDetails && window.initializePersonalDetails();
                 } else {
                     // fallback: reload page if container not found
@@ -3059,6 +3220,28 @@
                 }
             });
         });
+
+        // Function to initialize form properly
+        function initializeForm() {
+            const form = document.querySelector('form');
+            if (form) {
+                // Ensure CSRF token is available
+                const csrfInput = form.querySelector('input[name="_token"]');
+                if (csrfInput) {
+                    const metaToken = document.querySelector('meta[name="csrf-token"]');
+                    if (metaToken && metaToken.getAttribute('content')) {
+                        csrfInput.value = metaToken.getAttribute('content');
+                    }
+                }
+                
+                // Initialize any form-specific functions
+                if (window.initializePersonalDetails) {
+                    window.initializePersonalDetails();
+                }
+                
+                console.log('Form initialized successfully');
+            }
+        }
     </script>
 </body>
 </html>

@@ -185,75 +185,126 @@ class DataUpdate {
      * Update or create family background for a user, including family members and siblings.
      */
     public static function updateFamilyBackground($userId, $fbData, $familyMembers = [], $siblings = []) {
-        $familyBackground = \App\Models\FamilyBackground::updateOrCreate(
-            ['user_id' => $userId],
-            $fbData
+        // Get or create FamilyHistoryDetail for this user
+        $user = \App\Models\User::find($userId);
+        if (!$user) {
+            throw new \Exception("User not found with ID: $userId");
+        }
+        
+        $familyHistory = \App\Models\FamilyHistoryDetail::updateOrCreate(
+            ['username' => $user->username],
+            []
         );
+        
         // Handle family members
         if (!empty($familyMembers)) {
-            \App\Models\FamilyMember::where('user_id', $userId)->delete();
             foreach ($familyMembers as $member) {
                 if (empty($member['role']) || empty($member['name'])) continue;
+                
+                // Create name detail
                 $nameId = \App\Models\NameDetail::create([
                     'first_name' => $member['name']['first_name'] ?? '',
                     'last_name' => $member['name']['last_name'] ?? '',
                     'middle_name' => $member['name']['middle_name'] ?? null,
                     'nickname' => $member['name']['nickname'] ?? null,
-                    'suffix' => $member['name']['suffix'] ?? null,
-                ])->id;
-                \App\Models\FamilyMember::create([
-                    'user_id' => $userId,
-                    'name_id' => $nameId,
-                    'role' => $member['role'],
+                    'name_extension' => $member['name']['suffix'] ?? null,
+                ])->name_id;
+                
+                // Create address for birth place if provided
+                $birthPlaceId = null;
+                if (!empty($member['birth_place'])) {
+                    $birthPlaceId = \App\Models\AddressDetail::create([
+                        'street' => $member['birth_place'],
+                        'country' => 'Philippines'
+                    ])->addr_id;
+                }
+                
+                // Create address for family address if provided
+                $familyAddrId = null;
+                if (!empty($member['complete_address'])) {
+                    $familyAddrId = \App\Models\AddressDetail::create([
+                        'street' => $member['complete_address'],
+                        'country' => 'Philippines'
+                    ])->addr_id;
+                }
+                
+                // Create occupation if provided
+                $occupationId = null;
+                if (!empty($member['occupation'])) {
+                    $occupationId = \App\Models\OccupationDetail::create([
+                        'occupation_desc' => $member['occupation'],
+                        'employer' => $member['employer'] ?? null,
+                    ])->occupation_id;
+                }
+                
+                // Create citizenship if provided
+                $citizenshipId = null;
+                if (!empty($member['citizenship'])) {
+                    $citizenshipId = \App\Models\CitizenshipDetail::create([
+                        'cit_description' => $member['citizenship']
+                    ])->cit_id;
+                }
+                
+                // Create dual citizenship if provided
+                $dualCitizenshipId = null;
+                if (!empty($member['dual_citizenship'])) {
+                    $dualCitizenshipId = \App\Models\CitizenshipDetail::create([
+                        'cit_description' => $member['dual_citizenship']
+                    ])->cit_id;
+                }
+                
+                // Create place naturalized if provided
+                $placeNaturalizedId = null;
+                if (!empty($member['place_naturalized'])) {
+                    $placeNaturalizedId = \App\Models\AddressDetail::create([
+                        'street' => $member['place_naturalized'],
+                        'country' => 'Philippines'
+                    ])->addr_id;
+                }
+                
+                // Create family detail
+                $familyDetail = \App\Models\FamilyDetail::create([
+                    'fam_name' => $nameId,
                     'birth_date' => $member['birth_date'] ?? null,
-                    'birth_place' => $member['birth_place'] ?? null,
-                    'occupation' => $member['occupation'] ?? null,
-                    'employer' => $member['employer'] ?? null,
-                    'place_of_employment' => $member['place_of_employment'] ?? null,
-                    'complete_address' => $member['complete_address'] ?? null,
-                    'citizenship_type' => $member['citizenship_type'] ?? null,
-                    'citizenship' => $member['citizenship'] ?? null,
-                    'citizenship_dual_1' => $member['citizenship_dual_1'] ?? null,
-                    'citizenship_dual_2' => $member['citizenship_dual_2'] ?? null,
-                    'citizenship_naturalized' => $member['citizenship_naturalized'] ?? null,
-                    'naturalized_month' => $member['naturalized_month'] ?? null,
-                    'naturalized_year' => $member['naturalized_year'] ?? null,
-                    'naturalized_place' => $member['naturalized_place'] ?? null,
-                    'isnaturalized' => $member['isnaturalized'] ?? 0,
-                    'naturalized_details' => $member['naturalized_details'] ?? null,
+                    'birth_place' => $birthPlaceId,
+                    'fam_addr' => $familyAddrId,
+                    'occupation' => $occupationId,
+                    'citizenship' => $citizenshipId,
+                    'dual' => $dualCitizenshipId,
+                    'date_naturalized' => $member['date_naturalized'] ?? null,
+                    'place_naturalized' => $placeNaturalizedId,
                 ]);
+                
+                // Update FamilyHistoryDetail with the family member reference
+                $roleField = $member['role'];
+                if (in_array($roleField, ['father', 'mother', 'guardian', 'father_in_law', 'mother_in_law'])) {
+                    $familyHistory->update([$roleField => $familyDetail->fam_id]);
+                }
             }
         }
+        
         // Handle siblings
         if (!empty($siblings)) {
-            $familyBackground->siblings()->delete();
             foreach ($siblings as $sibling) {
-                $siblingNameId = null;
                 if (!empty($sibling['first_name']) || !empty($sibling['last_name'])) {
-                    $siblingNameId = \App\Models\NameDetail::create([
-                        'first_name' => $sibling['first_name'] ?? '',
-                        'last_name' => $sibling['last_name'] ?? '',
+                    \App\Models\SiblingDetail::create([
+                        'username' => $user->username,
+                        'first_name' => $sibling['first_name'] ?? null,
                         'middle_name' => $sibling['middle_name'] ?? null,
-                        'nickname' => $sibling['nickname'] ?? null,
-                        'suffix' => $sibling['suffix'] ?? null,
-                    ])->id;
+                        'last_name' => $sibling['last_name'] ?? null,
+                        'date_of_birth' => $sibling['date_of_birth'] ?? null,
+                        'citizenship' => $sibling['citizenship'] ?? null,
+                        'dual_citizenship' => $sibling['dual_citizenship'] ?? null,
+                        'complete_address' => $sibling['complete_address'] ?? null,
+                        'occupation' => $sibling['occupation'] ?? null,
+                        'employer' => $sibling['employer'] ?? null,
+                        'employer_address' => $sibling['employer_address'] ?? null,
+                    ]);
                 }
-                $familyBackground->siblings()->create([
-                    'name_id' => $siblingNameId,
-                    'first_name' => $sibling['first_name'] ?? null,
-                    'middle_name' => $sibling['middle_name'] ?? null,
-                    'last_name' => $sibling['last_name'] ?? null,
-                    'date_of_birth' => $sibling['date_of_birth'] ?? null,
-                    'citizenship' => $sibling['citizenship'] ?? null,
-                    'dual_citizenship' => $sibling['dual_citizenship'] ?? null,
-                    'complete_address' => $sibling['complete_address'] ?? null,
-                    'occupation' => $sibling['occupation'] ?? null,
-                    'employer' => $sibling['employer'] ?? null,
-                    'employer_address' => $sibling['employer_address'] ?? null,
-                ]);
             }
         }
-        return $familyBackground->id;
+        
+        return $familyHistory->id;
     }
 
     /**
@@ -323,10 +374,10 @@ class DataUpdate {
         $userId = $militaryHistory->user_id ?? null;
         // Handle assignments
         if (!empty($assignments)) {
-            \App\Models\MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->delete();
+            \App\Models\AssignmentDetail::where('assign_id', $militaryHistory->military_assign)->delete();
             foreach ($assignments as $assignment) {
                 if (!empty($assignment['unit_office'])) {
-                    \App\Models\MilitaryAssignment::create(array_merge($assignment, [
+                    \App\Models\AssignmentDetail::create(array_merge($assignment, [
                         'assign_id' => $militaryHistory->military_assign,
                     ]));
                 }
@@ -334,29 +385,29 @@ class DataUpdate {
         }
         // Handle schools
         if (!empty($schools)) {
-            \App\Models\MilitarySchool::where('user_id', $userId)->delete();
+            \App\Models\MilitarySchoolDetail::where('username', $username)->delete();
             foreach ($schools as $school) {
                 if (!empty($school['school'])) {
-                    \App\Models\MilitarySchool::create(array_merge($school, [
-                        'user_id' => $userId,
+                    \App\Models\MilitarySchoolDetail::create(array_merge($school, [
+                        'username' => $username,
                     ]));
                 }
             }
         }
         // Handle awards
         if (!empty($awards)) {
-            $schoolIds = \App\Models\MilitarySchool::where('user_id', $userId)->pluck('history_id');
-            \App\Models\MilitaryAward::whereIn('history_id', $schoolIds)->delete();
+            $schoolIds = \App\Models\MilitarySchoolDetail::where('username', $username)->pluck('history_id');
+            \App\Models\AwardDetail::whereIn('history_id', $schoolIds)->delete();
             foreach ($awards as $award) {
                 if (!empty($award['name'])) {
-                    $school = \App\Models\MilitarySchool::where('user_id', $userId)->first();
+                    $school = \App\Models\MilitarySchoolDetail::where('username', $username)->first();
                     if (!$school) {
-                        $school = \App\Models\MilitarySchool::create([
-                            'user_id' => $userId,
+                        $school = \App\Models\MilitarySchoolDetail::create([
+                            'username' => $username,
                             'date_attended' => null,
                         ]);
                     }
-                    \App\Models\MilitaryAward::create([
+                    \App\Models\AwardDetail::create([
                         'history_id' => $school->history_id,
                         'decoration_award_or_commendation' => $award['name'],
                     ]);
@@ -811,5 +862,66 @@ class DataUpdate {
                 );
             }
         }
+    }
+
+    /**
+     * Save all military history for a user using normalized data (dates as month/year, etc.).
+     */
+    public static function saveMilitaryHistoryNormalized($data, $username) {
+        // Save main military history
+        $militaryData = [
+            'username' => $username,
+            'enlist_date' => self::parseMonthYear($data['enlistment_month'] ?? null, $data['enlistment_year'] ?? null),
+            'comm_src' => $data['commission_source'] ?? null,
+            'start_comm' => self::parseMonthYear($data['commission_date_from_month'] ?? null, $data['commission_date_from_year'] ?? null),
+            'end_comm' => self::parseMonthYear($data['commission_date_to_month'] ?? null, $data['commission_date_to_year'] ?? null),
+        ];
+        $militaryHistory = \App\Models\MilitaryHistoryDetail::updateOrCreate(
+            ['username' => $username],
+            $militaryData
+        );
+        // Save assignments
+        \App\Models\AssignmentDetail::where('username', $username)->delete();
+        if (!empty($data['assignments']) && is_array($data['assignments'])) {
+            foreach ($data['assignments'] as $assignment) {
+                if (!empty($assignment['unit_office'])) {
+                    \App\Models\AssignmentDetail::create([
+                        'username' => $username,
+                        'start_date' => self::parseMonthYear($assignment['from_month'] ?? null, $assignment['from_year'] ?? null),
+                        'end_date' => self::parseMonthYear($assignment['to_month'] ?? null, $assignment['to_year'] ?? null),
+                        'assign_unit' => $assignment['unit_office'],
+                        'assign_chief' => $assignment['co_chief'] ?? null,
+                    ]);
+                }
+            }
+        }
+        // Save schools
+        \App\Models\MilitarySchoolDetail::where('username', $username)->delete();
+        if (!empty($data['schools']) && is_array($data['schools'])) {
+            foreach ($data['schools'] as $school) {
+                if (!empty($school['school'])) {
+                    \App\Models\MilitarySchoolDetail::create([
+                        'username' => $username,
+                        'school' => $school['school'],
+                        'attend_date' => self::parseMonthYear($school['date_attended_from_month'] ?? null, $school['date_attended_from_year'] ?? null),
+                        'train_nature' => $school['nature_training'] ?? null,
+                        'rating' => $school['rating'] ?? null,
+                    ]);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Helper to parse month/year to Y-m-d (first day of month), or null if missing.
+     */
+    public static function parseMonthYear($month, $year) {
+        if ($year && $month) {
+            return sprintf('%04d-%02d-01', $year, $month);
+        } elseif ($year) {
+            return sprintf('%04d-01-01', $year);
+        }
+        return null;
     }
 }

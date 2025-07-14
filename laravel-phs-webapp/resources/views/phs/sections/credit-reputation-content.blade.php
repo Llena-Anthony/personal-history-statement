@@ -155,9 +155,31 @@
             @endfor
         </div>
         <!-- Action Buttons -->
+        @php
+            $sectionOrder = [
+                'personal-details',
+                'personal-characteristics',
+                'marital-status',
+                'family-background',
+                'educational-background',
+                'military-history',
+                'places-of-residence',
+                'employment-history',
+                'foreign-countries',
+                'credit-reputation',
+                'arrest-record',
+                'character-and-reputation',
+                'organization',
+                'miscellaneous'
+            ];
+            $sectionName = 'credit-reputation';
+            $currentIndex = array_search($sectionName, $sectionOrder);
+            $previousSection = $currentIndex > 0 ? $sectionOrder[$currentIndex - 1] : null;
+            $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : route('client.dashboard');
+        @endphp
         <div class="flex justify-between items-center pt-6 border-t border-gray-200 mt-8">
-            <a href="{{ route('phs.foreign-countries.create') }}" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Previous Section
+            <a href="{{ $previousSectionRoute }}" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Previous Section
             </a>
             <button type="submit" class="btn-primary" onclick="handleFormSubmit(event, 'credit-reputation')">
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>

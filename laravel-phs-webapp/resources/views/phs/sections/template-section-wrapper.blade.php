@@ -28,6 +28,14 @@
     $nextSectionRoute = route('phs.' . $nextSection . '.create');
     $dashboardRoute = route('client.dashboard');
     $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : $dashboardRoute;
+    
+    // Debug information
+    \Log::info('Template section wrapper variables:', [
+        'sectionName' => $sectionName ?? 'NOT SET',
+        'formAction' => $formAction ?? 'NOT SET',
+        'nextSection' => $nextSection ?? 'NOT SET',
+        'nextSectionRoute' => $nextSectionRoute ?? 'NOT SET'
+    ]);
 @endphp
 
 @extends($layout)
@@ -50,7 +58,15 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ $formAction }}" class="space-y-8" id="phs-form">
+    @php
+        $finalFormAction = $formAction ?? route('phs.' . ($sectionName ?? 'personal-details') . '.store');
+        \Log::info('Template form action debug:', [
+            'formAction' => $formAction ?? 'NOT SET',
+            'sectionName' => $sectionName ?? 'NOT SET',
+            'finalFormAction' => $finalFormAction
+        ]);
+    @endphp
+    <form method="POST" action="{{ $finalFormAction }}" class="space-y-8" id="phs-form" data-action="{{ $finalFormAction }}">
         @csrf
 
         <!-- Form content will be included here -->
@@ -78,11 +94,28 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('phs-form');
+    console.log('Form found:', form);
     if (form) {
+        console.log('Form action:', form.action);
+        console.log('Form method:', form.method);
+        
+        // Ensure form action is correct
+        const correctAction = form.getAttribute('data-action');
+        if (correctAction && (!form.action || form.action.includes('object%20HTMLButtonElement'))) {
+            console.log('Fixing form action from:', form.action, 'to:', correctAction);
+            form.action = correctAction;
+        }
+        
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+            console.log('Form submission started');
+            console.log('Form action before submission:', form.action);
+            console.log('Form data-action attribute:', form.getAttribute('data-action'));
+            
             const formData = new FormData(form);
             const action = formData.get('action') || 'next';
+            console.log('Action:', action);
+            console.log('Form action URL:', form.action);
 
             // Show loading state
             const submitButtons = form.querySelectorAll('button[type="submit"]');
@@ -91,11 +124,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
             });
 
-            fetch(form.action, {
+            // Ensure we're using the correct action URL
+            const actionUrl = form.getAttribute('data-action') || form.action;
+            console.log('Making fetch request to:', actionUrl);
+            fetch(actionUrl, {
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 },
                 body: formData
             })
@@ -402,7 +438,8 @@ function getCommonProvinces(region) {
 
 // Initialize place loading for personal details section
 if (document.getElementById('birth_region')) {
-    loadRegions();
+    // Don't auto-initialize here to avoid conflicts
+    // loadRegions();
 }
 
 // Initialize personal details section
@@ -413,7 +450,8 @@ window.initializePersonalDetails = function() {
 
 // Auto-initialize if this is the personal details section
 if (document.getElementById('birth_region')) {
-    window.initializePersonalDetails();
+    // Don't auto-initialize here to avoid conflicts
+    // console.log('Auto-initialization skipped to prevent conflicts');
 }
 </script>
 @endsection

@@ -148,9 +148,31 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            <button type="button" onclick="window.navigateToPreviousSection('miscellaneous')" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Previous Section
-            </button>
+            @php
+                $sectionOrder = [
+                    'personal-details',
+                    'personal-characteristics',
+                    'marital-status',
+                    'family-background',
+                    'educational-background',
+                    'military-history',
+                    'places-of-residence',
+                    'employment-history',
+                    'foreign-countries',
+                    'credit-reputation',
+                    'arrest-record',
+                    'character-and-reputation',
+                    'organization',
+                    'miscellaneous'
+                ];
+                $sectionName = 'miscellaneous';
+                $currentIndex = array_search($sectionName, $sectionOrder);
+                $previousSection = $currentIndex > 0 ? $sectionOrder[$currentIndex - 1] : null;
+                $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : route('client.dashboard');
+            @endphp
+            <a href="{{ $previousSectionRoute }}" class="btn-secondary">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Previous Section
+            </a>
             <button type="button" id="finishBtn" class="btn-primary">
                 Save & Continue <i class="fas fa-arrow-right ml-2"></i>
             </button>

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\MilitaryHistoryDetail;
-use App\Models\MilitaryAssignment;
-use App\Models\MilitarySchool;
-use App\Models\MilitaryAward;
+use App\Models\AssignmentDetail;
+use App\Models\MilitarySchoolDetail;
+use App\Models\AwardDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Traits\PHSSectionTracking;
@@ -22,9 +22,10 @@ class MilitaryHistoryController extends Controller
         $militaryHistory = MilitaryHistoryDetail::where('username', auth()->id())->first();
         if ($militaryHistory) {
             $data['militaryHistory'] = $militaryHistory;
-            $data['assignments'] = MilitaryAssignment::where('assign_id', $militaryHistory->military_assign)->get();
-            $data['schools'] = MilitarySchool::where('user_id', $militaryHistory->user_id)->get();
-            $data['awards'] = MilitaryAward::whereIn('history_id', $data['schools']->pluck('history_id'))->get();
+            $data['assignments'] = AssignmentDetail::where('assign_id', $militaryHistory->military_assign)->get();
+            $username = auth()->user()->username;
+            $data['schools'] = MilitarySchoolDetail::where('username', $username)->get();
+            $data['awards'] = AwardDetail::whereIn('history_id', $data['schools']->pluck('history_id'))->get();
         }
 
         // Return partial for AJAX requests, full view for normal requests
@@ -38,95 +39,44 @@ class MilitaryHistoryController extends Controller
     public function store(Request $request)
     {
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
-
-        // Validation (keep as is)
-        if ($isSaveOnly) {
-            $validated = $request->validate([
-                'enlistment_month' => 'required|string|max:2',
-                'enlistment_year' => 'required|integer|min:1900|max:2030',
-                'commission_source' => 'nullable|string|max:255',
-                'commission_date_from_month' => 'nullable|string|max:2',
-                'commission_date_from_year' => 'nullable|integer|min:1900|max:2030',
-                'commission_date_to_month' => 'nullable|string|max:2',
-                'commission_date_to_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments' => 'nullable|array',
-                'assignments.*.from_month' => 'nullable|string|max:2',
-                'assignments.*.from_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments.*.to_month' => 'nullable|string|max:2',
-                'assignments.*.to_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments.*.unit_office' => 'nullable|string|max:255',
-                'assignments.*.co_chief' => 'nullable|string|max:255',
-                'schools' => 'nullable|array',
-                'schools.*.school' => 'nullable|string|max:255',
-                'schools.*.location' => 'nullable|string|max:255',
-                'schools.*.date_attended_from_month' => 'nullable|string|max:2',
-                'schools.*.date_attended_from_year' => 'nullable|integer|min:1900|max:2030',
-                'schools.*.date_attended_to_month' => 'nullable|string|max:2',
-                'schools.*.date_attended_to_year' => 'nullable|integer|min:1900|max:2030',
-                'schools.*.nature_training' => 'nullable|string|max:255',
-                'schools.*.rating' => 'nullable|string|max:255',
-                'awards' => 'nullable|array',
-                'awards.*.name' => 'nullable|string|max:255',
-            ]);
-        } else {
-            $validated = $request->validate([
-                'enlistment_month' => 'required|string|max:2',
-                'enlistment_year' => 'required|integer|min:1900|max:2030',
-                'commission_source' => 'nullable|string|max:255',
-                'commission_date_from_month' => 'nullable|string|max:2',
-                'commission_date_from_year' => 'nullable|integer|min:1900|max:2030',
-                'commission_date_to_month' => 'nullable|string|max:2',
-                'commission_date_to_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments' => 'nullable|array',
-                'assignments.*.from_month' => 'nullable|string|max:2',
-                'assignments.*.from_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments.*.to_month' => 'nullable|string|max:2',
-                'assignments.*.to_year' => 'nullable|integer|min:1900|max:2030',
-                'assignments.*.unit_office' => 'nullable|string|max:255',
-                'assignments.*.co_chief' => 'nullable|string|max:255',
-                'schools' => 'nullable|array',
-                'schools.*.school' => 'nullable|string|max:255',
-                'schools.*.location' => 'nullable|string|max:255',
-                'schools.*.date_attended_from_month' => 'nullable|string|max:2',
-                'schools.*.date_attended_from_year' => 'nullable|integer|min:1900|max:2030',
-                'schools.*.date_attended_to_month' => 'nullable|string|max:2',
-                'schools.*.date_attended_to_year' => 'nullable|integer|min:1900|max:2030',
-                'schools.*.nature_training' => 'nullable|string|max:255',
-                'schools.*.rating' => 'nullable|string|max:255',
-                'awards' => 'nullable|array',
-                'awards.*.name' => 'nullable|string|max:255',
-            ]);
-        }
-
-        $this->processDateFields($validated);
-
         try {
-            DB::beginTransaction();
-
-            $username = auth()->user()->username;
-            $data = [
-                'military' => [
-                    'enlistment_month' => $validated['enlistment_month'],
-                    'enlistment_year' => $validated['enlistment_year'],
-                    'commission_source' => $validated['commission_source'] ?? null,
-                    'commission_date_from_month' => $validated['commission_date_from_month'] ?? null,
-                    'commission_date_from_year' => $validated['commission_date_from_year'] ?? null,
-                    'commission_date_to_month' => $validated['commission_date_to_month'] ?? null,
-                    'commission_date_to_year' => $validated['commission_date_to_year'] ?? null,
-                ],
-                'assignments' => $validated['assignments'] ?? [],
-                'schools' => $validated['schools'] ?? [],
-                'awards' => $validated['awards'] ?? [],
+            // Validation (minimal for save-only, full for final)
+            $rules = [
+                'enlistment_month' => 'required|string|max:2',
+                'enlistment_year' => 'required|integer|min:1900|max:2030',
+                'commission_source' => 'nullable|string|max:255',
+                'commission_date_from_month' => 'nullable|string|max:2',
+                'commission_date_from_year' => 'nullable|integer|min:1900|max:2030',
+                'commission_date_to_month' => 'nullable|string|max:2',
+                'commission_date_to_year' => 'nullable|integer|min:1900|max:2030',
+                'assignments' => 'nullable|array',
+                'assignments.*.from_month' => 'nullable|string|max:2',
+                'assignments.*.from_year' => 'nullable|integer|min:1900|max:2030',
+                'assignments.*.to_month' => 'nullable|string|max:2',
+                'assignments.*.to_year' => 'nullable|integer|min:1900|max:2030',
+                'assignments.*.unit_office' => 'nullable|string|max:255',
+                'assignments.*.co_chief' => 'nullable|string|max:255',
+                'schools' => 'nullable|array',
+                'schools.*.school' => 'nullable|string|max:255',
+                'schools.*.location' => 'nullable|string|max:255',
+                'schools.*.date_attended_from_month' => 'nullable|string|max:2',
+                'schools.*.date_attended_from_year' => 'nullable|integer|min:1900|max:2030',
+                'schools.*.date_attended_to_month' => 'nullable|string|max:2',
+                'schools.*.date_attended_to_year' => 'nullable|integer|min:1900|max:2030',
+                'schools.*.nature_training' => 'nullable|string|max:255',
+                'schools.*.rating' => 'nullable|string|max:255',
             ];
-            \App\Helper\DataUpdate::saveMilitaryHistory($data, $username);
+            $validated = $request->validate($rules);
 
+            DB::beginTransaction();
+            $username = auth()->user()->username;
+            \App\Helper\DataUpdate::saveMilitaryHistoryNormalized($validated, $username);
             $this->markSectionAsCompleted('military-history');
             DB::commit();
 
-            if ($isSaveOnly) {
-                return response()->json(['success' => true, 'message' => 'Military history saved successfully']);
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => true, 'message' => 'Military history saved successfully', 'next_route' => route('phs.places-of-residence.create')]);
             }
-
             return redirect()->route('phs.places-of-residence.create')
                 ->with('success', 'Military history saved successfully. Please continue with your places of residence.');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -135,6 +85,8 @@ class MilitaryHistoryController extends Controller
             }
             throw $e;
         } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Exception in MilitaryHistoryController@store', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             if ($isSaveOnly || $request->ajax()) {
                 return response()->json(['success' => false, 'message' => 'An error occurred while saving'], 500);
             }

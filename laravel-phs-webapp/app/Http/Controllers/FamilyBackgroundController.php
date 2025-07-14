@@ -216,15 +216,13 @@ class FamilyBackgroundController extends Controller
             $this->markSectionAsCompleted('family-background');
             session()->save();
             if ($request->ajax()) {
-                $nextRoute = auth()->user()->usertype === 'personnel'
-                    ? route('personnel.phs.educational-background.create')
-                    : route('phs.educational-background.create');
+                $nextRoute = route('phs.educational-background.create');
                 return response()->json([
                     'success' => true,
                     'next_route' => $nextRoute
                 ]);
             }
-            return redirect()->route('phs.section', ['section' => 'family-background']);
+            return redirect()->route('phs.educational-background.create');
         } catch (\Exception $e) {
             \Log::error('Exception in FamilyBackgroundController@store', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             if ($request->ajax()) {

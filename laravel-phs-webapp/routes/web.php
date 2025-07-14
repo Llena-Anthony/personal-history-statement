@@ -395,6 +395,24 @@ Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/phs/test-autofill', function() {
         return view('phs.test-autofill');
     })->name('phs.test-autofill');
+
+    // CSRF Token Refresh Route
+    Route::get('/refresh-csrf', function() {
+        return response()->json(['token' => csrf_token()]);
+    })->name('refresh-csrf');
+
+    // Debug route for session and CSRF token
+    Route::get('/debug-session', function() {
+        return response()->json([
+            'session_id' => session()->getId(),
+            'csrf_token' => csrf_token(),
+            'user_id' => auth()->id(),
+            'user_type' => auth()->user()->usertype ?? null,
+            'session_started' => session()->isStarted(),
+            'admin_switched' => session('admin_switched_to_client', false)
+        ]);
+    })->name('debug-session');
+
     // PHS Review Routes
     // Route::get('/phs/review', [PHSReviewController::class, 'review'])->name('phs.review');
     // Route::post('/phs/review/finalize', [PHSReviewController::class, 'finalize'])->name('phs.review.finalize');

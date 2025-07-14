@@ -19,6 +19,11 @@ class ClientMiddleware
             auth()->check() &&
             (auth()->user()->usertype === 'client' || session('admin_switched_to_client'))
         ) {
+            // Ensure session is properly started
+            if (!session()->isStarted()) {
+                session()->start();
+            }
+            
             $response = $next($request);
             return $response
                 ->header('Cache-Control','no-cache, no-store, max-age=0, must-revalidate')

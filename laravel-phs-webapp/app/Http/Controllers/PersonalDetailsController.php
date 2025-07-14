@@ -33,10 +33,31 @@ class PersonalDetailsController extends Controller
             'user_id' => auth()->id(),
             'request_data' => $request->all(),
             'is_ajax' => $request->ajax(),
-            'save_only' => $request->header('X-Save-Only')
+            'save_only' => $request->header('X-Save-Only'),
+            'session_id' => session()->getId(),
+            'user_agent' => $request->userAgent(),
+            'ip' => $request->ip()
         ]);
 
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
+
+        // Check if user is authenticated
+        if (!auth()->check()) {
+            \Log::error('PersonalDetails store: User not authenticated');
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Authentication required'], 401);
+            }
+            return redirect()->route('login')->with('error', 'Please log in to continue.');
+        }
+
+        // Check if session is valid
+        if (!session()->isStarted()) {
+            \Log::error('PersonalDetails store: Session not started');
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Session error'], 419);
+            }
+            return back()->with('error', 'Session error. Please try again.');
+        }
 
         try {
             // For save-only mode, use minimal validation

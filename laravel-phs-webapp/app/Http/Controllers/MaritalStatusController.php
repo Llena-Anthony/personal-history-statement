@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MaritalDetail;
-use App\Models\FamilyBackground;
+use App\Models\FamilyHistoryDetail;
 use App\Models\Child;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
