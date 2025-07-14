@@ -591,28 +591,28 @@
                             <span class="text-[#D4AF37]">Personnel</span>
                             <span class="mx-2">/</span>
                             <span id="header-breadcrumb" style="
-                                display: inline-flex;
-                                align-items: center;
-                                justify-content: center;
-                                min-width: 140px;
-                                max-width: 220px;
-                                width: 180px;
-                                white-space: nowrap;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                text-align: center;
-                                vertical-align: middle;
-                                background: linear-gradient(90deg, rgba(212,175,55,0.13) 0%, rgba(27,54,93,0.10) 100%);
-                                border: 1.5px solid #D4AF37;
-                                box-shadow: 0 2px 8px rgba(27,54,93,0.07);
-                                border-radius: 0.75rem;
-                                padding: 4px 18px 4px 14px;
-                                font-weight: 700;
-                                font-size: 1.05rem;
-                                color: #fffbe8;
-                                letter-spacing: 0.02em;
-                                transition: box-shadow 0.2s, background 0.2s;
-                            ">
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    max-width: 240px;
+    width: 240px;
+    white-space: nowrap;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    text-align: center;
+    vertical-align: middle;
+    background: linear-gradient(90deg, rgba(212,175,55,0.13) 0%, rgba(27,54,93,0.10) 100%);
+    border: 1.5px solid #D4AF37;
+    box-shadow: 0 2px 8px rgba(27,54,93,0.07);
+    border-radius: 0.75rem;
+    padding: 4px 18px 4px 14px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #fffbe8;
+    letter-spacing: 0.02em;
+    transition: box-shadow 0.2s, background 0.2s;
+">
                                 @yield('header', 'Dashboard')
                             </span>
                         </div>

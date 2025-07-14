@@ -44,7 +44,7 @@
                         {{ optional(optional($user->userDetail)->nameDetail)->first_name }} {{ optional(optional($user->userDetail)->nameDetail)->last_name }}
                     </h2>
                     <p class="text-gray-600">{{ $user->username }}</p>
-                    <p class="text-sm text-gray-500">{{ $user->email ?? 'N/A' }}</p>
+                    <p class="text-sm text-gray-500">{{ $user->userDetail->email_addr ?? 'N/A' }}</p>
                 </div>
             </div>
             <div class="text-right">
