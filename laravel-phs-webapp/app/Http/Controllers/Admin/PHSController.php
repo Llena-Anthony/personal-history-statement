@@ -53,8 +53,20 @@ class PHSController extends Controller
         $militaryAwards = DataRetrieval::retrieveAwards($username);
         $placesOfResidence = \App\Models\ResidenceHistoryDetail::where('username', $username)->with('addressDetail')->get();
         $employmentHistory = \App\Helper\DataRetrieval::retrieveEmployment($username);
+        $foreignCountries = \App\Helper\DataRetrieval::retrieveForeignVisits($username);
+        $creditDetail = \App\Helper\DataRetrieval::retrieveCreditDetail($username);
+        $creditReferences = \App\Helper\DataRetrieval::retrieveCreditReferences($username);
+        $arrestRecord = \App\Helper\DataRetrieval::retrieveArrestRecord($username);
+        $characterReferences = \App\Helper\DataRetrieval::retrieveCharRef($username);
+        $neighbors = \App\Helper\DataRetrieval::retrieveNeighbor($username);
+        $organizationData = \App\Helper\DataRetrieval::retrieveOrganizationMemberships($username);
+        $organizations = $organizationData['organizations'] ?? collect();
+        $miscellaneousData = \App\Helper\DataRetrieval::retrieveMiscellaneous($username);
+        $miscellaneous = $miscellaneousData['hobbies_sports_pastimes'] ?? '';
+        $languages = $miscellaneousData['languages'] ?? collect();
+        $lieDetectionTest = $miscellaneousData['lie_detection_test'] ?? '';
         
-        return view('admin.phs.show', compact('user', 'personalDetails', 'personalCharacteristics', 'maritalStatus', 'familyBackground', 'siblings', 'educationalBackground', 'militaryHistory', 'militaryAssignments', 'militarySchools', 'militaryAwards', 'placesOfResidence', 'employmentHistory'));
+        return view('admin.phs.show', compact('user', 'personalDetails', 'personalCharacteristics', 'maritalStatus', 'familyBackground', 'siblings', 'educationalBackground', 'militaryHistory', 'militaryAssignments', 'militarySchools', 'militaryAwards', 'placesOfResidence', 'employmentHistory', 'foreignCountries', 'creditDetail', 'creditReferences', 'arrestRecord', 'characterReferences', 'neighbors', 'organizations', 'miscellaneous', 'languages', 'lieDetectionTest'));
     }
 
     public function edit($username)
