@@ -953,31 +953,31 @@
             console.log('navigateToNextSection called with sectionId:', sectionId);
 
             // Save current section data without validation
-            const saveSuccess = await saveCurrentSectionData(sectionId);
+            const { saveSuccess, nextRoute } = await saveCurrentSectionData(sectionId);
             console.log('Save success:', saveSuccess);
 
             if (saveSuccess) {
-                // Navigate to next section
+                if (nextRoute) {
+                    window.location.href = nextRoute;
+                    return false;
+                }
+                // Fallback to old logic if nextRoute is not present
                 const nextSection = getNextSection(sectionId);
                 console.log('Next section:', nextSection);
-
                 if (nextSection) {
-                    const nextRoute = getSectionRoute(nextSection);
-                    console.log('Next route:', nextRoute);
-                    if (nextRoute && nextRoute !== '#') {
-                        // Use the navigation instance to load content dynamically instead of page redirect
+                    const fallbackRoute = getSectionRoute(nextSection);
+                    console.log('Fallback next route:', fallbackRoute);
+                    if (fallbackRoute && fallbackRoute !== '#') {
                         if (window.phsNavigationInstance) {
-                            await window.phsNavigationInstance.loadContent(nextRoute, nextSection);
+                            await window.phsNavigationInstance.loadContent(fallbackRoute, nextSection);
                         } else {
-                            // Fallback to page redirect if navigation instance not available
-                            window.location.href = nextRoute;
+                            window.location.href = fallbackRoute;
                         }
-                        return false; // Prevent form submission
+                        return false;
                     }
                 }
             }
-
-            return false; // Always return false to prevent form submission
+            return false;
         };
 
         window.navigateToPreviousSection = async function(currentSection) {
@@ -1039,7 +1039,7 @@
             const form = document.querySelector('form');
             if (!form) {
                 console.log('No form found, allowing navigation');
-                return true; // allow navigation if no form
+                return { saveSuccess: true, nextRoute: null };
             }
 
             console.log('Form found, action:', form.action);
@@ -1056,6 +1056,7 @@
 
             const formData = new FormData(form);
             let saveSuccess = false;
+            let nextRoute = null;
             let errorMsg = '';
             let retryCount = 0;
             const maxRetries = 2;
@@ -1089,6 +1090,7 @@
                             // Mark section as visited
                             window.phsNavigationInstance.markSectionAsVisited(sectionId);
                             saveSuccess = true;
+                            nextRoute = data.next_route || null;
                             console.log('Save successful');
                         } else {
                             errorMsg = data.message || 'Save failed.';
@@ -1155,7 +1157,7 @@
             if (!saveSuccess) {
                 alert(errorMsg || 'Failed to save. Please check your input.');
             }
-            return saveSuccess;
+            return { saveSuccess, nextRoute };
         }
 
         function phsNavigation(initialSection) {
@@ -2265,7 +2267,7 @@
                 residenceEntry.className = 'residence-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
                 residenceEntry.setAttribute('data-index', idx);
                 residenceEntry.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">From (Year)</label>
                             <input type="number" name="residences[${idx}][from]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="YYYY" min="1900" max="2030">
@@ -2274,9 +2276,41 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">To (Year)</label>
                             <input type="number" name="residences[${idx}][to]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="YYYY" min="1900" max="2030">
                         </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                            <input type="text" name="residences[${idx}][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter complete address">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                            <select name="residences[${idx}][region]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" onchange="loadProvinces('residences[${idx}]')">
+                                <option value="">Select Region</option>
+                                <!-- Populate with regions dynamically or server-side -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Province</label>
+                            <select name="residences[${idx}][province]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" onchange="loadCities('residences[${idx}]')">
+                                <option value="">Select Province</option>
+                                <!-- Populate with provinces dynamically or server-side -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">City/Municipality</label>
+                            <select name="residences[${idx}][city]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" onchange="loadBarangays('residences[${idx}]')">
+                                <option value="">Select City/Municipality</option>
+                                <!-- Populate with cities dynamically or server-side -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Barangay</label>
+                            <select name="residences[${idx}][barangay]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                                <option value="">Select Barangay</option>
+                                <!-- Populate with barangays dynamically or server-side -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
+                            <input type="text" name="residences[${idx}][street]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter street address">
                         </div>
                     </div>
                     <button type="button" class="remove-residence absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>

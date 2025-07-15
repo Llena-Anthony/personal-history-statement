@@ -1,17 +1,5 @@
 <div class="max-w-4xl mx-auto">
 
-    <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
-                <i class="fas fa-puzzle-piece text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">XIV: Miscellaneous</h1>
-            </div>
-        </div>
-    </div>
-
     <!-- Form -->
     <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10">
         @csrf
@@ -146,37 +134,6 @@
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
-            @php
-                $sectionOrder = [
-                    'personal-details',
-                    'personal-characteristics',
-                    'marital-status',
-                    'family-background',
-                    'educational-background',
-                    'military-history',
-                    'places-of-residence',
-                    'employment-history',
-                    'foreign-countries',
-                    'credit-reputation',
-                    'arrest-record',
-                    'character-and-reputation',
-                    'organization',
-                    'miscellaneous'
-                ];
-                $sectionName = 'miscellaneous';
-                $currentIndex = array_search($sectionName, $sectionOrder);
-                $previousSection = $currentIndex > 0 ? $sectionOrder[$currentIndex - 1] : null;
-                $previousSectionRoute = $previousSection ? route('phs.' . $previousSection . '.create') : route('client.dashboard');
-            @endphp
-            <a href="{{ $previousSectionRoute }}" class="btn-secondary">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Previous Section
-            </a>
-            <button type="button" id="finishBtn" class="btn-primary">
-                Save & Continue <i class="fas fa-arrow-right ml-2"></i>
-            </button>
-        </div>
     </form>
 </div>
 

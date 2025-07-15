@@ -414,7 +414,7 @@ Route::middleware(['auth', 'client'])->group(function () {
     })->name('debug-session');
 
     // PHS Review Routes
-    // Route::get('/phs/review', [PHSReviewController::class, 'review'])->name('phs.review');
+    Route::get('/phs/review', [App\Http\Controllers\PHSReviewController::class, 'review'])->name('phs.review.create');
     // Route::post('/phs/review/finalize', [PHSReviewController::class, 'finalize'])->name('phs.review.finalize');
 });
 

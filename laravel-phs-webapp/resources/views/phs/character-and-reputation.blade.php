@@ -1,7 +1,7 @@
 @php
     // Standardized section configuration
     $sectionName = 'character-and-reputation';
-    $sectionTitle = 'XIII: Character and Reputation';
+    $sectionTitle = 'XII: Character and Reputation';
     $sectionDescription = 'Please provide your character references and neighbor information.';
     $sectionIcon = 'fas fa-user-shield';
     $nextSection = 'miscellaneous';

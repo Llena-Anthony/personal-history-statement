@@ -424,16 +424,16 @@ class DataUpdate {
         // Remove all old residence history for this user
         \App\Models\ResidenceHistoryDetail::where('username', $username)->delete();
         foreach ($residences as $residence) {
-            if (!empty($residence['address'])) {
-                // Create address detail (store address in 'street' field, others null)
+            // Only save if at least one address field is present
+            if (!empty($residence['region']) || !empty($residence['province']) || !empty($residence['city']) || !empty($residence['barangay']) || !empty($residence['street'])) {
                 $address = \App\Models\AddressDetail::create([
-                    'country' => null,
-                    'region' => null,
-                    'province' => null,
-                    'city' => null,
-                    'barangay' => null,
-                    'street' => $residence['address'],
-                    'zip_code' => null,
+                    'country' => $residence['country'] ?? 'Philippines',
+                    'region' => $residence['region'] ?? null,
+                    'province' => $residence['province'] ?? null,
+                    'city' => $residence['city'] ?? null,
+                    'barangay' => $residence['barangay'] ?? null,
+                    'street' => $residence['street'] ?? null,
+                    'zip_code' => $residence['zip_code'] ?? null,
                 ]);
                 // Create residence history detail
                 \App\Models\ResidenceHistoryDetail::create([
@@ -813,22 +813,18 @@ class DataUpdate {
     public static function saveOrganizationMemberships($organizations, $username) {
         foreach ($organizations as $organization) {
             if (!empty($organization['name'])) {
-                // Create or update address details if address is provided
+                // Create or update address details if address is provided as an array
                 $addressId = null;
-                if (!empty($organization['address'])) {
-                    $address = \App\Models\AddressDetail::firstOrCreate(
-                        [
-                            'street' => $organization['address'],
-                            'country' => 'Philippines' // Default country
-                        ],
-                        [
-                            'barangay' => '',
-                            'province' => '',
-                            'city' => '',
-                            'region' => '',
-                            'zip_code' => ''
-                        ]
-                    );
+                if (!empty($organization['address']) && is_array($organization['address'])) {
+                    $address = \App\Models\AddressDetail::firstOrCreate([
+                        'country' => $organization['address']['country'] ?? 'Philippines',
+                        'region' => $organization['address']['region'] ?? null,
+                        'province' => $organization['address']['province'] ?? null,
+                        'city' => $organization['address']['city'] ?? null,
+                        'barangay' => $organization['address']['barangay'] ?? null,
+                        'street' => $organization['address']['street'] ?? null,
+                        'zip_code' => null,
+                    ]);
                     $addressId = $address->addr_id;
                 }
 

@@ -1,16 +1,3 @@
-<div class="max-w-4xl mx-auto">
-    <div class="mb-8">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="w-12 h-12 bg-[#1B365D] rounded-full flex items-center justify-center">
-                <i class="fas fa-users text-white text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-3xl font-bold text-[#1B365D]">Organization</h1>
-                <p class="text-gray-600">List all organizations you are or have been a member of.</p>
-            </div>
-        </div>
-    </div>
-    
     {{-- Remove the <form> wrapper and just keep the section content fields here --}}
 
     <!-- Organization Entries -->
@@ -34,13 +21,55 @@
                                        placeholder="Enter organization name">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                                <input type="text" name="organizations[{{ $index }}][address]" 
-                                       value="{{ old('organizations.' . $index . '.address', $organization->addressDetails->street ?? '') }}"
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
+                                <input type="text" name="organizations[{{ $index }}][position]" 
+                                       value="{{ old('organizations.' . $index . '.position', $organization->membershipDetails->first()->position_held ?? '') }}"
                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
-                                       placeholder="Enter organization address">
+                                       placeholder="Enter position held">
                             </div>
-                            <div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                                    <div>
+                                        <select name="organizations[{{ $index }}][region]" id="org_{{ $index }}_region" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadProvinces('org_{{ $index }}')">
+                                            <option value="">Select Region</option>
+                                            @if(isset($organization->addressDetails->region))
+                                                <option value="{{ $organization->addressDetails->region }}" selected>{{ $organization->addressDetails->region_name ?? $organization->addressDetails->region }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <select name="organizations[{{ $index }}][province]" id="org_{{ $index }}_province" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadCities('org_{{ $index }}')">
+                                            <option value="">Select Province</option>
+                                            @if(isset($organization->addressDetails->province))
+                                                <option value="{{ $organization->addressDetails->province }}" selected>{{ $organization->addressDetails->province_name ?? $organization->addressDetails->province }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <select name="organizations[{{ $index }}][city]" id="org_{{ $index }}_city" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadBarangays('org_{{ $index }}')">
+                                            <option value="">Select City/Municipality</option>
+                                            @if(isset($organization->addressDetails->city))
+                                                <option value="{{ $organization->addressDetails->city }}" selected>{{ $organization->addressDetails->city_name ?? $organization->addressDetails->city }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    <div>
+                                        <select name="organizations[{{ $index }}][barangay]" id="org_{{ $index }}_barangay" class="w-full px-2 py-2 border border-gray-300 rounded-lg">
+                                            <option value="">Select Barangay</option>
+                                            @if(isset($organization->addressDetails->barangay))
+                                                <option value="{{ $organization->addressDetails->barangay }}" selected>{{ $organization->addressDetails->barangay_name ?? $organization->addressDetails->barangay }}</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="text" name="organizations[{{ $index }}][street]" class="w-full px-2 py-2 border border-gray-300 rounded-lg" placeholder="Street address" value="{{ old('organizations.' . $index . '.street', $organization->addressDetails->street ?? '') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
                                 <div class="flex space-x-2">
                                     <select name="organizations[{{ $index }}][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
@@ -64,13 +93,6 @@
                                            placeholder="Year">
                                 </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
-                                <input type="text" name="organizations[{{ $index }}][position]" 
-                                       value="{{ old('organizations.' . $index . '.position', $organization->membershipDetails->first()->position_held ?? '') }}"
-                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
-                                       placeholder="Enter position held">
-                            </div>
                         </div>
                         @if($index > 0)
                             <button type="button" class="remove-organization absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
@@ -86,10 +108,40 @@
                             <input type="text" name="organizations[0][name]" class="w-full px-4 py-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter organization name">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                            <input type="text" name="organizations[0][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter organization address">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
+                            <input type="text" name="organizations[0][position]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter position held">
                         </div>
-                        <div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                                <div>
+                                    <select name="organizations[0][region]" id="org_0_region" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadProvinces('org_0')">
+                                        <option value="">Select Region</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select name="organizations[0][province]" id="org_0_province" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadCities('org_0')">
+                                        <option value="">Select Province</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select name="organizations[0][city]" id="org_0_city" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadBarangays('org_0')">
+                                        <option value="">Select City/Municipality</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <div>
+                                    <select name="organizations[0][barangay]" id="org_0_barangay" class="w-full px-2 py-2 border border-gray-300 rounded-lg">
+                                        <option value="">Select Barangay</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <input type="text" name="organizations[0][street]" class="w-full px-2 py-2 border border-gray-300 rounded-lg" placeholder="Street address" value="{{ old('organizations.0.street') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
                             <div class="flex space-x-2">
                                 <select name="organizations[0][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
@@ -110,10 +162,6 @@
                                 <input type="number" name="organizations[0][year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
-                            <input type="text" name="organizations[0][position]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter position held">
-                        </div>
                     </div>
                 </div>
             @endif
@@ -126,7 +174,6 @@
     {{-- Remove the <form> wrapper and just keep the section content fields here --}}
 
     {{-- Remove the <form> wrapper and just keep the section content fields here --}}
-</div>
 
 <script>
 // Organization addition handler
@@ -146,10 +193,40 @@ function addOrganizationHandler(e) {
                 <input type="text" name="organizations[${orgIndex}][name]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter organization name">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                <input type="text" name="organizations[${orgIndex}][address]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter organization address">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
+                <input type="text" name="organizations[${orgIndex}][position]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter position held">
             </div>
-            <div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                    <div>
+                        <select name="organizations[${orgIndex}][region]" id="org_${orgIndex}_region" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadProvinces('org_${orgIndex}')">
+                            <option value="">Select Region</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select name="organizations[${orgIndex}][province]" id="org_${orgIndex}_province" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadCities('org_${orgIndex}')">
+                            <option value="">Select Province</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select name="organizations[${orgIndex}][city]" id="org_${orgIndex}_city" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadBarangays('org_${orgIndex}')">
+                            <option value="">Select City/Municipality</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div>
+                        <select name="organizations[${orgIndex}][barangay]" id="org_${orgIndex}_barangay" class="w-full px-2 py-2 border border-gray-300 rounded-lg">
+                            <option value="">Select Barangay</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" name="organizations[${orgIndex}][street]" class="w-full px-2 py-2 border border-gray-300 rounded-lg" placeholder="Street address" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
                 <div class="flex space-x-2">
                     <select name="organizations[${orgIndex}][month]" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
@@ -170,10 +247,6 @@ function addOrganizationHandler(e) {
                     <input type="number" name="organizations[${orgIndex}][year]" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
-                <input type="text" name="organizations[${orgIndex}][position]" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter position held">
-            </div>
         </div>
         <button type="button" class="remove-organization absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors"><i class="fas fa-times-circle"></i></button>
     `;
@@ -191,6 +264,20 @@ function removeOrganizationHandler(e) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach add handler
+    const addBtn = document.getElementById('add-organization');
+    if (addBtn) {
+        addBtn.removeEventListener('click', addOrganizationHandler);
+        addBtn.addEventListener('click', addOrganizationHandler);
+    }
+    // Attach remove handler (event delegation)
+    const orgContainer = document.getElementById('organizations');
+    if (orgContainer) {
+        orgContainer.removeEventListener('click', removeOrganizationHandler);
+        orgContainer.addEventListener('click', removeOrganizationHandler);
+    }
+});
 // Call global initialization function for Organization
 if (typeof window.initializeOrganization === 'function') {
     window.initializeOrganization();

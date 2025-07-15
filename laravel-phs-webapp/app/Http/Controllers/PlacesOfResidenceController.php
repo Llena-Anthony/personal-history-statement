@@ -56,8 +56,12 @@ class PlacesOfResidenceController extends Controller
 
             $this->markSectionAsCompleted('places-of-residence');
 
-            if ($isSaveOnly) {
-                return response()->json(['success' => true, 'message' => 'Places of residence saved successfully']);
+            if ($isSaveOnly || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Places of residence saved successfully',
+                    'next_route' => route('phs.employment-history.create')
+                ]);
             }
 
             return redirect()->route('phs.employment-history.create')

@@ -415,9 +415,12 @@ class DataRetrieval {
      */
     public static function retrieveOrganizationMemberships($username) {
         $memberships = self::retrieveMemberships($username);
-        
+        $orgIds = $memberships->pluck('org')->unique()->toArray();
+        $organizations = OrganizationDetail::with(['addressDetail', 'membershipDetails' => function($q) use ($username) {
+            $q->where('username', $username);
+        }])->whereIn('org_id', $orgIds)->get();
         return [
-            'organizations' => $memberships,
+            'organizations' => $organizations,
         ];
     }
 

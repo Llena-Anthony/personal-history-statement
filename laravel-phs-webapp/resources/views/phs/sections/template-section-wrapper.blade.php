@@ -38,7 +38,7 @@
     ]);
 @endphp
 
-@extends($layout)
+@extends('layouts.phs-new')
 
 @section('title', $sectionTitle)
 

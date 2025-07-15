@@ -173,8 +173,13 @@ class CreditReputationController extends Controller
             );
             $this->markSectionAsCompleted('credit-reputation');
             session()->save();
-            if ($isSaveOnly) {
-                return response()->json(['success' => true, 'message' => 'Credit reputation saved successfully']);
+            if ($isSaveOnly || $request->ajax()) {
+                $nextRoute = route('phs.arrest-record.create');
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Credit reputation saved successfully',
+                    'next_route' => $nextRoute
+                ]);
             }
             if ($request->ajax()) {
                 $nextRoute = route('phs.arrest-record.create');

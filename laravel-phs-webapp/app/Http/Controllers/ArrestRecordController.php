@@ -31,44 +31,32 @@ class ArrestRecordController extends Controller
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
         
         try {
-            // Validation (minimal for save-only, full for final submission)
-            if ($isSaveOnly) {
-                $validated = $request->validate([
-                    'arrest_records' => 'nullable|array',
-                    'arrest_records.*.date_arrested' => 'nullable|date',
-                    'arrest_records.*.offense' => 'nullable|string|max:255',
-                    'arrest_records.*.place_arrested' => 'nullable|string|max:255',
-                    'arrest_records.*.status' => 'nullable|string|max:255',
-                    'arrest_records.*.disposition' => 'nullable|string|max:255',
-                ]);
-            } else {
-                $validated = $request->validate([
-                    'arrest_records' => 'nullable|array',
-                    'arrest_records.*.date_arrested' => 'nullable|date',
-                    'arrest_records.*.offense' => 'nullable|string|max:255',
-                    'arrest_records.*.place_arrested' => 'nullable|string|max:255',
-                    'arrest_records.*.status' => 'nullable|string|max:255',
-                    'arrest_records.*.disposition' => 'nullable|string|max:255',
-                ]);
-            }
+            $rules = [
+                'investigated_arrested' => 'nullable|string|in:yes,no',
+                'investigated_arrested_details' => 'nullable|string|max:255',
+                'family_investigated_arrested' => 'nullable|string|in:yes,no',
+                'family_investigated_arrested_details' => 'nullable|string|max:255',
+                'administrative_case' => 'nullable|string|in:yes,no',
+                'administrative_case_details' => 'nullable|string|max:255',
+                'pd1081_arrested' => 'nullable|string|in:yes,no',
+                'pd1081_arrested_details' => 'nullable|string|max:255',
+                'intoxicating_liquor_narcotics' => 'nullable|string|in:yes,no',
+                'intoxicating_liquor_narcotics_details' => 'nullable|string|max:255',
+            ];
+            $validated = $request->validate($rules);
 
             $username = auth()->user()->username;
-            $data = [
-                'arrest_records' => $validated['arrest_records'] ?? [],
-            ];
-            
+            $data = ['arrest' => $validated];
+
             \App\Helper\DataUpdate::saveArrestRecord($data, $username);
             $this->markSectionAsCompleted('arrest-record');
             session()->save();
 
-            if ($isSaveOnly) {
-                return response()->json(['success' => true, 'message' => 'Arrest record saved successfully']);
-            }
-
-            if ($request->ajax()) {
+            if ($isSaveOnly || $request->ajax()) {
                 $nextRoute = route('phs.character-and-reputation.create');
                 return response()->json([
                     'success' => true,
+                    'message' => 'Arrest record saved successfully',
                     'next_route' => $nextRoute
                 ]);
             }

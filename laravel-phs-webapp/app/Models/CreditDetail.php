@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class CreditDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';

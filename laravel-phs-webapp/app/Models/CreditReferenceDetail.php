@@ -8,6 +8,7 @@ use App\Traits\Searchable;
 
 class CreditReferenceDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'account_id';
     public $incrementing = true;
     public $keyType = 'int';
