@@ -205,6 +205,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // PHS Submission Management Routes
     Route::get('print-preview', [App\Http\Controllers\PrintController::class, 'preview'])->name('phs.preview');
+    Route::get('print-individual/{username}', [PrintController::class, 'printIndividual'])->name('phs.print-indiv');
 
     Route::get('phs', [App\Http\Controllers\Admin\PHSController::class, 'index'])->name('phs.index');
     Route::get('phs/{username}', [App\Http\Controllers\Admin\PHSController::class, 'show'])->name('phs.show');

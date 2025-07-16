@@ -771,16 +771,157 @@ class DataUpdate {
      * Save all personal characteristics for a user using the above helper.
      */
     public static function savePersonalCharacteristics($data, $username) {
-        self::updatePersonalCharacteristics($username, $data);
+        // Split data for DescriptionDetail and PersonalDetail
+        $descFields = [
+            'sex', 'age', 'height', 'weight', 'body_build', 'complexion', 'eye_color', 'hair_color', 'other_marks'
+        ];
+        $personalFields = [
+            'health_state', 'illness', 'blood_type', 'cap_size', 'shoe_size', 'hobbies', 'undergo_lie_detection'
+        ];
+        $descData = [];
+        $personalData = [];
+        foreach ($data as $key => $value) {
+            if (in_array($key, $descFields)) $descData[$key] = $value;
+            if (in_array($key, $personalFields)) $personalData[$key] = $value;
+        }
+        if (!empty($descData)) self::updatePersonalCharacteristics($username, $descData);
+        if (!empty($personalData)) self::updatePersonalDetail($username, $personalData);
     }
 
     /**
      * Save all marital status data for a user using the above helper.
      */
     public static function saveMaritalStatus($data, $username) {
+        \Log::info('saveMaritalStatus called', ['username' => $username, 'data' => $data]);
+        // Split data for MaritalDetail, SpouseDetail, and ChildrenDetail
+        $maritalFields = ['marital_stat'];
+        $spouseFields = [
+            'spouse_first_name', 'spouse_middle_name', 'spouse_last_name', 'spouse_suffix',
+            'marriage_month', 'marriage_year', 'marriage_place', 'spouse_birth_date', 'spouse_birth_place',
+            'spouse_occupation', 'spouse_employer', 'spouse_employment_place', 'spouse_contact',
+            'spouse_citizenship', 'spouse_other_citizenship'
+        ];
         $children = $data['children'] ?? [];
-        unset($data['children']);
-        self::updateMaritalStatus($username, $data, $children);
+        $maritalData = [];
+        $spouseData = [];
+        foreach ($data as $key => $value) {
+            if (in_array($key, $maritalFields)) $maritalData[$key] = $value;
+            if (in_array($key, $spouseFields)) $spouseData[$key] = $value;
+        }
+        // Map to DB columns
+        $maritalDetail = [
+            'marital_stat' => $maritalData['marital_stat'] ?? null,
+        ];
+        // --- SPOUSE ---
+        $spouseNameId = null;
+        if ($spouseData['spouse_first_name'] || $spouseData['spouse_last_name']) {
+            $spouseName = [
+                'first_name' => $spouseData['spouse_first_name'] ?? null,
+                'middle_name' => $spouseData['spouse_middle_name'] ?? null,
+                'last_name' => $spouseData['spouse_last_name'] ?? null,
+                'suffix' => $spouseData['spouse_suffix'] ?? null,
+            ];
+            $spouseNameId = \App\Models\NameDetail::firstOrCreate($spouseName)->name_id;
+        }
+        // Marriage place
+        $marrPlaceId = null;
+        if (!empty($spouseData['marriage_place'])) {
+            $marrPlaceId = \App\Models\AddressDetail::firstOrCreate(['street' => $spouseData['marriage_place']])->addr_id;
+        }
+        // Spouse birth place
+        $birthPlaceId = null;
+        if (!empty($spouseData['spouse_birth_place'])) {
+            $birthPlaceId = \App\Models\AddressDetail::firstOrCreate(['street' => $spouseData['spouse_birth_place']])->addr_id;
+        }
+        // Spouse occupation
+        $occupationId = null;
+        if (!empty($spouseData['spouse_occupation'])) {
+            $occupationArr = [
+                'occupation_desc' => $spouseData['spouse_occupation'],
+                'employer' => $spouseData['spouse_employer'] ?? null,
+            ];
+            // Save employment place as address
+            if (!empty($spouseData['spouse_employment_place'])) {
+                $employmentAddr = \App\Models\AddressDetail::firstOrCreate(['street' => $spouseData['spouse_employment_place']]);
+                $occupationArr['occupation_addr'] = $employmentAddr->addr_id;
+            }
+            $occupationId = \App\Models\OccupationDetail::firstOrCreate($occupationArr)->occupation_id;
+        }
+        // Spouse citizenship
+        $citizenshipId = null;
+        if (!empty($spouseData['spouse_citizenship'])) {
+            $citizenshipId = \App\Models\CitizenshipDetail::firstOrCreate([
+                'cit_description' => $spouseData['spouse_citizenship']
+            ])->cit_id;
+        }
+        // Spouse dual citizenship
+        $dualId = null;
+        if (!empty($spouseData['spouse_other_citizenship'])) {
+            $dualId = \App\Models\CitizenshipDetail::firstOrCreate([
+                'cit_description' => $spouseData['spouse_other_citizenship']
+            ])->cit_id;
+        }
+        // Spouse record
+        $spouseArr = [
+            'spouse_name' => $spouseNameId,
+            'marr_date' => (!empty($spouseData['marriage_year']) && !empty($spouseData['marriage_month'])) ? ($spouseData['marriage_year'] . '-' . $spouseData['marriage_month'] . '-01') : null,
+            'marr_place' => $marrPlaceId,
+            'birth_date' => $spouseData['spouse_birth_date'] ?? null,
+            'birth_place' => $birthPlaceId,
+            'occupation' => $occupationId,
+            'mobile_num' => $spouseData['spouse_contact'] ?? null,
+            'citizenship' => $citizenshipId,
+            'dual' => $dualId,
+        ];
+        $spouse = \App\Models\SpouseDetail::create($spouseArr);
+        $maritalDetail['spouse'] = $spouse->spouse_id;
+        // --- CHILDREN ---
+        $childrenArr = [];
+        foreach ($children as $child) {
+            \Log::info('Processing child for saveMaritalStatus', ['child' => $child]);
+            if (!empty($child['first_name']) || !empty($child['last_name'])) {
+                $childNameId = \App\Models\NameDetail::firstOrCreate([
+                    'first_name' => $child['first_name'] ?? '',
+                    'middle_name' => $child['middle_name'] ?? null,
+                    'last_name' => $child['last_name'] ?? '',
+                    'suffix' => $child['suffix'] ?? null,
+                ])->name_id;
+                $childAddrId = null;
+                if (!empty($child['address'])) {
+                    $childAddrId = \App\Models\AddressDetail::firstOrCreate(['street' => $child['address']])->addr_id;
+                }
+                $childCitId = null;
+                if (!empty($child['citizenship'])) {
+                    $childCitId = \App\Models\CitizenshipDetail::firstOrCreate(['cit_description' => $child['citizenship']])->cit_id;
+                }
+                $childrenArr[] = [
+                    'child_name' => $childNameId,
+                    'birth_date' => $child['birth_date'] ?? null,
+                    'citizenship' => $childCitId,
+                    'addr' => $childAddrId,
+                    'other_parent' => null,
+                    'username' => $username,
+                    'father_name' => $child['father_name'] ?? null,
+                    'mother_name' => $child['mother_name'] ?? null,
+                ];
+            }
+        }
+        // Save marital detail
+        \App\Models\MaritalDetail::updateOrCreate(
+            ['username' => $username],
+            $maritalDetail
+        );
+        // Remove old children and add new
+        \App\Models\ChildrenDetail::where('username', $username)->delete();
+        \Log::info('Children array to be saved', ['childrenArr' => $childrenArr]);
+        foreach ($childrenArr as $childRow) {
+            try {
+                \App\Models\ChildrenDetail::create($childRow);
+            } catch (\Exception $e) {
+                \Log::error('Failed to create ChildrenDetail', ['childRow' => $childRow, 'error' => $e->getMessage()]);
+            }
+        }
+        \Log::info('saveMaritalStatus completed', ['username' => $username, 'maritalDetail' => $maritalDetail, 'spouseData' => $spouseData, 'children' => $children]);
     }
 
     /**

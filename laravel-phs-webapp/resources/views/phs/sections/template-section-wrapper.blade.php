@@ -443,9 +443,38 @@ if (document.getElementById('birth_region')) {
 }
 
 // Initialize personal details section
-window.initializePersonalDetails = function() {
+window.initializePersonalDetails = async function() {
     console.log('Personal Details section initialized');
-    loadRegions();
+    await loadRegions();
+
+    // Prefill region selects
+    if (window.prefilledBirthRegion) {
+        const birthRegion = document.getElementById('birth_region');
+        if (birthRegion) {
+            birthRegion.value = window.prefilledBirthRegion;
+            await loadProvinces('birth');
+        }
+    }
+    if (window.prefilledHomeRegion) {
+        const homeRegion = document.getElementById('home_region');
+        if (homeRegion) {
+            homeRegion.value = window.prefilledHomeRegion;
+            await loadProvinces('home');
+        }
+    }
+    if (window.prefilledBusinessRegion) {
+        const businessRegion = document.getElementById('business_region');
+        if (businessRegion) {
+            businessRegion.value = window.prefilledBusinessRegion;
+            await loadProvinces('business');
+        }
+    }
+    // After all selects are set, update hidden fields
+    if (typeof updateAddressNames === 'function') {
+        updateAddressNames('home');
+        updateAddressNames('business');
+        updateAddressNames('birth');
+    }
 };
 
 // Auto-initialize if this is the personal details section

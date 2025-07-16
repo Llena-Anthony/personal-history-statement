@@ -3299,5 +3299,6 @@
             if (barangay) document.getElementById(`${type}_barangay_name`).value = barangay.options[barangay.selectedIndex]?.text || '';
         }
     </script>
+    @stack('scripts')
 </body>
 </html>

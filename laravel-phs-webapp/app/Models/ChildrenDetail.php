@@ -8,16 +8,19 @@ use App\Models\Searchable;
 
 class ChildrenDetail extends Model
 {
+    public $timestamps = false;
     protected $primaryKey = 'child_id';
     public $incrementing = true;
     public $keyType = 'int';
-    public $fillable = [
+    protected $fillable = [
         'child_name',
         'birth_date',
         'citizenship',
         'addr',
         'other_parent',
-        'username'
+        'username',
+        'father_name',
+        'mother_name',
     ];
     protected $casts = [
         'birth_date'=> 'date'
