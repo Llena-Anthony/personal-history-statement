@@ -114,7 +114,7 @@
                                 <div class="form-group">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
                         <div class="relative">
-                                        <input type="email" value="{{ $user->email }}" disabled
+                                        <input type="email" value="{{ $user->userDetail->email_addr ?? '' }}" disabled
                                             class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed">
                                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                             <i class="fas fa-lock text-gray-400"></i>
