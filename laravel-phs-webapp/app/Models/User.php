@@ -36,6 +36,7 @@ class User extends Authenticatable
         'is_active',
         'last_login_at',
         'remember_token',
+        'email',
     ];
 
     public function userDetail() {

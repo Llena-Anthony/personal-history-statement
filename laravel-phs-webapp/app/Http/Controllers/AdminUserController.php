@@ -171,6 +171,7 @@ class AdminUserController extends Controller
                 'organic_role' => $sessionUserData['organic_group'],
                 'is_active' => '1',
                 'phs_status' => 'pending',
+                'email' => $sessionUserData['email'],
             ];
 
             Log::info('Attempting to create user with data', ['userData' => $userData]);

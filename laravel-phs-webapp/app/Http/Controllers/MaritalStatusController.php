@@ -30,6 +30,11 @@ class MaritalStatusController extends Controller
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
         \Log::info('MaritalStatusController store() called');
         try {
+            // Ensure marital_stat is set to 'Single' if missing or empty
+            $data = $request->all();
+            if (!isset($data['marital_stat']) || empty($data['marital_stat'])) {
+                $data['marital_stat'] = 'Single';
+            }
             // Add validation for spouse fields
             $rules = [
                 'marital_stat' => 'required|string',
@@ -49,8 +54,7 @@ class MaritalStatusController extends Controller
                 'spouse_citizenship' => 'nullable|string|max:100',
                 'spouse_other_citizenship' => 'nullable|string|max:100',
             ];
-            $validated = $request->validate($rules);
-            $data = $request->all();
+            $validated = \Validator::make($data, $rules)->validate();
             $childrenData = $data['children'] ?? [];
             unset($data['_token']);
             // Capitalize spouse name fields
@@ -66,15 +70,6 @@ class MaritalStatusController extends Controller
                 } else {
                     $data['marriage_month'] = null;
                     $data['marriage_year'] = null;
-                }
-            }
-            // Add default values for required fields if they're missing
-            $defaults = [
-                'marital_status' => 'Single',
-            ];
-            foreach ($defaults as $field => $defaultValue) {
-                if (!isset($data[$field]) || empty($data[$field])) {
-                    $data[$field] = $defaultValue;
                 }
             }
             // Remove empty/null values
