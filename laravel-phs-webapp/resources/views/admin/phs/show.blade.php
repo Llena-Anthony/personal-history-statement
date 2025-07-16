@@ -109,7 +109,13 @@
                         <div class="space-y-4">
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Date of Birth:</span>
-                                <span class="text-sm text-gray-900">{{ $personalDetails['date_of_birth'] ?? 'N/A' }}</span>
+                                <span class="text-sm text-gray-900">
+                                    @if(!empty($personalDetails['date_of_birth']))
+                                        {{ \Carbon\Carbon::parse($personalDetails['date_of_birth'])->format('Y-m-d') }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </span>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                 <span class="text-sm font-medium text-gray-600">Place of Birth:</span>

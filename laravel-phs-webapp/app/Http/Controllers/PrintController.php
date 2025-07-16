@@ -10,18 +10,19 @@ use App\Model\BirthDetails;
 use App\Models\CharacterReference;
 use App\Models\PHSSubmission;
 use App\Models\User;
+use App\Helper\DataRetrieval;
 
 class PrintController extends Controller
 {
-    public function preview() {
-        return view("admin.phs.phs-template");
+    public function preview($username = null) {
+        $personalDetails = $username ? DataRetrieval::retrievePersonalDetails($username) : null;
+        return view("admin.phs.phs-template", compact('personalDetails'));
     }
 
     public function printIndividual($username)
     {
-
-        $applicant = User::where('username', $username)->first();
-        return view("admin.phs.phs-template");
+        $personalDetails = DataRetrieval::retrievePersonalDetails($username);
+        return view("admin.phs.phs-template", compact('personalDetails'));
     }
 
     public function printPHSSubmission($username)

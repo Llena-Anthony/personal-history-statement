@@ -68,7 +68,14 @@
 
         {{-- Personal-A --}}
         <div class="mt-[-170pt] flex ml-[0.6in]"><span class="mr-[0.5in]">A.</span>
-            Name:<div id="app-name" class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2"></div>
+            Name:
+            <div id="app-name" class="border-b border-black text-[11pt] text-left ml-auto w-[5.65in] pl-2">
+                @if(isset($personalDetails))
+                    {{ $personalDetails['last_name'] ?? '' }}, {{ $personalDetails['first_name'] ?? '' }} {{ $personalDetails['middle_name'] ?? '' }}
+                @else
+                    &nbsp;
+                @endif
+            </div>
         </div>
         <div class="ml-[1.8in] text-center">
             <span class="mr-[0.9in]">(Last Name)</span>
@@ -100,7 +107,13 @@
 
         {{-- Personal-F --}}
         <div class="flex ml-[0.6in]"><span class="mr-[0.5in]">F.</span>
-            Birth Date:<div id="app-bdate" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2"></div>
+            Birth Date:<div id="app-bdate" class="border-b border-black text-[11pt] text-left ml-auto w-[1.5in] pl-2">
+                @if(isset($personalDetails) && !empty($personalDetails['date_of_birth']))
+                    {{ \Carbon\Carbon::parse($personalDetails['date_of_birth'])->format('Y-m-d') }}
+                @else
+                    &nbsp;
+                @endif
+            </div>
             Place of Birth:<div id="app-bplace" class="border-b border-black text-[11pt] text-left ml-auto w-[2.95in] pl-2"></div>
         </div>
 
@@ -1164,8 +1177,8 @@
                 of brandy. Josephine Z Quanzing, a partner in law firm of San Diego and Ballesteros
                 located at 2879 Valley Forge St., Quezon City turned to Richard Ting, a Chinese food
                 expert from Q.W. Kwantung Company, Ltd., 346 Hadji Jairula Hussin Blvd., and said.
-                “I can’t speak for my government but I’m quite sure your country and mine get together
-                for closer understanding”
+                "I can't speak for my government but I'm quite sure your country and mine get together
+                for closer understanding"
                 </p>
                 <div class="w-full h-[110.5pt] indent-[0.3in] text-[11pt] leading-[15.3px] bg-[length:100%_15.3px] bg-repeat-y bg-[linear-gradient(to_bottom,_transparent_13.5px,_black_13.5px,_black_14.5px,_transparent_14.5px)]"></div>
 
