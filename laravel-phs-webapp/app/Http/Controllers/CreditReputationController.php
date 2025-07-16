@@ -60,10 +60,7 @@ class CreditReputationController extends Controller
         $data['creditReputation'] = $creditReputation;
         $data['otherIncomes'] = $otherIncomes;
         $data['knownBanks'] = $knownBanks;
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.credit-reputation-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.credit-reputation', $data);
     }
 
@@ -108,36 +105,31 @@ class CreditReputationController extends Controller
                     'itr_amount' => $validated['itr_amount'] ?? null,
                 ],
                 'references' => array_map(function($ref) {
+                    if (!empty($ref['address'])) {
+                        // Save full address in region field
+                        $address = \App\Models\AddressDetail::firstOrCreate([
+                            'country' => 'Philippines',
+                            'region' => $ref['address'],
+                        ]);
+                        $addr_id = $address->addr_id;
+                    } else {
+                        $addr_id = null;
+                    }
                     return [
                         'bank_name' => $ref['name'] ?? null,
-                        'region' => $ref['region'] ?? null,
-                        'province' => $ref['province'] ?? null,
-                        'city' => $ref['city'] ?? null,
-                        'barangay' => $ref['barangay'] ?? null,
-                        'street' => $ref['street'] ?? null,
+                        'addr_id' => $addr_id,
                     ];
                 }, $validated['character_references'] ?? []),
+                'bank_accounts' => $request->input('bank_accounts', []),
             ];
             // Save logic: clear old, add new
             \App\Models\CreditReferenceDetail::where('username', $username)->delete();
             foreach ($data['references'] as $ref) {
                 if (!empty($ref['bank_name'])) {
-                    // Find or create address for the bank
-                    $address = null;
-                    if (!empty($ref['region']) || !empty($ref['province']) || !empty($ref['city']) || !empty($ref['barangay']) || !empty($ref['street'])) {
-                        $address = \App\Models\AddressDetail::firstOrCreate([
-                            'country' => 'Philippines',
-                            'region' => $ref['region'] ?? '',
-                            'province' => $ref['province'] ?? '',
-                            'city' => $ref['city'] ?? '',
-                            'barangay' => $ref['barangay'] ?? '',
-                            'street' => $ref['street'] ?? '',
-                        ]);
-                    }
                     // Find or create the bank by name and address
                     $bank = \App\Models\BankDetail::firstOrCreate([
                         'bank' => $ref['bank_name'],
-                        'bank_addr' => $address ? $address->addr_id : null,
+                        'bank_addr' => $ref['addr_id'],
                     ]);
                     \App\Models\CreditReferenceDetail::create([
                         'bank' => $bank->bank_id,
@@ -145,6 +137,8 @@ class CreditReputationController extends Controller
                     ]);
                 }
             }
+            // Save/update bank accounts
+            \App\Helper\DataUpdate::updateBankAccounts($username, $data['bank_accounts']);
             // Save/update CreditDetail
             $creditData = $data['credit'];
             $other_income_src = null;
@@ -152,12 +146,16 @@ class CreditReputationController extends Controller
                 $other_income_src = json_encode(array_filter(array_column($creditData['other_incomes'], 'source')));
             }
             $saln_detail = null;
-            if (!empty($creditData['assets_liabilities_agency']) || !empty($creditData['assets_liabilities_month']) || !empty($creditData['assets_liabilities_year'])) {
+            $saln_date_filed = null;
+            if (!empty($creditData['assets_liabilities_agency'])) {
                 $saln_detail = json_encode([
                     'agency' => $creditData['assets_liabilities_agency'] ?? null,
-                    'month' => $creditData['assets_liabilities_month'] ?? null,
-                    'year' => $creditData['assets_liabilities_year'] ?? null,
                 ]);
+            }
+            if (!empty($creditData['assets_liabilities_year'])) {
+                $month = $creditData['assets_liabilities_month'] ?? '01';
+                $year = $creditData['assets_liabilities_year'];
+                $saln_date_filed = sprintf('%04d-%02d-01', $year, (int)$month);
             }
             $amount_paid = null;
             if (!empty($creditData['itr_amount'])) {
@@ -168,6 +166,7 @@ class CreditReputationController extends Controller
                 [
                     'other_income_src' => $other_income_src,
                     'saln_detail' => $saln_detail,
+                    'saln_date_filed' => $saln_date_filed,
                     'amount_paid' => $amount_paid,
                 ]
             );

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('username')->primary();
             $table->string('other_income_src')->nullable();
             $table->string('saln_detail')->nullable();
+            $table->date('saln_date_filed')->nullable();
             $table->double('amount_paid')->nullable();
 
             $table->foreign('username')

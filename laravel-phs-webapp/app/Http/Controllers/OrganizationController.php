@@ -15,11 +15,7 @@ class OrganizationController extends Controller
         $prefill = DataRetrieval::retrieveOrganizationMemberships(auth()->user()->username);
         $data = $this->getCommonViewData('organization');
         $data = array_merge($data, $prefill);
-
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.organization-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.organization', $data);
     }
 
@@ -66,19 +62,6 @@ class OrganizationController extends Controller
 
             $username = auth()->user()->username;
             $organizations = $validated['organizations'] ?? [];
-
-            // Map address fields into an address array for each organization
-            foreach ($organizations as &$org) {
-                $org['address'] = [
-                    'region' => $org['region'] ?? null,
-                    'province' => $org['province'] ?? null,
-                    'city' => $org['city'] ?? null,
-                    'barangay' => $org['barangay'] ?? null,
-                    'street' => $org['street'] ?? null,
-                    'country' => 'Philippines',
-                ];
-            }
-            unset($org);
 
             \App\Helper\DataUpdate::saveOrganizationMemberships($organizations, $username);
             $this->markSectionAsCompleted('organization');

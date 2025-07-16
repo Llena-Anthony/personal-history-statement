@@ -720,21 +720,38 @@ class DataUpdate {
      */
     public static function updateArrestRecord($username, $arrestData = []) {
         // Helper to create ArrestDetail if details are provided
-        $createArrestDetail = function($details) {
-            if (!empty($details)) {
-                // Parse details into fields if needed, else store all in disposition_of_case
+        $createArrestDetail = function($court_name, $nature_of_offense, $disposition_of_case) {
+            if (!empty($court_name) || !empty($nature_of_offense) || !empty($disposition_of_case)) {
                 return \App\Models\ArrestDetail::create([
-                    'court_name' => null,
-                    'nature_of_offense' => null,
-                    'disposition_of_case' => $details,
+                    'court_name' => $court_name,
+                    'nature_of_offense' => $nature_of_offense,
+                    'disposition_of_case' => $disposition_of_case,
                 ])->arrest_detail_id;
             }
             return null;
         };
-        $arr_desc = ($arrestData['investigated_arrested'] === 'yes') ? $createArrestDetail($arrestData['investigated_arrested_details'] ?? null) : null;
-        $fam_arr_desc = ($arrestData['family_investigated_arrested'] === 'yes') ? $createArrestDetail($arrestData['family_investigated_arrested_details'] ?? null) : null;
+        $arr_desc = ($arrestData['investigated_arrested'] === 'yes')
+            ? $createArrestDetail(
+                $arrestData['investigated_arrested_court_name'] ?? null,
+                $arrestData['investigated_arrested_nature_of_offense'] ?? null,
+                $arrestData['investigated_arrested_disposition_of_case'] ?? null
+            )
+            : null;
+        $fam_arr_desc = ($arrestData['family_investigated_arrested'] === 'yes')
+            ? $createArrestDetail(
+                $arrestData['family_investigated_arrested_court_name'] ?? null,
+                $arrestData['family_investigated_arrested_nature_of_offense'] ?? null,
+                $arrestData['family_investigated_arrested_disposition_of_case'] ?? null
+            )
+            : null;
         $admin_case_desc = ($arrestData['administrative_case'] === 'yes') ? ($arrestData['administrative_case_details'] ?? null) : null;
-        $violation_desc = ($arrestData['pd1081_arrested'] === 'yes') ? $createArrestDetail($arrestData['pd1081_arrested_details'] ?? null) : null;
+        $violation_desc = ($arrestData['pd1081_arrested'] === 'yes')
+            ? $createArrestDetail(
+                null,
+                $arrestData['pd1081_arrested_nature_of_offense'] ?? null,
+                $arrestData['pd1081_arrested_disposition_of_case'] ?? null
+            )
+            : null;
         $extent_of_intoxication = ($arrestData['intoxicating_liquor_narcotics'] === 'yes') ? ($arrestData['intoxicating_liquor_narcotics_details'] ?? null) : null;
         // Save/update ArrestRecordDetail
         \App\Models\ArrestRecordDetail::updateOrCreate(
@@ -756,6 +773,31 @@ class DataUpdate {
     public static function saveArrestRecord($data, $username) {
         $arrestData = $data['arrest'] ?? [];
         return self::updateArrestRecord($username, $arrestData);
+    }
+
+    /**
+     * Update or create bank accounts for a user from form data.
+     */
+    public static function updateBankAccounts($username, $bankAccounts = []) {
+        \App\Models\BankAccountDetail::where('username', $username)->delete();
+        foreach ($bankAccounts as $account) {
+            if (empty($account['bank_name'])) continue;
+            // Create/find address (region only)
+            $address = \App\Models\AddressDetail::firstOrCreate([
+                'country' => 'Philippines',
+                'region' => $account['address'] ?? '',
+            ]);
+            // Create/find bank
+            $bank = \App\Models\BankDetail::firstOrCreate([
+                'bank' => $account['bank_name'],
+                'bank_addr' => $address->addr_id,
+            ]);
+            // Save bank account detail
+            \App\Models\BankAccountDetail::create([
+                'bank' => $bank->bank_id,
+                'username' => $username,
+            ]);
+        }
     }
 
     /**
@@ -1107,11 +1149,14 @@ class DataUpdate {
         if (!empty($data['languages']) && is_array($data['languages'])) {
             foreach ($data['languages'] as $lang) {
                 if (!empty($lang['language'])) {
-                    // Find or create the language in language_details
-                    $language = \App\Models\LanguageDetail::firstOrCreate([
-                        'lang_desc' => $lang['language']
-                    ]);
-                    // Update or create fluency detail for this user/language
+                    // Check if language exists, else create
+                    $language = \App\Models\LanguageDetail::where('lang_desc', $lang['language'])->first();
+                    if (!$language) {
+                        $language = \App\Models\LanguageDetail::create([
+                            'lang_desc' => $lang['language']
+                        ]);
+                    }
+                    // Use lang_id for fluency detail
                     \App\Models\FluencyDetail::updateOrCreate(
                         [
                             'username' => $username,
@@ -1136,16 +1181,16 @@ class DataUpdate {
     public static function saveOrganizationMemberships($organizations, $username) {
         foreach ($organizations as $organization) {
             if (!empty($organization['name'])) {
-                // Create or update address details if address is provided as an array
+                // Save address in the region field only
                 $addressId = null;
-                if (!empty($organization['address']) && is_array($organization['address'])) {
+                if (!empty($organization['address'])) {
                     $address = \App\Models\AddressDetail::firstOrCreate([
-                        'country' => $organization['address']['country'] ?? 'Philippines',
-                        'region' => $organization['address']['region'] ?? null,
-                        'province' => $organization['address']['province'] ?? null,
-                        'city' => $organization['address']['city'] ?? null,
-                        'barangay' => $organization['address']['barangay'] ?? null,
-                        'street' => $organization['address']['street'] ?? null,
+                        'country' => 'Philippines',
+                        'region' => $organization['address'],
+                        'province' => null,
+                        'city' => null,
+                        'barangay' => null,
+                        'street' => null,
                         'zip_code' => null,
                     ]);
                     $addressId = $address->addr_id;

@@ -19,11 +19,7 @@ class ForeignCountriesController extends Controller
         $data = $this->getCommonViewData('foreign-countries');
         $data['foreignVisits'] = $foreignVisits;
 
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.foreign-countries-content', $data);
-        }
-
+        // Always return the full section view
         return view('phs.foreign-countries', $data);
     }
 

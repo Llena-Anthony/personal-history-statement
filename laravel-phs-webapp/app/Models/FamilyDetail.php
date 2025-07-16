@@ -30,14 +30,14 @@ class FamilyDetail extends Model
     {
         return $this->belongsTo(NameDetail::class,'fam_name','name_id');
     }
-    public function birthPlace()
-    {
-        return $this->belongsTo(AddressDetail::class,'birth_place','addr_id');
-    }
-    public function familyAddr()
-    {
-        return $this->belongsTo(AddressDetail::class,'fam_addr','addr_id');
-    }
+    // public function birthPlace()
+    // {
+    //     return $this->belongsTo(AddressDetail::class,'birth_place','addr_id');
+    // }
+    // public function familyAddr()
+    // {
+    //     return $this->belongsTo(AddressDetail::class,'fam_addr','addr_id');
+    // }
     public function occupationDetail()
     {
         return $this->belongsTo(OccupationDetail::class,'occupation','occupation_id');

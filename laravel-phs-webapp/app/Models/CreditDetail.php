@@ -16,6 +16,7 @@ class CreditDetail extends Model
         'username',
         'other_income_src',
         'saln_detail',
+        'saln_date_filed',
         'amount_paid'
     ];
     public function user()

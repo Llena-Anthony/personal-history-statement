@@ -15,11 +15,7 @@ class MiscellaneousController extends Controller
         $prefill = DataRetrieval::retrieveMiscellaneous(auth()->user()->username);
         $data = $this->getCommonViewData('miscellaneous');
         $data = array_merge($data, $prefill);
-
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.miscellaneous-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.miscellaneous-new', $data);
     }
 
@@ -67,14 +63,14 @@ class MiscellaneousController extends Controller
             }
 
             if ($request->ajax()) {
-                $nextRoute = route('phs.review');
+                $nextRoute = route('phs.review.create');
                 return response()->json([
                     'success' => true,
                     'next_route' => $nextRoute
                 ]);
             }
 
-            return redirect()->route('phs.review')
+            return redirect()->route('phs.review.create')
                 ->with('success', 'Miscellaneous information saved successfully. Please review your PHS submission.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($isSaveOnly || $request->ajax()) {

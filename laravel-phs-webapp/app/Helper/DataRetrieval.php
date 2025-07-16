@@ -50,7 +50,7 @@ class DataRetrieval {
         return ArrestDetail::where('arrest_detail_id', $arrestId)->first() ?? null;
     }
     public static function retrieveArrestRecord($username): ?ArrestRecordDetail {
-        return ArrestRecordDetail::where('username', $username)->first() ?? null;
+        return ArrestRecordDetail::with(['arrDesc', 'famArrDesc', 'violationDesc'])->where('username', $username)->first() ?? null;
     }
     public static function retrieveAssignments($assign_id) {
         return AssignmentDetail::where('assign_id', $assign_id)->get();
@@ -59,7 +59,13 @@ class DataRetrieval {
         return AwardDetail::where('username', $username)->get();
     }
     public static function retrieveBankAccounts($username) {
-        return BankAccountDetail::where('username', $username)->get();
+        $accounts = \App\Models\BankAccountDetail::with(['bankDetail.addressDetail'])->where('username', $username)->get();
+        return $accounts->map(function($account) {
+            return [
+                'bank_name' => $account->bankDetail ? $account->bankDetail->bank : '',
+                'address' => ($account->bankDetail && $account->bankDetail->addressDetail) ? $account->bankDetail->addressDetail->region : '',
+            ];
+        });
     }
     public static function retrieveBank($bankId): ?BankDetail {
         return BankDetail::where('bank_id', $bankId)->first() ?? null;
@@ -435,6 +441,11 @@ class DataRetrieval {
         $organizations = OrganizationDetail::with(['addressDetail', 'membershipDetails' => function($q) use ($username) {
             $q->where('username', $username);
         }])->whereIn('org_id', $orgIds)->get();
+        // Map to flatten address for view
+        $organizations = $organizations->map(function($org) {
+            $org->address = $org->addressDetail ? $org->addressDetail->region : '';
+            return $org;
+        });
         return [
             'organizations' => $organizations,
         ];
@@ -445,7 +456,15 @@ class DataRetrieval {
      */
     public static function retrieveMiscellaneous($username) {
         $personalDetail = self::retrievePersonalDetail($username);
-        $fluencyDetails = self::retrieveFluency($username);
+        $fluencyDetails = \App\Models\FluencyDetail::where('username', $username)->get()->map(function($f) {
+            $lang = \App\Models\LanguageDetail::find($f->lang);
+            return [
+                'language' => $lang ? $lang->lang_desc : '',
+                'speak' => $f->speak_fluency,
+                'read' => $f->read_fluency,
+                'write' => $f->write_fluency,
+            ];
+        })->toArray();
 
         return [
             'hobbies_sports_pastimes' => $personalDetail?->hobbies ?? '',

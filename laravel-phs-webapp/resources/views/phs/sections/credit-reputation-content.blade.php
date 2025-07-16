@@ -1,5 +1,6 @@
-<div x-data="creditReputationForm()">
-        <!-- Combined Section for A-D -->
+<div class="max-w-4xl mx-auto">
+    <!-- Credit Reputation Information Card -->
+    <div x-data="creditReputationForm()">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-credit-card mr-3 text-[#D4AF37]"></i>
@@ -37,10 +38,19 @@
                         </template>
                     </div>
                 </div>
-                <!-- Single textarea for bank accounts/loans -->
+                <!-- Bank Accounts/Loans -->
                 <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Name and address of banks or other credit institutions with which you have accounts/loans:</label>
-                    <textarea name="bank_accounts_details" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Enter name and address">{{ old('bank_accounts_details', $bankAccountsDetails ?? '') }}</textarea>
+                    <template x-for="(account, index) in bank_accounts" :key="index">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                            <input type="text" :name="'bank_accounts[' + index + '][bank_name]'" x-model="account.bank_name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Bank Name">
+                            <input type="text" :name="'bank_accounts[' + index + '][address]'" x-model="account.address" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Bank Address (Region)">
+                            <button type="button" @click="removeAccount(index)" x-show="bank_accounts.length > 1 && index > 0" class="col-span-2 text-red-500 hover:text-red-700 text-xs mt-1">Remove</button>
+                        </div>
+                    </template>
+                    <button type="button" @click="addAccount" class="mt-2 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium">
+                        <i class="fas fa-plus mr-1"></i> Add Another Bank
+                    </button>
                 </div>
                 <!-- Assets and Liabilities -->
                 <div>
@@ -76,7 +86,7 @@
                                             <option value="11">November</option>
                                             <option value="12">December</option>
                                         </select>
-                                        <input type="number" name="assets_liabilities_year" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                        <input type="number" name="assets_liabilities_year" min="1900" max="2030" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                                     </div>
                                 </div>
                             </div>
@@ -119,53 +129,52 @@
                         <label class="block text-xs font-medium text-gray-500 mb-1">Bank/Institution Name</label>
                         <input type="text" name="character_references[{{ $i }}][name]" id="credit_reference_bank_name_{{ $i }}" value="{{ $oldCreditReferences[$i]['name'] ?? '' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-bank-name" placeholder="Enter bank/institution name" data-index="{{ $i }}">
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">Region</label>
-                            <select name="character_references[{{ $i }}][region]" id="credit_reference_region_{{ $i }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-region" data-index="{{ $i }}" onchange="loadProvinces('credit_reference_{{ $i }}')">
-                                <option value="">Select Region</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">Province</label>
-                            <select name="character_references[{{ $i }}][province]" id="credit_reference_province_{{ $i }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-province" data-index="{{ $i }}" onchange="loadCities('credit_reference_{{ $i }}')">
-                                <option value="">Select Province</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">City/Municipality</label>
-                            <select name="character_references[{{ $i }}][city]" id="credit_reference_city_{{ $i }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-city" data-index="{{ $i }}" onchange="loadBarangays('credit_reference_{{ $i }}')">
-                                <option value="">Select City/Municipality</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">Barangay</label>
-                            <select name="character_references[{{ $i }}][barangay]" id="credit_reference_barangay_{{ $i }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-barangay" data-index="{{ $i }}">
-                                <option value="">Select Barangay</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">Street Address</label>
-                            <input type="text" name="character_references[{{ $i }}][street]" id="credit_reference_street_{{ $i }}" value="{{ $oldCreditReferences[$i]['street'] ?? '' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-street" data-index="{{ $i }}" placeholder="Enter street address">
-                        </div>
+                    <div class="mb-4">
+                        <label class="block text-xs font-medium text-gray-500 mb-1">Address</label>
+                        <input type="text" name="character_references[{{ $i }}][address]" id="credit_reference_address_{{ $i }}" value="{{ $oldCreditReferences[$i]['address'] ?? '' }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg credit-reference-address" placeholder="Enter full address" data-index="{{ $i }}">
                     </div>
                 </div>
             @endfor
         </div>
+    </div>
 </div>
+
+@if (request()->ajax())
+    <script>
+        if (typeof window.initializeCreditReputation === 'function') {
+            window.initializeCreditReputation();
+        }
+    </script>
+@endif
 
 <script>
     function creditReputationForm() {
+        let initialAccounts = @json(old('bank_accounts', $bankAccounts));
+        if (!Array.isArray(initialAccounts) || initialAccounts.length === 0) {
+            initialAccounts = [{ bank_name: '', address: '' }];
+        }
+        let salnDetail = null;
+        @if(!empty($creditDetail->saln_detail))
+            try { salnDetail = JSON.parse(@json($creditDetail->saln_detail)); } catch (e) { salnDetail = null; }
+        @endif
+        let salnMonth = '';
+        let salnYear = '';
+        @if(!empty($creditDetail->saln_date_filed))
+            salnMonth = (new Date(@json($creditDetail->saln_date_filed))).toISOString().slice(5,7);
+            salnYear = (new Date(@json($creditDetail->saln_date_filed))).getFullYear().toString();
+        @endif
         return {
-            dependent_on_salary: '{{ old('dependent_on_salary', $creditReputation->dependent_on_salary) }}',
+            dependent_on_salary: '{{ old('dependent_on_salary', (empty($creditDetail->other_income_src) ? "1" : "0")) }}',
             has_loans: '{{ old('has_loans', $creditReputation->has_loans) }}',
-            has_filed_assets_liabilities: '{{ old('has_filed_assets_liabilities', $creditReputation->has_filed_assets_liabilities) }}',
+            has_filed_assets_liabilities: '{{ old('has_filed_assets_liabilities', !empty($creditDetail->saln_detail) ? "1" : "0") }}',
             has_filed_itr: '{{ old('has_filed_itr', $creditReputation->has_filed_itr) }}',
 
-            other_incomes: @json(old('other_incomes', $otherIncomes->map->only(['source']))),
-            bank_accounts: @json(old('bank_accounts', $bankAccounts->map->only(['bank_name', 'address']))),
+            assets_liabilities_agency: '{{ old('assets_liabilities_agency', !empty($creditDetail->saln_detail) ? (json_decode($creditDetail->saln_detail)->agency ?? '') : '') }}',
+            assets_liabilities_month: '{{ old('assets_liabilities_month') ?? '' }}' || salnMonth,
+            assets_liabilities_year: '{{ old('assets_liabilities_year') ?? '' }}' || salnYear,
+
+            other_incomes: @json(old('other_incomes', !empty($creditDetail->other_income_src) ? collect(json_decode($creditDetail->other_income_src))->map(fn($src) => ['source' => $src]) : collect([["source" => ""]]))),
+            bank_accounts: initialAccounts,
 
             addIncome() { this.other_incomes.push({ source: '' }); },
             removeIncome(index) { if (this.other_incomes.length > 1) this.other_incomes.splice(index, 1); },
@@ -184,30 +193,13 @@ window.knownBanks = @json($knownBanks);
 
 function autofillCreditReferenceAddress(index) {
     const nameInput = document.getElementById('credit_reference_bank_name_' + index);
-    const regionSelect = document.getElementById('credit_reference_region_' + index);
-    const provinceSelect = document.getElementById('credit_reference_province_' + index);
-    const citySelect = document.getElementById('credit_reference_city_' + index);
-    const barangaySelect = document.getElementById('credit_reference_barangay_' + index);
-    const streetInput = document.getElementById('credit_reference_street_' + index);
+    const addressInput = document.getElementById('credit_reference_address_' + index);
     if (!nameInput) return;
     const value = nameInput.value.trim().toLowerCase();
     const found = window.knownBanks.find(b => b.name.toLowerCase() === value);
     if (found) {
         // Set values (triggers change events for dynamic loading)
-        regionSelect.value = found.region;
-        regionSelect.dispatchEvent(new Event('change'));
-        setTimeout(() => {
-            provinceSelect.value = found.province;
-            provinceSelect.dispatchEvent(new Event('change'));
-            setTimeout(() => {
-                citySelect.value = found.city;
-                citySelect.dispatchEvent(new Event('change'));
-                setTimeout(() => {
-                    barangaySelect.value = found.barangay;
-                    streetInput.value = found.street;
-                }, 300);
-            }, 300);
-        }, 300);
+        addressInput.value = found.address;
     }
 }
 

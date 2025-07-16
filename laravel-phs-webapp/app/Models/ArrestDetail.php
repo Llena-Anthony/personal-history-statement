@@ -12,7 +12,7 @@ class ArrestDetail extends Model
     protected $primaryKey = 'arrest_detail_id';
     public $incrementing = true;
     public $keyType = 'int';
-    protected $table = 'arrest_detail';
+    protected $table = 'arrest_details';
 
     protected $fillable = [
         'court_name',
