@@ -1,5 +1,6 @@
-<div x-data="creditReputationForm()">
-        <!-- Combined Section for A-D -->
+<div class="max-w-4xl mx-auto">
+    <!-- Credit Reputation Information Card -->
+    <div x-data="creditReputationForm()">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">
                 <i class="fas fa-credit-card mr-3 text-[#D4AF37]"></i>
@@ -37,7 +38,7 @@
                         </template>
                     </div>
                 </div>
-                <!-- Single textarea for bank accounts/loans -->
+                <!-- Bank Accounts/Loans -->
                 <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Name and address of banks or other credit institutions with which you have accounts/loans:</label>
                     <template x-for="(account, index) in bank_accounts" :key="index">
@@ -85,7 +86,7 @@
                                             <option value="11">November</option>
                                             <option value="12">December</option>
                                         </select>
-                                        <input type="number" name="assets_liabilities_year" min="1900" max="2030" class="w-1/2 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
+                                        <input type="number" name="assets_liabilities_year" min="1900" max="2030" class="w-1/2 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Year">
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +136,16 @@
                 </div>
             @endfor
         </div>
+    </div>
 </div>
+
+@if (request()->ajax())
+    <script>
+        if (typeof window.initializeCreditReputation === 'function') {
+            window.initializeCreditReputation();
+        }
+    </script>
+@endif
 
 <script>
     function creditReputationForm() {
@@ -163,7 +173,7 @@
             assets_liabilities_month: '{{ old('assets_liabilities_month') ?? '' }}' || salnMonth,
             assets_liabilities_year: '{{ old('assets_liabilities_year') ?? '' }}' || salnYear,
 
-            other_incomes: @json(old('other_incomes', !empty($creditDetail->other_income_src) ? collect(json_decode($creditDetail->other_income_src))->map(fn($src) => ['source' => $src]) : collect([['source' => '']]))),
+            other_incomes: @json(old('other_incomes', !empty($creditDetail->other_income_src) ? collect(json_decode($creditDetail->other_income_src))->map(fn($src) => ['source' => $src]) : collect([["source" => ""]]))),
             bank_accounts: initialAccounts,
 
             addIncome() { this.other_incomes.push({ source: '' }); },
