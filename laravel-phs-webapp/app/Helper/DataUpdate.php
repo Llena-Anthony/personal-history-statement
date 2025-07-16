@@ -214,126 +214,229 @@ class DataUpdate {
     /**
      * Update or create family background for a user, including family members and siblings.
      */
-    public static function updateFamilyBackground($userId, $fbData, $familyMembers = [], $siblings = []) {
+    public static function updateFamilyBackground($username, $fbData, $familyMembers = [], $siblings = []) {
         // Get or create FamilyHistoryDetail for this user
-        $user = \App\Models\User::find($userId);
+        $user = \App\Models\User::where('username', $username)->first();
         if (!$user) {
-            throw new \Exception("User not found with ID: $userId");
+            throw new \Exception("User not found with username: $username");
         }
-        
         $familyHistory = \App\Models\FamilyHistoryDetail::updateOrCreate(
-            ['username' => $user->username],
+            ['username' => $username],
             []
         );
-        
+
         // Handle family members
         if (!empty($familyMembers)) {
             foreach ($familyMembers as $member) {
                 if (empty($member['role']) || empty($member['name'])) continue;
-                
-                // Create name detail
-                $nameId = \App\Models\NameDetail::create([
+                // Find existing FamilyDetail for this user/role
+                $roleField = $member['role'];
+                $existingFamId = $familyHistory->$roleField ?? null;
+                $existingFamily = $existingFamId ? \App\Models\FamilyDetail::find($existingFamId) : null;
+
+                if ($roleField === 'father') {
+                    \Log::info('Father card save: incoming member', ['member' => $member]);
+                }
+                // Update or create name detail
+                $nameArr = [
                     'first_name' => $member['name']['first_name'] ?? '',
                     'last_name' => $member['name']['last_name'] ?? '',
                     'middle_name' => $member['name']['middle_name'] ?? null,
-                    'nickname' => $member['name']['nickname'] ?? null,
-                    'name_extension' => $member['name']['suffix'] ?? null,
-                ])->name_id;
-                
-                // Create address for birth place if provided
+                    'suffix' => $member['name']['suffix'] ?? null,
+                ];
+                if ($roleField === 'father') {
+                    \Log::info('Father card save: nameArr', ['nameArr' => $nameArr]);
+                }
+                $nameModel = $existingFamily && $existingFamily->fam_name
+                    ? \App\Models\NameDetail::updateOrCreate(['name_id' => $existingFamily->fam_name], $nameArr)
+                    : \App\Models\NameDetail::create($nameArr);
+                $nameId = $nameModel->name_id ?? null;
+                if (!$nameId || !\App\Models\NameDetail::find($nameId)) {
+                    \Log::error('Failed to create or find NameDetail', ['nameArr' => $nameArr, 'nameId' => $nameId]);
+                    continue;
+                }
+                if ($roleField === 'father') {
+                    \Log::info('Father card save: nameId', ['nameId' => $nameId]);
+                }
+                // Update or create address for birth place
                 $birthPlaceId = null;
                 if (!empty($member['birth_place'])) {
-                    $birthPlaceId = \App\Models\AddressDetail::create([
-                        'street' => $member['birth_place'],
+                    $birthPlaceText = trim($member['birth_place']);
+                    if (str_ends_with(strtolower($birthPlaceText), ', philippines')) {
+                        $birthPlaceText = substr($birthPlaceText, 0, -13);
+                    }
+                    $birthPlaceArr = [
+                        'street' => $birthPlaceText,
                         'country' => 'Philippines'
-                    ])->addr_id;
+                    ];
+                    if ($roleField === 'father') {
+                        \Log::info('Father card save: birthPlaceArr', ['birthPlaceArr' => $birthPlaceArr]);
+                    }
+                    $birthPlaceId = $existingFamily && $existingFamily->birth_place
+                        ? \App\Models\AddressDetail::updateOrCreate(['addr_id' => $existingFamily->birth_place], $birthPlaceArr)->addr_id
+                        : \App\Models\AddressDetail::create($birthPlaceArr)->addr_id;
+                    if ($roleField === 'father') {
+                        \Log::info('Father card save: birthPlaceId', ['birthPlaceId' => $birthPlaceId]);
+                    }
                 }
-                
-                // Create address for family address if provided
+
+                // Update or create address for family address
                 $familyAddrId = null;
                 if (!empty($member['complete_address'])) {
-                    $familyAddrId = \App\Models\AddressDetail::create([
+                    $familyAddrArr = [
                         'street' => $member['complete_address'],
                         'country' => 'Philippines'
-                    ])->addr_id;
+                    ];
+                    $familyAddrId = $existingFamily && $existingFamily->fam_addr
+                        ? \App\Models\AddressDetail::updateOrCreate(['addr_id' => $existingFamily->fam_addr], $familyAddrArr)->addr_id
+                        : \App\Models\AddressDetail::create($familyAddrArr)->addr_id;
                 }
-                
-                // Create occupation if provided
+
+                // Update or create occupation
                 $occupationId = null;
                 if (!empty($member['occupation'])) {
-                    $occupationId = \App\Models\OccupationDetail::create([
+                    $occupationArr = [
                         'occupation_desc' => $member['occupation'],
                         'employer' => $member['employer'] ?? null,
-                    ])->occupation_id;
+                    ];
+                    $occupationId = $existingFamily && $existingFamily->occupation
+                        ? \App\Models\OccupationDetail::updateOrCreate(['occupation_id' => $existingFamily->occupation], $occupationArr)->occupation_id
+                        : \App\Models\OccupationDetail::create($occupationArr)->occupation_id;
                 }
-                
-                // Create citizenship if provided
+
+                // Update or create dual citizenship
+                $dualCitizenshipId = null;
+                if (!empty($member['dual_citizenship_1'])) {
+                    $dualCitArr = [
+                        'cit_description' => $member['dual_citizenship_1']
+                    ];
+                    $dualCitizenshipId = $existingFamily && $existingFamily->dual
+                        ? \App\Models\CitizenshipDetail::updateOrCreate(['cit_id' => $existingFamily->dual], $dualCitArr)->cit_id
+                        : \App\Models\CitizenshipDetail::firstOrCreate($dualCitArr)->cit_id;
+                }
+
+                // Update or create place naturalized
+                $placeNaturalizedId = null;
+                if (!empty($member['naturalized_place'])) {
+                    $placeNatArr = [
+                        'street' => $member['naturalized_place'],
+                        'country' => 'Philippines'
+                    ];
+                    $placeNaturalizedId = $existingFamily && $existingFamily->place_naturalized
+                        ? \App\Models\AddressDetail::updateOrCreate(['addr_id' => $existingFamily->place_naturalized], $placeNatArr)->addr_id
+                        : \App\Models\AddressDetail::create($placeNatArr)->addr_id;
+                }
+
+                // Update or create citizenship
                 $citizenshipId = null;
                 if (!empty($member['citizenship'])) {
-                    $citizenshipId = \App\Models\CitizenshipDetail::create([
-                        'cit_description' => $member['citizenship']
-                    ])->cit_id;
+                    $citizenshipArr = [
+                        'cit_description' => trim($member['citizenship'])
+                    ];
+                    $citizenshipId = $existingFamily && $existingFamily->citizenship
+                        ? \App\Models\CitizenshipDetail::updateOrCreate(['cit_id' => $existingFamily->citizenship], $citizenshipArr)->cit_id
+                        : \App\Models\CitizenshipDetail::firstOrCreate($citizenshipArr)->cit_id;
                 }
-                
-                // Create dual citizenship if provided
-                $dualCitizenshipId = null;
-                if (!empty($member['dual_citizenship'])) {
-                    $dualCitizenshipId = \App\Models\CitizenshipDetail::create([
-                        'cit_description' => $member['dual_citizenship']
-                    ])->cit_id;
-                }
-                
-                // Create place naturalized if provided
-                $placeNaturalizedId = null;
-                if (!empty($member['place_naturalized'])) {
-                    $placeNaturalizedId = \App\Models\AddressDetail::create([
-                        'street' => $member['place_naturalized'],
+
+                // Update or create place of employment (address)
+                $placeOfEmploymentId = null;
+                if (!empty($member['place_of_employment'])) {
+                    $placeOfEmploymentArr = [
+                        'street' => $member['place_of_employment'],
                         'country' => 'Philippines'
-                    ])->addr_id;
+                    ];
+                    $placeOfEmploymentId = $existingFamily && $existingFamily->place_of_employment
+                        ? \App\Models\AddressDetail::updateOrCreate(['addr_id' => $existingFamily->place_of_employment], $placeOfEmploymentArr)->addr_id
+                        : \App\Models\AddressDetail::create($placeOfEmploymentArr)->addr_id;
                 }
-                
-                // Create family detail
-                $familyDetail = \App\Models\FamilyDetail::create([
+
+                // Save employer address if present
+                $employerAddressId = null;
+                if (!empty($member['employer_address'])) {
+                    $employerAddressArr = [
+                        'street' => $member['employer_address'],
+                        'country' => 'Philippines'
+                    ];
+                    $employerAddressId = $existingFamily && $existingFamily->employer_address
+                        ? \App\Models\AddressDetail::updateOrCreate(['addr_id' => $existingFamily->employer_address], $employerAddressArr)->addr_id
+                        : \App\Models\AddressDetail::create($employerAddressArr)->addr_id;
+                }
+
+                // Update or create family detail
+                $familyDetailArr = [
                     'fam_name' => $nameId,
-                    'birth_date' => $member['birth_date'] ?? null,
+                    'birth_date' => !empty($member['birth_date']) ? date('Y-m-d', strtotime($member['birth_date'])) : null,
                     'birth_place' => $birthPlaceId,
                     'fam_addr' => $familyAddrId,
                     'occupation' => $occupationId,
                     'citizenship' => $citizenshipId,
                     'dual' => $dualCitizenshipId,
-                    'date_naturalized' => $member['date_naturalized'] ?? null,
+                    'date_naturalized' => $member['naturalized_year'] ?? null,
                     'place_naturalized' => $placeNaturalizedId,
-                ]);
-                
+                    'place_of_employment' => $placeOfEmploymentId,
+                    'employer_address' => $employerAddressId,
+                    'citizenship_type' => $member['citizenship_type'] ?? null,
+                    'dual_citizenship_2' => $member['dual_citizenship_2'] ?? null,
+                    'naturalized_month' => $member['naturalized_month'] ?? null,
+                    'naturalized_details' => $member['naturalized_details'] ?? null,
+                ];
+                if ($roleField === 'father') {
+                    \Log::info('Father card save: familyDetailArr', ['familyDetailArr' => $familyDetailArr]);
+                }
+                $familyDetailObj = null;
+                if ($existingFamily) {
+                    $existingFamily->update($familyDetailArr);
+                    $familyDetailObj = $existingFamily->fresh();
+                } else {
+                    $familyDetailObj = \App\Models\FamilyDetail::create($familyDetailArr);
+                }
+                if ($roleField === 'father') {
+                    \Log::info('Father card save: savedFamilyDetail', ['familyDetail' => $familyDetailObj]);
+                }
                 // Update FamilyHistoryDetail with the family member reference
-                $roleField = $member['role'];
-                if (in_array($roleField, ['father', 'mother', 'guardian', 'father_in_law', 'mother_in_law'])) {
-                    $familyHistory->update([$roleField => $familyDetail->fam_id]);
+                $roleMap = [
+                    'step_parent_guardian' => 'guardian',
+                    'father' => 'father',
+                    'mother' => 'mother',
+                    'father_in_law' => 'father_in_law',
+                    'mother_in_law' => 'mother_in_law',
+                ];
+                $historyRole = $roleMap[$roleField] ?? $roleField;
+                if (in_array($historyRole, ['father', 'mother', 'guardian', 'father_in_law', 'mother_in_law'])) {
+                    $familyHistory->update([$historyRole => $familyDetailObj->fam_id]);
                 }
             }
         }
-        
-        // Handle siblings
+
+        // Handle siblings: update or create by sib_id, remove missing
+        $existingSiblings = \App\Models\SiblingDetail::where('username', $user->username)->get()->keyBy('sib_id');
+        $submittedIds = collect($siblings)->pluck('sib_id')->filter()->map(function($id){return (int)$id;})->all();
+        // Delete siblings not in submitted data
+        \App\Models\SiblingDetail::where('username', $user->username)
+            ->whereNotIn('sib_id', $submittedIds)->delete();
         if (!empty($siblings)) {
             foreach ($siblings as $sibling) {
-                if (!empty($sibling['first_name']) || !empty($sibling['last_name'])) {
-                    \App\Models\SiblingDetail::create([
-                        'username' => $user->username,
-                        'first_name' => $sibling['first_name'] ?? null,
-                        'middle_name' => $sibling['middle_name'] ?? null,
-                        'last_name' => $sibling['last_name'] ?? null,
-                        'date_of_birth' => $sibling['date_of_birth'] ?? null,
-                        'citizenship' => $sibling['citizenship'] ?? null,
-                        'dual_citizenship' => $sibling['dual_citizenship'] ?? null,
-                        'complete_address' => $sibling['complete_address'] ?? null,
-                        'occupation' => $sibling['occupation'] ?? null,
-                        'employer' => $sibling['employer'] ?? null,
-                        'employer_address' => $sibling['employer_address'] ?? null,
-                    ]);
+                $sibId = isset($sibling['sib_id']) && $sibling['sib_id'] ? (int)$sibling['sib_id'] : null;
+                $data = [
+                    'username' => $user->username,
+                    'first_name' => $sibling['first_name'] ?? null,
+                    'middle_name' => $sibling['middle_name'] ?? null,
+                    'last_name' => $sibling['last_name'] ?? null,
+                    'date_of_birth' => $sibling['date_of_birth'] ?? null,
+                    'citizenship' => $sibling['citizenship'] ?? null,
+                    'dual_citizenship' => $sibling['dual_citizenship'] ?? null,
+                    'complete_address' => $sibling['complete_address'] ?? null,
+                    'occupation' => $sibling['occupation'] ?? null,
+                    'employer' => $sibling['employer'] ?? null,
+                    'employer_address' => $sibling['employer_address'] ?? null,
+                ];
+                if ($sibId && $existingSiblings->has($sibId)) {
+                    $existingSiblings[$sibId]->update($data);
+                } else {
+                    \App\Models\SiblingDetail::create($data);
                 }
             }
         }
-        
         return $familyHistory->id;
     }
 
@@ -682,6 +785,11 @@ class DataUpdate {
             'mobile_num' => $data['mobile'] ?? null,
             'email_addr' => $data['email'] ?? null,
         ];
+        // Preserve existing profile_path if not provided
+        $currentUserDetail = \App\Models\UserDetail::where('username', $username)->first();
+        if (!isset($data['profile_path']) && $currentUserDetail) {
+            $userDetailData['profile_path'] = $currentUserDetail->profile_path;
+        }
         
         \Log::info('Updating user detail', ['userDetailData' => $userDetailData]);
         self::updateUserDetail($username, $userDetailData);
@@ -820,6 +928,7 @@ class DataUpdate {
             ])->cit_id;
         }
         // Spouse record
+        \Log::info('saveMaritalStatus spouseData', ['spouseData' => $spouseData]);
         $spouseArr = [
             'spouse_name' => $spouseNameId,
             'marr_date' => (!empty($spouseData['marriage_year']) && !empty($spouseData['marriage_month'])) ? ($spouseData['marriage_year'] . '-' . $spouseData['marriage_month'] . '-01') : null,
@@ -831,8 +940,32 @@ class DataUpdate {
             'citizenship' => $citizenshipId,
             'dual' => $dualId,
         ];
-        $spouse = \App\Models\SpouseDetail::create($spouseArr);
-        $maritalDetail['spouse'] = $spouse->spouse_id;
+        \Log::info('saveMaritalStatus spouseArr', ['spouseArr' => $spouseArr]);
+        // Find current spouse_id for this user (if any)
+        $marital = \App\Models\MaritalDetail::where('username', $username)->first();
+        $spouse = null;
+        if ($marital && $marital->spouse) {
+            // Update existing spouse row
+            $spouse = \App\Models\SpouseDetail::find($marital->spouse);
+            if ($spouse) {
+                $spouse->update($spouseArr);
+            } else {
+                $spouse = \App\Models\SpouseDetail::create($spouseArr);
+            }
+        } else {
+            // No spouse yet, create new
+            $spouse = \App\Models\SpouseDetail::create($spouseArr);
+        }
+        // Save marital detail
+        // Always include spouse in update array
+        $maritalDetail['spouse'] = $spouse ? $spouse->spouse_id : null;
+        
+        \App\Models\MaritalDetail::updateOrCreate(
+            ['username' => $username],
+            $maritalDetail
+        );
+        // Remove old children and add new
+        \App\Models\ChildrenDetail::where('username', $username)->delete();
         // --- CHILDREN ---
         $childrenArr = [];
         foreach ($children as $child) {
@@ -864,13 +997,6 @@ class DataUpdate {
                 ];
             }
         }
-        // Save marital detail
-        \App\Models\MaritalDetail::updateOrCreate(
-            ['username' => $username],
-            $maritalDetail
-        );
-        // Remove old children and add new
-        \App\Models\ChildrenDetail::where('username', $username)->delete();
         \Log::info('Children array to be saved', ['childrenArr' => $childrenArr]);
         foreach ($childrenArr as $childRow) {
             try {
@@ -885,11 +1011,11 @@ class DataUpdate {
     /**
      * Save all family background data for a user using the above helper.
      */
-    public static function saveFamilyBackground($data, $userId) {
+    public static function saveFamilyBackground($data, $username) {
         $familyMembers = $data['family_members'] ?? [];
         $siblings = $data['siblings'] ?? [];
         unset($data['family_members'], $data['siblings']);
-        self::updateFamilyBackground($userId, $data, $familyMembers, $siblings);
+        self::updateFamilyBackground($username, $data, $familyMembers, $siblings);
     }
 
     /**

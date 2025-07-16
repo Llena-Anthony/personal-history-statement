@@ -66,6 +66,9 @@
                 <div>
                     <label for="spouse_birth_date" class="block text-sm font-medium text-gray-700 mb-2">Spouse Birth Date</label>
                     <input type="date" name="spouse_birth_date" id="spouse_birth_date" value="{{ old('spouse_birth_date', $spouse_birth_date ?? '') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                    @error('spouse_birth_date')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label for="spouse_birth_place" class="block text-sm font-medium text-gray-700 mb-2">Spouse Birth Place</label>
@@ -301,6 +304,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateMarriageDate() {
         const month = marriageMonthSelect ? marriageMonthSelect.value : '';
         const year = marriageYearInput ? marriageYearInput.value : '';
+
+        if (!marriageDateHidden) {
+            // Prevent error if the hidden input is missing
+            return;
+        }
 
         if (month && year) {
             // Set to first day of the month for month/year format

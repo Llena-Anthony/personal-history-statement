@@ -3,6 +3,9 @@
 @section('title', 'Personal History Statement')
 
 @section('content')
+@php
+    $sectionStatus = session('phs_sections', []);
+@endphp
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 relative">
     <!-- Background Overlay -->
     <div class="absolute inset-0 bg-[url('/images/pma-background.jpg')] bg-cover bg-center bg-no-repeat opacity-10 blur-sm"></div>
@@ -46,11 +49,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('phs.family-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.family-background.create') ? 'font-bold text-gray-900' : 'text-gray-400 hover:text-gray-700' }}">
-                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.family-background.create') ? 'bg-yellow-400' : 'bg-gray-200' }}">
+                        <a href="{{ route('phs.family-background.create') }}" class="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors {{ request()->routeIs('phs.family-background.create') ? 'font-bold text-gray-900' : (isset($sectionStatus['family-background']) ? 'text-green-600 font-semibold' : 'text-gray-400 hover:text-gray-700') }}">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full {{ request()->routeIs('phs.family-background.create') ? 'bg-yellow-400' : (isset($sectionStatus['family-background']) ? 'bg-green-500' : 'bg-gray-200') }}">
                                 <span class="text-xs text-white font-bold">IV</span>
+                                @if(isset($sectionStatus['family-background']))
+                                    <i class="fas fa-check ml-1 text-xs"></i>
+                                @endif
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.family-background.create') ? 'font-bold' : 'font-medium' }}">Family History and Information</span>
+                            <span class="text-sm {{ request()->routeIs('phs.family-background.create') ? 'font-bold' : (isset($sectionStatus['family-background']) ? 'font-semibold' : 'font-medium') }}">Family History and Information</span>
                         </a>
                     </li>
                     <li>

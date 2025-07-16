@@ -30,7 +30,26 @@ class MaritalStatusController extends Controller
         $isSaveOnly = $request->header('X-Save-Only') === 'true';
         \Log::info('MaritalStatusController store() called');
         try {
-            // Get all request data
+            // Add validation for spouse fields
+            $rules = [
+                'marital_stat' => 'required|string',
+                'spouse_first_name' => 'nullable|string|max:255',
+                'spouse_middle_name' => 'nullable|string|max:255',
+                'spouse_last_name' => 'nullable|string|max:255',
+                'spouse_suffix' => 'nullable|string|max:10',
+                'marriage_month' => 'nullable|string|max:2',
+                'marriage_year' => 'nullable|string|max:4',
+                'marriage_place' => 'nullable|string|max:255',
+                'spouse_birth_date' => 'nullable|date',
+                'spouse_birth_place' => 'nullable|string|max:255',
+                'spouse_occupation' => 'nullable|string|max:255',
+                'spouse_employer' => 'nullable|string|max:255',
+                'spouse_employment_place' => 'nullable|string|max:255',
+                'spouse_contact' => 'nullable|string|max:20',
+                'spouse_citizenship' => 'nullable|string|max:100',
+                'spouse_other_citizenship' => 'nullable|string|max:100',
+            ];
+            $validated = $request->validate($rules);
             $data = $request->all();
             $childrenData = $data['children'] ?? [];
             unset($data['_token']);
@@ -78,6 +97,9 @@ class MaritalStatusController extends Controller
             }
             return redirect()->route('phs.family-background.create')
                 ->with('success', 'Marital status saved successfully. Please continue with your family background.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return validation errors to the view
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             \Log::error('MaritalStatusController error: ' . $e->getMessage(), ['exception' => $e]);
             if ($isSaveOnly || $request->ajax()) {

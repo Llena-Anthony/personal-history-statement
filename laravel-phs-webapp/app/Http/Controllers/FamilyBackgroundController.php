@@ -196,14 +196,14 @@ class FamilyBackgroundController extends Controller
                         'complete_address' => $validated[$role . '_complete_address'] ?? null,
                         'citizenship_type' => $validated[$role . '_citizenship_type'] ?? null,
                         'citizenship' => $validated[$role . '_citizenship'] ?? null,
-                        'citizenship_dual_1' => $validated[$role . '_citizenship_dual_1'] ?? null,
-                        'citizenship_dual_2' => $validated[$role . '_citizenship_dual_2'] ?? null,
+                        'dual_citizenship_1' => $validated[$role . '_citizenship_dual_1'] ?? null,
+                        'dual_citizenship_2' => $validated[$role . '_citizenship_dual_2'] ?? null,
                         'citizenship_naturalized' => $validated[$role . '_citizenship_naturalized'] ?? null,
                         'naturalized_month' => $validated[$role . '_naturalized_month'] ?? null,
                         'naturalized_year' => $validated[$role . '_naturalized_year'] ?? null,
                         'naturalized_place' => $validated[$role . '_naturalized_place'] ?? null,
-                        'isnaturalized' => ($validated[$role . '_citizenship_type'] ?? null) === 'Naturalized' ? 1 : 0,
                         'naturalized_details' => $validated[$role . '_naturalized_details'] ?? null,
+                        'other_citizenship' => $validated[$role . '_other_citizenship'] ?? null,
                     ];
                 }
             }
@@ -212,7 +212,7 @@ class FamilyBackgroundController extends Controller
             $data = $validated;
             $data['family_members'] = $familyMembers;
             $data['siblings'] = $siblings;
-            \App\Helper\DataUpdate::saveFamilyBackground($data, $userId);
+            \App\Helper\DataUpdate::saveFamilyBackground($data, auth()->user()->username);
             $this->markSectionAsCompleted('family-background');
             session()->save();
             if ($request->ajax()) {

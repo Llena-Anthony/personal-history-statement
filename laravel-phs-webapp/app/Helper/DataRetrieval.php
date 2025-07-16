@@ -227,7 +227,7 @@ class DataRetrieval {
                 $marriagePlace->region,
                 $marriagePlace->country
             ])) : '',
-            'spouse_birth_date' => $spouse?->birth_date ?? '',
+            'spouse_birth_date' => $spouse?->birth_date ? date('Y-m-d', strtotime($spouse->birth_date)) : '',
             'spouse_birth_place' => $birthPlace ? implode(', ', array_filter([
                 $birthPlace->street,
                 $birthPlace->barangay,
@@ -272,63 +272,36 @@ class DataRetrieval {
         foreach ($roles as $role => $famId) {
             if ($famId) {
                 $fam = self::retrieveFamily($famId);
-                $name = $fam?->familyName;
-                $birthPlace = $fam?->birthPlace;
-                $address = $fam?->familyAddr;
-                $occupation = $fam?->occupationDetail;
-                $citizenship = $fam?->citizenshipDetail;
-                $dualCitizenship = $fam?->dualCitizenship;
-                $placeNaturalized = $fam?->placeNaturalized;
                 $family_members->put($role, (object) [
-                    'first_name' => $name?->first_name ?? '',
-                    'middle_name' => $name?->middle_name ?? '',
-                    'last_name' => $name?->last_name ?? '',
-                    'suffix' => $name?->name_extension ?? '',
-                    'birth_date' => $fam?->birth_date ?? '',
-                    'birth_place' => $birthPlace ? implode(', ', array_filter([
-                        $birthPlace->street,
-                        $birthPlace->barangay,
-                        $birthPlace->city,
-                        $birthPlace->province,
-                        $birthPlace->region,
-                        $birthPlace->country
-                    ])) : '',
-                    'complete_address' => $address ? implode(', ', array_filter([
-                        $address->street,
-                        $address->barangay,
-                        $address->city,
-                        $address->province,
-                        $address->region,
-                        $address->country
-                    ])) : '',
-                    'occupation' => $occupation?->occupation_desc ?? '',
-                    'employer' => $occupation?->employer ?? '',
-                    'place_of_employment' => $occupation && $occupation->addressDetail
-                        ? implode(', ', array_filter([
-                            $occupation->addressDetail->street,
-                            $occupation->addressDetail->barangay,
-                            $occupation->addressDetail->city,
-                            $occupation->addressDetail->province,
-                            $occupation->addressDetail->region,
-                            $occupation->addressDetail->country
-                        ])) : '',
-                    'citizenship' => $citizenship?->cit_description ?? '',
-                    'dual_citizenship' => $dualCitizenship?->cit_description ?? '',
-                    'citizenship_type' => $fam?->dual ? 'Dual' : ($fam?->date_naturalized ? 'Naturalized' : 'Single'),
+                    'first_name' => $fam?->familyName?->first_name ?? '',
+                    'middle_name' => $fam?->familyName?->middle_name ?? '',
+                    'last_name' => $fam?->familyName?->last_name ?? '',
+                    'suffix' => $fam?->familyName?->suffix ?? '',
+                    'birth_date' => $fam?->birth_date ? date('Y-m-d', strtotime($fam->birth_date)) : '',
+                    'birth_place' => $fam?->birthPlace?->full_address ?? '',
+                    'complete_address' => $fam?->familyAddr?->full_address ?? '',
+                    'occupation' => $fam?->occupationDetail?->occupation_desc ?? '',
+                    'employer' => $fam?->occupationDetail?->employer ?? '',
+                    'place_of_employment' => $fam?->placeOfEmployment?->full_address ?? '',
+                    'employer_address' => $fam?->employerAddress?->full_address ?? '',
+                    'citizenship' => $fam?->citizenshipDetail?->cit_description ?? '',
+                    'dual_citizenship_1' => $fam?->dualCitizenship?->cit_description ?? '',
+                    'citizenship_type' => $fam?->citizenship_type ?? '',
+                    'dual_citizenship_2' => $fam?->dual_citizenship_2 ?? '',
                     'date_naturalized' => $fam?->date_naturalized ?? '',
-                    'place_naturalized' => $placeNaturalized ? implode(', ', array_filter([
-                        $placeNaturalized->street,
-                        $placeNaturalized->barangay,
-                        $placeNaturalized->city,
-                        $placeNaturalized->province,
-                        $placeNaturalized->region,
-                        $placeNaturalized->country
-                    ])) : '',
+                    'naturalized_month' => $fam?->naturalized_month ?? '',
+                    'naturalized_details' => $fam?->naturalized_details ?? '',
+                    'place_naturalized' => $fam?->placeNaturalized?->full_address ?? '',
                 ]);
             }
         }
         // Always return siblings as a collection
-        $siblings = self::retrieveSiblings($username);
+        $siblings = self::retrieveSiblings($username)->map(function($sibling) {
+            if (!empty($sibling->date_of_birth)) {
+                $sibling->date_of_birth = (strlen($sibling->date_of_birth) === 10) ? $sibling->date_of_birth : date('Y-m-d', strtotime($sibling->date_of_birth));
+            }
+            return $sibling;
+        });
         return [
             'family_members' => $family_members,
             'siblings' => $siblings,

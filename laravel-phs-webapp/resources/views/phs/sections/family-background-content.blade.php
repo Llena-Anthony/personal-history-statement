@@ -37,10 +37,6 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">Place of Birth</label>
                     <input type="text" name="father_birth_place" value="{{ old('father_birth_place', $family_members->get('father')->birth_place ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of birth">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Place of Employment</label>
-                    <input type="text" name="father_place_of_employment" value="{{ old('father_place_of_employment', $family_members->get('father')->place_of_employment ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of employment">
-                </div>
             </div>
             <!-- Address -->
             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-[#D4AF37]"></i>Address</h4>
@@ -110,6 +106,22 @@
                             <input type="text" name="father_naturalized_place" value="{{ old('father_naturalized_place') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of naturalization">
                         </div>
                     </div>
+                </div>
+            </div>
+            <!-- Employment -->
+            <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-briefcase mr-2 text-[#D4AF37]"></i>Employment</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Occupation</label>
+                    <input type="text" name="father_occupation" value="{{ old('father_occupation', $family_members->get('father')->occupation ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter occupation">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Employer</label>
+                    <input type="text" name="father_employer" value="{{ old('father_employer', $family_members->get('father')->employer ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter employer">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Place of Employment</label>
+                    <input type="text" name="father_place_of_employment" value="{{ old('father_place_of_employment', $family_members->get('father')->place_of_employment ?? '') }}" autocomplete="off" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors" placeholder="Enter place of employment">
                 </div>
             </div>
         </div>
@@ -248,6 +260,7 @@
                 @if($siblings->count() > 0)
                     @foreach($siblings as $index => $sibling)
                         <div class="sibling-entry p-4 border border-gray-200 rounded-lg relative">
+                            <input type="hidden" name="siblings[{{ $index }}][sib_id]" value="{{ $sibling->sib_id }}">
                             <!-- Name Details -->
                             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-id-card mr-2 text-[#D4AF37]"></i>Name Details</h4>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
@@ -317,6 +330,7 @@
                 @else
                     <template id="sibling-template">
                         <div class="sibling-entry p-4 border border-gray-200 rounded-lg relative">
+                            <input type="hidden" name="siblings[__INDEX__][sib_id]" value="">
                             <h4 class="text-lg font-semibold text-gray-700 mb-4 flex items-center"><i class="fas fa-id-card mr-2 text-[#D4AF37]"></i>Name Details</h4>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                                 <div>
