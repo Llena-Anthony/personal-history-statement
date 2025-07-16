@@ -1675,7 +1675,7 @@ function printTemplateDirect(event) {
     let iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.id = 'print-template-iframe';
-    iframe.src = "{{ route('admin.phs.preview') }}";
+    iframe.src = "{{ route('admin.phs.print-indiv', ['username' => $user->username]) }}";
     document.body.appendChild(iframe);
     iframe.onload = function() {
         setTimeout(function() {

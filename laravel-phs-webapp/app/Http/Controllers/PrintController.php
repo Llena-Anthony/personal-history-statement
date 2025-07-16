@@ -17,12 +17,12 @@ class PrintController extends Controller
         return view("admin.phs.phs-template");
     }
 
-    // public function preview($username)
-    // {
+    public function printIndividual($username)
+    {
 
-    //     $applicant = User::where('username', $username)->first();
-    //     return view("admin.phs.phs-template");
-    // }
+        $applicant = User::where('username', $username)->first();
+        return view("admin.phs.phs-template");
+    }
 
     public function printPHSSubmission($username)
     {
