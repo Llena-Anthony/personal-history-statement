@@ -96,13 +96,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('phs-form');
     console.log('Form found:', form);
     if (form) {
+        console.log('AJAX handler attached');
         console.log('Form action:', form.action);
         console.log('Form method:', form.method);
         
         // Ensure form action is correct
         const correctAction = form.getAttribute('data-action');
-        if (correctAction && (!form.action || form.action.includes('object%20HTMLButtonElement'))) {
-            console.log('Fixing form action from:', form.action, 'to:', correctAction);
+        if (correctAction) {
             form.action = correctAction;
         }
         

@@ -20,8 +20,21 @@
                     </div>
                 </div>
                 <div class="text-white">
-                    <h2 class="text-2xl font-bold">{{ $user->first_name }}</h2>
-                    <p class="text-gray-200">{{ $user->email }}</p>
+                    <h2 class="text-2xl font-bold">
+                        @php
+                            $nameDetail = optional(optional($user->userDetail)->nameDetail);
+                        @endphp
+                        {{
+                            $nameDetail ?
+                                trim(
+                                    ($nameDetail->first_name ?? '') .
+                                    ($nameDetail->middle_name ? ' ' . $nameDetail->middle_name : '') .
+                                    ($nameDetail->last_name ? ' ' . $nameDetail->last_name : '')
+                                ) :
+                                $user->username
+                        }}
+                    </h2>
+                    <p class="text-gray-200">{{ $user->userDetail->email_addr ?? '' }}</p>
                     <p class="text-sm text-gray-300">{{ $user->organic_role ?? 'Administrator' }}</p>
                 </div>
             </div>
@@ -109,7 +122,16 @@
                                 <input type="text" 
                                        name="name" 
                                        id="name" 
-                                       value="{{ old('name', $user->first_name) }}"
+                                       value="@php
+                                           $nameDetail = optional(optional($user->userDetail)->nameDetail);
+                                           echo $nameDetail ?
+                                               trim(
+                                                   ($nameDetail->first_name ?? '') .
+                                                   ($nameDetail->middle_name ? ' ' . $nameDetail->middle_name : '') .
+                                                   ($nameDetail->last_name ? ' ' . $nameDetail->last_name : '')
+                                               ) :
+                                               $user->username;
+                                       @endphp"
                                        disabled
                                        class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
                                 <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">
@@ -140,7 +162,7 @@
                                 <input type="email" 
                                        name="email" 
                                        id="email" 
-                                       value="{{ old('email', $user->email) }}"
+                                       value="{{ old('email', $user->userDetail->email_addr ?? '') }}"
                                        disabled
                                        class="block w-full rounded-lg border border-gray-200 bg-gray-100 text-gray-500 px-3 py-1.5 shadow-sm focus:outline-none cursor-not-allowed text-xs">
                                 <span class="absolute right-2 top-1.5 text-gray-400 text-xs" title="This field cannot be edited.">

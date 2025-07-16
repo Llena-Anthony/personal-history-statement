@@ -51,6 +51,10 @@ class PersonalDetailsController extends Controller
                     'birth_city' => 'nullable|string|max:255',
                     'birth_barangay' => 'nullable|string|max:255',
                     'birth_street' => 'nullable|string|max:255',
+                    'birth_region_name' => 'nullable|string|max:255',
+                    'birth_province_name' => 'nullable|string|max:255',
+                    'birth_city_name' => 'nullable|string|max:255',
+                    'birth_barangay_name' => 'nullable|string|max:255',
                     'nationality' => 'nullable|string|max:255',
                     'rank' => 'nullable|string|max:255',
                     'afpsn' => 'nullable|string|max:255',
@@ -61,11 +65,19 @@ class PersonalDetailsController extends Controller
                     'home_city' => 'nullable|string|max:255',
                     'home_barangay' => 'nullable|string|max:255',
                     'home_street' => 'nullable|string|max:255',
+                    'home_region_name' => 'nullable|string|max:255',
+                    'home_province_name' => 'nullable|string|max:255',
+                    'home_city_name' => 'nullable|string|max:255',
+                    'home_barangay_name' => 'nullable|string|max:255',
                     'business_region' => 'nullable|string|max:255',
                     'business_province' => 'nullable|string|max:255',
                     'business_city' => 'nullable|string|max:255',
                     'business_barangay' => 'nullable|string|max:255',
                     'business_street' => 'nullable|string|max:255',
+                    'business_region_name' => 'nullable|string|max:255',
+                    'business_province_name' => 'nullable|string|max:255',
+                    'business_city_name' => 'nullable|string|max:255',
+                    'business_barangay_name' => 'nullable|string|max:255',
                     'email' => 'nullable|string|max:255',
                     'mobile' => 'nullable|string|max:255',
                     'religion' => 'nullable|string|max:255',
@@ -88,6 +100,10 @@ class PersonalDetailsController extends Controller
                     'birth_city' => 'nullable|string|max:255',
                     'birth_barangay' => 'nullable|string|max:255',
                     'birth_street' => 'nullable|string|max:255',
+                    'birth_region_name' => 'nullable|string|max:255',
+                    'birth_province_name' => 'nullable|string|max:255',
+                    'birth_city_name' => 'nullable|string|max:255',
+                    'birth_barangay_name' => 'nullable|string|max:255',
                     'nationality' => 'required|string|max:255',
                     'rank' => 'nullable|string|max:255',
                     'afpsn' => 'nullable|string|max:255',
@@ -98,11 +114,19 @@ class PersonalDetailsController extends Controller
                     'home_city' => 'required|string|max:255',
                     'home_barangay' => 'nullable|string|max:255',
                     'home_street' => 'nullable|string|max:255',
+                    'home_region_name' => 'nullable|string|max:255',
+                    'home_province_name' => 'nullable|string|max:255',
+                    'home_city_name' => 'nullable|string|max:255',
+                    'home_barangay_name' => 'nullable|string|max:255',
                     'business_region' => 'nullable|string|max:255',
                     'business_province' => 'nullable|string|max:255',
                     'business_city' => 'nullable|string|max:255',
                     'business_barangay' => 'nullable|string|max:255',
                     'business_street' => 'nullable|string|max:255',
+                    'business_region_name' => 'nullable|string|max:255',
+                    'business_province_name' => 'nullable|string|max:255',
+                    'business_city_name' => 'nullable|string|max:255',
+                    'business_barangay_name' => 'nullable|string|max:255',
                     'email' => 'nullable|string|max:255',
                     'mobile' => 'nullable|string|max:255',
                     'religion' => 'nullable|string|max:255',
@@ -133,25 +157,37 @@ class PersonalDetailsController extends Controller
                     'change_in_name' => $validated['name_change'] ?? null,
                 ],
                 'birth_address' => [
-                    'region' => $validated['birth_region'] ?? null,
-                    'province' => $validated['birth_province'] ?? null,
-                    'city' => $validated['birth_city'] ?? null,
-                    'barangay' => $validated['birth_barangay'] ?? null,
+                    'region' => null, // Not used for text-only addresses
+                    'province' => null, // Not used for text-only addresses
+                    'city' => null, // Not used for text-only addresses
+                    'barangay' => null, // Not used for text-only addresses
                     'street' => $validated['birth_street'] ?? null,
+                    'region_name' => $validated['birth_region_name'] ?? null,
+                    'province_name' => $validated['birth_province_name'] ?? null,
+                    'city_name' => $validated['birth_city_name'] ?? null,
+                    'barangay_name' => $validated['birth_barangay_name'] ?? null,
                 ],
                 'home_address' => [
-                    'region' => $validated['home_region'] ?? null,
-                    'province' => $validated['home_province'] ?? null,
-                    'city' => $validated['home_city'] ?? null,
-                    'barangay' => $validated['home_barangay'] ?? null,
+                    'region' => null, // Not used for text-only addresses
+                    'province' => null, // Not used for text-only addresses
+                    'city' => null, // Not used for text-only addresses
+                    'barangay' => null, // Not used for text-only addresses
                     'street' => $validated['home_street'] ?? null,
+                    'region_name' => $validated['home_region_name'] ?? null,
+                    'province_name' => $validated['home_province_name'] ?? null,
+                    'city_name' => $validated['home_city_name'] ?? null,
+                    'barangay_name' => $validated['home_barangay_name'] ?? null,
                 ],
                 'business_address' => [
-                    'region' => $validated['business_region'] ?? null,
-                    'province' => $validated['business_province'] ?? null,
-                    'city' => $validated['business_city'] ?? null,
-                    'barangay' => $validated['business_barangay'] ?? null,
+                    'region' => null, // Not used for text-only addresses
+                    'province' => null, // Not used for text-only addresses
+                    'city' => null, // Not used for text-only addresses
+                    'barangay' => null, // Not used for text-only addresses
                     'street' => $validated['business_street'] ?? null,
+                    'region_name' => $validated['business_region_name'] ?? null,
+                    'province_name' => $validated['business_province_name'] ?? null,
+                    'city_name' => $validated['business_city_name'] ?? null,
+                    'barangay_name' => $validated['business_barangay_name'] ?? null,
                 ],
                 'birth_date' => $validated['date_of_birth'],
                 'nationality' => null, // will be mapped below
@@ -178,9 +214,13 @@ class PersonalDetailsController extends Controller
             // Map nationality string to citizenship ID
             if (!empty($validated['nationality'])) {
                 $citizenship = \App\Models\CitizenshipDetail::where('cit_description', $validated['nationality'])->first();
-                if ($citizenship) {
-                    $data['nationality'] = $citizenship->cit_id;
+                if (!$citizenship) {
+                    // Create new citizenship record if it doesn't exist
+                    $citizenship = \App\Models\CitizenshipDetail::create([
+                        'cit_description' => $validated['nationality']
+                    ]);
                 }
+                $data['nationality'] = $citizenship->cit_id;
             }
 
             \App\Helper\DataUpdate::savePersonalDetails($data, $username);

@@ -353,48 +353,78 @@ class DataRetrieval {
     public static function retrievePersonalDetails($username) {
         $userDetail = self::retrieveUserDetail($username);
         $name = $userDetail ? self::retrieveNameDetail($userDetail->full_name) : null;
-        $home = $userDetail ? self::retrieveAddressDetail($userDetail->home_addr) : null;
-        $birthAddr = $userDetail ? self::retrieveAddressDetail($userDetail->birth_place) : null;
         $jobDetail = self::retrieveJobDetail($username);
-        $busAddr = $jobDetail ? self::retrieveAddressDetail($jobDetail->job_addr) : null;
         $govId = self::retrieveGovIdDetail($username);
         $nationality = $userDetail ? self::retrieveCitizenshipDetail($userDetail->nationality) : null;
+        $personalDetail = self::retrievePersonalDetail($username);
+
+        // Parse address text from user_details table
+        $homeAddress = $userDetail ? self::parseAddressText($userDetail->home_addr) : [];
+        $birthAddress = $userDetail ? self::parseAddressText($userDetail->birth_place) : [];
+        $businessAddress = $jobDetail ? self::parseAddressText($jobDetail->job_addr) : [];
 
         return [
             "first_name" => $name?->first_name ?? '',
             "last_name" => $name?->last_name ?? '',
             "middle_name" => $name?->middle_name ?? '',
-            "suffix" => $name?->name_extension ?? '',
-            "nickname" => $name?->nickname ?? '',
+            "suffix" => $name?->suffix ?? '',
+            "nickname" => $personalDetail?->nickname ?? '',
             "date_of_birth" => $userDetail?->birth_date ?? '',
-            "birth_region" => $birthAddr?->region ?? '',
-            "birth_province" => $birthAddr?->province ?? '',
-            "birth_city" => $birthAddr?->city ?? '',
-            "birth_barangay" => $birthAddr?->barangay ?? '',
-            "birth_street" => $birthAddr?->street ?? '',
+            "birth_region" => '', // Empty for dropdown functionality
+            "birth_province" => '', // Empty for dropdown functionality
+            "birth_city" => '', // Empty for dropdown functionality
+            "birth_barangay" => '', // Empty for dropdown functionality
+            "birth_street" => $birthAddress['street'] ?? '',
+            "birth_region_name" => $birthAddress['region'] ?? '',
+            "birth_province_name" => $birthAddress['province'] ?? '',
+            "birth_city_name" => $birthAddress['city'] ?? '',
+            "birth_barangay_name" => $birthAddress['barangay'] ?? '',
             "nationality" => $nationality?->cit_description ?? '',
             "rank" => $jobDetail?->rank ?? '',
             "afpsn" => $jobDetail?->afpsn ?? '',
             "branch_of_service" => $jobDetail?->service_branch ?? '',
             "present_job" => $jobDetail?->job_desc ?? '',
-            "home_region" => $home?->region ?? '',
-            "home_province" => $home?->province ?? '',
-            "home_city" => $home?->city ?? '',
-            "home_barangay" => $home?->barangay ?? '',
-            "home_street" => $home?->street ?? '',
-            "business_region" => $busAddr?->region ?? '',
-            "business_province" => $busAddr?->province ?? '',
-            "business_city" => $busAddr?->city ?? '',
-            "business_barangay" => $busAddr?->barangay ?? '',
-            "business_street" => $busAddr?->street ?? '',
+            "home_region" => '', // Empty for dropdown functionality
+            "home_province" => '', // Empty for dropdown functionality
+            "home_city" => '', // Empty for dropdown functionality
+            "home_barangay" => '', // Empty for dropdown functionality
+            "home_street" => $homeAddress['street'] ?? '',
+            "home_region_name" => $homeAddress['region'] ?? '',
+            "home_province_name" => $homeAddress['province'] ?? '',
+            "home_city_name" => $homeAddress['city'] ?? '',
+            "home_barangay_name" => $homeAddress['barangay'] ?? '',
+            "business_region" => '', // Empty for dropdown functionality
+            "business_province" => '', // Empty for dropdown functionality
+            "business_city" => '', // Empty for dropdown functionality
+            "business_barangay" => '', // Empty for dropdown functionality
+            "business_street" => $businessAddress['street'] ?? '',
+            "business_region_name" => $businessAddress['region'] ?? '',
+            "business_province_name" => $businessAddress['province'] ?? '',
+            "business_city_name" => $businessAddress['city'] ?? '',
+            "business_barangay_name" => $businessAddress['barangay'] ?? '',
             "email" => $userDetail?->email_addr ?? '',
             "mobile" => $userDetail?->mobile_num ?? '',
             "religion" => $userDetail?->religion ?? '',
             "tin" => $govId?->tin_num ?? '',
             "passport_number" => $govId?->pass_num ?? '',
             "passport_expiry" => $govId?->pass_exp ?? '',
-            "name_change" => $name?->change_in_name ?? '',
+            "name_change" => $personalDetail?->change_in_name ?? '',
         ];
+    }
+
+    // Helper to parse address text into components
+    private static function parseAddressText($addressText) {
+        if (empty($addressText)) {
+            return [];
+        }
+        $parts = array_map('trim', explode(',', $addressText));
+        $result = [];
+        if (count($parts) > 0) $result['street'] = $parts[0];
+        if (count($parts) > 1) $result['barangay'] = $parts[1];
+        if (count($parts) > 2) $result['city'] = $parts[2];
+        if (count($parts) > 3) $result['province'] = $parts[3];
+        if (count($parts) > 4) $result['region'] = $parts[4];
+        return $result;
     }
 
     /**

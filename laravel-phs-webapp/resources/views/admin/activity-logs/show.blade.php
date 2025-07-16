@@ -89,7 +89,7 @@
                         <div class="space-y-2">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Email:</span>
-                                <span class="font-medium text-gray-900">{{ $activityLog->user->email ?? 'N/A' }}</span>
+                                <span class="font-medium text-gray-900">{{ $activityLog->user->userDetail->email_addr ?? 'N/A' }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">User Type:</span>

@@ -37,7 +37,16 @@ use App\Http\Controllers\MiscellaneousController;
 // Public Routes
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect()->route('client.dashboard');
+        switch (auth()->user()->usertype) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'personnel':
+                return redirect()->route('personnel.dashboard');
+            case 'client':
+                return redirect()->route('client.dashboard');
+            default:
+                return redirect()->route('login')->with('error', 'Unknown user type.');
+        }
     }
     return redirect()->route('login');
 });

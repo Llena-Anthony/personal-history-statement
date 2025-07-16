@@ -117,11 +117,11 @@
                 </label>
                 <select name="birth_region" id="birth_region"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadProvinces('birth')">
+                        onchange="loadProvinces('birth'); updateCompleteAddress('birth'); updateAddressNames('birth')">
                     <option value="">Select Region</option>
-                    @if(isset($birth_region) && $birth_region)
-                        <option value="{{ $birth_region }}" selected>
-                            {{ $birth_region_name ?? $birth_region }}
+                    @if(isset($birth_region_name) && $birth_region_name)
+                        <option value="{{ $birth_region_name }}" selected>
+                            {{ $birth_region_name }}
                         </option>
                     @endif
                 </select>
@@ -134,11 +134,11 @@
                 </label>
                 <select name="birth_province" id="birth_province"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadCities('birth')">
+                        onchange="loadCities('birth'); updateCompleteAddress('birth'); updateAddressNames('birth')">
                     <option value="">Select Province</option>
-                    @if(isset($birth_province) && $birth_province)
-                        <option value="{{ $birth_province }}" selected>
-                            {{ $birth_province_name ?? $birth_province }}
+                    @if(isset($birth_province_name) && $birth_province_name)
+                        <option value="{{ $birth_province_name }}" selected>
+                            {{ $birth_province_name }}
                         </option>
                     @endif
                 </select>
@@ -151,11 +151,11 @@
                 </label>
                 <select name="birth_city" id="birth_city"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadBarangays('birth')">
+                        onchange="loadBarangays('birth'); updateCompleteAddress('birth'); updateAddressNames('birth')">
                     <option value="">Select City/Municipality</option>
-                    @if(isset($birth_city) && $birth_city)
-                        <option value="{{ $birth_city }}" selected>
-                            {{ $birth_city_name ?? $birth_city }}
+                    @if(isset($birth_city_name) && $birth_city_name)
+                        <option value="{{ $birth_city_name }}" selected>
+                            {{ $birth_city_name }}
                         </option>
                     @endif
                 </select>
@@ -170,11 +170,12 @@
                 Barangay
             </label>
             <select name="birth_barangay" id="birth_barangay"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                    onchange="updateCompleteAddress('birth'); updateAddressNames('birth')">
                 <option value="">Select Barangay</option>
-                @if(isset($birth_barangay) && $birth_barangay)
-                    <option value="{{ $birth_barangay }}" selected>
-                        {{ $birth_barangay_name ?? $birth_barangay }}
+                @if(isset($birth_barangay_name) && $birth_barangay_name)
+                    <option value="{{ $birth_barangay_name }}" selected>
+                        {{ $birth_barangay_name }}
                     </option>
                 @endif
             </select>
@@ -282,11 +283,11 @@
                 </label>
                 <select name="home_region" id="home_region"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadProvinces('home')">
+                        onchange="loadProvinces('home'); updateCompleteAddress('home'); updateAddressNames('home')">
                     <option value="">Select Region</option>
-                    @if(isset($home_region) && $home_region)
-                        <option value="{{ $home_region }}" selected>
-                            {{ $home_region_name ?? $home_region }}
+                    @if(isset($home_region_name) && $home_region_name)
+                        <option value="{{ $home_region_name }}" selected>
+                            {{ $home_region_name }}
                         </option>
                     @endif
                 </select>
@@ -299,11 +300,11 @@
                 </label>
                 <select name="home_province" id="home_province"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadCities('home')">
+                        onchange="loadCities('home'); updateCompleteAddress('home'); updateAddressNames('home')">
                     <option value="">Select Province</option>
-                    @if(isset($home_province) && $home_province)
-                        <option value="{{ $home_province }}" selected>
-                            {{ $home_province_name ?? $home_province }}
+                    @if(isset($home_province_name) && $home_province_name)
+                        <option value="{{ $home_province_name }}" selected>
+                            {{ $home_province_name }}
                         </option>
                     @endif
                 </select>
@@ -316,11 +317,11 @@
                 </label>
                 <select name="home_city" id="home_city"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadBarangays('home')">
+                        onchange="loadBarangays('home'); updateCompleteAddress('home'); updateAddressNames('home')">
                     <option value="">Select City/Municipality</option>
-                    @if(isset($home_city) && $home_city)
-                        <option value="{{ $home_city }}" selected>
-                            {{ $home_city_name ?? $home_city }}
+                    @if(isset($home_city_name) && $home_city_name)
+                        <option value="{{ $home_city_name }}" selected>
+                            {{ $home_city_name }}
                         </option>
                     @endif
                 </select>
@@ -334,13 +335,14 @@
                     Barangay
                 </label>
                 <select name="home_barangay" id="home_barangay"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                        onchange="updateCompleteAddress('home'); updateAddressNames('home')">
                     <option value="">Select Barangay</option>
-                    @if(isset($home_barangay) && $home_barangay)
-                        <option value="{{ $home_barangay }}" selected>
-                            {{ $home_barangay_name ?? $home_barangay }}
-                        </option>
-                    @endif
+                                    @if(isset($home_barangay_name) && $home_barangay_name)
+                    <option value="{{ $home_barangay_name }}" selected>
+                        {{ $home_barangay_name }}
+                    </option>
+                @endif
                 </select>
             </div>
 
@@ -382,11 +384,11 @@
                 </label>
                 <select name="business_region" id="business_region"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadProvinces('business')">
+                        onchange="loadProvinces('business'); updateCompleteAddress('business'); updateAddressNames('business')">
                     <option value="">Select Region</option>
-                    @if(isset($business_region) && $business_region)
-                        <option value="{{ $business_region }}" selected>
-                            {{ $business_region_name ?? $business_region }}
+                    @if(isset($business_region_name) && $business_region_name)
+                        <option value="{{ $business_region_name }}" selected>
+                            {{ $business_region_name }}
                         </option>
                     @endif
                 </select>
@@ -399,11 +401,11 @@
                 </label>
                 <select name="business_province" id="business_province"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadCities('business')">
+                        onchange="loadCities('business'); updateCompleteAddress('business'); updateAddressNames('business')">
                     <option value="">Select Province</option>
-                    @if(isset($business_province) && $business_province)
-                        <option value="{{ $business_province }}" selected>
-                            {{ $business_province_name ?? $business_province }}
+                    @if(isset($business_province_name) && $business_province_name)
+                        <option value="{{ $business_province_name }}" selected>
+                            {{ $business_province_name }}
                         </option>
                     @endif
                 </select>
@@ -416,11 +418,11 @@
                 </label>
                 <select name="business_city" id="business_city"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                        onchange="loadBarangays('business')">
+                        onchange="loadBarangays('business'); updateCompleteAddress('business'); updateAddressNames('business')">
                     <option value="">Select City/Municipality</option>
-                    @if(isset($business_city) && $business_city)
-                        <option value="{{ $business_city }}" selected>
-                            {{ $business_city_name ?? $business_city }}
+                    @if(isset($business_city_name) && $business_city_name)
+                        <option value="{{ $business_city_name }}" selected>
+                            {{ $business_city_name }}
                         </option>
                     @endif
                 </select>
@@ -434,13 +436,14 @@
                     Barangay
                 </label>
                 <select name="business_barangay" id="business_barangay"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
+                        onchange="updateCompleteAddress('business'); updateAddressNames('business')">
                     <option value="">Select Barangay</option>
-                    @if(isset($business_barangay) && $business_barangay)
-                        <option value="{{ $business_barangay }}" selected>
-                            {{ $business_barangay_name ?? $business_barangay }}
-                        </option>
-                    @endif
+                                    @if(isset($business_barangay_name) && $business_barangay_name)
+                    <option value="{{ $business_barangay_name }}" selected>
+                        {{ $business_barangay_name }}
+                    </option>
+                @endif
                 </select>
             </div>
 
@@ -481,3 +484,7 @@
 <input type="hidden" name="business_province_name" id="business_province_name">
 <input type="hidden" name="business_city_name" id="business_city_name">
 <input type="hidden" name="business_barangay_name" id="business_barangay_name">
+<input type="hidden" id="birth_region_name" name="birth_region_name" value="{{ $birth_region_name ?? '' }}">
+<input type="hidden" id="birth_province_name" name="birth_province_name" value="{{ $birth_province_name ?? '' }}">
+<input type="hidden" id="birth_city_name" name="birth_city_name" value="{{ $birth_city_name ?? '' }}">
+<input type="hidden" id="birth_barangay_name" name="birth_barangay_name" value="{{ $birth_barangay_name ?? '' }}">
