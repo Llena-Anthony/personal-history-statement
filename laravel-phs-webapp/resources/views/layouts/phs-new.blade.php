@@ -597,17 +597,8 @@
                                 </a>
                             @endif
                             <div class="hidden sm:block">
-                                @if(Auth::user())
-                                    <a href="{{ route('client.dashboard') }}" class="hover:opacity-80 transition-opacity cursor-pointer">
-                                        <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
-                                        <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
-                                    </a>
-                                @else
-                                    <a href="#" onclick="event.preventDefault();" class="hover:opacity-80 transition-opacity cursor-pointer">
-                                        <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
-                                        <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
-                                    </a>
-                                @endif
+                                <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
+                                <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
                             </div>
                         </div>
                     </div>
@@ -617,21 +608,39 @@
                             <div style="font-weight:bold;">Philippine Standard Time:</div>
                             <div id="ph-time-value"></div>
                         </div>
-                        <div class="hidden lg:block text-white text-xs">
-                            <span class="text-[#D4AF37]">
-                                @if(Auth::user())
-                                    Client
-                                @else
-                                    Client
-                                @endif
-                            </span>
+                        <div class="hidden lg:block text-white text-xs flex items-center gap-2">
+                            <span class="text-[#D4AF37]">Client</span>
                             <span class="mx-2">/</span>
-                            <span>PHS Form</span>
+                            <span>@yield('header', 'PHS Form')</span>
+                            @if(session('admin_switched_to_client'))
+                            <span class="ml-2 px-2 py-1 bg-blue-600 text-white text-xs rounded-full font-medium flex items-center">
+                                <i class="fas fa-user-shield mr-1"></i>Admin PHS
+                            </span>
+                            @endif
                         </div>
-                        <!-- Logout Icon Button -->
+                        @if(session('admin_switched_to_client'))
+                        <!-- Hamburger Menu for Admin-Switched-to-Client -->
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-2">
+                                <i class="fas fa-bars text-lg"></i>
+                            </button>
+                            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" @click.away="open = false" class="absolute right-0 mt-2 w-48 rounded-lg bg-white/95 shadow-xl border border-white/10 z-50">
+                                <div class="py-1">
+                                    <a href="{{ route('return.to.admin') }}" id="returnToAdminBtn" class="block px-4 py-2 text-sm text-[#1B365D] hover:bg-blue-50 flex items-center">
+                                        <i class="fas fa-arrow-left mr-2"></i>Return to Admin
+                                    </a>
+                                    <button onclick="showLogoutConfirmation()" class="w-full text-left px-4 py-2 text-sm text-[#1B365D] hover:bg-blue-50 flex items-center">
+                                        <i class="fas fa-power-off mr-2"></i>Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @else
+                        <!-- Logout Icon Button (only if not admin-switched-to-client) -->
                         <button onclick="showLogoutConfirmation()" title="Logout" class="text-white hover:text-[#D4AF37] p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ml-4">
                             <i class="fas fa-power-off text-lg"></i>
                         </button>
+                        @endif
                     </div>
                 </div>
             </div>
