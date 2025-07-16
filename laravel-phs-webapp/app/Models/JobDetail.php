@@ -21,10 +21,6 @@ class JobDetail extends Model
         'job_addr',
     ];
 
-    public function addressDetail()
-    {
-        return $this->belongsTo(AddressDetail::class, 'job_addr', 'addr_id');
-    }
     public function user()
     {
         return $this->belongsTo(User::class, 'username', 'username');

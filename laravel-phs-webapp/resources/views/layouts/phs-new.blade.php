@@ -3049,6 +3049,17 @@
             const city = citySelect && citySelect.selectedIndex > 0 ? citySelect.options[citySelect.selectedIndex].text : '';
             const barangay = barangaySelect && barangaySelect.selectedIndex > 0 ? barangaySelect.options[barangaySelect.selectedIndex].text : '';
 
+            // Update hidden name fields
+            const regionNameField = document.getElementById(`${type}_region_name`);
+            const provinceNameField = document.getElementById(`${type}_province_name`);
+            const cityNameField = document.getElementById(`${type}_city_name`);
+            const barangayNameField = document.getElementById(`${type}_barangay_name`);
+
+            if (regionNameField) regionNameField.value = region;
+            if (provinceNameField) provinceNameField.value = province;
+            if (cityNameField) cityNameField.value = city;
+            if (barangayNameField) barangayNameField.value = barangay;
+
             let completeAddress = '';
             if (street) completeAddress += street + ', ';
             if (barangay) completeAddress += barangay + ', ';
@@ -3275,6 +3286,17 @@
                 
                 console.log('Form initialized successfully');
             }
+        }
+
+        function updateAddressNames(type) {
+            const region = document.getElementById(`${type}_region`);
+            const province = document.getElementById(`${type}_province`);
+            const city = document.getElementById(`${type}_city`);
+            const barangay = document.getElementById(`${type}_barangay`);
+            if (region) document.getElementById(`${type}_region_name`).value = region.options[region.selectedIndex]?.text || '';
+            if (province) document.getElementById(`${type}_province_name`).value = province.options[province.selectedIndex]?.text || '';
+            if (city) document.getElementById(`${type}_city_name`).value = city.options[city.selectedIndex]?.text || '';
+            if (barangay) document.getElementById(`${type}_barangay_name`).value = barangay.options[barangay.selectedIndex]?.text || '';
         }
     </script>
 </body>

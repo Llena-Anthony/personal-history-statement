@@ -34,14 +34,6 @@ class UserDetail extends Model
     {
         return $this->belongsTo(NameDetail::class, 'full_name', 'name_id');
     }
-    public function homeAddress()
-    {
-        return $this->belongsTo(AddressDetail::class, 'home_addr', 'addr_id');
-    }
-    public function birthPlace()
-    {
-        return $this->belongsTo(AddressDetail::class, 'birth_place', 'addr_id');
-    }
     public function citizenshipDetail()
     {
         return $this->belongsTo(CitizenshipDetail::class, 'nationality', 'cit_id');

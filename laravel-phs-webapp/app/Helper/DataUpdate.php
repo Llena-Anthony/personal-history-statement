@@ -56,8 +56,23 @@ class DataUpdate {
      * Update or create name detail for a user.
      */
     public static function updateNameDetail($username, $nameData) {
-        // Only use columns that exist in the table
-        $name = \App\Models\NameDetail::firstOrCreate([
+        // Find the user's current name_id
+        $userDetail = \App\Models\UserDetail::where('username', $username)->first();
+        $nameId = $userDetail ? $userDetail->full_name : null;
+        if ($nameId) {
+            // Update the existing name_details row
+            $name = \App\Models\NameDetail::find($nameId);
+            if ($name) {
+                $name->last_name = $nameData['last_name'] ?? null;
+                $name->first_name = $nameData['first_name'] ?? null;
+                $name->middle_name = $nameData['middle_name'] ?? null;
+                $name->suffix = $nameData['suffix'] ?? null;
+                $name->save();
+                return $name->name_id;
+            }
+        }
+        // If no name_id, create a new name_details row
+        $name = \App\Models\NameDetail::create([
             'last_name' => $nameData['last_name'] ?? null,
             'first_name' => $nameData['first_name'] ?? null,
             'middle_name' => $nameData['middle_name'] ?? null,
@@ -86,14 +101,21 @@ class DataUpdate {
      * Update or create user detail for a user.
      */
     public static function updateUserDetail($username, $userDetailData) {
+        \Log::info('updateUserDetail started', ['username' => $username, 'userDetailData' => $userDetailData]);
+        
         // Ensure full_name is set to the correct name_id
         if (isset($userDetailData['full_name']) && is_array($userDetailData['full_name'])) {
             $userDetailData['full_name'] = self::updateNameDetail($username, $userDetailData['full_name']);
         }
+        // If full_name is already an integer (name_id), use it directly
+        
+        \Log::info('About to update/create user detail', ['username' => $username, 'data' => $userDetailData]);
         $userDetail = \App\Models\UserDetail::updateOrCreate(
             ['username' => $username],
             $userDetailData
         );
+        \Log::info('User detail updated/created successfully', ['username' => $userDetail->username]);
+        
         return $userDetail->username;
     }
 
@@ -637,43 +659,69 @@ class DataUpdate {
      * Save all personal details for a user using the above helpers.
      */
     public static function savePersonalDetails($data, $username) {
+        \Log::info('savePersonalDetails started', ['username' => $username, 'data_keys' => array_keys($data)]);
+        
         // Name
         $nameId = self::updateNameDetail($username, $data['name'] ?? []);
-        // Addresses
-        $birthAddrId = self::updateAddressDetail($data['birth_address'] ?? []);
-        $homeAddrId = self::updateAddressDetail($data['home_address'] ?? []);
-        $businessAddrId = self::updateAddressDetail($data['business_address'] ?? []);
+        \Log::info('Name detail updated', ['name_id' => $nameId]);
+        
+        // Addresses - save as text
+        $birthAddrText = self::addressArrayToString($data['birth_address'] ?? []);
+        $homeAddrText = self::addressArrayToString($data['home_address'] ?? []);
+        $businessAddrText = self::addressArrayToString($data['business_address'] ?? []);
+        
         // UserDetail
         $userDetailData = [
             'full_name' => $nameId,
             'profile_path' => $data['profile_path'] ?? null,
-            'home_addr' => $homeAddrId,
+            'home_addr' => $homeAddrText,
             'birth_date' => $data['birth_date'] ?? null,
-            'birth_place' => $birthAddrId,
+            'birth_place' => $birthAddrText,
             'nationality' => $data['nationality'] ?? null,
             'religion' => $data['religion'] ?? null,
             'mobile_num' => $data['mobile'] ?? null,
             'email_addr' => $data['email'] ?? null,
         ];
+        
+        \Log::info('Updating user detail', ['userDetailData' => $userDetailData]);
         self::updateUserDetail($username, $userDetailData);
-        // PersonalDetail
-        self::updatePersonalDetail($username, $data['personal'] ?? []);
+        \Log::info('User detail updated successfully');
+        
+        // PersonalDetail - handle nickname and change_in_name
+        $personalData = $data['personal'] ?? [];
+        if (!empty($personalData)) {
+            \Log::info('Updating personal detail', ['personalData' => $personalData]);
+            self::updatePersonalDetail($username, $personalData);
+            \Log::info('Personal detail updated successfully');
+        }
+        
         // JobDetail
         if (!empty($data['job'])) {
-            self::updateJobDetail($username, $data['job']);
+            $jobData = $data['job'];
+            $jobData['job_addr'] = $businessAddrText;
+            \Log::info('Updating job detail', ['jobData' => $jobData]);
+            self::updateJobDetail($username, $jobData);
+            \Log::info('Job detail updated successfully');
         }
+        
         // Government ID
         if (!empty($data['gov_id'])) {
+            \Log::info('Updating government ID', ['gov_id' => $data['gov_id']]);
             self::updateGovIdDetail($username, $data['gov_id']);
+            \Log::info('Government ID updated successfully');
         }
+        
         // Character References
         if (!empty($data['character_references'])) {
             self::updateCharacterReferences($username, $data['character_references']);
         }
+        
         // Neighbor References
         if (!empty($data['neighbor_references'])) {
             self::updateNeighbors($username, $data['neighbor_references']);
         }
+        
+        \Log::info('savePersonalDetails completed successfully');
         // Add more as needed for other sections
     }
 
@@ -927,5 +975,17 @@ class DataUpdate {
             return sprintf('%04d-01-01', $year);
         }
         return null;
+    }
+
+    // Helper to convert address array to string
+    private static function addressArrayToString($address) {
+        if (empty($address) || !is_array($address)) return '';
+        return implode(', ', array_filter([
+            $address['street'] ?? '',
+            $address['barangay_name'] ?? $address['barangay'] ?? '',
+            $address['city_name'] ?? $address['city'] ?? '',
+            $address['province_name'] ?? $address['province'] ?? '',
+            $address['region_name'] ?? $address['region'] ?? ''
+        ]));
     }
 }

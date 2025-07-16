@@ -170,6 +170,8 @@ class PersonalDetailsController extends Controller
             }
 
             $username = auth()->user()->username;
+            \Log::info('Processing personal details for user', ['username' => $username]);
+            
             $data = [
                 'name' => [
                     'first_name' => $validated['first_name'],
@@ -180,10 +182,10 @@ class PersonalDetailsController extends Controller
                     'change_in_name' => $validated['name_change'] ?? null,
                 ],
                 'birth_address' => [
-                    'region' => $validated['birth_region'] ?? null,
-                    'province' => $validated['birth_province'] ?? null,
-                    'city' => $validated['birth_city'] ?? null,
-                    'barangay' => $validated['birth_barangay'] ?? null,
+                    'region' => null, // Not used for text-only addresses
+                    'province' => null, // Not used for text-only addresses
+                    'city' => null, // Not used for text-only addresses
+                    'barangay' => null, // Not used for text-only addresses
                     'street' => $validated['birth_street'] ?? null,
                     'region_name' => $validated['birth_region_name'] ?? null,
                     'province_name' => $validated['birth_province_name'] ?? null,
@@ -191,10 +193,10 @@ class PersonalDetailsController extends Controller
                     'barangay_name' => $validated['birth_barangay_name'] ?? null,
                 ],
                 'home_address' => [
-                    'region' => $validated['home_region'] ?? null,
-                    'province' => $validated['home_province'] ?? null,
-                    'city' => $validated['home_city'] ?? null,
-                    'barangay' => $validated['home_barangay'] ?? null,
+                    'region' => null, // Not used for text-only addresses
+                    'province' => null, // Not used for text-only addresses
+                    'city' => null, // Not used for text-only addresses
+                    'barangay' => null, // Not used for text-only addresses
                     'street' => $validated['home_street'] ?? null,
                     'region_name' => $validated['home_region_name'] ?? null,
                     'province_name' => $validated['home_province_name'] ?? null,
@@ -202,10 +204,10 @@ class PersonalDetailsController extends Controller
                     'barangay_name' => $validated['home_barangay_name'] ?? null,
                 ],
                 'business_address' => [
-                    'region' => $validated['business_region'] ?? null,
-                    'province' => $validated['business_province'] ?? null,
-                    'city' => $validated['business_city'] ?? null,
-                    'barangay' => $validated['business_barangay'] ?? null,
+                    'region' => null, // Not used for text-only addresses
+                    'province' => null, // Not used for text-only addresses
+                    'city' => null, // Not used for text-only addresses
+                    'barangay' => null, // Not used for text-only addresses
                     'street' => $validated['business_street'] ?? null,
                     'region_name' => $validated['business_region_name'] ?? null,
                     'province_name' => $validated['business_province_name'] ?? null,
@@ -234,17 +236,28 @@ class PersonalDetailsController extends Controller
                 ],
             ];
 
+            \Log::info('Data structure prepared', ['data' => $data]);
+
             // Map nationality string to citizenship ID
             if (!empty($validated['nationality'])) {
                 $citizenship = \App\Models\CitizenshipDetail::where('cit_description', $validated['nationality'])->first();
-                if ($citizenship) {
-                    $data['nationality'] = $citizenship->cit_id;
+                if (!$citizenship) {
+                    // Create new citizenship record if it doesn't exist
+                    $citizenship = \App\Models\CitizenshipDetail::create([
+                        'cit_description' => $validated['nationality']
+                    ]);
                 }
+                $data['nationality'] = $citizenship->cit_id;
+                \Log::info('Nationality mapped', ['nationality' => $validated['nationality'], 'cit_id' => $data['nationality']]);
             }
 
+            \Log::info('Calling savePersonalDetails', ['username' => $username]);
             \App\Helper\DataUpdate::savePersonalDetails($data, $username);
+            \Log::info('savePersonalDetails completed successfully');
+            
             $this->markSectionAsCompleted('personal-details');
             session()->save();
+            \Log::info('Section marked as completed and session saved');
 
             if ($isSaveOnly) {
                 return response()->json(['success' => true, 'message' => 'Personal details saved successfully']);
