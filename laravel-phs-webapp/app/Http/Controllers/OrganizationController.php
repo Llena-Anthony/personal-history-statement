@@ -15,11 +15,7 @@ class OrganizationController extends Controller
         $prefill = DataRetrieval::retrieveOrganizationMemberships(auth()->user()->username);
         $data = $this->getCommonViewData('organization');
         $data = array_merge($data, $prefill);
-
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.organization-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.organization', $data);
     }
 

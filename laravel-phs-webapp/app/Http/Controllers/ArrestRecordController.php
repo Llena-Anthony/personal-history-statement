@@ -19,10 +19,7 @@ class ArrestRecordController extends Controller
         $data = $this->getCommonViewData('arrest-record');
         $data = array_merge($data, $prefill);
         $data['arrestRecord'] = DataRetrieval::retrieveArrestRecord(auth()->user()->username);
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.arrest-record-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.arrest-record', $data);
     }
 

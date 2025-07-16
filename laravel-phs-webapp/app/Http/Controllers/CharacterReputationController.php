@@ -15,11 +15,7 @@ class CharacterReputationController extends Controller
         $prefill = DataRetrieval::retrieveCharacterReputation(auth()->user()->username);
         $data = $this->getCommonViewData('character-and-reputation');
         $data = array_merge($data, $prefill);
-
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.character-and-reputation-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.character-and-reputation', $data);
     }
 

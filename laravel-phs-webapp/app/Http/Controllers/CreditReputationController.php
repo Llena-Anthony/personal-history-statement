@@ -60,10 +60,7 @@ class CreditReputationController extends Controller
         $data['creditReputation'] = $creditReputation;
         $data['otherIncomes'] = $otherIncomes;
         $data['knownBanks'] = $knownBanks;
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.credit-reputation-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.credit-reputation', $data);
     }
 

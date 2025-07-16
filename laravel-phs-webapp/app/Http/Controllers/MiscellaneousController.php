@@ -15,11 +15,7 @@ class MiscellaneousController extends Controller
         $prefill = DataRetrieval::retrieveMiscellaneous(auth()->user()->username);
         $data = $this->getCommonViewData('miscellaneous');
         $data = array_merge($data, $prefill);
-
-        // Check if it's an AJAX request
-        if (request()->ajax()) {
-            return view('phs.sections.miscellaneous-content', $data)->render();
-        }
+        // Always return the full section view
         return view('phs.miscellaneous-new', $data);
     }
 
