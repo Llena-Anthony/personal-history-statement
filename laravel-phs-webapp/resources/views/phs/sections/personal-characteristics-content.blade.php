@@ -130,13 +130,13 @@
     
     <!-- Scars/Marks & Other Distinguishing Features -->
     <div class="mt-6">
-        <label for="distinguishing_features" class="block text-sm font-medium text-gray-700 mb-2">
+        <label for="other_marks" class="block text-sm font-medium text-gray-700 mb-2">
             Scars, Marks & Other Distinguishing Features
         </label>
-        <textarea name="distinguishing_features" id="distinguishing_features" rows="3"
+        <textarea name="other_marks" id="other_marks" rows="3"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                  placeholder="Describe any scars, marks, tattoos, or other distinguishing features...">{{ old('distinguishing_features', $personalCharacteristics->distinguishing_features ?? '') }}</textarea>
-        @error('distinguishing_features')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                  placeholder="Describe any scars, marks, tattoos, or other distinguishing features...">{{ old('other_marks', $personalCharacteristics->distinguishing_features ?? $personalCharacteristics->other_marks ?? '') }}</textarea>
+        @error('other_marks')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
     </div>
 </div>
 
@@ -150,17 +150,17 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Present State of Health -->
         <div>
-            <label for="health_status" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="health_state" class="block text-sm font-medium text-gray-700 mb-2">
                 Present State of Health
             </label>
-            <select name="health_status" id="health_status"
+            <select name="health_state" id="health_state"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors">
                 <option value="">Select Health Status</option>
-                <option value="excellent" {{ old('health_status', $personalCharacteristics->health_status ?? '') == 'excellent' ? 'selected' : '' }}>Excellent</option>
-                <option value="good" {{ old('health_status', $personalCharacteristics->health_status ?? '') == 'good' ? 'selected' : '' }}>Good</option>
-                <option value="poor" {{ old('health_status', $personalCharacteristics->health_status ?? '') == 'poor' ? 'selected' : '' }}>Poor</option>
+                <option value="excellent" {{ old('health_state', $personalCharacteristics->health_status ?? $personalCharacteristics->health_state ?? '') == 'excellent' ? 'selected' : '' }}>Excellent</option>
+                <option value="good" {{ old('health_state', $personalCharacteristics->health_status ?? $personalCharacteristics->health_state ?? '') == 'good' ? 'selected' : '' }}>Good</option>
+                <option value="poor" {{ old('health_state', $personalCharacteristics->health_status ?? $personalCharacteristics->health_state ?? '') == 'poor' ? 'selected' : '' }}>Poor</option>
             </select>
-            @error('health_status')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+            @error('health_state')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
         
         <!-- Blood Type -->
@@ -186,13 +186,13 @@
     
     <!-- Recent Serious Illness -->
     <div class="mt-6">
-        <label for="recent_illness" class="block text-sm font-medium text-gray-700 mb-2">
+        <label for="illness" class="block text-sm font-medium text-gray-700 mb-2">
             Recent Serious Illness
         </label>
-        <textarea name="recent_illness" id="recent_illness" rows="3"
+        <textarea name="illness" id="illness" rows="3"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors"
-                  placeholder="Describe any recent serious illness, if any...">{{ old('recent_illness', $personalCharacteristics->recent_illness ?? '') }}</textarea>
-        @error('recent_illness')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                  placeholder="Describe any recent serious illness, if any...">{{ old('illness', $personalCharacteristics->recent_illness ?? $personalCharacteristics->illness ?? '') }}</textarea>
+        @error('illness')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
     </div>
 </div>
 

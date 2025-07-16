@@ -216,7 +216,7 @@ class DataRetrieval {
             'spouse_first_name' => $spouseName?->first_name ?? '',
             'spouse_middle_name' => $spouseName?->middle_name ?? '',
             'spouse_last_name' => $spouseName?->last_name ?? '',
-            'spouse_suffix' => $spouseName?->name_extension ?? '',
+            'spouse_suffix' => $spouseName?->suffix ?? '',
             'marriage_month' => $spouse?->marr_date ? date('m', strtotime($spouse->marr_date)) : '',
             'marriage_year' => $spouse?->marr_date ? date('Y', strtotime($spouse->marr_date)) : '',
             'marriage_place' => $marriagePlace ? implode(', ', array_filter([

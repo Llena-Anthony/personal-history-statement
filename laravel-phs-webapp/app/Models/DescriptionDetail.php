@@ -12,13 +12,13 @@ class DescriptionDetail extends Model
     protected $primaryKey = 'username';
     public $incrementing = false;
     public $keyType = 'string';
-    public $fillable = [
+    protected $fillable = [
         'username',
         'sex',
         'age',
         'height',
         'weight',
-        'body-build',
+        'body_build',
         'complexion',
         'eye_color',
         'hair_color',

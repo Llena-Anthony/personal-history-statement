@@ -74,10 +74,17 @@ class PersonalCharacteristicsController extends Controller
             }
 
             $nextRoute = auth()->user()->usertype === 'personnel'
-                ? 'personnel.phs.marital-status.create'
-                : 'phs.marital-status.create';
+                ? route('personnel.phs.marital-status.create')
+                : route('phs.marital-status.create');
 
-            return redirect()->route($nextRoute)
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'next_route' => $nextRoute
+                ]);
+            }
+
+            return redirect($nextRoute)
                 ->with('success', 'Personal characteristics saved successfully. Please continue with your marital status.');
         } catch (\Exception $e) {
             \Log::error('PersonalCharacteristics save error:', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);

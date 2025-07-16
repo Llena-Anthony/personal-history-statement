@@ -1,3 +1,14 @@
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof updateAddressNames === 'function') {
+        updateAddressNames('home');
+        updateAddressNames('business');
+        updateAddressNames('birth');
+    }
+});
+</script>
+@endpush
 <!-- Personal Information -->
 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <h3 class="text-xl font-semibold text-[#1B365D] mb-6 flex items-center">

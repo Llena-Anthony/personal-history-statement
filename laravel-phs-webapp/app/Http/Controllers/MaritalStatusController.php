@@ -20,6 +20,8 @@ class MaritalStatusController extends Controller
         $prefill = DataRetrieval::retrieveMaritalStatus(auth()->user()->username);
         $data = $this->getCommonViewData('marital-status');
         $data = array_merge($data, $prefill);
+        // Fix: set $marital_stat for blade prefill
+        $data['marital_stat'] = $prefill['marital_status'] ?? '';
         return view('phs.marital-status', $data);
     }
 
