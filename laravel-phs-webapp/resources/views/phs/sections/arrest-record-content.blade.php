@@ -148,21 +148,21 @@
 <script>
     function arrestRecordForm() {
         return {
-            investigated_arrested: '{{ old('investigated_arrested', optional($arrestRecord->arrDesc)->arrest_detail_id ? 'yes' : 'no') }}',
-            investigated_arrested_court_name: '{{ old('investigated_arrested_court_name', optional($arrestRecord->arrDesc)->court_name ?? '') }}',
-            investigated_arrested_nature_of_offense: '{{ old('investigated_arrested_nature_of_offense', optional($arrestRecord->arrDesc)->nature_of_offense ?? '') }}',
-            investigated_arrested_disposition_of_case: '{{ old('investigated_arrested_disposition_of_case', optional($arrestRecord->arrDesc)->disposition_of_case ?? '') }}',
-            family_investigated_arrested: '{{ old('family_investigated_arrested', optional($arrestRecord->famArrDesc)->arrest_detail_id ? 'yes' : 'no') }}',
-            family_investigated_arrested_court_name: '{{ old('family_investigated_arrested_court_name', optional($arrestRecord->famArrDesc)->court_name ?? '') }}',
-            family_investigated_arrested_nature_of_offense: '{{ old('family_investigated_arrested_nature_of_offense', optional($arrestRecord->famArrDesc)->nature_of_offense ?? '') }}',
-            family_investigated_arrested_disposition_of_case: '{{ old('family_investigated_arrested_disposition_of_case', optional($arrestRecord->famArrDesc)->disposition_of_case ?? '') }}',
-            pd1081_arrested: '{{ old('pd1081_arrested', optional($arrestRecord->violationDesc)->arrest_detail_id ? 'yes' : 'no') }}',
-            pd1081_arrested_nature_of_offense: '{{ old('pd1081_arrested_nature_of_offense', optional($arrestRecord->violationDesc)->nature_of_offense ?? '') }}',
-            pd1081_arrested_disposition_of_case: '{{ old('pd1081_arrested_disposition_of_case', optional($arrestRecord->violationDesc)->disposition_of_case ?? '') }}',
-            administrative_case: '{{ old('administrative_case', $arrestRecord->admin_case_desc ? 'yes' : 'no') }}',
-            administrative_case_details: '{{ old('administrative_case_details', $arrestRecord->admin_case_desc ?? '') }}',
-            intoxicating_liquor_narcotics: '{{ old('intoxicating_liquor_narcotics', $arrestRecord->extent_of_intoxication ? 'yes' : 'no') }}',
-            intoxicating_liquor_narcotics_details: '{{ old('intoxicating_liquor_narcotics_details', $arrestRecord->extent_of_intoxication ?? '') }}',
+            investigated_arrested: '{{ old('investigated_arrested', optional(optional($arrestRecord)->arrDesc)->arrest_detail_id ? 'yes' : 'no') }}',
+            investigated_arrested_court_name: '{{ old('investigated_arrested_court_name', optional(optional($arrestRecord)->arrDesc)->court_name ?? '') }}',
+            investigated_arrested_nature_of_offense: '{{ old('investigated_arrested_nature_of_offense', optional(optional($arrestRecord)->arrDesc)->nature_of_offense ?? '') }}',
+            investigated_arrested_disposition_of_case: '{{ old('investigated_arrested_disposition_of_case', optional(optional($arrestRecord)->arrDesc)->disposition_of_case ?? '') }}',
+            family_investigated_arrested: '{{ old('family_investigated_arrested', optional(optional($arrestRecord)->famArrDesc)->arrest_detail_id ? 'yes' : 'no') }}',
+            family_investigated_arrested_court_name: '{{ old('family_investigated_arrested_court_name', optional(optional($arrestRecord)->famArrDesc)->court_name ?? '') }}',
+            family_investigated_arrested_nature_of_offense: '{{ old('family_investigated_arrested_nature_of_offense', optional(optional($arrestRecord)->famArrDesc)->nature_of_offense ?? '') }}',
+            family_investigated_arrested_disposition_of_case: '{{ old('family_investigated_arrested_disposition_of_case', optional(optional($arrestRecord)->famArrDesc)->disposition_of_case ?? '') }}',
+            pd1081_arrested: '{{ old('pd1081_arrested', optional(optional($arrestRecord)->violationDesc)->arrest_detail_id ? 'yes' : 'no') }}',
+            pd1081_arrested_nature_of_offense: '{{ old('pd1081_arrested_nature_of_offense', optional(optional($arrestRecord)->violationDesc)->nature_of_offense ?? '') }}',
+            pd1081_arrested_disposition_of_case: '{{ old('pd1081_arrested_disposition_of_case', optional(optional($arrestRecord)->violationDesc)->disposition_of_case ?? '') }}',
+            administrative_case: '{{ old('administrative_case', optional($arrestRecord)->admin_case_desc ? 'yes' : 'no') }}',
+            administrative_case_details: '{{ old('administrative_case_details', optional($arrestRecord)->admin_case_desc ?? '') }}',
+            intoxicating_liquor_narcotics: '{{ old('intoxicating_liquor_narcotics', optional($arrestRecord)->extent_of_intoxication ? 'yes' : 'no') }}',
+            intoxicating_liquor_narcotics_details: '{{ old('intoxicating_liquor_narcotics_details', optional($arrestRecord)->extent_of_intoxication ?? '') }}',
         }
     }
 
