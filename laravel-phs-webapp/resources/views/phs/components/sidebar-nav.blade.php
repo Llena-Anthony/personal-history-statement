@@ -56,7 +56,7 @@
                                     <i class="fas fa-check ml-1 text-xs"></i>
                                 @endif
                             </span>
-                            <span class="text-sm {{ request()->routeIs('phs.family-background.create') ? 'font-bold' : (isset($sectionStatus['family-background']) ? 'font-semibold' : 'font-medium') }}">Family History and Information</span>
+                            <span class="text-sm {{ request()->routeIs('phs.family-background.create') ? 'font-bold' : (isset($sectionStatus['family-background']) ? 'font-semibold' : 'font-medium') }}">Family History</span>
                         </a>
                     </li>
                     <li>

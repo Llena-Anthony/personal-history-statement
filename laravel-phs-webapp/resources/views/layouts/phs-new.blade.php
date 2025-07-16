@@ -596,7 +596,7 @@
                                     <img src="{{ asset('images/pma_logo.svg') }}" alt="PMA Logo" class="pma-crest">
                                 </a>
                             @endif
-                            <div class="hidden sm:block">
+                            <div>
                                 <h1 class="header-title text-white font-bold text-lg">Personal History Statement Online System</h1>
                                 <p class="text-[#D4AF37] text-xs font-medium">Complete Your PHS Form</p>
                             </div>
@@ -608,7 +608,7 @@
                             <div style="font-weight:bold;">Philippine Standard Time:</div>
                             <div id="ph-time-value"></div>
                         </div>
-                        <div class="hidden lg:block text-white text-xs flex items-center gap-2">
+                        <div class="text-white text-xs flex items-center gap-2">
                             <span class="text-[#D4AF37]">Client</span>
                             <span class="mx-2">/</span>
                             <span>@yield('header', 'PHS Form')</span>
@@ -1200,7 +1200,7 @@
                     },
                     {
                         id: 'family-background',
-                        title: 'IV: Family Background',
+                        title: 'IV: Family History',
                         description: 'Extended family',
                         icon: 'fas fa-tree',
                         route: PHSSectionRoutes['family-background'],

@@ -149,7 +149,7 @@
                     { label: 'I', name: 'Personal Details', url: '{{ route('phs.create') }}', status: '{{ session('phs_section_status.I', 'default') }}', route: 'phs.create' },
                     { label: 'II', name: 'Personal Characteristics', url: '{{ route('phs.personal-characteristics.create') }}', status: '{{ session('phs_section_status.II', 'default') }}', route: 'phs.personal-characteristics.create' },
                     { label: 'III', name: 'Marital Status', url: '{{ route('phs.marital-status.create') }}', status: '{{ session('phs_section_status.III', 'default') }}', route: 'phs.marital-status.create' },
-                    { label: 'IV', name: 'Family History and Information', url: '{{ route('phs.family-background.create') }}', status: '{{ session('phs_section_status.IV', 'default') }}', route: 'phs.family-background.create' },
+                    { label: 'IV', name: 'Family History', url: '{{ route('phs.family-background.create') }}', status: '{{ session('phs_section_status.IV', 'default') }}', route: 'phs.family-background.create' },
                     { label: 'V', name: 'Educational Background', url: '{{ route('phs.educational-background.create') }}', status: '{{ session('phs_section_status.V', 'default') }}', route: 'phs.educational-background.create' },
                     { label: 'VI', name: 'Military History', url: '{{ route('phs.military-history.create') }}', status: '{{ session('phs_section_status.VI', 'default') }}', route: 'phs.military-history.create' },
                     { label: 'VII', name: 'Places of Residence Since Birth', url: '{{ route('phs.places-of-residence.create') }}', status: '{{ session('phs_section_status.VII', 'default') }}', route: 'phs.places-of-residence.create' },
