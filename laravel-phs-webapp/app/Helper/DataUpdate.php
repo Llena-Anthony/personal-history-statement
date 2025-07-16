@@ -15,11 +15,15 @@ class DataUpdate {
             ->delete();
         foreach ($references as $reference) {
             if (!empty($reference['name']) || !empty($reference['address'])) {
+                // Create or find the name in name_details
+                $name = \App\Models\NameDetail::firstOrCreate([
+                    'first_name' => $reference['name'],
+                ]);
                 ReferenceDetail::create([
                     'username' => $username,
                     'ref_type' => 'character',
-                    'ref_name' => $reference['name'] ?? '',
-                    'ref_address' => $reference['address'] ?? '',
+                    'ref_name' => $name->name_id,
+                    'ref_addr' => $reference['address'] ?? '',
                 ]);
             }
         }
@@ -34,11 +38,15 @@ class DataUpdate {
             ->delete();
         foreach ($neighbors as $neighbor) {
             if (!empty($neighbor['name']) || !empty($neighbor['address'])) {
+                // Create or find the name in name_details
+                $name = \App\Models\NameDetail::firstOrCreate([
+                    'first_name' => $neighbor['name'],
+                ]);
                 ReferenceDetail::create([
                     'username' => $username,
                     'ref_type' => 'neighbor',
-                    'ref_name' => $neighbor['name'] ?? '',
-                    'ref_address' => $neighbor['address'] ?? '',
+                    'ref_name' => $name->name_id,
+                    'ref_addr' => $neighbor['address'] ?? '',
                 ]);
             }
         }

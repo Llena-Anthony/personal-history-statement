@@ -14,18 +14,20 @@ return new class extends Migration
         Schema::create('reference_details', function (Blueprint $table) {
             $table->id('ref_id');
 
-            $table->foreignId('ref_name')
-            ->nullable()
-            ->constrained('name_details','name_id')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
+            // $table->foreignId('ref_name')
+            // ->nullable()
+            // ->constrained('name_details','name_id')
+            // ->onDelete('restrict')
+            // ->onUpdate('cascade');
 
-            $table->foreignId('ref_addr')
-            ->nullable()
-            ->constrained('address_details','addr_id')
-            ->onDelete('restrict')
-            ->onUpdate('cascade');
+            // $table->foreignId('ref_addr')
+            // ->nullable()
+            // ->constrained('address_details','addr_id')
+            // ->onDelete('restrict')
+            // ->onUpdate('cascade');
 
+            $table->string('ref_name')->nullable();
+            $table->string('ref_addr')->nullable();
             $table->string('ref_type')->nullable();
             $table->string('username')->nullable();
 

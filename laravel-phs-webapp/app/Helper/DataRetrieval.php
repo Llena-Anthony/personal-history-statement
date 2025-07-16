@@ -401,8 +401,21 @@ class DataRetrieval {
      * Retrieve all character and reputation fields for a user.
      */
     public static function retrieveCharacterReputation($username) {
-        $characterReferences = self::retrieveCharRef($username);
-        $neighbors = self::retrieveNeighbor($username);
+        $characterReferences = self::retrieveCharRef($username)->map(function($ref) {
+            $name = $ref->nameDetail ? $ref->nameDetail->first_name : '';
+            return [
+                'name' => $name,
+                'address' => $ref->ref_addr ?? '',
+            ];
+        })->toArray();
+
+        $neighbors = self::retrieveNeighbor($username)->map(function($ref) {
+            $name = $ref->nameDetail ? $ref->nameDetail->first_name : '';
+            return [
+                'name' => $name,
+                'address' => $ref->ref_addr ?? '',
+            ];
+        })->toArray();
 
         return [
             'character_references' => $characterReferences,
