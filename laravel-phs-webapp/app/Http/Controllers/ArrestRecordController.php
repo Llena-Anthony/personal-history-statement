@@ -18,7 +18,7 @@ class ArrestRecordController extends Controller
         }
         $data = $this->getCommonViewData('arrest-record');
         $data = array_merge($data, $prefill);
-
+        $data['arrestRecord'] = DataRetrieval::retrieveArrestRecord(auth()->user()->username);
         // Check if it's an AJAX request
         if (request()->ajax()) {
             return view('phs.sections.arrest-record-content', $data)->render();
@@ -33,13 +33,18 @@ class ArrestRecordController extends Controller
         try {
             $rules = [
                 'investigated_arrested' => 'nullable|string|in:yes,no',
-                'investigated_arrested_details' => 'nullable|string|max:255',
+                'investigated_arrested_court_name' => 'nullable|string|max:255',
+                'investigated_arrested_nature_of_offense' => 'nullable|string|max:255',
+                'investigated_arrested_disposition_of_case' => 'nullable|string|max:255',
                 'family_investigated_arrested' => 'nullable|string|in:yes,no',
-                'family_investigated_arrested_details' => 'nullable|string|max:255',
+                'family_investigated_arrested_court_name' => 'nullable|string|max:255',
+                'family_investigated_arrested_nature_of_offense' => 'nullable|string|max:255',
+                'family_investigated_arrested_disposition_of_case' => 'nullable|string|max:255',
                 'administrative_case' => 'nullable|string|in:yes,no',
                 'administrative_case_details' => 'nullable|string|max:255',
                 'pd1081_arrested' => 'nullable|string|in:yes,no',
-                'pd1081_arrested_details' => 'nullable|string|max:255',
+                'pd1081_arrested_nature_of_offense' => 'nullable|string|max:255',
+                'pd1081_arrested_disposition_of_case' => 'nullable|string|max:255',
                 'intoxicating_liquor_narcotics' => 'nullable|string|in:yes,no',
                 'intoxicating_liquor_narcotics_details' => 'nullable|string|max:255',
             ];

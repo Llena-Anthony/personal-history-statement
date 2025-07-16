@@ -617,21 +617,38 @@ class DataUpdate {
      */
     public static function updateArrestRecord($username, $arrestData = []) {
         // Helper to create ArrestDetail if details are provided
-        $createArrestDetail = function($details) {
-            if (!empty($details)) {
-                // Parse details into fields if needed, else store all in disposition_of_case
+        $createArrestDetail = function($court_name, $nature_of_offense, $disposition_of_case) {
+            if (!empty($court_name) || !empty($nature_of_offense) || !empty($disposition_of_case)) {
                 return \App\Models\ArrestDetail::create([
-                    'court_name' => null,
-                    'nature_of_offense' => null,
-                    'disposition_of_case' => $details,
+                    'court_name' => $court_name,
+                    'nature_of_offense' => $nature_of_offense,
+                    'disposition_of_case' => $disposition_of_case,
                 ])->arrest_detail_id;
             }
             return null;
         };
-        $arr_desc = ($arrestData['investigated_arrested'] === 'yes') ? $createArrestDetail($arrestData['investigated_arrested_details'] ?? null) : null;
-        $fam_arr_desc = ($arrestData['family_investigated_arrested'] === 'yes') ? $createArrestDetail($arrestData['family_investigated_arrested_details'] ?? null) : null;
+        $arr_desc = ($arrestData['investigated_arrested'] === 'yes')
+            ? $createArrestDetail(
+                $arrestData['investigated_arrested_court_name'] ?? null,
+                $arrestData['investigated_arrested_nature_of_offense'] ?? null,
+                $arrestData['investigated_arrested_disposition_of_case'] ?? null
+            )
+            : null;
+        $fam_arr_desc = ($arrestData['family_investigated_arrested'] === 'yes')
+            ? $createArrestDetail(
+                $arrestData['family_investigated_arrested_court_name'] ?? null,
+                $arrestData['family_investigated_arrested_nature_of_offense'] ?? null,
+                $arrestData['family_investigated_arrested_disposition_of_case'] ?? null
+            )
+            : null;
         $admin_case_desc = ($arrestData['administrative_case'] === 'yes') ? ($arrestData['administrative_case_details'] ?? null) : null;
-        $violation_desc = ($arrestData['pd1081_arrested'] === 'yes') ? $createArrestDetail($arrestData['pd1081_arrested_details'] ?? null) : null;
+        $violation_desc = ($arrestData['pd1081_arrested'] === 'yes')
+            ? $createArrestDetail(
+                null,
+                $arrestData['pd1081_arrested_nature_of_offense'] ?? null,
+                $arrestData['pd1081_arrested_disposition_of_case'] ?? null
+            )
+            : null;
         $extent_of_intoxication = ($arrestData['intoxicating_liquor_narcotics'] === 'yes') ? ($arrestData['intoxicating_liquor_narcotics_details'] ?? null) : null;
         // Save/update ArrestRecordDetail
         \App\Models\ArrestRecordDetail::updateOrCreate(
@@ -653,6 +670,31 @@ class DataUpdate {
     public static function saveArrestRecord($data, $username) {
         $arrestData = $data['arrest'] ?? [];
         return self::updateArrestRecord($username, $arrestData);
+    }
+
+    /**
+     * Update or create bank accounts for a user from form data.
+     */
+    public static function updateBankAccounts($username, $bankAccounts = []) {
+        \App\Models\BankAccountDetail::where('username', $username)->delete();
+        foreach ($bankAccounts as $account) {
+            if (empty($account['bank_name'])) continue;
+            // Create/find address (region only)
+            $address = \App\Models\AddressDetail::firstOrCreate([
+                'country' => 'Philippines',
+                'region' => $account['address'] ?? '',
+            ]);
+            // Create/find bank
+            $bank = \App\Models\BankDetail::firstOrCreate([
+                'bank' => $account['bank_name'],
+                'bank_addr' => $address->addr_id,
+            ]);
+            // Save bank account detail
+            \App\Models\BankAccountDetail::create([
+                'bank' => $bank->bank_id,
+                'username' => $username,
+            ]);
+        }
     }
 
     /**

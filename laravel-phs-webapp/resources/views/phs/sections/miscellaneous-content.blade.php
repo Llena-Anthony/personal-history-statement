@@ -1,140 +1,139 @@
 <div class="max-w-4xl mx-auto">
 
-    <!-- Form -->
-    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10" id="phs-form">
-        @csrf
-        
-        <!-- Hobbies, Sports, and Pastimes Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
-                <i class="fas fa-running mr-3 text-[#D4AF37]"></i>
-                Hobbies, Sports, and Pastimes
-            </h2>
-            <div>
-                <label for="hobbies_sports_pastimes" class="block font-medium text-gray-800 mb-1">Please list your hobbies, sports, and pastimes:</label>
-                <textarea name="hobbies_sports_pastimes" id="hobbies_sports_pastimes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors resize-none" placeholder="e.g., Reading, Basketball, Photography, etc. If none, write 'NONE'">{{ old('hobbies_sports_pastimes', $miscellaneous->hobbies_sports_pastimes ?? '') }}</textarea>
-            </div>
+    <!-- Hobbies, Sports, and Pastimes Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
+            <i class="fas fa-running mr-3 text-[#D4AF37]"></i>
+            Hobbies, Sports, and Pastimes
+        </h2>
+        <div>
+            <label for="hobbies_sports_pastimes" class="block font-medium text-gray-800 mb-1">Please list your hobbies, sports, and pastimes:</label>
+            <textarea name="hobbies_sports_pastimes" id="hobbies_sports_pastimes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D] transition-colors resize-none" placeholder="e.g., Reading, Basketball, Photography, etc. If none, write 'NONE'">{{ old('hobbies_sports_pastimes', $miscellaneous->hobbies_sports_pastimes ?? '') }}</textarea>
         </div>
+    </div>
 
-        <!-- Language and Dialect Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
-                <i class="fas fa-language mr-3 text-[#D4AF37]"></i>
-                Language and Dialect Proficiency
-            </h2>
-            <p class="text-sm text-gray-600 mb-4">Indicate your proficiency level as FLUENT, FAIR, or POOR for each language/dialect.</p>
-            
-            <div id="languages-container">
-                <!-- Dynamic language rows will be added here -->
-                @if(isset($languages) && count($languages) > 0)
-                    @foreach($languages as $index => $language)
-                        <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="{{ $index }}">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
-                                    <input type="text" name="languages[{{ $index }}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" value="{{ $language['language'] ?? '' }}">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
-                                    <select name="languages[{{ $index }}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Select</option>
-                                        <option value="FLUENT" {{ ($language['speak'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
-                                        <option value="FAIR" {{ ($language['speak'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
-                                        <option value="POOR" {{ ($language['speak'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
-                                    <select name="languages[{{ $index }}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Select</option>
-                                        <option value="FLUENT" {{ ($language['read'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
-                                        <option value="FAIR" {{ ($language['read'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
-                                        <option value="POOR" {{ ($language['read'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
-                                    <select name="languages[{{ $index }}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
-                                        <option value="">Select</option>
-                                        <option value="FLUENT" {{ ($language['write'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
-                                        <option value="FAIR" {{ ($language['write'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
-                                        <option value="POOR" {{ ($language['write'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
-                                    </select>
-                                </div>
-                            </div>
-                            @if($index > 0)
-                                <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
-                                    <i class="fas fa-times-circle"></i>
-                                </button>
-                            @endif
-                        </div>
-                    @endforeach
-                @else
-                    <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="0">
+    <!-- Language and Dialect Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
+            <i class="fas fa-language mr-3 text-[#D4AF37]"></i>
+            Language and Dialect Proficiency
+        </h2>
+        <p class="text-sm text-gray-600 mb-4">Indicate your proficiency level as FLUENT, FAIR, or POOR for each language/dialect.</p>
+        
+        <div id="languages-container">
+            <!-- Dynamic language rows will be added here -->
+            @if(isset($languages) && count($languages) > 0)
+                @foreach($languages as $index => $language)
+                    <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="{{ $index }}">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
-                                <input type="text" name="languages[0][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <input type="text" name="languages[{{ $index }}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" value="{{ $language['language'] ?? '' }}">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
-                                <select name="languages[0][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <select name="languages[{{ $index }}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="">Select</option>
-                                    <option value="FLUENT">FLUENT</option>
-                                    <option value="FAIR">FAIR</option>
-                                    <option value="POOR">POOR</option>
+                                    <option value="FLUENT" {{ ($language['speak'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                    <option value="FAIR" {{ ($language['speak'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                    <option value="POOR" {{ ($language['speak'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
-                                <select name="languages[0][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <select name="languages[{{ $index }}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="">Select</option>
-                                    <option value="FLUENT">FLUENT</option>
-                                    <option value="FAIR">FAIR</option>
-                                    <option value="POOR">POOR</option>
+                                    <option value="FLUENT" {{ ($language['read'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                    <option value="FAIR" {{ ($language['read'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                    <option value="POOR" {{ ($language['read'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
-                                <select name="languages[0][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <select name="languages[{{ $index }}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
                                     <option value="">Select</option>
-                                    <option value="FLUENT">FLUENT</option>
-                                    <option value="FAIR">FAIR</option>
-                                    <option value="POOR">POOR</option>
+                                    <option value="FLUENT" {{ ($language['write'] ?? '') === 'FLUENT' ? 'selected' : '' }}>FLUENT</option>
+                                    <option value="FAIR" {{ ($language['write'] ?? '') === 'FAIR' ? 'selected' : '' }}>FAIR</option>
+                                    <option value="POOR" {{ ($language['write'] ?? '') === 'POOR' ? 'selected' : '' }}>POOR</option>
                                 </select>
                             </div>
                         </div>
+                        @if($index > 0)
+                            <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        @endif
                     </div>
-                @endif
-            </div>
-            
-            <button type="button" id="add-language" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium cursor-pointer">
-                <i class="fas fa-plus mr-1"></i> Add Another Language
-            </button>
-        </div>
-
-        <!-- Lie Detection Test Section -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
-                <i class="fas fa-question-circle mr-3 text-[#D4AF37]"></i>
-                Lie Detection Test
-            </h2>
-            <div>
-                <label class="block font-medium text-gray-800 mb-3">Are you willing to undergo periodic lie detection test?</label>
-                <div class="space-y-2">
-                    <label class="flex items-center">
-                        <input type="radio" name="lie_detection_test" value="yes" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'yes' ? 'checked' : '' }}>
-                        <span class="text-gray-800">Yes</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="lie_detection_test" value="no" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'no' ? 'checked' : '' }}>
-                        <span class="text-gray-800">No</span>
-                    </label>
+                @endforeach
+            @else
+                <div class="language-entry p-4 border border-gray-200 rounded-lg mt-4 relative" data-index="0">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
+                            <input type="text" name="languages[0][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
+                            <select name="languages[0][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <option value="">Select</option>
+                                <option value="FLUENT">FLUENT</option>
+                                <option value="FAIR">FAIR</option>
+                                <option value="POOR">POOR</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
+                            <select name="languages[0][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <option value="">Select</option>
+                                <option value="FLUENT">FLUENT</option>
+                                <option value="FAIR">FAIR</option>
+                                <option value="POOR">POOR</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
+                            <select name="languages[0][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                                <option value="">Select</option>
+                                <option value="FLUENT">FLUENT</option>
+                                <option value="FAIR">FAIR</option>
+                                <option value="POOR">POOR</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+            @endif
+        </div>
+        
+        <button type="button" id="add-language" class="mt-4 text-[#1B365D] hover:text-[#2B4B7D] transition-colors text-sm font-medium cursor-pointer">
+            <i class="fas fa-plus mr-1"></i> Add Another Language
+        </button>
+    </div>
+
+    <!-- Lie Detection Test Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-semibold text-[#1B365D] mb-4 flex items-center">
+            <i class="fas fa-question-circle mr-3 text-[#D4AF37]"></i>
+            Lie Detection Test
+        </h2>
+        <div>
+            <label class="block font-medium text-gray-800 mb-3">Are you willing to undergo periodic lie detection test?</label>
+            <div class="space-y-2">
+                <label class="flex items-center">
+                    <input type="radio" name="lie_detection_test" value="yes" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'yes' ? 'checked' : '' }}>
+                    <span class="text-gray-800">Yes</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="radio" name="lie_detection_test" value="no" class="mr-3 text-[#1B365D] focus:ring-[#1B365D]" {{ old('lie_detection_test', $miscellaneous->lie_detection_test ?? '') === 'no' ? 'checked' : '' }}>
+                    <span class="text-gray-800">No</span>
+                </label>
+            </div>
+            <div id="lie-detection-details-container" style="display: none;" class="mt-4">
+                <label for="lie_detection_details" class="block font-medium text-gray-800 mb-1">If yes, please provide relevant details:</label>
+                <input type="text" name="lie_detection_details" id="lie_detection_details" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" placeholder="Enter relevant details" value="{{ old('lie_detection_details', $miscellaneous->lie_detection_details ?? '') }}">
             </div>
         </div>
+    </div>
 
-    </form>
 </div>
 
 <!-- Redirect Modal -->
@@ -228,5 +227,22 @@ document.addEventListener('DOMContentLoaded', function() {
         langContainer.removeEventListener('click', removeLanguageHandler);
         langContainer.addEventListener('click', removeLanguageHandler);
     }
+
+    // Lie Detection Test toggle
+    function toggleLieDetectionDetails() {
+        var yesRadio = document.querySelector('input[name="lie_detection_test"][value="yes"]');
+        var detailsContainer = document.getElementById('lie-detection-details-container');
+        if (yesRadio && yesRadio.checked) {
+            detailsContainer.style.display = '';
+        } else {
+            detailsContainer.style.display = 'none';
+        }
+    }
+    var lieDetectionRadios = document.querySelectorAll('input[name="lie_detection_test"]');
+    lieDetectionRadios.forEach(function(radio) {
+        radio.addEventListener('change', toggleLieDetectionDetails);
+    });
+    // Initial state
+    toggleLieDetectionDetails();
 });
 </script> 

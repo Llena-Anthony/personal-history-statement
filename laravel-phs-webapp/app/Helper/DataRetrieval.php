@@ -50,7 +50,7 @@ class DataRetrieval {
         return ArrestDetail::where('arrest_detail_id', $arrestId)->first() ?? null;
     }
     public static function retrieveArrestRecord($username): ?ArrestRecordDetail {
-        return ArrestRecordDetail::where('username', $username)->first() ?? null;
+        return ArrestRecordDetail::with(['arrDesc', 'famArrDesc', 'violationDesc'])->where('username', $username)->first() ?? null;
     }
     public static function retrieveAssignments($assign_id) {
         return AssignmentDetail::where('assign_id', $assign_id)->get();
@@ -59,7 +59,13 @@ class DataRetrieval {
         return AwardDetail::where('username', $username)->get();
     }
     public static function retrieveBankAccounts($username) {
-        return BankAccountDetail::where('username', $username)->get();
+        $accounts = \App\Models\BankAccountDetail::with(['bankDetail.addressDetail'])->where('username', $username)->get();
+        return $accounts->map(function($account) {
+            return [
+                'bank_name' => $account->bankDetail ? $account->bankDetail->bank : '',
+                'address' => ($account->bankDetail && $account->bankDetail->addressDetail) ? $account->bankDetail->addressDetail->region : '',
+            ];
+        });
     }
     public static function retrieveBank($bankId): ?BankDetail {
         return BankDetail::where('bank_id', $bankId)->first() ?? null;
