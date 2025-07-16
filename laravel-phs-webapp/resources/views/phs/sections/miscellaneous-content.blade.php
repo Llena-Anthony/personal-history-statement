@@ -1,7 +1,7 @@
 <div class="max-w-4xl mx-auto">
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10">
+    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10" id="phs-miscellaneous-form">
         @csrf
         
         <!-- Hobbies, Sports, and Pastimes Section -->

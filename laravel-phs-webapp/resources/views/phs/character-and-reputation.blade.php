@@ -21,7 +21,7 @@
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @php
-                $oldCharacterReferences = old('character_references', $character_references->toArray() ?? []);
+                $oldCharacterReferences = old('character_references', $character_references ?? []);
             @endphp
             @for ($i = 0; $i < 5; $i++)
                 <div>
@@ -43,7 +43,7 @@
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @php
-                $oldNeighbors = old('neighbors', $neighbors->toArray() ?? []);
+                $oldNeighbors = old('neighbors', $neighbors ?? []);
             @endphp
             @for ($i = 0; $i < 3; $i++)
                 <div>
