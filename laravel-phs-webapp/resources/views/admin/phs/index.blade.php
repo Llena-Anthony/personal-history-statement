@@ -59,6 +59,30 @@
                 'approved' => 'Approved',
                 'rejected' => 'Rejected'
             ],
+            'usertype' => [
+                'admin' => 'Admin',
+                'personnel' => 'Personnel',
+                'client' => 'Client'
+            ],
+            'region' => [
+                'NCR' => 'NCR',
+                'CAR' => 'CAR',
+                'Region I' => 'Region I',
+                'Region II' => 'Region II',
+                'Region III' => 'Region III',
+                'Region IV-A' => 'Region IV-A',
+                'Region IV-B' => 'Region IV-B',
+                'Region V' => 'Region V',
+                'Region VI' => 'Region VI',
+                'Region VII' => 'Region VII',
+                'Region VIII' => 'Region VIII',
+                'Region IX' => 'Region IX',
+                'Region X' => 'Region X',
+                'Region XI' => 'Region XI',
+                'Region XII' => 'Region XII',
+                'Region XIII' => 'Region XIII',
+                'BARMM' => 'BARMM',
+            ],
             'date_range' => true
         ]"
     />
@@ -151,6 +175,7 @@
                 <thead class="bg-gradient-to-r from-[#1B365D]/10 to-[#2B4B7D]/10">
                     <tr>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Applicant</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User Type</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Submitted Date</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Last Updated</th>
@@ -174,6 +199,21 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
+                            @php
+                                $type = strtolower($submission->usertype);
+                                $typeLabel = ucfirst($type);
+                                $badgeClass = match($type) {
+                                    'admin' => 'bg-blue-100 text-blue-800 border-blue-200',
+                                    'personnel' => 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                                    'client' => 'bg-gray-100 text-gray-800 border-gray-200',
+                                    default => 'bg-gray-100 text-gray-800 border-gray-200',
+                                };
+                            @endphp
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full border {{ $badgeClass }}">
+                                <i class="fas fa-user mr-1"></i>{{ $typeLabel }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
                             <span class="px-3 py-1 text-xs font-semibold rounded-full
                                 @if($submission->phs_status === 'pending') bg-yellow-100 text-yellow-800 border border-yellow-200
                                 @elseif($submission->phs_status === 'reviewed') bg-blue-100 text-blue-800 border border-blue-200
@@ -190,12 +230,12 @@
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900">{{ $submission->last_login_at ? $submission->last_login_at->format('M d, Y') : 'N/A' }}</div>
-                            <div class="text-sm text-gray-500">{{ $submission->last_login_at ? $submission->last_login_at->format('h:i A') : 'N/A' }}</div>
+                            <div class="text-sm text-gray-900">{{ $submission->created_at ? \Carbon\Carbon::parse($submission->created_at)->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $submission->created_at ? \Carbon\Carbon::parse($submission->created_at)->format('h:i A') : 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm text-gray-900">{{ $submission->last_login_at ? $submission->last_login_at->format('M d, Y') : 'N/A' }}</div>
-                            <div class="text-sm text-gray-500">{{ $submission->last_login_at ? $submission->last_login_at->format('h:i A') : 'N/A' }}</div>
+                            <div class="text-sm text-gray-900">{{ $submission->updated_at ? \Carbon\Carbon::parse($submission->updated_at)->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-sm text-gray-500">{{ $submission->updated_at ? \Carbon\Carbon::parse($submission->updated_at)->format('h:i A') : 'N/A' }}</div>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end">

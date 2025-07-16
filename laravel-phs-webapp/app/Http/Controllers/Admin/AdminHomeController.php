@@ -16,24 +16,57 @@ class AdminHomeController extends Controller
         // User Statistics
         $totalUsers = User::count();
         $enabledUsers = User::where('is_active', true)->count();
-        $newUsersThisMonth = 0; // Since users table doesn't have timestamps, we'll set this to 0 for now
+        $newUsersThisMonth = User::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
 
-        // For now, we'll set these to 0 since PHS/PDS submissions are not implemented yet
-        $totalPHSSubmissions = 0;
-        $newPHSSubmissionsThisMonth = 0;
+        // Submission Status Distribution (from users table)
+        $submissionStats = [
+            'pending'   => User::where('phs_status', 'pending')->count(),
+            'reviewed'  => User::where('phs_status', 'reviewed')->count(),
+            'approved'  => User::where('phs_status', 'approved')->count(),
+            'rejected'  => User::where('phs_status', 'rejected')->count(),
+        ];
+
+        // PHS Submissions (total and this month) - only count real submissions
+        $realStatuses = ['reviewed', 'approved', 'submitted'];
+        $totalPHSSubmissions = User::whereIn('phs_status', $realStatuses)->count();
+        $newPHSSubmissionsThisMonth = User::whereIn('phs_status', $realStatuses)
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+        // Remove PDS stats since pds_status does not exist
         $totalPDSSubmissions = 0;
         $newPDSSubmissionsThisMonth = 0;
 
-        // Submission Status Distribution (placeholder for now)
-        $submissionStats = [
-            'pending' => 0,
-            'reviewed' => 0,
-            'approved' => 0,
-            'rejected' => 0,
-        ];
-
-        // Monthly Statistics (placeholder for now)
+        // Monthly Statistics for charts (group by month for real PHS submissions only)
         $monthlyStats = collect();
+        $months = User::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month')
+            ->whereIn('phs_status', $realStatuses)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('month');
+        if ($months->isEmpty()) {
+            // No data: provide a default month and zero count
+            $monthlyStats->push([
+                'month' => now()->format('M Y'),
+                'phs_count' => 0
+            ]);
+        } else {
+            foreach ($months as $month) {
+                if (empty($month) || !preg_match('/^\d{4}-\d{2}$/', $month)) {
+                    continue; // Skip invalid or empty months
+                }
+                $monthlyStats->push([
+                    'month' => Carbon::createFromFormat('Y-m', $month)->format('M Y'),
+                    'phs_count' => User::whereIn('phs_status', $realStatuses)
+                        ->whereYear('created_at', substr($month, 0, 4))
+                        ->whereMonth('created_at', substr($month, 5, 2))
+                        ->count(),
+                ]);
+            }
+        }
+        $monthlyStats = collect($monthlyStats);
 
         // Recent Activity using ActivityLogDetail
         $recentActivities = ActivityLogDetail::with('user')

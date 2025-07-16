@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('is_active')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
+            // Add timestamps for created_at and updated_at
+            $table->timestamps();
         });
     }
 

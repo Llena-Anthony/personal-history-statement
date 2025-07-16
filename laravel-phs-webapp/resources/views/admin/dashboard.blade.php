@@ -239,9 +239,9 @@
                             <span class="w-3 h-3 bg-[#1B365D] rounded-full"></span>
                             <span class="text-sm text-gray-600">PHS</span>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="w-3 h-3 bg-[#D4AF37] rounded-full"></span>
-                            <span class="text-sm text-gray-600">PDS</span>
+                        <div class="flex items-center space-x-2 opacity-50 cursor-not-allowed" title="PDS in development by another team">
+                            <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
+                            <span class="text-sm text-gray-400">PDS (coming soon)</span>
                         </div>
                     </div>
                 </div>
@@ -586,7 +586,13 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script>
+    // Register the DataLabels plugin globally
+    if (window.Chart && window.ChartDataLabels) {
+        Chart.register(window.ChartDataLabels);
+    }
+
     // Welcome Banner Enhancement
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Welcome banner initialization started');
@@ -732,20 +738,56 @@
                             pointStyle: 'circle'
                         }
                     },
+                    title: {
+                        display: true,
+                        text: 'PHS Submission Status Distribution',
+                        font: { size: 18, weight: 'bold' },
+                        color: '#1B365D',
+                        padding: { top: 10, bottom: 20 }
+                    },
                     tooltip: {
                         backgroundColor: 'rgba(27, 54, 93, 0.9)',
                         titleColor: '#D4AF37',
                         bodyColor: '#fff',
                         borderColor: 'rgba(255, 255, 255, 0.1)',
-                        borderWidth: 1
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.chart._metasets[0].total;
+                                const percent = total ? ((value / total) * 100).toFixed(1) : 0;
+                                return `${label}: ${value} (${percent}%)`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        display: true,
+                        color: '#222',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (value, ctx) => value > 0 ? value : '',
+                        anchor: 'end',
+                        align: 'end',
+                        offset: 8,
+                        borderRadius: 4,
+                        backgroundColor: 'rgba(255,255,255,0.8)',
+                        padding: 4,
+                        borderWidth: 1,
+                        borderColor: '#D4AF37',
+                        shadowBlur: 2
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
                     }
                 },
                 cutout: '60%'
-            }
+            },
+            plugins: [ChartDataLabels]
         });
     }
 
-    // Enhanced Monthly Submissions Chart
+    // Reverted Monthly Submissions Chart (no click-to-filter)
     const monthlySubmissionsCtx = document.getElementById('monthlySubmissionsChart');
     if (monthlySubmissionsCtx) {
         new Chart(monthlySubmissionsCtx.getContext('2d'), {
@@ -757,22 +799,9 @@
                     data: {!! json_encode($monthlyStats->pluck('phs_count')) !!},
                     borderColor: '#1B365D',
                     backgroundColor: 'rgba(27, 54, 93, 0.1)',
-                    borderWidth: 3,
                     fill: true,
                     tension: 0.4,
                     pointBackgroundColor: '#1B365D',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6
-                }, {
-                    label: 'PDS Submissions',
-                    data: {!! json_encode($monthlyStats->pluck('pds_count')) !!},
-                    borderColor: '#D4AF37',
-                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#D4AF37',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,
                     pointRadius: 6
@@ -781,13 +810,64 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 14 },
+                            color: '#1B365D',
+                            usePointStyle: true
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly PHS Submissions Trend',
+                        font: { size: 18, weight: 'bold' },
+                        color: '#1B365D',
+                        padding: { top: 10, bottom: 20 }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(27, 54, 93, 0.9)',
+                        titleColor: '#D4AF37',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${context.parsed.y}`;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        display: true,
+                        color: '#1B365D',
+                        font: { weight: 'bold', size: 13 },
+                        align: 'top',
+                        anchor: 'end',
+                        offset: 4,
+                        backgroundColor: 'rgba(255,255,255,0.85)',
+                        borderRadius: 4,
+                        borderWidth: 1,
+                        borderColor: '#1B365D',
+                        padding: 4,
+                        formatter: (value, ctx) => value > 0 ? value : ''
+                    },
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeInOutQuart'
+                    }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Submissions',
+                            font: { size: 14, weight: 'bold' },
+                            color: '#1B365D'
+                        },
                         ticks: {
                             stepSize: 1
                         },
@@ -796,29 +876,19 @@
                         }
                     },
                     x: {
+                        title: {
+                            display: true,
+                            text: 'Month',
+                            font: { size: 14, weight: 'bold' },
+                            color: '#1B365D'
+                        },
                         grid: {
                             display: false
                         }
                     }
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            padding: 20
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(27, 54, 93, 0.9)',
-                        titleColor: '#D4AF37',
-                        bodyColor: '#fff',
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                        borderWidth: 1
-                    }
                 }
-            }
+            },
+            plugins: [window.ChartDataLabels]
         });
     }
 

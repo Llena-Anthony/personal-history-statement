@@ -50,38 +50,37 @@
         </div>
         @endif
 
-        <!-- User Type Filter Icon -->
-        @if(isset($filters['user_type']))
-        <div class="relative" x-data="{ open: false }">
-            <button @click="open = !open" type="button" 
-                class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:shadow-md">
-                <i class="fas fa-users mr-2 text-blue-500"></i>
-                User Type
-                <i class="fas fa-chevron-down ml-2 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
-            </button>
-            
-            <!-- User Type Dropdown -->
-            <div x-show="open" x-cloak
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 transform scale-95"
-                 x-transition:enter-end="opacity-100 transform scale-100"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 transform scale-100"
-                 x-transition:leave-end="opacity-0 transform scale-95"
-                 @click.away="open = false" 
-                class="absolute z-10 mt-2 w-56 rounded-xl shadow-xl bg-white ring-1 ring-black ring-opacity-5 border border-gray-200">
-                <div class="py-2">
-                    @foreach($filters['user_type'] as $type => $label)
-                    <a href="{{ request()->fullUrlWithQuery(['user_type' => $type]) }}" 
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150">
-                        <i class="fas fa-user mr-2 text-blue-400"></i>
-                        {{ $label }}
-                    </a>
-                    @endforeach
+        <!-- Dynamically render all other filters as dropdowns -->
+        @foreach($filters as $key => $options)
+            @if($key !== 'status' && $key !== 'date_range' && is_array($options))
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open" type="button" 
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:shadow-md">
+                    <i class="fas fa-filter mr-2 text-blue-400"></i>
+                    {{ ucfirst(str_replace('_', ' ', $key)) }}
+                    <i class="fas fa-chevron-down ml-2 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                </button>
+                <div x-show="open" x-cloak
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform scale-100"
+                     x-transition:leave-end="opacity-0 transform scale-95"
+                     @click.away="open = false" 
+                    class="absolute z-10 mt-2 w-56 rounded-xl shadow-xl bg-white ring-1 ring-black ring-opacity-5 border border-gray-200">
+                    <div class="py-2">
+                        @foreach($options as $option => $label)
+                        <a href="{{ request()->fullUrlWithQuery([$key => $option]) }}" 
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors duration-150">
+                            {{ $label }}
+                        </a>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
-        @endif
+            @endif
+        @endforeach
 
         <!-- Date Range Filter Icon -->
         @if(isset($filters['date_range']))

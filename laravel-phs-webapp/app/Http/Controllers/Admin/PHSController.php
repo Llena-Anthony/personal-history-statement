@@ -24,6 +24,25 @@ class PHSController extends Controller
             })
             ->when($request->status, function ($query, $status) {
                 $query->where('phs_status', $status);
+            })
+            // Add usertype filter
+            ->when($request->usertype, function ($query, $usertype) {
+                $query->where('usertype', $usertype);
+            })
+            // Add region filter (via userDetail.home_addr -> AddressDetail.region)
+            ->when($request->region, function ($query, $region) {
+                $query->whereHas('userDetail', function ($q) use ($region) {
+                    $q->where('home_addr', 'like', "%{$region}%");
+                });
+            })
+            // Add date_range filter
+            ->when($request->date_range, function ($query, $dateRange) {
+                $dates = explode(' ', str_replace('+', ' ', $dateRange));
+                if (count($dates) === 2) {
+                    $start = $dates[0];
+                    $end = $dates[1];
+                    $query->whereBetween('created_at', [$start, $end]);
+                }
             });
 
         $query->orderBy('phs_status')->orderBy('username');

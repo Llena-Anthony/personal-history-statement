@@ -406,18 +406,27 @@ class AdminUserController extends Controller
     public function toggleStatus(Request $request, User $user)
     {
         $validated = $request->validate([
-            'is_active' => ['required', 'boolean'],
+            'is_active' => ['required'], // accept any value, cast below
         ]);
+
+        // Cast is_active to boolean
+        $isActive = filter_var($validated['is_active'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if ($isActive === null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid status value.'
+            ], 422);
+        }
 
         try {
             $oldStatus = $user->is_active ? 'Active' : 'Disabled';
-            $newStatus = $validated['is_active'] ? 'Active' : 'Disabled';
+            $newStatus = $isActive ? 'Active' : 'Disabled';
 
-            $user->update(['is_active' => $validated['is_active']]);
+            $user->update(['is_active' => $isActive]);
 
             // Log the status change
             $userDetail = $user->userDetail;
-            $userInfo = $userDetail ? $userDetail->nameDetail->first_name . ' ' . $userDetail->nameDetail->last_name . ' (' . $user->username . ')' : $user->username;
+            $userInfo = $userDetail && $userDetail->nameDetail ? $userDetail->nameDetail->first_name . ' ' . $userDetail->nameDetail->last_name . ' (' . $user->username . ')' : $user->username;
             $description = "Changed user status: {$userInfo} | Status: {$oldStatus} → {$newStatus}";
 
             ActivityLogDetail::create([
@@ -436,7 +445,7 @@ class AdminUserController extends Controller
             ]);
         } catch (\Exception $e) {
             Log::error('User status toggle failed', [
-                'user_id' => $user->id,
+                'user_id' => $user->id ?? null,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);

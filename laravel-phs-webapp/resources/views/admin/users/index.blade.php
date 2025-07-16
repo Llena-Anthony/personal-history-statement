@@ -247,8 +247,11 @@
                         </td>
                         <td class="px-6 py-4">
                             <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full 
-                                {{ $user->usertype === 'admin' ? 'bg-[#1B365D]/20 text-[#1B365D] border border-[#1B365D]/30' : 
-                                   ($user->usertype === 'personnel' ? 'bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/30' : 'bg-[#1B365D]/20 text-[#1B365D] border-[#1B365D]/30') }}">
+                                {{
+                                    $user->usertype === 'admin' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                    ($user->usertype === 'personnel' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                                    'bg-gray-100 text-gray-800 border border-gray-200')
+                                }}">
                                 <i class="fas {{ $user->usertype === 'admin' ? 'fa-user-shield' : ($user->usertype === 'personnel' ? 'fa-user-tie' : 'fa-user') }} mr-1"></i>
                                 <span class="align-middle">{{ ucfirst($user->usertype) }}</span>
                             </span>

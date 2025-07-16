@@ -867,6 +867,7 @@
                         <!-- Dashboard -->
                         <li><a href="{{ route('admin.dashboard') }}" 
                                data-route="admin.dashboard"
+                               onclick="window.location = this.href; return false;"
                                class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} dynamic-nav">
                             <i class="fa-solid fa-chart-line"></i>
                             <span class="ml-3">Dashboard</span>
