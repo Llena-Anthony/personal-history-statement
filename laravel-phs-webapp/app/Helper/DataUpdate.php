@@ -792,11 +792,14 @@ class DataUpdate {
         if (!empty($data['languages']) && is_array($data['languages'])) {
             foreach ($data['languages'] as $lang) {
                 if (!empty($lang['language'])) {
-                    // Find or create the language in language_details
-                    $language = \App\Models\LanguageDetail::firstOrCreate([
-                        'lang_desc' => $lang['language']
-                    ]);
-                    // Update or create fluency detail for this user/language
+                    // Check if language exists, else create
+                    $language = \App\Models\LanguageDetail::where('lang_desc', $lang['language'])->first();
+                    if (!$language) {
+                        $language = \App\Models\LanguageDetail::create([
+                            'lang_desc' => $lang['language']
+                        ]);
+                    }
+                    // Use lang_id for fluency detail
                     \App\Models\FluencyDetail::updateOrCreate(
                         [
                             'username' => $username,
@@ -821,16 +824,16 @@ class DataUpdate {
     public static function saveOrganizationMemberships($organizations, $username) {
         foreach ($organizations as $organization) {
             if (!empty($organization['name'])) {
-                // Create or update address details if address is provided as an array
+                // Save address in the region field only
                 $addressId = null;
-                if (!empty($organization['address']) && is_array($organization['address'])) {
+                if (!empty($organization['address'])) {
                     $address = \App\Models\AddressDetail::firstOrCreate([
-                        'country' => $organization['address']['country'] ?? 'Philippines',
-                        'region' => $organization['address']['region'] ?? null,
-                        'province' => $organization['address']['province'] ?? null,
-                        'city' => $organization['address']['city'] ?? null,
-                        'barangay' => $organization['address']['barangay'] ?? null,
-                        'street' => $organization['address']['street'] ?? null,
+                        'country' => 'Philippines',
+                        'region' => $organization['address'],
+                        'province' => null,
+                        'city' => null,
+                        'barangay' => null,
+                        'street' => null,
                         'zip_code' => null,
                     ]);
                     $addressId = $address->addr_id;

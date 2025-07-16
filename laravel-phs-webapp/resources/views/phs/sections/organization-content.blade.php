@@ -23,51 +23,13 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Position Held</label>
                                 <input type="text" name="organizations[{{ $index }}][position]" 
-                                       value="{{ old('organizations.' . $index . '.position', $organization->membershipDetails->first()->position_held ?? '') }}"
+                                       value="{{ old('organizations.' . $index . '.position', $organization->membershipDetails->first()->position ?? '') }}"
                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]" 
                                        placeholder="Enter position held">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                                    <div>
-                                        <select name="organizations[{{ $index }}][region]" id="org_{{ $index }}_region" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadProvinces('org_{{ $index }}')">
-                                            <option value="">Select Region</option>
-                                            @if(isset($organization->addressDetails->region))
-                                                <option value="{{ $organization->addressDetails->region }}" selected>{{ $organization->addressDetails->region_name ?? $organization->addressDetails->region }}</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <select name="organizations[{{ $index }}][province]" id="org_{{ $index }}_province" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadCities('org_{{ $index }}')">
-                                            <option value="">Select Province</option>
-                                            @if(isset($organization->addressDetails->province))
-                                                <option value="{{ $organization->addressDetails->province }}" selected>{{ $organization->addressDetails->province_name ?? $organization->addressDetails->province }}</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <select name="organizations[{{ $index }}][city]" id="org_{{ $index }}_city" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadBarangays('org_{{ $index }}')">
-                                            <option value="">Select City/Municipality</option>
-                                            @if(isset($organization->addressDetails->city))
-                                                <option value="{{ $organization->addressDetails->city }}" selected>{{ $organization->addressDetails->city_name ?? $organization->addressDetails->city }}</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <div>
-                                        <select name="organizations[{{ $index }}][barangay]" id="org_{{ $index }}_barangay" class="w-full px-2 py-2 border border-gray-300 rounded-lg">
-                                            <option value="">Select Barangay</option>
-                                            @if(isset($organization->addressDetails->barangay))
-                                                <option value="{{ $organization->addressDetails->barangay }}" selected>{{ $organization->addressDetails->barangay_name ?? $organization->addressDetails->barangay }}</option>
-                                            @endif
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <input type="text" name="organizations[{{ $index }}][street]" class="w-full px-2 py-2 border border-gray-300 rounded-lg" placeholder="Street address" value="{{ old('organizations.' . $index . '.street', $organization->addressDetails->street ?? '') }}">
-                                    </div>
-                                </div>
+                                <input type="text" name="organizations[{{ $index }}][address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address" value="{{ old('organizations.' . $index . '.address', $organization->address ?? '') }}">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
@@ -113,33 +75,7 @@
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                                <div>
-                                    <select name="organizations[0][region]" id="org_0_region" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadProvinces('org_0')">
-                                        <option value="">Select Region</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <select name="organizations[0][province]" id="org_0_province" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadCities('org_0')">
-                                        <option value="">Select Province</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <select name="organizations[0][city]" id="org_0_city" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadBarangays('org_0')">
-                                        <option value="">Select City/Municipality</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <div>
-                                    <select name="organizations[0][barangay]" id="org_0_barangay" class="w-full px-2 py-2 border border-gray-300 rounded-lg">
-                                        <option value="">Select Barangay</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <input type="text" name="organizations[0][street]" class="w-full px-2 py-2 border border-gray-300 rounded-lg" placeholder="Street address" value="{{ old('organizations.0.street') }}">
-                                </div>
-                            </div>
+                            <input type="text" name="organizations[0][address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address" value="{{ old('organizations.0.address') }}">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
@@ -198,33 +134,7 @@ function addOrganizationHandler(e) {
             </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
-                    <div>
-                        <select name="organizations[${orgIndex}][region]" id="org_${orgIndex}_region" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadProvinces('org_${orgIndex}')">
-                            <option value="">Select Region</option>
-                        </select>
-                    </div>
-                    <div>
-                        <select name="organizations[${orgIndex}][province]" id="org_${orgIndex}_province" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadCities('org_${orgIndex}')">
-                            <option value="">Select Province</option>
-                        </select>
-                    </div>
-                    <div>
-                        <select name="organizations[${orgIndex}][city]" id="org_${orgIndex}_city" class="w-full px-2 py-2 border border-gray-300 rounded-lg" onchange="loadBarangays('org_${orgIndex}')">
-                            <option value="">Select City/Municipality</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <div>
-                        <select name="organizations[${orgIndex}][barangay]" id="org_${orgIndex}_barangay" class="w-full px-2 py-2 border border-gray-300 rounded-lg">
-                            <option value="">Select Barangay</option>
-                        </select>
-                    </div>
-                    <div>
-                        <input type="text" name="organizations[${orgIndex}][street]" class="w-full px-2 py-2 border border-gray-300 rounded-lg" placeholder="Street address" value="">
-                    </div>
-                </div>
+                <input type="text" name="organizations[${orgIndex}][address]" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter address" value="">
             </div>
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date of Membership</label>
@@ -281,5 +191,39 @@ document.addEventListener('DOMContentLoaded', function() {
 // Call global initialization function for Organization
 if (typeof window.initializeOrganization === 'function') {
     window.initializeOrganization();
+}
+
+// Dynamically load regions for all organization region dropdowns
+async function loadOrganizationRegions() {
+    try {
+        const response = await fetch('https://psgc.gitlab.io/api/regions/');
+        const regions = await response.json();
+        document.querySelectorAll('select[id$="_region"]').forEach(regionSelect => {
+            // Only fill if not already filled with options
+            if (regionSelect.options.length <= 1) {
+                regions.forEach(region => {
+                    const option = new Option(region.name, region.code);
+                    regionSelect.add(option);
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Error loading organization regions:', error);
+    }
+}
+
+// Call on page load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadOrganizationRegions);
+} else {
+    loadOrganizationRegions();
+}
+
+// Also call after adding a new organization entry
+const addOrgBtn = document.getElementById('add-organization');
+if (addOrgBtn) {
+    addOrgBtn.addEventListener('click', function() {
+        setTimeout(loadOrganizationRegions, 100); // Wait for new entry to be added
+    });
 }
 </script> 

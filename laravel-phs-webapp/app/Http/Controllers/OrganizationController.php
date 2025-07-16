@@ -67,19 +67,6 @@ class OrganizationController extends Controller
             $username = auth()->user()->username;
             $organizations = $validated['organizations'] ?? [];
 
-            // Map address fields into an address array for each organization
-            foreach ($organizations as &$org) {
-                $org['address'] = [
-                    'region' => $org['region'] ?? null,
-                    'province' => $org['province'] ?? null,
-                    'city' => $org['city'] ?? null,
-                    'barangay' => $org['barangay'] ?? null,
-                    'street' => $org['street'] ?? null,
-                    'country' => 'Philippines',
-                ];
-            }
-            unset($org);
-
             \App\Helper\DataUpdate::saveOrganizationMemberships($organizations, $username);
             $this->markSectionAsCompleted('organization');
             session()->save();

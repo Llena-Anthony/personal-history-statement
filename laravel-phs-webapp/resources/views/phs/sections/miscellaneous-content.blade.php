@@ -1,7 +1,7 @@
 <div class="max-w-4xl mx-auto">
 
     <!-- Form -->
-    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10" id="phs-miscellaneous-form">
+    <form method="POST" action="{{ route('phs.miscellaneous.store') }}" class="space-y-10" id="phs-form">
         @csrf
         
         <!-- Hobbies, Sports, and Pastimes Section -->
@@ -149,11 +149,84 @@
 </div>
 
 <script>
-    // Call global initialization function for Miscellaneous
-    if (typeof window.initializeMiscellaneous === 'function') {
-        window.initializeMiscellaneous();
-    }
+// Language addition handler
+function addLanguageHandler(e) {
+    e.preventDefault();
+    const container = document.getElementById('languages-container');
+    const entries = container.querySelectorAll('.language-entry');
+    let max = -1;
+    entries.forEach(entry => {
+        const idx = parseInt(entry.getAttribute('data-index'));
+        if (!isNaN(idx) && idx > max) max = idx;
+    });
+    const nextIndex = max + 1;
+    const entry = document.createElement('div');
+    entry.className = 'language-entry p-4 border border-gray-200 rounded-lg mt-4 relative';
+    entry.setAttribute('data-index', nextIndex);
+    entry.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Language/Dialect</label>
+                <input type="text" name="languages[${nextIndex}][language]" placeholder="e.g., English, Tagalog, Spanish" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Speak</label>
+                <select name="languages[${nextIndex}][speak]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    <option value="">Select</option>
+                    <option value="FLUENT">FLUENT</option>
+                    <option value="FAIR">FAIR</option>
+                    <option value="POOR">POOR</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Read</label>
+                <select name="languages[${nextIndex}][read]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    <option value="">Select</option>
+                    <option value="FLUENT">FLUENT</option>
+                    <option value="FAIR">FAIR</option>
+                    <option value="POOR">POOR</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Write</label>
+                <select name="languages[${nextIndex}][write]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B365D] focus:border-[#1B365D]">
+                    <option value="">Select</option>
+                    <option value="FLUENT">FLUENT</option>
+                    <option value="FAIR">FAIR</option>
+                    <option value="POOR">POOR</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="remove-language absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors">
+            <i class="fas fa-times-circle"></i>
+        </button>
+    `;
+    container.appendChild(entry);
+}
 
-    // Set the dashboard route
-    var $dashboardRoute = "{{ route('client.dashboard') }}";
+// Language removal handler
+function removeLanguageHandler(e) {
+    if (e.target.closest('.remove-language')) {
+        const container = document.getElementById('languages-container');
+        const entries = container.querySelectorAll('.language-entry');
+        if (entries.length > 1) {
+            e.target.closest('.language-entry').remove();
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Attach add handler
+    const addBtn = document.getElementById('add-language');
+    if (addBtn) {
+        addBtn.removeEventListener('click', addLanguageHandler);
+        addBtn.addEventListener('click', addLanguageHandler);
+    }
+    // Attach remove handler (event delegation)
+    const langContainer = document.getElementById('languages-container');
+    if (langContainer) {
+        langContainer.removeEventListener('click', removeLanguageHandler);
+        langContainer.addEventListener('click', removeLanguageHandler);
+    }
+});
 </script> 
