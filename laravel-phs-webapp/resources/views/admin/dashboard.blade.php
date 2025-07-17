@@ -708,19 +708,15 @@
         new Chart(submissionStatusCtx.getContext('2d'), {
             type: 'doughnut',
             data: {
-                labels: ['Pending', 'Reviewed', 'Approved', 'Rejected'],
+                labels: ['Pending', 'Completed'],
                 datasets: [{
                     data: [
                         {{ $submissionStats['pending'] ?? 0 }},
-                        {{ $submissionStats['reviewed'] ?? 0 }},
-                        {{ $submissionStats['approved'] ?? 0 }},
-                        {{ $submissionStats['rejected'] ?? 0 }}
+                        {{ $submissionStats['completed'] ?? 0 }}
                     ],
                     backgroundColor: [
                         '#D4AF37', // PMA Gold
-                        '#1B365D', // PMA Navy
-                        '#34D399', // Green
-                        '#F87171'  // Red
+                        '#34D399'  // Green
                     ],
                     borderWidth: 0,
                     hoverOffset: 4

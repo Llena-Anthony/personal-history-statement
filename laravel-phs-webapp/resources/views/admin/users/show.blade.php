@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <label class="text-xs font-medium text-gray-500">Email Address</label>
-                    <p class="text-sm text-gray-900">{{ $user->email }}</p>
+                    <p class="text-sm text-gray-900">{{ $user->userDetail->email_addr ?? 'No email' }}</p>
                 </div>
                 <div>
                     <label class="text-xs font-medium text-gray-500">Branch</label>

@@ -274,7 +274,7 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">Email Address</span>
-                    <span class="info-value">{{ $submission->user->email ?? 'N/A' }}</span>
+                    <span class="info-value">{{ $submission->user->userDetail->email_addr ?? 'N/A' }}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Submission Status</span>

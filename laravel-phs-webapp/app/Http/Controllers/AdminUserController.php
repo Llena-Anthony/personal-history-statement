@@ -171,7 +171,6 @@ class AdminUserController extends Controller
                 'organic_role' => $sessionUserData['organic_group'],
                 'is_active' => '1',
                 'phs_status' => 'pending',
-                'email' => $sessionUserData['email'],
             ];
 
             Log::info('Attempting to create user with data', ['userData' => $userData]);
@@ -508,7 +507,7 @@ class AdminUserController extends Controller
                     $user->username,
                     $user->name,
                     $user->username,
-                    $user->email,
+                    $user->userDetail->email_addr ?? '',
                     ucfirst($user->usertype),
                     ucfirst($user->organic_role),
                     'N/A', // branch field doesn't exist

@@ -20,12 +20,10 @@ class AdminHomeController extends Controller
             ->whereYear('created_at', now()->year)
             ->count();
 
-        // Submission Status Distribution (from users table)
+        // Submission Status Distribution (from users table) - only pending and completed
         $submissionStats = [
             'pending'   => User::where('phs_status', 'pending')->count(),
-            'reviewed'  => User::where('phs_status', 'reviewed')->count(),
-            'approved'  => User::where('phs_status', 'approved')->count(),
-            'rejected'  => User::where('phs_status', 'rejected')->count(),
+            'completed' => User::whereIn('phs_status', ['reviewed', 'approved', 'rejected'])->count(),
         ];
 
         // PHS Submissions (total and this month) - only count real submissions
